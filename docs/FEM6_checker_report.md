@@ -415,10 +415,20 @@ changes `M`.
 `fig2_memory_response.png`, `fig3_damping_ratio.png`,
 `fig4_domain_comparison.png`; numbers in `results/demo.json`.
 
-Memory demo numbers (200×10 µm bar, cuboid `3×10⁻⁶/1×10⁻⁶`, `τ = 3×10⁻⁷ s`,
-10 nm axial release): mode 5 at 7.161 MHz, `k² = 0.402`, `V(t=0) = 141.5 V`
-for all `α` (as it must — the initial condition is the same), with the decay
-envelope separating the three `α` over the 8-period window.
+Memory demo numbers (200×10 µm bar, cuboid `3×10⁻⁶/1×10⁻⁶`, 10 nm axial
+release): mode 5 at 7.161 MHz, `k² = 0.402`, `V(t = 0) = 141.5 V` for all `α`
+(as it must — the initial condition is the same), with `τ = 3×10⁻⁹ s` chosen so
+that `ωτ = 0.13` and the ring-down is **underdamped** over 20 periods; the
+`α = 0.7` curve lags the `α = 1` curve, which is the visible signature of the
+fractional kernel.
+
+*Warning on `τ`.* The blueprint's `τ = 3×10⁻⁷ s` gives `ωτ = 13.5` for this
+mode, i.e. the mode is **overdamped** (`ζ = 6.75`) and the response is a pure
+non-oscillating relaxation. That is not an error, but if the paper shows "the
+memory effect on the ring-down" with those parameters the reader will see a
+decay curve with no oscillation and conclude the code is broken. Either choose
+`τ` per mode so that `ωτ = O(0.1–1)`, or show the overdamped case deliberately
+as the "creep" limit.
 
 ---
 

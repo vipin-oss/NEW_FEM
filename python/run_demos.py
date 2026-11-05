@@ -100,14 +100,14 @@ def fig_memory():
     tip_row = int(np.searchsorted(idx, m.mech_dof[tip_node][0]))
     x0 = Phi[:, j].copy()
     x0 *= 10e-9 / abs(x0[tip_row])              # 10 nm tip amplitude
-    tau = 3e-7
+    tau = 3e-9          # omega*tau = 0.13 at this mode (underdamped)
     f_zero = np.zeros(idx.size)
     out = {"mode_index": j + 1, "f_axial_kHz": float(wo[j] / 2e3 / np.pi),
            "k2_axial": float(k2[j])}
     fig, ax = plt.subplots(1, 2, figsize=(6.6, 2.7))
     for alpha in [1.0, 0.9, 0.7]:
-        T = 8 * 2 * np.pi / wo[j]
-        N = 8000
+        T = 20 * 2 * np.pi / wo[j]
+        N = 12000
         dt = T / N
         t, x, y, v, a = f6.transient(Koc, M, Koc, f_zero, alpha, tau, dt, N,
                                      nmodes=8, x0=x0, v0=np.zeros(idx.size))
@@ -133,7 +133,7 @@ def fig_memory():
 def fig_damping():
     a = np.linspace(0.05, 1.0, 40)
     w0 = 2 * np.pi * 200e3
-    tau = 3e-7
+    tau = 3e-9          # omega*tau = 0.13 at this mode (underdamped)
     ze = []
     for x in a:
         s = f6.complex_frequency(w0, tau, x)
