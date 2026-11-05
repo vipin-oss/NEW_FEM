@@ -1,1 +1,65 @@
-# NEW_FEM
+# NEW_FEM — FEM-6 reference implementation
+
+Independent, from-the-equations implementation of the **FEM-6** model
+(fractional-memory piezoelectric strain-gradient plate on the FEM-1 BFS C1
+element), used to audit the delivered MATLAB code and blueprint.
+
+The Python code is authoritative; the MATLAB file is a mirror for delivery.
+
+## Contents
+
+```
+python/fem6_core.py          element, assembly, potential condensation,
+                             modes, L1 Caputo stepping, complex pole, materials
+python/run_verification.py   V1–V7 verification suite (~40 s)
+python/run_demos.py          figures 1–4 + results/demo.json
+matlab/FEM6_memory_piezo_SG_2D_v2.m   corrected MATLAB mirror + self-tests
+docs/FEM6_checker_report.md           answers to the four blueprint questions,
+                                      findings A/B/C/D, revised blueprint
+docs/FEM6_cuboid_coefficient.md       Q1 in full (second-moment derivation)
+results/verification.{md,json}        verification output
+results/demo.json, results/figures/   demo output
+```
+
+## Run
+
+```bash
+python3 python/run_verification.py     # 40 s, writes results/
+python3 python/run_demos.py            # 1 min, writes figures
+```
+
+Requires `numpy`, `scipy`, `matplotlib`. No hard-coded paths: both scripts
+resolve `results/` relative to the repository root.
+
+## Model in one screen
+
+Mechanical dofs per node (C1 Hermite): `u, u_x, u_y, u_xy, v, v_x, v_y, v_xy`.
+Potential dofs per node: `φ, φ_x, φ_y, φ_xy`. Eight mechanical and four
+potential dofs per node, 12 total.
+
+```
+[ K_uu + K_g   K_up ] [ q ]   [ f ]
+[ K_upᵀ        A    ] [ φ ] = [ 0 ]        K_g = ½ ∫ M_mn B_,mᵀ C B_,n
+```
+
+with `M = ⟨ξξ⟩` the second-moment tensor of the averaging window
+(cuboid `diag(a_x²/3, a_y²/3)`, 3-D ellipsoid `diag(l²/5, l²/5)` — the latter
+reproduces FEM-1's `l²/10`). Condensing `φ` on the electrode gives
+`K_eff = K_uu + K_up A⁻¹ K_upᵀ` and
+
+```
+k_eff² = (ω_open² − ω_short²) / ω_open² .
+```
+
+Memory: `M q̈ + K_eff [ q + τ^α D^α q ] = f`, Caputo `D^α` discretised by L1
+with `b_k = (k+1)^{1-α} − k^{1-α}`, `b_0 = 1`, and Newmark (β=¼, γ=½) with the
+memory term implicit.
+
+## Status
+
+All seven verification cases pass, and the FEM-1 benchmark is reproduced
+(4.234 µm vs 4.23 µm published at `l/L = 0.2`). Two blocking defects were found
+in the delivered MATLAB code — the missing `b₀ = 1` weight and, depending on
+the length-scale convention, the gradient coefficient — plus a physical dead
+end in the demonstration (a homogeneous plate in bending carries no net
+electrode charge, so `k_eff² ≈ 2×10⁻¹⁰`). See `docs/FEM6_checker_report.md`.
