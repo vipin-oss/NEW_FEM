@@ -1,0 +1,25 @@
+{
+ "tag": "py3.11.2-np2.2.6-sp1.15.3",
+ "python": "3.11.2",
+ "numpy": "2.2.6",
+ "scipy": "1.15.3",
+ "machine": "x86_64",
+ "values": {
+  "h1_um": {
+   "dense eigh, scaled": 0.0041758278046878676,
+   "dense eigh, unscaled": 0.004170510131908882,
+   "QZ (eig, general)": 0.0041733640453943495,
+   "numpy eig, all modes": 0.004173177919520568,
+   "dense eigh, 12 modes": 0.0076878340208785725,
+   "sparse eigsh, 12 modes": 0.007678430228259375
+  },
+  "h10_um": {
+   "dense eigh, scaled": 0.00017437295492322006,
+   "dense eigh, unscaled": 0.00017437295485286347,
+   "QZ (eig, general)": 0.00017437295661080685,
+   "numpy eig, all modes": 0.0001743729671645101,
+   "dense eigh, 12 modes": 0.0003034045388233625,
+   "sparse eigsh, 12 modes": 0.0003034045048539443
+  }
+ }
+}

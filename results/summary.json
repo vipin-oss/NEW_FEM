@@ -310,15 +310,15 @@
   },
   {
    "id": "U1",
-   "what": "h = 1 um flexo k^2 over four equivalent solver paths and 3 numeric stacks",
-   "value": "spread 0.107 %, k^2 4.1705e-03..4.1781e-03",
+   "what": "h = 1 um flexo k^2 over four equivalent solver paths and 4 numeric stacks",
+   "value": "spread 0.182 %, k^2 4.1705e-03..4.1781e-03",
    "criterion": "< 0.5 % (quoted to 2 s.f.)",
    "pass": true
   },
   {
    "id": "U2",
    "what": "the same spread at h = 10 um",
-   "value": "1.12e-05 %",
+   "value": "1.49e-05 %",
    "criterion": "< 1e-3 %",
    "pass": true
   },
@@ -395,7 +395,7 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "52/52",
+   "value": "53/53",
    "criterion": "all agree",
    "pass": true
   }

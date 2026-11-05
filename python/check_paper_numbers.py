@@ -68,7 +68,7 @@ def g(path):
     return v
 
 
-def row(where, literal, source, value, fmt, rel_tol=1e-6):
+def row(where, literal, source, value, fmt, rel_tol=1e-6, upper=None):
     """One claim.  It passes if the literal is the formatted JSON value, or if
     the literal *as a number* is within ``rel_tol`` of the JSON value.
 
@@ -83,6 +83,13 @@ def row(where, literal, source, value, fmt, rel_tol=1e-6):
     """
     got = fmt.format(value)
     got = got.replace("e-0", "e-").replace("e+0", "e+")   # 1.74e-04 -> 1.74e-4
+    if upper is not None:
+        # an upper bound: the text says "within X", so the claim is
+        # value <= X, not value == X.  The measured value still moves with the
+        # numeric stack; the bound does not.
+        return {"where": where, "tex": literal, "json": source,
+                "value": value, "formatted": f"<= {upper:g}", "rel": None,
+                "rel_tol": None, "ok": bool(value <= upper)}
     rel = None
     try:
         lit = float(literal)
@@ -262,9 +269,13 @@ def main():
                  "independent F2 zeta at alpha=0.3, omega*tau=0.3", zc,
                  "{:.3f}"))
     SN = J("sensitivity.json")
-    R.append(row("sensitivity, spread at h=1 um, per cent", "0.1",
-                 "sensitivity.json spread_h1_pct", SN["spread_h1_pct"],
-                 "{:.1f}"))
+    R.append(row("sensitivity, spread at h=1 um, per cent, upper bound",
+                 "0.5\\,\\%", "sensitivity.json spread_h1_pct (range/midpoint)",
+                 SN["spread_h1_pct"], "{:.2f}", upper=0.5))
+    R.append(row("sensitivity, spread at h=10 um, per cent, upper bound",
+                 "10^{-4}\\,\\%",
+                 "sensitivity.json spread_h10_pct (range/midpoint)",
+                 SN["spread_h10_pct"], "{:.2e}", upper=1e-4))
     CT = J("config_table.json")
     R.append(row("config table, flexo only at h=10", "1.76e-4",
                  "config_table rows[0] k2_flexo",

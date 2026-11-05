@@ -156,7 +156,7 @@ figure exists to show.
 | T4 | flexo k², 48×4 vs 96×4 witness, rel. diff < 2 % |
 | T5 | flexo k² at µ = 0 / value < 1e-5 |
 
-All five pass; the suite reports 51/51.
+All five pass; the suite reports 57/57.
 
 ## 5. Platform sensitivity of the h = 1 µm point
 
@@ -167,8 +167,19 @@ runs the same model through four mathematically equivalent eigensolver paths
 and any number of numpy/scipy stacks (`--emit` per stack), and writes
 `results/sensitivity.md` and `Paper_12/table_sensitivity.tex`.  Quoted at two
 significant digits — 4.2e-3 and a factor 24 — the number is stable across
-every row; the fourth digit is not.  N1 in `run_all.py` therefore carries a
-5e-3 relative tolerance on exactly these rows.
+every row; the fourth digit is not.
+
+The spread is `(max - min) / midpoint` over the equivalent rows, and every
+deviation in the generated tables is measured from that midpoint.  It is not
+measured from the running stack: on the reviewer's Python 3.13.18 / numpy
+2.5.3 / scipy 1.18.1 stack the same range produced "0.15 %" instead of
+"0.11 %", because that stack sits at one end of the range and the reference
+moved with it.  With the midpoint definition the number no longer depends on
+who runs the script: four stacks (numpy 1.26.4 / 2.0.2 / 2.2.6 / 2.4.6) give
+0.18 % at `h = 1 µm` and 1.5e-5 % at `h = 10 µm`, and adding the fourth stack
+did not move either.  The paper states an upper bound — within 0.5 % — and N1
+checks `spread ≤ 0.5`; the two 5e-3 relative-tolerance rows for 4.2e-3 and 24
+are unchanged.
 
 ## 4. Which modulus goes with which permittivity
 

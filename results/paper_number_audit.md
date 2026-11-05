@@ -1,6 +1,6 @@
 # Every number in the manuscript against the JSON it came from
 
-52/52 claims agree; 0 disagree with the JSON, 0 are not found in the text.
+53/53 claims agree; 0 disagree with the JSON, 0 are not found in the text.
 
 | # | claim | manuscript | json | value | status |
 |---|---|---|---|---|---|
@@ -44,15 +44,16 @@
 | 38 | independent, beam modulus | `7.63` | `independent F1 E_beam / 1e10` | `7.63` | ok |
 | 39 | independent, zeta maximum in alpha | `0.179` | `independent F2 zeta at alpha=0.7, omega*tau=0.3` | `0.179` | ok |
 | 40 | independent, zeta at alpha=0.3 | `0.108` | `independent F2 zeta at alpha=0.3, omega*tau=0.3` | `0.108` | ok |
-| 41 | sensitivity, spread at h=1 um, per cent | `0.1` | `sensitivity.json spread_h1_pct` | `0.1` | ok |
-| 42 | config table, flexo only at h=10 | `1.76e-4` | `config_table rows[0] k2_flexo` | `1.76e-4` | ok |
-| 43 | config table, flexo only at h=1 | `5.5e-3` | `config_table rows[3] k2_flexo` | `5.5e-3` | ok |
-| 44 | config table, growth with e=0 | `31` | `config_table growth_flexo_only` | `31` | ok |
-| 45 | config table, piezo shift at h=1, per cent | `24` | `config_table min flexo_shift x100` | `24` | ok |
-| 46 | axes, C_xx poled y | `1.6946` | `independent F5 poling y C_xx / 1e11` | `1.6946` | ok |
-| 47 | axes, E_b poled y | `1.3544` | `independent F5 E_beam_pol_y / 1e11` | `1.3544` | ok |
-| 48 | axes, kappa11/kappa33 | `39` | `independent F5 kappa_ratio_11_over_33` | `39` | ok |
-| 49 | pairing, the hybrid x | `6.34` | `independent F5 x_hybrid x1e4` | `6.34` | ok |
-| 50 | pairing, distance from the FEM value | `77` | `independent F5 hybrid_vs_fem_rel x100` | `77` | ok |
-| 51 | pairing, poled x on the long faces | `1.61` | `independent F5 poling x top/bottom x_fem x1e5` | `1.61` | ok |
-| 52 | independent, flexo x, uniform curvature | `3.570415` | `independent F3 x_analytic x1e4` | `3.570415` | ok |
+| 41 | sensitivity, spread at h=1 um, per cent, upper bound | `0.5\,\%` | `sensitivity.json spread_h1_pct (range/midpoint)` | `<= 0.5` | ok |
+| 42 | sensitivity, spread at h=10 um, per cent, upper bound | `10^{-4}\,\%` | `sensitivity.json spread_h10_pct (range/midpoint)` | `<= 0.0001` | ok |
+| 43 | config table, flexo only at h=10 | `1.76e-4` | `config_table rows[0] k2_flexo` | `1.76e-4` | ok |
+| 44 | config table, flexo only at h=1 | `5.5e-3` | `config_table rows[3] k2_flexo` | `5.5e-3` | ok |
+| 45 | config table, growth with e=0 | `31` | `config_table growth_flexo_only` | `31` | ok |
+| 46 | config table, piezo shift at h=1, per cent | `24` | `config_table min flexo_shift x100` | `24` | ok |
+| 47 | axes, C_xx poled y | `1.6946` | `independent F5 poling y C_xx / 1e11` | `1.6946` | ok |
+| 48 | axes, E_b poled y | `1.3544` | `independent F5 E_beam_pol_y / 1e11` | `1.3544` | ok |
+| 49 | axes, kappa11/kappa33 | `39` | `independent F5 kappa_ratio_11_over_33` | `39` | ok |
+| 50 | pairing, the hybrid x | `6.34` | `independent F5 x_hybrid x1e4` | `6.34` | ok |
+| 51 | pairing, distance from the FEM value | `77` | `independent F5 hybrid_vs_fem_rel x100` | `77` | ok |
+| 52 | pairing, poled x on the long faces | `1.61` | `independent F5 poling x top/bottom x_fem x1e5` | `1.61` | ok |
+| 53 | independent, flexo x, uniform curvature | `3.570415` | `independent F3 x_analytic x1e4` | `3.570415` | ok |

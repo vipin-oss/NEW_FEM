@@ -21,7 +21,7 @@ absent; `pip install tectonic` finds no distribution).  What *was* checked
 mechanically is recorded in `results/paper_structure.md`:
 balanced braces and environments, every `\ref` having a `\label`, every
 `\cite` having a `\bibitem`, all ten included figures present, `\input`
-files present, and 51/51 quoted numbers agreeing with the JSON they came from.
+files present, and 53/53 quoted numbers agreeing with the JSON they came from.
 Compile it once before reading it as finished.
 
 ## Figures
@@ -109,13 +109,23 @@ thinnest plate, through the elastic stiffness of the same mode.
 model through four mathematically equivalent eigensolver paths on whatever
 numpy/scipy stack invoked it, and merges the runs of other stacks that were
 written with `--emit`.  The h = 1 µm flexoelectric coupling — a difference of
-nearly equal eigenvalues of a pencil with condition ~10¹² — spreads by 0.1 %
-over three stacks (numpy 1.26.4 / 2.0.2 / 2.4.6, scipy 1.11.4 / 1.13.1 /
-1.17.1) and four paths, while the h = 10 µm value spreads by 10⁻⁵ %.  The
-paper therefore quotes the thin-plate point as 4.2e-3 and the growth as 24,
-and N1 carries a 5e-3 relative tolerance on exactly those rows so that the
-suite passes on any stack.  Truncating the secular sum to twelve modes moves
-k² by 84 %, which is why the sum runs over the whole spectrum.
+nearly equal eigenvalues of a pencil with condition ~10¹² — spreads by 0.18 %
+over four stacks (numpy 1.26.4 / 2.0.2 / 2.2.6 / 2.4.6, scipy 1.11.4 /
+1.13.1 / 1.15.3 / 1.17.1) and four paths, while the h = 10 µm value spreads by
+1.5e-5 %.
+
+The spread is `(max - min) / midpoint` over all equivalent rows, and the table's
+deviations are taken from that same midpoint — *never* from the stack that
+happens to be running.  The first version of this script measured deviations
+from the running stack, and that number is a statement about the machine: it
+read 0.11 % here and 0.15 % on the reviewer's Python 3.13 / numpy 2.5.3 /
+scipy 1.18.1 stack for the same range.  The paper therefore quotes the point as
+4.2e-3, the growth as 24, and the spread as an upper bound — "within 0.5 %" —
+which N1 checks as `spread ≤ 0.5`, so a different stack cannot fail the row by
+sitting at one end of the range.  The two 5e-3 relative-tolerance rows for
+4.2e-3 and 24 remain for the same reason.  Truncating the secular sum to
+twelve modes moves k² by more than 80 %, which is why the sum runs over the
+whole spectrum.
 
 `python3 python/list_unverified.py` (criterion N2) writes
 `results/unverified_numbers.md`: every number in the paper that no independent

@@ -181,7 +181,11 @@ at the thinnest plate (G2), which is why the reported growth is 24 and the
 `e = 0` idealisation would be 31.  Both are quoted to two significant digits
 because the `h = 1 µm` point itself moves at the 1e-3 level between numeric
 stacks (`tab:sens`); the sensitivity, and the tolerance it forces on N1, is
-now recorded rather than discovered by a reader running the suite.
+now recorded rather than discovered by a reader running the suite.  The spread
+is `(max - min) / midpoint`, so it is a property of the model rather than of
+the machine, and the paper states it as an upper bound — within 0.5 % — which
+N1 checks as `spread ≤ 0.5`; measuring it from the running stack instead was
+the defect that made the suite fail on a different Python version.
 
 **Still open.** Nothing quantitative.  A referee could ask for the combined
 case at a *single* thickness with both couplings designed to be comparable,
