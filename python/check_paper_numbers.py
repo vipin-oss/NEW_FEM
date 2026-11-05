@@ -191,7 +191,7 @@ def main():
                  * g("k2_closed_form.json.kappa_eff") * 1e10, "{:.4f}"))
     # the count is checked in words, because that is how the abstract says it
     words = {41: "forty-one", 49: "forty-nine", 50: "fifty",
-             51: "fifty-one"}
+             51: "fifty-one", 54: "fifty-four"}
     nt = g("summary.json.n_total")
     R.append(row("criteria count", words.get(int(nt), str(nt)),
                  f"summary.json n_total = {int(nt)}", int(nt),
@@ -238,6 +238,20 @@ def main():
     R.append(row("independent, zeta at alpha=0.3", "0.108",
                  "independent F2 zeta at alpha=0.3, omega*tau=0.3", zc,
                  "{:.3f}"))
+    CT = J("config_table.json")
+    R.append(row("config table, flexo only at h=10", "1.76e-4",
+                 "config_table rows[0] k2_flexo",
+                 CT["rows"][0]["k2_flexo"], "{:.2e}"))
+    R.append(row("config table, flexo only at h=1", "5.47e-3",
+                 "config_table rows[3] k2_flexo",
+                 CT["rows"][3]["k2_flexo"], "{:.2e}"))
+    R.append(row("config table, growth with e=0", "31.1",
+                 "config_table growth_flexo_only",
+                 CT["growth_flexo_only"], "{:.1f}"))
+    R.append(row("config table, piezo shift at h=1, per cent", "24",
+                 "config_table min flexo_shift x100",
+                 100 * abs(min(r["flexo_shift"] for r in CT["rows"])),
+                 "{:.0f}"))
     F5 = J(I)["F5_configurations"]
     cfg = {r["configuration"]: r for r in F5["rows"]}
     R.append(row("axes, C_xx poled y", "1.6946",

@@ -599,6 +599,17 @@ def fig_p9_damping_surface():
     ax.view_init(elev=32, azim=-118)
     ax.tick_params(labelsize=6, pad=-1)
     ax.set_zlim(-0.06, 1.02)
+    # the validity window of the element: omega*tau <= 1 (Sec. limits)
+    al_band = np.array([[0.2, 1.0], [0.2, 1.0]])
+    ax.plot_surface(al_band, np.array([[-1.5, -1.5], [0.0, 0.0]]),
+                    np.full((2, 2), -0.062), color="0.30", alpha=0.30,
+                    linewidth=0, shade=False)
+    ax.plot([0.2, 1.0], [0.0, 0.0], [-0.061, -0.061], ls="--", lw=1.1,
+            color="k")
+    ax.text2D(0.012, 0.995, "shaded floor: " r"$\omega\tau\leq1$, the band "
+              "used here\n" r"unshaded: $\omega\tau>1$, not claimed",
+              transform=ax.transAxes, fontsize=5.8, va="top", color="0.15",
+              linespacing=1.35)
     fig.colorbar(surf, ax=ax, shrink=0.55, pad=0.06, label=r"$\zeta$")
     save(fig, "P9_damping_surface")
 

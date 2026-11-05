@@ -80,12 +80,16 @@ CLAIMS = [
     ("0.09", "spread of the piezo $k^2$ between 10 and 1 micron",
      "nahi hua", "FEM thickness sweep (T3, T2 for mesh independence); the "
      "spread is small but no closed form predicts it"),
+    ("31.1", "the same growth with the piezoelectric terms switched off",
+     "nahi hua", "config_table: an FEM run with $e=0$ in the same solver; the "
+     "two runs differ by the piezoelectric stiffness of the mode, and neither "
+     "has a closed form"),
     ("23.9", "growth of the flexoelectric $k^2$ over the same range",
      "nahi hua", "the same FEM sweep (T3); the flexoelectric operator itself "
      "is verified against the uniform-curvature limit (I6, I7), the growth "
      "factor is not"),
-    ("fifty-one", "the number of graded criteria",
-     "hua", "run\\_all.py: 51/51 pass, and check\\_paper\\_numbers.py compares "
+    ("fifty-four", "the number of graded criteria",
+     "hua", "run\\_all.py: 54/54 pass, and check\\_paper\\_numbers.py compares "
      "the word against summary.json"),
 ]
 

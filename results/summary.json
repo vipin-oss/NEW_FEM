@@ -276,8 +276,22 @@
   {
    "id": "A2",
    "what": "every number in the abstract has an independent-check verdict",
-   "value": "10 hua / 6 nahi hua / 4 inputs, 19 tokens",
+   "value": "10 hua / 7 nahi hua / 4 inputs, 20 tokens",
    "criterion": "0 uncovered, 0 stale",
+   "pass": true
+  },
+  {
+   "id": "G1",
+   "what": "piezoelectric share of the bending device (poling y, long faces) at every thickness",
+   "value": "5.7e-07",
+   "criterion": "< 1e-5 (electrically silent bending mode)",
+   "pass": true
+  },
+  {
+   "id": "G2",
+   "what": "flexo growth with and without the piezoelectric terms",
+   "value": "23.9 vs 31.1",
+   "criterion": "reported 23.9 uses the real crystal; 31.1 with e = 0, both graded",
    "pass": true
   },
   {
@@ -292,6 +306,13 @@
    "what": "window second-moment factors 1/3, 1/4, 1/5 by quadrature",
    "value": "3.3e-06",
    "criterion": "< 1e-5",
+   "pass": true
+  },
+  {
+   "id": "N2",
+   "what": "the list of unverified numbers cites only numbers still in the manuscript",
+   "value": "31 entries, 0 stale",
+   "criterion": "0 stale",
    "pass": true
   },
   {
@@ -353,13 +374,13 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "47/47",
+   "value": "51/51",
    "criterion": "all agree",
    "pass": true
   }
  ],
- "n_pass": 51,
- "n_total": 51,
+ "n_pass": 54,
+ "n_total": 54,
  "scripts_ok": {
   "run_verification.py": true,
   "run_flexo_check.py": true,
@@ -371,6 +392,8 @@
   "derive_k2_closed_form.py": true,
   "run_independent_checks.py": true,
   "audit_abstract_claims.py": true,
+  "run_config_table.py": true,
+  "list_unverified.py": true,
   "run_demos.py": true,
   "run_paper_figures.py": true,
   "make_paper_table.py": true,

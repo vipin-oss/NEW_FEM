@@ -21,7 +21,7 @@ absent; `pip install tectonic` finds no distribution).  What *was* checked
 mechanically is recorded in `results/paper_structure.md`:
 balanced braces and environments, every `\ref` having a `\label`, every
 `\cite` having a `\bibitem`, all ten included figures present, `\input`
-files present, and 47/47 quoted numbers agreeing with the JSON they came from.
+files present, and 51/51 quoted numbers agreeing with the JSON they came from.
 Compile it once before reading it as finished.
 
 ## Figures
@@ -48,11 +48,11 @@ quick inspection only.
 ## Where the numbers come from
 
 Every number in the text is a value from `python3 python/run_all.py`
-(51/51 checks):
+(54/54 checks):
 
 | in the paper | source |
 |---|---|
-| Table 1 (51 checks) | `results/summary.json` → `checks`, rendered by `python/make_paper_table.py` into `table_verification.tex` (never typed by hand) |
+| Table 1 (54 checks) | `results/summary.json` → `checks`, rendered by `python/make_paper_table.py` into `table_verification.tex` (never typed by hand) |
 | Table 2 (plane strain vs stress, four cases) | `results/application_table.json` → `rows` |
 | Table 3 (memory matrix, S1) | `results/memory_variants.json` → `S1` |
 | Table 4 (KV vs Zener, S2) | `results/memory_variants.json` → `S2` |
@@ -63,6 +63,8 @@ Every number in the text is a value from `python3 python/run_all.py`
 | mode tracking (K1–K2) | `results/mode_tracking.json` |
 | `tab:independent` (independent routes, I1–I9) | `results/independent_checks.json`, rendered by `run_independent_checks.py` into `table_independent.tex` |
 | `tab:axes` (axes, Voigt indices, the two poling configurations) | the same JSON, rendered into `table_axes.tex` (panel F5) |
+| `tab:config` (piezo-only / flexo-only / both on one bending mode) | `results/config_table.json`, rendered by `run_config_table.py` into `table_config.tex`, graded G1–G2 |
+| the list of unverified numbers | `results/unverified_numbers.md`, written by `list_unverified.py`, graded N2 |
 | abstract, number by number | `results/abstract_audit.md`, `results/abstract_audit.json` (criterion A2) |
 | poles and damping map | `python/fem6_core.py::complex_frequency` with branch continuation |
 
@@ -71,7 +73,7 @@ the material constants, step by step, and also reproduces the superseded
 `0.3582` series as `k^2/(1+k^2)` of the corrected one — that identity is what
 identifies the earlier number as the same formula applied twice.
 
-`python3 python/check_paper_numbers.py` re-checks 47 of those claims against
+`python3 python/check_paper_numbers.py` re-checks 51 of those claims against
 the JSON and writes `results/paper_number_audit.md`; it is graded as criterion
 N1, so a stale number in the text fails the suite.
 
@@ -90,6 +92,22 @@ poling-$x$ table of Sec.~\ref{sec:closedform} calls $C^p_{22}$.  The pairing of
 the poling-$x$ modulus $\SI{9.55e10}{\pascal}$ with $\kappa_{33}$ gives
 $6.34\times10^{-4}$, 77 % away from the finite element value, and corresponds
 to no configuration.
+
+`python3 python/run_config_table.py` (criteria G1–G2, `tab:config`) answers
+the question that follows from the two configurations: what do the
+piezoelectric terms do on the *bending* device?  Three materials, one
+geometry, the same mode.  With `μ = 0` the piezoelectric coupling of that mode
+is `1.0e-10` at every thickness — the piezoelectric charge of a bending mode is
+odd in `y − h/2` and integrates to zero over a face electrode — so the device
+is not piezoelectric by accident.  With `e = 0` the flexoelectric coupling
+grows by 31.1 instead of the 23.9 reported for the real crystal: the
+piezoelectric terms shift the flexoelectric coupling by up to 24 % at the
+thinnest plate, through the elastic stiffness of the same mode.
+
+`python3 python/list_unverified.py` (criterion N2) writes
+`results/unverified_numbers.md`: every number in the paper that no independent
+route reproduces, with the reason, checked against `main.tex` so that it cannot
+cite a number the text no longer contains.
 
 `python3 python/audit_abstract_claims.py` (criterion A2) lists every numeric
 token of the abstract with the verdict `hua` (an independent route

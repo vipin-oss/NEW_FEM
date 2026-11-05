@@ -63,7 +63,8 @@ def main():
                "run_material_check.py", "run_memory_variants.py",
                "run_coupling_check.py", "run_mode_tracking.py",
                "run_application_table.py", "derive_k2_closed_form.py",
-               "run_independent_checks.py", "audit_abstract_claims.py"]
+               "run_independent_checks.py", "audit_abstract_claims.py",
+               "run_config_table.py", "list_unverified.py"]
     if figs:
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")
@@ -81,6 +82,8 @@ def main():
     At = load("application_table.json")
     Ic = load("independent_checks.json")
     Ab = load("abstract_audit.json")
+    Gc = load("config_table.json")
+    Uv = load("unverified_numbers.json")
     Cf = load("k2_closed_form.json")
     D = load("demo.json") if figs else None
     Pg = load("paper_figures_data.json") if figs else None
@@ -246,6 +249,15 @@ def main():
         f"inputs, {len(Ab['tokens'])} tokens",
         "0 uncovered, 0 stale",
         not Ab["missing"] and not Ab["stale"])
+    gmax = max(r["piezo_share"] for r in Gc["rows"])
+    chk("G1", "piezoelectric share of the bending device (poling y, long "
+        "faces) at every thickness", f"{gmax:.1e}",
+        "< 1e-5 (electrically silent bending mode)", gmax < 1e-5)
+    chk("G2", "flexo growth with and without the piezoelectric terms",
+        f"{Gc['growth_both']:.1f} vs {Gc['growth_flexo_only']:.1f}",
+        "reported 23.9 uses the real crystal; 31.1 with e = 0, both graded",
+        abs(Gc["growth_both"] - 23.9) < 0.1
+        and abs(Gc["growth_flexo_only"] - 31.1) < 0.1)
     cfg = {r["configuration"]: r for r in Ic["F5_configurations"]["rows"]}
     yb = cfg["poling y, electrodes top/bottom"]
     xb = cfg["poling x, electrodes top/bottom"]
@@ -263,6 +275,10 @@ def main():
     mw = Ic["F4_window_moments"]["worst_rel"]
     chk("I8", "window second-moment factors 1/3, 1/4, 1/5 by quadrature",
         f"{mw:.1e}", "< 1e-5", mw < 1e-5)
+
+    chk("N2", "the list of unverified numbers cites only numbers still in the "
+        "manuscript", f"{Uv['n']} entries, {len(Uv['stale'])} stale",
+        "0 stale", not Uv["stale"] and Uv["n"] > 0)
 
     ak2 = [r["k2"] for r in At["rows"]]
     chk("A1", "application table: extensional plane stress is the strongest "
