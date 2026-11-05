@@ -25,7 +25,7 @@ Every numeric token of the abstract of `Paper_12/main.tex`, with the verdict `hu
 | `0.5608` | $e^{\mathsf T}C^{-1}e/\kappa$, 2-D plane stress | **hua** | derive\_k2\_closed\_form.py from the constitutive tensors only; agreements 0.56079 vs 0.56079 (D1) |
 | `0.09` | spread of the piezo $k^2$ between 10 and 1 micron | *nahi hua* | FEM thickness sweep (T3, T2 for mesh independence); the spread is small but no closed form predicts it |
 | `23.9` | growth of the flexoelectric $k^2$ over the same range | *nahi hua* | the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not |
-| `fifty` | the number of graded criteria | **hua** | run\_all.py: 50/50 pass, and check\_paper\_numbers.py compares the word against summary.json |
+| `fifty-one` | the number of graded criteria | **hua** | run\_all.py: 51/51 pass, and check\_paper\_numbers.py compares the word against summary.json |
 
 ## Coverage
 

@@ -57,3 +57,17 @@ Integrated over each shape and divided by its measure, not taken from the formul
 
 Worst relative difference 3.3e-06.
 
+
+## F5 -- the same bending field in four poling/electrode pairings
+
+The flexoelectric polarization of $u=\kappa xy$, $v=-\kappa x^2/2$ is $\bm D=\mu\kappa\hat{\bm y}$: normal to the long faces, parallel to the short ones.  So only the long faces collect it, and the permittivity that then enters is the one along $y$ -- $\kappa_{33}$ for a plate poled along $y$, $\kappa_{11}$ for one poled along $x$.  The coupling factor fixes the modulus only once that pairing is fixed.
+
+| configuration | $C^p_{xx}$ [Pa] | $\kappa_{yy}$ [F/m] | $V_{oc}$ [V] | $x$ FEM | $x$ closed form |
+|---|---|---|---|---|---|
+| poling y, electrodes top/bottom | 1.6946e+11 | 4.9583e-10 | 2.017e-02 | 3.5704e-04 | 3.5704e-04 |
+| poling x, electrodes top/bottom | 9.5500e+10 | 1.9479e-08 | 5.134e-04 | 1.6127e-05 | 1.6127e-05 |
+| poling x, electrodes left/right | 9.5500e+10 | 1.9479e-08 | -7.482e-14 | 2.1796e-29 | 0.0000e+00 |
+| poling y, electrodes left/right | 1.6946e+11 | 4.9583e-10 | -1.975e-15 | 3.3619e-31 | 0.0000e+00 |
+
+The Step-3 modulus $\SI{9.55e10}{\pascal}$ with the poling-$y$ permittivity would give $x=6.3355e-04$, 77 % away from the finite element value, and no configuration of this geometry produces that pairing.  The beam modulus of the poling-$y$ plate is 1.3544e+11 Pa, and $\kappa_{11}/\kappa_{33}=39.3$.
+

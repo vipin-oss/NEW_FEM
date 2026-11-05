@@ -84,8 +84,8 @@ CLAIMS = [
      "nahi hua", "the same FEM sweep (T3); the flexoelectric operator itself "
      "is verified against the uniform-curvature limit (I6, I7), the growth "
      "factor is not"),
-    ("fifty", "the number of graded criteria",
-     "hua", "run\\_all.py: 50/50 pass, and check\\_paper\\_numbers.py compares "
+    ("fifty-one", "the number of graded criteria",
+     "hua", "run\\_all.py: 51/51 pass, and check\\_paper\\_numbers.py compares "
      "the word against summary.json"),
 ]
 

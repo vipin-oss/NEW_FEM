@@ -1,6 +1,6 @@
 # Verification table as it appears in the manuscript
 
-50/50 checks pass.
+51/51 checks pass.
 
 | id | checked quantity | value | criterion | source |
 |---|---|---|---|---|
@@ -44,6 +44,7 @@
 | I6 | flexo x, uniform curvature: FEM energy triple vs 3 mu^2/(C11 h^2 kappa33) | 3.570415e-04 vs 3.570415e-04 | rel. diff < 1e-8 (worst 1.8e-10) | `results/?` |
 | I7 | flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33 | 1.7e-13 | < 1e-10 | `results/?` |
 | A2 | every number in the abstract has an independent-check verdict | 10 hua / 6 nahi hua / 4 inputs, 19 tokens | 0 uncovered, 0 stale | `results/?` |
+| I9 | the same bending field, four poling/electrode pairings: only the long faces collect it, and each pairing with its own permittivity | poled y 3.570e-04 vs 3.570e-04; poled x 1.613e-05 vs 1.613e-05; short-face pairs 7.5e-14 V | rel. diff < 1e-6, short-face charge < 1e-12 | `results/?` |
 | I8 | window second-moment factors 1/3, 1/4, 1/5 by quadrature | 3.3e-06 | < 1e-5 | `results/?` |
 | A1 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | T1 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |
@@ -53,4 +54,4 @@
 | T5 | flexo k^2 at mu = 0 / value (residual) | 6e-07 | < 1e-5 | `results/demo.json` |
 | P1 | paper figures: vector set written | 10 PDF | = 10 (P1-P10) | `results/paper_figures_data.json` |
 | P2 | orientation sweep rows / k^2 range | 168 rows, 0.3786-0.4677 | 168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
-| N1 | manuscript numbers vs the JSON they came from | 41/41 | all agree | `results/?` |
+| N1 | manuscript numbers vs the JSON they came from | 47/47 | all agree | `results/?` |

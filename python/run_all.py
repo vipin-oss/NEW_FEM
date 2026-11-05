@@ -246,6 +246,20 @@ def main():
         f"inputs, {len(Ab['tokens'])} tokens",
         "0 uncovered, 0 stale",
         not Ab["missing"] and not Ab["stale"])
+    cfg = {r["configuration"]: r for r in Ic["F5_configurations"]["rows"]}
+    yb = cfg["poling y, electrodes top/bottom"]
+    xb = cfg["poling x, electrodes top/bottom"]
+    xl = cfg["poling x, electrodes left/right"]
+    yl = cfg["poling y, electrodes left/right"]
+    chk("I9", "the same bending field, four poling/electrode pairings: only "
+        "the long faces collect it, and each pairing with its own permittivity",
+        f"poled y {yb['x_fem']:.3e} vs {yb['x_analytic']:.3e}; poled x "
+        f"{xb['x_fem']:.3e} vs {xb['x_analytic']:.3e}; short-face pairs "
+        f"{max(abs(xl['V']), abs(yl['V'])):.1e} V",
+        "rel. diff < 1e-6, short-face charge < 1e-12", 
+        abs(yb["x_fem"] / yb["x_analytic"] - 1) < 1e-6
+        and abs(xb["x_fem"] / xb["x_analytic"] - 1) < 1e-6
+        and max(abs(xl["V"]), abs(yl["V"])) < 1e-12)
     mw = Ic["F4_window_moments"]["worst_rel"]
     chk("I8", "window second-moment factors 1/3, 1/4, 1/5 by quadrature",
         f"{mw:.1e}", "< 1e-5", mw < 1e-5)

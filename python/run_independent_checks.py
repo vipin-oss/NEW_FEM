@@ -239,6 +239,93 @@ def check_flexo_curvature(kappa=1.0):
 # ---------------------------------------------------------------------------
 # F4  the second-moment factors of the three window shapes
 # ---------------------------------------------------------------------------
+def _bending_field(nx, ny, poling, pair, mu=1.0e-6, kappa=1.0):
+    """Prescribe u = kappa x y, v = -kappa x^2/2 and read V and x."""
+    m = mt.batio3(poling, "plane_stress")
+    core = mt.to_core(m)
+    core.mu = mu
+    core.e[:] = 0.0
+    mesh = f6.mesh_rect(nx, ny, L, H)
+    mdl = f6.assemble(mesh, core, np.zeros((2, 2)), clamped_edges=(),
+                      gradient=False)
+    Ksc, _, idx, _ = f6.reduce(mdl, "short", pair=pair)
+    _, _, _, (d, beta) = f6.reduce(mdl, "open", pair=pair)
+    u_full = np.zeros(mdl.ndof_mech)
+    for n, (x, y) in enumerate(mesh.nodes):
+        g = mdl.mech_dof[n]
+        u_full[g[0]] = kappa * x * y
+        u_full[g[1]] = kappa * y
+        u_full[g[2]] = kappa * x
+        u_full[g[3]] = kappa
+        u_full[g[4]] = -0.5 * kappa * x ** 2
+        u_full[g[5]] = -kappa * x
+        u_full[g[6]] = 0.0
+        u_full[g[7]] = 0.0
+    u = u_full[idx]
+    V = float(d @ u) / beta
+    U = 0.5 * float(u @ (Ksc @ u))
+    x_fem = beta * V ** 2 / (2.0 * U) if U > 0 else 0.0
+    C = m.C()
+    kap = m.kappa()
+    return {"poling": poling, "pair": f"{pair[0]}/{pair[1]}",
+            "C_xx": float(C[0, 0]), "C_yy": float(C[1, 1]),
+            "C_xy": float(C[0, 1]),
+            "kappa_x": float(kap[0, 0]), "kappa_y": float(kap[1, 1]),
+            "beta": beta, "U": U, "V": V, "x_fem": x_fem}
+
+
+def check_configurations(kappa=1.0):
+    """The same bending field in four poling/electrode pairings.
+
+    The flexoelectric polarization of the field u = kappa xy, v = -kappa x^2/2
+    is D = mu grad(tr eps) = mu kappa e_y: it is normal to the long faces and
+    parallel to the short ones.  So only the bottom/top pair can collect it,
+    and the permittivity that then enters is the one along y -- which is
+    kappa_33 when the poling axis is y and kappa_11 when it is x.  This is the
+    table that fixes which modulus belongs with which permittivity; the
+    coupling on its own cannot.
+    """
+    rows = []
+    for poling, pair in (("y", ("bottom", "top")), ("x", ("bottom", "top")),
+                         ("x", ("left", "right")), ("y", ("left", "right"))):
+        r = _bending_field(24, 4, poling, pair)
+        r["configuration"] = ("poling " + poling + ", electrodes "
+                              + ("top/bottom" if pair == ("bottom", "top")
+                                 else "left/right"))
+        # the closed form for the long-face pair; zero for the short-face pair,
+        # because the flexoelectric flux there is parallel to the electrode
+        if pair == ("bottom", "top"):
+            r["x_analytic"] = 3.0 * 1.0e-6 ** 2 / (
+                r["C_xx"] * H ** 2 * r["kappa_y"])
+            r["V_analytic"] = 1.0e-6 * kappa * H / r["kappa_y"]
+        else:
+            r["x_analytic"] = 0.0
+            r["V_analytic"] = 0.0
+        r["rel_diff"] = (abs(r["x_fem"] / r["x_analytic"] - 1)
+                         if r["x_analytic"] else abs(r["x_fem"]))
+        rows.append(r)
+    # the pairing the notation invites: the Step-3 modulus with the poling-y
+    # permittivity.  Nothing in the model corresponds to it.
+    hybrid = 3.0 * 1.0e-6 ** 2 / (9.55e10 * H ** 2 * 4.95834517752e-10)
+    ref = [r for r in rows if r["poling"] == "y"
+           and r["pair"] == "bottom/top"][0]["x_fem"]
+    return {"kappa_1_per_m": kappa, "rows": rows,
+            "E_beam_pol_y": float(
+                [r for r in rows if r["poling"] == "y"
+                 and r["pair"] == "bottom/top"][0]["C_xx"]
+                - [r for r in rows if r["poling"] == "y"
+                   and r["pair"] == "bottom/top"][0]["C_xy"] ** 2
+                / [r for r in rows if r["poling"] == "y"
+                   and r["pair"] == "bottom/top"][0]["C_yy"]),
+            "kappa_ratio_11_over_33": float(
+                [r for r in rows if r["poling"] == "x"
+                 and r["pair"] == "bottom/top"][0]["kappa_y"]
+                / [r for r in rows if r["poling"] == "y"
+                   and r["pair"] == "bottom/top"][0]["kappa_y"]),
+            "x_hybrid_9p55_kappa33": float(hybrid),
+            "hybrid_vs_fem_rel": float(abs(hybrid / ref - 1.0))}
+
+
 def check_moments(a1=1.0, a2=0.6):
     """M_ii = a_i^2/3, a_i^2/4, a_i^2/5 from quadrature, not from the formula.
 
@@ -282,7 +369,21 @@ def check_moments(a1=1.0, a2=0.6):
     return out
 
 
-def write_latex(F1, F2, F3, F4):
+def _num(v, digits=4):
+    """1.6946e+11 -> $1.6946\times10^{11}$, and 0 for a value at round-off."""
+    if abs(v) < 1e-12:
+        return "$0$"
+    mant, exp = f"{v:.{digits}e}".split("e")
+    return f"${mant}" + chr(92) + f"times10^{{{int(exp)}}}$"
+
+
+def _si(v, unit, digits=4):
+    BS = chr(92)
+    mant, exp = f"{v:.{digits}e}".split("e")
+    return f"{BS}SI{{{mant}e{int(exp)}}}{{{unit}}}"
+
+
+def write_latex(F1, F2, F3, F4, F5):
     """Paper_12/table_independent.tex, built from the values just computed."""
     ROW = chr(92) * 2
     BS = chr(92)
@@ -313,8 +414,8 @@ def write_latex(F1, F2, F3, F4):
                  f"{r['zeta_kv_exact']:.6f}@@ROW@@")
     L += ["@@BS@@midrule",
           "@@BS@@multicolumn{5}{@{}l}{@@BS@@emph{(c) flexoelectric coupling, "
-          "uniform curvature: $x=3@@BS@@mu^2/(C^p_{11}h^2@@BS@@kappa_{33})$ "
-          "against the finite element energy triple}}@@ROW@@",
+          "uniform curvature, poling $y$, electrodes on the long faces: "
+          "$x=3@@BS@@mu^2/(C^p_{xx}h^2@@BS@@kappa_{yy})$}}@@ROW@@",
           "mesh & @@BS@@multicolumn{2}{c}{$V_{oc}$ [V]: FEM / closed form} & "
           "$x$: FEM & $x$: closed form@@ROW@@",
           "@@BS@@midrule"]
@@ -333,10 +434,86 @@ def write_latex(F1, F2, F3, F4):
                  f"{{{r['M11_num']:.10f} ($a_1^2/{r['factor']:g}$)}} & "
                  f"@@BS@@multicolumn{{2}}{{c}}"
                  f"{{{r['M22_num']:.10f} ($a_2^2/{r['factor']:g}$)}}@@ROW@@")
+    L += ["@@BS@@midrule",
+          "@@BS@@multicolumn{5}{@{}l}{@@BS@@emph{(e) the same bending field in "
+          "four poling/electrode pairings: only the long faces can collect a "
+          "flexoelectric charge, and the permittivity that enters follows the "
+          "poling axis}}@@ROW@@",
+          "configuration & $C^p_{xx}$ [Pa] & $@@BS@@kappa_{yy}$ [F/m] & "
+          "$V_{oc}$ [V] & $x$@@ROW@@",
+          "@@BS@@midrule"]
+    for r in F5["rows"]:
+        L.append(f"{r['configuration']} & {_num(r['C_xx'])} & "
+                 f"{_num(r['kappa_y'])} & {_num(r['V'])} & "
+                 f"{_num(r['x_fem'])}@@ROW@@")
+    L.append("Step-3 modulus with $@@BS@@kappa_{33}$ (no configuration) & "
+             f"{_num(9.55e10)} & {_num(4.9583e-10)} & -- & "
+             f"{_num(F5['x_hybrid_9p55_kappa33'])}@@ROW@@")
     L += ["@@BS@@bottomrule", "@@BS@@end{tabular}"]
     txt = "\n".join(L) + "\n"
     txt = txt.replace("@@BS@@", BS).replace("@@ROW@@", ROW)
     with open(os.path.join(ROOT, "Paper_12", "table_independent.tex"), "w") as fh:
+        fh.write(txt)
+
+
+def write_axes(F1, F3, F5):
+    """Paper_12/table_axes.tex: which axis, which index, which modulus."""
+    ROW = chr(92) * 2
+    BS = chr(92)
+    rows = {r["configuration"]: r for r in F5["rows"]}
+    pol_y = rows["poling y, electrodes top/bottom"]
+    pol_x = rows["poling x, electrodes left/right"]
+    E_y = pol_y["C_xx"] - pol_y["C_xy"] ** 2 / pol_y["C_yy"]
+    UM = BS + "micro" + BS + "metre"
+    SI_200 = BS + "SI{200}{" + UM + "}"
+    SI_10 = BS + "SI{10}{" + UM + "}"
+    PA = BS + "pascal"
+    FM = BS + "farad" + BS + "per" + BS + "metre"
+    L = ["% generated by python/run_independent_checks.py -- do not edit",
+         "@@BS@@begin{tabular}{@{}llll@{}}",
+         "@@BS@@toprule",
+         "@@BS@@multicolumn{4}{@{}l}{@@BS@@emph{(a) the model axes, Voigt "
+         "indices $1=x$, $2=y$, $3=z$}}@@ROW@@",
+         "axis & role & extent & what it carries@@ROW@@",
+         "@@BS@@midrule",
+         "$x$ & length & " + SI_200 + " & bending: "
+         "$@@BS@@varepsilon_{xx}=@@BS@@kappa y$; the piezoelectric load "
+         "direction@@ROW@@",
+         "$y$ & thickness & " + SI_10 + " & strain gradient "
+         "$@@BS@@partial@@BS@@varepsilon_{xx}/@@BS@@partial y=@@BS@@kappa$; "
+         "the flexoelectric gap@@ROW@@",
+         "$z$ & out of plane & -- & neutral axis of the bending (curvature "
+         "about $z$), free surface@@ROW@@",
+         "@@BS@@midrule",
+         "@@BS@@multicolumn{4}{@{}l}{@@BS@@emph{(b) the two configurations; "
+         "they differ in the poling axis, and therefore in which entry of "
+         "$@@BS@@bm C_p$ multiplies $@@BS@@varepsilon_{xx}$}}@@ROW@@",
+         "& & piezo $k^2$ (@@BS@@ref{sec:closedform}) & flexo check "
+         "(@@BS@@ref{sec:independent})@@ROW@@",
+         "@@BS@@midrule",
+         "poling axis & & $x$ & $y$@@ROW@@",
+         "electrodes & & $x=0$, $x=L$ (short faces) & $y=0$, $y=h$ (long "
+         "faces)@@ROW@@",
+         "gap & & $L=$" + SI_200 + " & $h=$" + SI_10 + "@@ROW@@",
+         "permittivity across the gap & & "
+         "$@@BS@@kappa_{xx}=@@BS@@kappa_{33}=$"
+         + _si(pol_x["kappa_x"], FM) + " & "
+         "$@@BS@@kappa_{yy}=@@BS@@kappa_{33}=$"
+         + _si(pol_y["kappa_y"], FM) + "@@ROW@@",
+         "$C^p_{xx}$ & multiplies $@@BS@@varepsilon_{xx}$ & "
+         + _si(pol_x["C_xx"], PA) + " & " + _si(pol_y["C_xx"], PA)
+         + "@@ROW@@",
+         "$C^p_{yy}$ & & " + _si(pol_x["C_yy"], PA) + " & "
+         + _si(pol_y["C_yy"], PA) + "@@ROW@@",
+         "$E_b=1/(@@BS@@bm C_p^{-1})_{xx}$ & beam modulus & "
+         + _si(F1["E_beam"], PA) + " & " + _si(E_y, PA) + "@@ROW@@",
+         "coupling & & $@@BS@@bm e_p^{@@BS@@mathsf T}@@BS@@bm C_p^{-1}"
+         "@@BS@@bm e_p/@@BS@@kappa_{xx}$ & "
+         "$3@@BS@@mu^2/(C^p_{xx}h^2@@BS@@kappa_{yy})$@@ROW@@",
+         "@@BS@@bottomrule", "@@BS@@end{tabular}"]
+    txt = "\n".join(L) + "\n"
+    txt = txt.replace("@@BS@@", BS).replace("@@ROW@@", ROW)
+    with open(os.path.join(ROOT, "Paper_12", "table_axes.tex"), "w") as fh:
         fh.write(txt)
 
 
@@ -348,10 +525,13 @@ def main():
     print("  F3 flexo curvature", flush=True)
     F3 = check_flexo_curvature()
     F4 = check_moments()
+    print("  F5 poling/electrode configurations", flush=True)
+    F5 = check_configurations()
     os.makedirs(RES, exist_ok=True)
     with open(os.path.join(RES, "independent_checks.json"), "w") as fh:
         json.dump({"F1_frequencies": F1, "F2_damping": F2,
-                   "F3_flexo_curvature": F3, "F4_window_moments": F4},
+                   "F3_flexo_curvature": F3, "F4_window_moments": F4,
+                   "F5_configurations": F5},
                   fh, indent=1)
 
     md = ["# Independent checks of the headline numbers", "",
@@ -431,10 +611,39 @@ def main():
                   f"{r['M22_exact'] / F4['a2'] ** 2:.12f} |")
     md += ["", f"Worst relative difference {F4['worst_rel']:.1e}.", ""]
 
+    md += ["", "## F5 -- the same bending field in four poling/electrode "
+           "pairings", "",
+           "The flexoelectric polarization of $u=\\kappa xy$, "
+           "$v=-\\kappa x^2/2$ is $\\bm D=\\mu\\kappa\\hat{\\bm y}$: "
+           "normal to the long faces, parallel to the short ones.  So only the "
+           "long faces collect it, and the permittivity that then enters is "
+           "the one along $y$ -- $\\kappa_{33}$ for a plate poled along $y$, "
+           "$\\kappa_{11}$ for one poled along $x$.  The coupling factor "
+           "fixes the modulus only once that pairing is fixed.", "",
+           "| configuration | $C^p_{xx}$ [Pa] | $\\kappa_{yy}$ [F/m] | "
+           "$V_{oc}$ [V] | $x$ FEM | $x$ closed form |",
+           "|---|---|---|---|---|---|"]
+    for r in F5["rows"]:
+        md.append(f"| {r['configuration']} | {r['C_xx']:.4e} | "
+                  f"{r['kappa_y']:.4e} | {r['V']:.3e} | {r['x_fem']:.4e} | "
+                  f"{r['x_analytic']:.4e} |")
+    md += ["",
+           f"The Step-3 modulus $\\SI{{9.55e10}}{{\\pascal}}$ with the "
+           f"poling-$y$ "
+           f"permittivity would give "
+           f"$x={F5['x_hybrid_9p55_kappa33']:.4e}$, "
+           f"{100 * F5['hybrid_vs_fem_rel']:.0f} % away from the finite "
+           f"element value, and no configuration of this geometry produces "
+           f"that pairing.  The beam modulus of the poling-$y$ plate is "
+           f"{F5['E_beam_pol_y']:.4e} Pa, and "
+           f"$\\kappa_{{11}}/\\kappa_{{33}}="
+           f"{F5['kappa_ratio_11_over_33']:.1f}$.", ""]
+
     with open(os.path.join(RES, "independent_checks.md"), "w") as fh:
         fh.write("\n".join(md) + "\n")
 
-    write_latex(F1, F2, F3, F4)
+    write_latex(F1, F2, F3, F4, F5)
+    write_axes(F1, F3, F5)
     for c in F1["cases"]:
         m0 = c["mesh"][0]
         print(f"  F1 {c['case']:16s} EB {c['f_EB_kHz']:7.1f} kHz  "

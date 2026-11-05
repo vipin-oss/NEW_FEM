@@ -190,7 +190,8 @@ def main():
                  g("k2_closed_form.json.x_2d")
                  * g("k2_closed_form.json.kappa_eff") * 1e10, "{:.4f}"))
     # the count is checked in words, because that is how the abstract says it
-    words = {41: "forty-one", 49: "forty-nine", 50: "fifty"}
+    words = {41: "forty-one", 49: "forty-nine", 50: "fifty",
+             51: "fifty-one"}
     nt = g("summary.json.n_total")
     R.append(row("criteria count", words.get(int(nt), str(nt)),
                  f"summary.json n_total = {int(nt)}", int(nt),
@@ -237,6 +238,28 @@ def main():
     R.append(row("independent, zeta at alpha=0.3", "0.108",
                  "independent F2 zeta at alpha=0.3, omega*tau=0.3", zc,
                  "{:.3f}"))
+    F5 = J(I)["F5_configurations"]
+    cfg = {r["configuration"]: r for r in F5["rows"]}
+    R.append(row("axes, C_xx poled y", "1.6946",
+                 "independent F5 poling y C_xx / 1e11",
+                 cfg["poling y, electrodes top/bottom"]["C_xx"] / 1e11,
+                 "{:.4f}"))
+    R.append(row("axes, E_b poled y", "1.3544",
+                 "independent F5 E_beam_pol_y / 1e11",
+                 F5["E_beam_pol_y"] / 1e11, "{:.4f}"))
+    R.append(row("axes, kappa11/kappa33", "39",
+                 "independent F5 kappa_ratio_11_over_33",
+                 F5["kappa_ratio_11_over_33"], "{:.0f}"))
+    R.append(row("pairing, the hybrid x", "6.34",
+                 "independent F5 x_hybrid x1e4",
+                 F5["x_hybrid_9p55_kappa33"] * 1e4, "{:.2f}"))
+    R.append(row("pairing, distance from the FEM value", "77",
+                 "independent F5 hybrid_vs_fem_rel x100",
+                 100 * F5["hybrid_vs_fem_rel"], "{:.0f}"))
+    R.append(row("pairing, poled x on the long faces", "1.61",
+                 "independent F5 poling x top/bottom x_fem x1e5",
+                 cfg["poling x, electrodes top/bottom"]["x_fem"] * 1e5,
+                 "{:.2f}"))
     R.append(row("independent, flexo x, uniform curvature", "3.570415",
                  "independent F3 x_analytic x1e4",
                  J(I)["F3_flexo_curvature"]["x_analytic"] * 1e4, "{:.6f}"))

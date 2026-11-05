@@ -156,4 +156,27 @@ figure exists to show.
 | T4 | flexo k², 48×4 vs 96×4 witness, rel. diff < 2 % |
 | T5 | flexo k² at µ = 0 / value < 1e-5 |
 
-All five pass; the suite reports 29/29.
+All five pass; the suite reports 51/51.
+
+## 4. Which modulus goes with which permittivity
+
+The two panels are two poling directions of one geometry, and the elastic
+modulus is not the same tensor in the two:
+
+|  | flexo column, panel (a) | piezo column, panel (b) |
+|---|---|---|
+| poling axis | `y` (through the thickness) | `x` (along the length) |
+| electrodes | long faces, gap `h` | end faces, gap `L` |
+| permittivity across the gap | `kappa_yy = kappa_33 = 4.9583e-10` F/m | `kappa_xx = kappa_33 = 4.9583e-10` F/m |
+| `C^p_xx` | `1.6946e11` Pa | `9.5500e10` Pa |
+| `C^p_yy` | `9.5500e10` Pa | `1.6946e11` Pa |
+| beam modulus `1/(C_p^-1)_xx` | `1.3544e11` Pa | `7.6327e10` Pa |
+
+The flexoelectric polarization of a bending field is normal to the long faces,
+so only a plate poled along `y` collects it -- hence the flexo column is poled
+`y` and the modulus that multiplies `eps_xx` there is `C^p_xx = 1.6946e11` Pa,
+not the `9.5500e10` Pa that the closed-form section of the manuscript prints
+(it is the same symbol for the other orientation). Pairing the `9.55e10` Pa
+modulus with `kappa_33` would give `x = 6.34e-4`, 77 % from the finite element
+value, and no configuration of this geometry produces it; the four pairings
+are tabulated in `Paper_12/table_axes.tex` and graded as criterion I9.

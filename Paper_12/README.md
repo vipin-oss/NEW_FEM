@@ -21,7 +21,7 @@ absent; `pip install tectonic` finds no distribution).  What *was* checked
 mechanically is recorded in `results/paper_structure.md`:
 balanced braces and environments, every `\ref` having a `\label`, every
 `\cite` having a `\bibitem`, all ten included figures present, `\input`
-files present, and 41/41 quoted numbers agreeing with the JSON they came from.
+files present, and 47/47 quoted numbers agreeing with the JSON they came from.
 Compile it once before reading it as finished.
 
 ## Figures
@@ -48,11 +48,11 @@ quick inspection only.
 ## Where the numbers come from
 
 Every number in the text is a value from `python3 python/run_all.py`
-(50/50 checks):
+(51/51 checks):
 
 | in the paper | source |
 |---|---|
-| Table 1 (50 checks) | `results/summary.json` → `checks`, rendered by `python/make_paper_table.py` into `table_verification.tex` (never typed by hand) |
+| Table 1 (51 checks) | `results/summary.json` → `checks`, rendered by `python/make_paper_table.py` into `table_verification.tex` (never typed by hand) |
 | Table 2 (plane strain vs stress, four cases) | `results/application_table.json` → `rows` |
 | Table 3 (memory matrix, S1) | `results/memory_variants.json` → `S1` |
 | Table 4 (KV vs Zener, S2) | `results/memory_variants.json` → `S2` |
@@ -61,7 +61,8 @@ Every number in the text is a value from `python3 python/run_all.py`
 | coupling closed forms (C1–C4) | `results/coupling_check.json` |
 | §4.4 derivation and Table 3 | `results/k2_closed_form.json`, `table_closed_form.tex`, `table_wrong_series.tex` |
 | mode tracking (K1–K2) | `results/mode_tracking.json` |
-| `tab:independent` (independent routes, I1–I8) | `results/independent_checks.json`, rendered by `run_independent_checks.py` into `table_independent.tex` |
+| `tab:independent` (independent routes, I1–I9) | `results/independent_checks.json`, rendered by `run_independent_checks.py` into `table_independent.tex` |
+| `tab:axes` (axes, Voigt indices, the two poling configurations) | the same JSON, rendered into `table_axes.tex` (panel F5) |
 | abstract, number by number | `results/abstract_audit.md`, `results/abstract_audit.json` (criterion A2) |
 | poles and damping map | `python/fem6_core.py::complex_frequency` with branch continuation |
 
@@ -70,17 +71,25 @@ the material constants, step by step, and also reproduces the superseded
 `0.3582` series as `k^2/(1+k^2)` of the corrected one — that identity is what
 identifies the earlier number as the same formula applied twice.
 
-`python3 python/check_paper_numbers.py` re-checks 41 of those claims against
+`python3 python/check_paper_numbers.py` re-checks 47 of those claims against
 the JSON and writes `results/paper_number_audit.md`; it is graded as criterion
 N1, so a stale number in the text fails the suite.
 
-`python3 python/run_independent_checks.py` (criteria I1–I8, Table 5) is the
+`python3 python/run_independent_checks.py` (criteria I1–I9, `tab:independent`) is the
 other half of that argument: it reproduces eight headline numbers along routes
 that never touch the assembled matrices — Euler–Bernoulli and Timoshenko beam
 theory, the real roots of a polynomial that the fractional pole equation
 becomes for rational order, a three-scalar energy identity for the
 flexoelectric coupling in the uniform-curvature limit, and a quadrature for
-the second moments of the three window shapes.
+the second moments of the three window shapes.  Its last panel is the one
+that settles the indexing question: the flexoelectric polarization of the
+bending field is normal to the long faces, so only a plate poled along $y$ can
+collect it, and the modulus that belongs with the permittivity
+$\kappa_{33}$ is then $C^p_{xx}=\SI{1.6946e11}{\pascal}$ -- the entry that the
+poling-$x$ table of Sec.~\ref{sec:closedform} calls $C^p_{22}$.  The pairing of
+the poling-$x$ modulus $\SI{9.55e10}{\pascal}$ with $\kappa_{33}$ gives
+$6.34\times10^{-4}$, 77 % away from the finite element value, and corresponds
+to no configuration.
 
 `python3 python/audit_abstract_claims.py` (criterion A2) lists every numeric
 token of the abstract with the verdict `hua` (an independent route
