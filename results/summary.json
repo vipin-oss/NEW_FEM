@@ -1,0 +1,184 @@
+{
+ "checks": [
+  {
+   "id": "V1a",
+   "what": "patch energy, rel. error",
+   "value": "4.44e-16",
+   "criterion": "< 1e-12",
+   "pass": true
+  },
+  {
+   "id": "V1b",
+   "what": "gradient energy under constant strain",
+   "value": "1.06e-12",
+   "criterion": "< 1e-9",
+   "pass": true
+  },
+  {
+   "id": "V1c",
+   "what": "K_g(ellipsoid) vs FEM-1 (l^2/10)",
+   "value": "3.40e-16",
+   "criterion": "< 1e-12",
+   "pass": true
+  },
+  {
+   "id": "V1d",
+   "what": "K_g(cuboid)/K_g(ellipsoid), equal a",
+   "value": "1.666667",
+   "criterion": "= 5/3 = 1.666667",
+   "pass": true
+  },
+  {
+   "id": "V1e",
+   "what": "cuboid vs ellipsoid at equal M",
+   "value": "0.00e+00",
+   "criterion": "= 0 (< 1e-12)",
+   "pass": true
+  },
+  {
+   "id": "V2",
+   "what": "FEM-1 benchmark, u_R at l/L = 0.20",
+   "value": "4.2339 um",
+   "criterion": "within 2 % of 4.23 um (paper)",
+   "pass": true
+  },
+  {
+   "id": "V3",
+   "what": "observed mesh order",
+   "value": "1.68",
+   "criterion": "> 1.5",
+   "pass": true
+  },
+  {
+   "id": "V4a",
+   "what": "bending mode k_eff^2 (piezo only)",
+   "value": "2.27e-10",
+   "criterion": "< 1e-6 (no net charge in bending)",
+   "pass": true
+  },
+  {
+   "id": "V4b",
+   "what": "length-extensional max k_eff^2",
+   "value": "0.3991",
+   "criterion": "> 0.35",
+   "pass": true
+  },
+  {
+   "id": "V5a",
+   "what": "alpha = 1 vs closed-form KV, order",
+   "value": "0.99",
+   "criterion": "> 0.9",
+   "pass": true
+  },
+  {
+   "id": "V5b",
+   "what": "harmonic |H|, worst deviation",
+   "value": "0.37 %",
+   "criterion": "< 2 %",
+   "pass": true
+  },
+  {
+   "id": "V5c",
+   "what": "tau -> 0 residual",
+   "value": "2.08e-09",
+   "criterion": "< 1e-6",
+   "pass": true
+  },
+  {
+   "id": "V5d",
+   "what": "delivered L1 stencil vs analytic |H|",
+   "value": "0.52 %",
+   "criterion": "< 1 %",
+   "pass": true
+  },
+  {
+   "id": "V6a",
+   "what": "static truncation, 24 modes",
+   "value": "3.19e-02",
+   "criterion": "< 5e-2",
+   "pass": true
+  },
+  {
+   "id": "V6b",
+   "what": "static truncation, monotone decreasing",
+   "value": "yes",
+   "criterion": "monotone",
+   "pass": true
+  },
+  {
+   "id": "V7",
+   "what": "equal-M cuboid vs ellipsoid, max rel. diff",
+   "value": "0.00e+00",
+   "criterion": "< 1e-12",
+   "pass": true
+  },
+  {
+   "id": "F1",
+   "what": "flexo patch test, mu = 0",
+   "value": "0.00e+00 V",
+   "criterion": "= 0",
+   "pass": true
+  },
+  {
+   "id": "F2",
+   "what": "flexo patch test vs mu*kappa*h/kappa33",
+   "value": "1.0000000000",
+   "criterion": "= 1 (1e-10)",
+   "pass": true
+  },
+  {
+   "id": "F3",
+   "what": "flexo linearity V(2mu)/V(mu)",
+   "value": "2.0000000000",
+   "criterion": "= 2",
+   "pass": true
+  },
+  {
+   "id": "F4",
+   "what": "bending k_eff^2 with flexo (mu=1e-6)",
+   "value": "1.25e-04",
+   "criterion": "> 1e-5",
+   "pass": true
+  },
+  {
+   "id": "M1",
+   "what": "kappa11/kappa33",
+   "value": "39.3",
+   "criterion": "> 30 (real crystal, was 1.2)",
+   "pass": true
+  },
+  {
+   "id": "S1a",
+   "what": "zeta(K_eff, alpha=1) vs omega*tau/2",
+   "value": "0.15023 vs 0.15000",
+   "criterion": "within 2 %",
+   "pass": true
+  },
+  {
+   "id": "S1b",
+   "what": "zeta(K_uu)/zeta(K_eff) at alpha=1",
+   "value": "0.449",
+   "criterion": "in (0, 1) -- the choice matters",
+   "pass": true
+  },
+  {
+   "id": "S2",
+   "what": "KV/Zener modulus at omega*tau = 1, alpha = 1",
+   "value": "1.345",
+   "criterion": "> 1.3 (KV unbounded)",
+   "pass": true
+  }
+ ],
+ "n_pass": 24,
+ "n_total": 24,
+ "scripts_ok": {
+  "run_verification.py": true,
+  "run_flexo_check.py": true,
+  "run_material_check.py": true,
+  "run_memory_variants.py": true,
+  "run_demos.py": true
+ },
+ "figures": true,
+ "all_pass": true,
+ "runtime_note": "run_verification is ~45 s of the total"
+}

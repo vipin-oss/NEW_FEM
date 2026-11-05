@@ -38,7 +38,8 @@ plt.rcParams.update({"font.size": 9, "figure.dpi": 200,
 # application model: length-extensional BaTiO3 bar (poled along x)
 # --------------------------------------------------------------------------
 L, H = 200e-6, 10e-6
-MAT_X = f6.batio3_plane_strain("x")
+import materials as mt
+MAT_X = mt.to_core(mt.batio3("x", "plane_stress"))
 MESH = f6.mesh_rect(24, 2, L, H)
 
 
@@ -185,18 +186,95 @@ def fig_domain():
     return {"l_over_L": ls.tolist()}
 
 
+
+def fig_flexo_thickness():
+    """Size effect: the flexoelectric coupling vs plate thickness, against the
+    thickness-independent piezoelectric extensional coupling."""
+    import materials as mt
+    rows = []
+    hs = [10e-6, 5e-6, 2e-6, 1e-6]
+    for h in hs:
+        mesh = f6.mesh_rect(24, 2, L, h)
+        Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)
+        # (a) bending, through-thickness electrodes, flexo on/off
+        out = {}
+        for tag, mu in (("mu0", 0.0), ("mu1", 1e-6)):
+            core = mt.to_core(mt.Material(**{**mt.batio3("y", "plane_stress").__dict__,
+                                             "mu": mu}))
+            mdl = f6.assemble(mesh, core, Mg)
+            Koc, M, idx, (d, beta) = f6.reduce(mdl, "open", pair=("bottom", "top"))
+            Ksc, _, _, _ = f6.reduce(mdl, "short", pair=("bottom", "top"))
+            wo, Phi = f6.modes(Koc, M, 4)
+            ws, _ = f6.modes(Ksc, M, 4)
+            k2 = (wo ** 2 - ws ** 2) / wo ** 2
+            tip = int(np.argmax(mesh.nodes[:, 0]))
+            row = int(np.searchsorted(idx, mdl.mech_dof[tip][0]))
+            x0 = Phi[:, 0] * (10e-9 / abs(Phi[row, 0]))
+            V = float(abs(d @ x0)) / beta
+            out[tag] = {"k2_1": float(k2[0]), "f1_kHz": float(wo[0] / 2e3 / np.pi),
+                        "V": V}
+        # (b) application case: length-extensional piezo
+        core = mt.to_core(mt.batio3("x", "plane_stress"))
+        mdl = f6.assemble(mesh, core, Mg)
+        Koc, M, idx, (d, beta) = f6.reduce(mdl, "open",
+                                           pair=("left", "right"))
+        Ksc, _, _, _ = f6.reduce(mdl, "short", pair=("left", "right"))
+        # thin plates put many bending modes below the extensional one, so ask
+        # for more modes; the extensional mode is the one with the largest k^2
+        wo, _ = f6.modes(Koc, M, 14)
+        ws, _ = f6.modes(Ksc, M, 14)
+        k2e = (wo ** 2 - ws ** 2) / wo ** 2
+        rows.append({"h_um": h * 1e6,
+                     "k2_flexo": out["mu1"]["k2_1"],
+                     "k2_bending_piezo": out["mu0"]["k2_1"],
+                     "f1_kHz": out["mu1"]["f1_kHz"],
+                     "V_10nm": out["mu1"]["V"],
+                     "k2_ext": float(np.max(k2e)),
+                     "f_ext_kHz": float(wo[int(np.argmax(k2e))] / 2e3 / np.pi)})
+        print(f"  h={h*1e6:4.1f} um: k2_flexo={rows[-1]['k2_flexo']:.3e}  "
+              f"k2_bend_piezo={rows[-1]['k2_bending_piezo']:.2e}  "
+              f"k2_ext={rows[-1]['k2_ext']:.4f}  f1={rows[-1]['f1_kHz']:.1f} kHz")
+
+    fig, ax = plt.subplots(1, 2, figsize=(6.6, 2.7))
+    h = np.array([r["h_um"] for r in rows])
+    kf = np.array([r["k2_flexo"] for r in rows])
+    ax[0].loglog(h, kf, "o-", label=r"flexo $k^2$ ($\mu=10^{-6}$ C/m)")
+    ax[0].loglog(h, kf[0] * (h[0] / h) ** 2, "k--", lw=1,
+                 label=r"slope $-2$ ($\propto h^{-2}$)")
+    ax[0].set_xlabel(r"thickness $h$ ($\mu$m)")
+    ax[0].set_ylabel(r"$k_{\rm eff}^2$ (bending)")
+    ax[0].invert_xaxis()
+    ax[0].legend(frameon=False, fontsize=7)
+    ax[0].set_title("(a) flexoelectric size effect")
+    ax[1].semilogx(h, [r["k2_ext"] for r in rows], "s-", label="length-extensional")
+    ax[1].semilogx(h, [r["k2_bending_piezo"] for r in rows], "^-",
+                   label="bending (piezo only)")
+    ax[1].set_xlabel(r"thickness $h$ ($\mu$m)")
+    ax[1].set_ylabel(r"$k_{\rm eff}^2$")
+    ax[1].invert_xaxis()
+    ax[1].legend(frameon=False, fontsize=7)
+    ax[1].set_title("(b) piezoelectric coupling")
+    fig.tight_layout()
+    fig.savefig(os.path.join(FIG, "fig5_flexo_thickness.png"))
+    plt.close(fig)
+    return rows
+
+
 def main():
     print("orientation sweep ...", flush=True)
     rows = oriented_sweep()
     fig_orientation(rows)
     print("memory response ...", flush=True)
     mem = fig_memory()
+    print("flexo thickness sweep ...")
+    thick = fig_flexo_thickness()
     print("damping ratio ...", flush=True)
     dam = fig_damping()
     print("domain comparison ...", flush=True)
     dom = fig_domain()
     with open(os.path.join(ROOT, "results", "demo.json"), "w") as fh:
-        json.dump({"orientation": rows, "memory": mem, "domain": dom},
+        json.dump({"orientation": rows, "memory": mem, "domain": dom,
+                   "damping": dam, "flexo_thickness": thick},
                   fh, indent=2)
     print("figures written to results/figures/")
 
