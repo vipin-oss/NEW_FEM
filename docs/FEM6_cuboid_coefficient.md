@@ -120,8 +120,9 @@ consequential line in the whole FEM-6 implementation.
 The complementary error — halving the coefficient to 1/12 or 1/20 (§0, "energy
 coefficient") while leaving it in `K_g` — gives a model that is half as stiff
 as FEM-1 and no longer reproduces the published benchmark. Verified: with
-`c = 1/2, M = l²/5` the benchmark is reproduced to machine precision; with
-`c = 1/4` it is not.
+`c = 1/2, M = l²/5` the benchmark is reproduced (4.2339 µm, ratio 0.9408 at
+`l/L = 0.2`; paper 4.23 µm, 0.94); with `c = 1/4` it gives 4.3192 µm
+(ratio 0.9598) and misses the published value.
 
 ## 4. Consequence 1: the "cuboid vs ellipsoid" study is not identifiable
 

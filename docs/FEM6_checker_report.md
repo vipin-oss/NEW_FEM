@@ -53,8 +53,15 @@ So **FEM-1's 1/10 is the 3-D-ellipsoid entry**; a cuboid needs **1/6**, i.e.
   `3.4×10⁻¹⁶`;
 * `K_g(cuboid, a=l) / K_g(ellipsoid, l) = 1.666667` (= 5/3);
 * equal `M` ⟹ identical matrices (difference `0.0`);
-* with `1/6` the FEM-1 benchmark is reproduced (4.234 µm at `l/L = 0.2`, paper
-  4.23 µm); with the doubled-halving `1/12` it is not.
+* with FEM-1's own ellipsoid entry (`M = l²/5`, `c = 1/2`) the benchmark is
+  reproduced: **4.2339 µm, ratio 0.9408** at `l/L = 0.2` on a 20×4 mesh (paper
+  4.23 µm, ratio 0.94);
+* assigning a **cuboid** half-width equal to `l` at the same `l` gives
+  4.1491 µm (ratio 0.9220) — correctly stiffer by `5/3`; matching `M` exactly
+  (`a = l√(3/5)`) returns the identical 4.2339 µm / 0.9408;
+* halving the coefficient to `1/4` in the M-form (i.e. putting the "1/12"
+  energy value into `K_g`) gives 4.3192 µm (ratio 0.9598) and **no longer
+  reproduces the benchmark**.
 
 **Two traps.**
 
