@@ -17,11 +17,14 @@ python/run_material_check.py plane strain vs stress comparison + anisotropy
 python/run_flexo_check.py    flexoelectric patch test F1-F5 (exact, mesh independent)
 python/run_memory_variants.py memory on K_eff vs K_uu; KV vs fractional Zener
 python/run_verification.py   V1–V7 verification suite (~40 s)
-python/run_demos.py          figures 1–4 + results/demo.json
+python/run_all.py            ONE command: whole suite + one pass/fail table (29 checks)
+python/run_demos.py          figures 1–5 + results/demo.json
 matlab/FEM6_memory_piezo_SG_2D_v2.m   corrected MATLAB mirror + self-tests
 docs/FEM6_checker_report.md           answers to the four blueprint questions,
                                       findings A/B/C/D, revised blueprint
 docs/FEM6_cuboid_coefficient.md       Q1 in full (second-moment derivation)
+docs/FEM6_thickness_sweep.md          figure 5: the three artefacts it had and
+                                      the secular/static replacements
 results/verification.{md,json}        verification output
 results/demo.json, results/figures/   demo output
 ```
@@ -29,8 +32,9 @@ results/demo.json, results/figures/   demo output
 ## Run
 
 ```bash
+python3 python/run_all.py              # ~1 min 40 s, writes results/SUMMARY.md
 python3 python/run_verification.py     # 40 s, writes results/
-python3 python/run_demos.py            # 1 min, writes figures
+python3 python/run_demos.py            # 50 s, writes figures
 ```
 
 Requires `numpy`, `scipy`, `matplotlib`. No hard-coded paths: both scripts

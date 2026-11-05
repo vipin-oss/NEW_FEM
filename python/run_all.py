@@ -1,7 +1,7 @@
 """
 run_all.py -- one command, whole suite, one pass/fail table.
 
-    python3 python/run_all.py              # everything (~75 s)
+    python3 python/run_all.py              # everything (~2 min)
     python3 python/run_all.py --no-figs    # skip the figures
 
 Runs, in order:
@@ -9,7 +9,7 @@ Runs, in order:
     run_flexo_check.py     F1-F5 flexoelectric
     run_material_check.py  plane strain vs plane stress, dielectric anisotropy
     run_memory_variants.py S1 memory matrix, S2 KV vs Zener
-    run_demos.py           figures 1-4 (optional)
+    run_demos.py           figures 1-5 (optional)
 then applies the pass/fail criteria below to the generated JSON and writes
 results/SUMMARY.md and results/summary.json.
 
@@ -24,6 +24,8 @@ import os
 import subprocess
 import sys
 import time
+
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -60,6 +62,7 @@ def main():
     F = load("flexo_check.json")
     Mc = load("material_comparison.json")
     Mv = load("memory_variants.json")
+    D = load("demo.json") if figs else None
 
     rows = []          # (id, what, value, criterion, ok)
 
@@ -151,11 +154,36 @@ def main():
         f"{kv['ratio_KV_over_Zener']:.3f}", "> 1.3 (KV unbounded)",
         kv["ratio_KV_over_Zener"] > 1.3)
 
+    if D is not None:
+        # thickness sweep -- the panel that used to be a mode-selection
+        # artefact, now graded on the properties that make it admissible:
+        # no mode is picked by argmax, the piezo column is mode-free, and the
+        # flexo column is monotone and carries a finer-mesh witness.
+        TH = D["flexo_thickness"]
+        ext = np.array([r["k2_ext"] for r in TH])
+        ratio = float(ext.max() / ext.min())
+        chk("T1", "piezo k^2 (mode-free) over h = 10 -> 1 um, max/min",
+            f"{ratio:.4f}", "< 1.005 (thickness independent)", ratio < 1.005)
+        mesh = max(abs(r["k2_ext"] / r["k2_ext_24"] - 1.0) for r in TH)
+        chk("T2", "piezo k^2, 24x2 vs 48x4, max rel. diff", f"{mesh:.1e}",
+            "< 1e-3", mesh < 1e-3)
+        kf = np.array([r["k2_flexo"] for r in TH])
+        chk("T3", "flexo k^2, 48x4 (monotone in h)",
+            f"{kf[0]:.2e} -> {kf[-1]:.2e}",
+            "strictly increasing as h falls", bool(np.all(np.diff(kf) > 0)))
+        wit = max(abs(r["k2_flexo_96"] / r["k2_flexo"] - 1.0)
+                  for r in TH if "k2_flexo_96" in r)
+        chk("T4", "flexo k^2, 48x4 vs 96x4 witness", f"{wit:.1e}",
+            "< 0.02", wit < 0.02)
+        fl = max(abs(r["k2_floor"]) / r["k2_flexo"] for r in TH)
+        chk("T5", "flexo k^2 at mu = 0 / value (residual)", f"{fl:.0e}",
+            "< 1e-5", fl < 1e-5)
+
     npass = sum(r["pass"] for r in rows)
     allok = npass == len(rows) and all(ran.values())
     out = {"checks": rows, "n_pass": npass, "n_total": len(rows),
            "scripts_ok": ran, "figures": figs, "all_pass": bool(allok),
-           "runtime_note": "run_verification is ~45 s of the total"}
+           "runtime_note": "run_verification ~45 s, run_demos ~~55 s of the total"}
 
     os.makedirs(RESULTS, exist_ok=True)
     with open(os.path.join(RESULTS, "summary.json"), "w") as fh:
