@@ -734,7 +734,12 @@ frequency.  The second is \emph{implementation}: the convolution of
 only the short-circuit matrix $K_{uu}$, and the two give different damping.
 
 \paragraph{Memory matrix.}  Table~\ref{tab:S1} reports the ring-down of the
-extensional mode (mode 4, \SI{6.727}{MHz}, $k^2_{\rm eff}=0.4650$) at
+extensional mode (mode 4, \SI{6.727}{MHz}, $k^2_{\rm eff}=0.4650$ with the
+fully uncoupled $K_{uu}$ denominator of \eqref{eq:kstatic}; the short-circuit
+denominator used in Table~\ref{tab:kinematics} gives $0.4580$ for the same mode,
+and the $1.5\,\%$ difference is the contribution of the internal potential dofs
+that grounding the electrodes does not remove -- the denominator has to be
+named, which is the point of Sec.~\ref{sec:couplingcare}) at
 $\tau=\SI{7.0974}{\nano\second}$, i.e.\ $\omega\tau=0.3$, with an initial tip
 displacement that produces \SI{139.07}{\volt} of open-circuit voltage at
 $t=0$.  The damping ratio extracted from the logarithmic decrement,
