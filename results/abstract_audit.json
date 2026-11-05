@@ -118,7 +118,7 @@
    "literal": "fifty",
    "what": "the number of graded criteria",
    "verdict": "hua",
-   "route": "run\\_all.py: 49/49 pass, and check\\_paper\\_numbers.py compares the word against summary.json"
+   "route": "run\\_all.py: 50/50 pass, and check\\_paper\\_numbers.py compares the word against summary.json"
   }
  ],
  "n_hua": 10,
