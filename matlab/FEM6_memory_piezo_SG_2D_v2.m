@@ -1,3 +1,8 @@
+%% =====================================================================
+%% FROZEN - NOT MAINTAINED.  Python (python/fem6_core.py) is authoritative.
+%% Item 2 of the change list below (the L1 weights) is WITHDRAWN: the
+%% delivered modal_fractional() is correct.  See docs/FEM6_A1_clarification.md.
+%% =====================================================================
 %% FEM6_memory_piezo_SG_2D_v2.m
 % FEM-6: fractional-memory (Caputo) piezoelectric strain-gradient model on
 % the FEM-1 BFS C1 element.  Corrected version of FEM6_memory_piezo_SG_2D.m.

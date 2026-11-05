@@ -57,9 +57,17 @@ memory term implicit.
 
 ## Status
 
-All seven verification cases pass, and the FEM-1 benchmark is reproduced
-(4.234 µm vs 4.23 µm published at `l/L = 0.2`). Two blocking defects were found
-in the delivered MATLAB code — the missing `b₀ = 1` weight and, depending on
-the length-scale convention, the gradient coefficient — plus a physical dead
-end in the demonstration (a homogeneous plate in bending carries no net
-electrode charge, so `k_eff² ≈ 2×10⁻¹⁰`). See `docs/FEM6_checker_report.md`.
+Verification: all seven cases pass and the FEM-1 benchmark is reproduced
+(4.2339 µm vs 4.23 µm published, at `l/L = 0.2` on a 20x4 mesh).
+
+Delivered-code audit, revised: the L1 memory stencil of the delivered
+`modal_fractional` reproduces the analytic transfer function to 0.52 % worst
+case over `alpha = 1.0..0.3` x `Omega/w0 = 0.25..2`, and its explicit stability
+bound sits just beyond the documented `gamma > 1.5` warning, so **both stand as
+delivered** (an earlier finding to the contrary was my own mis-transcription
+and is withdrawn; see `docs/FEM6_A1_clarification.md`). Open items: the
+demonstration configuration cannot produce an electrode voltage
+(`k_eff^2 = 2e-10`, physics not a bug) and the material set is a placeholder.
+
+`matlab/` is frozen and unverified - Python is authoritative. MATLAB is not
+available in this environment, so the mirror has never been executed.

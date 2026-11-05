@@ -252,55 +252,89 @@ def v5_memory():
     R["memory_tau0"] = float(np.max(np.abs(x[0] -
                                            (1 - np.cos(w0 * t)) / w0 ** 2)))
 
-    # the L1 off-by-one of the delivered script
-    R["l1_bug"] = l1_offbyone(w0, tau, K, M)
+    # the delivered L1 stencil, transcribed verbatim
+    R["l1_scheme"] = l1_scheme_check()
 
 
-def l1_offbyone(w0, tau, K, M):
-    """Reproduce the delivered modal_fractional.m indexing on a 1-dof mode."""
-    out = {}
-    dt, N = 20 * tau / 2000, 2000
-    T = N * dt
-    for a_ in [1.0, 0.7]:
-        j = np.arange(N + 1)
-        b = (j + 1) ** (1 - a_) - j ** (1 - a_)
-        c = dt ** (-a_) / __import__("math").gamma(2 - a_)
-        if a_ >= 1:
-            b = np.r_[1.0, np.zeros(N)]
-            c = 1.0 / dt
-        # delivered scheme: Dq = c * sum_{k=1}^{n-1} b_k dq_{n-k}
-        q = np.zeros(N + 1)
-        dq = np.zeros(N + 1)
-        q[1] = 0.5 * dt ** 2
-        dq[1] = q[1] - q[0]
-        for n in range(2, N + 1):
-            Dq_old = c * np.dot(dq[n - 1:0:-1], b[1:n])
-            q[n] = 2 * q[n - 1] - q[n - 2] + dt ** 2 * (1 - w0 ** 2 *
-                                                        (q[n - 1] + tau ** a_ * Dq_old))
-            dq[n] = q[n] - q[n - 1]
-        # corrected scheme: weights b_0..b_{n-1}
-        qc = np.zeros(N + 1)
-        dqc = np.zeros(N + 1)
-        qc[1] = 0.5 * dt ** 2
-        dqc[1] = qc[1] - qc[0]
-        for n in range(2, N + 1):
-            Dq_new = c * np.dot(dqc[n - 1::-1], b[:n])
-            qc[n] = 2 * qc[n - 1] - qc[n - 2] + dt ** 2 * (1 - w0 ** 2 *
-                                                           (qc[n - 1] + tau ** a_ * Dq_new))
-            dqc[n] = qc[n] - qc[n - 1]
-        tail = slice(int(0.8 * N), N)
-        p2p = float(np.ptp(q[tail]))
-        p2pc = float(np.ptp(qc[tail]))
-        out[str(a_)] = {"delivered_osc": p2p, "corrected_osc": p2pc,
-                        "ratio": p2p / p2pc if p2pc else np.inf}
-        log(f"  L1 off-by-one alpha={a_}: late oscillation "
-            f"{p2p:.3e} (delivered) vs {p2pc:.3e} (corrected)")
-    return out
+def l1_delivered_stencil(w, f, tau, alpha, dt, Nt):
+    """Verbatim transcription of modal_fractional() of
+    FEM6_memory_piezo_SG_2D.m, 1-based indexing kept for fidelity.
+
+        q(:,2) = 0.5*dt^2*f;
+        dq(:,1) = q(:,2)-q(:,1);
+        for n = 2:Nt
+            Dq = c*(dq(:,n-1:-1:1)*b(1:n-1)');
+            q(:,n+1) = 2*q(:,n) - q(:,n-1) + dt^2*(f - w.^2.*(q(:,n)+tau^alpha*Dq));
+            dq(:,n) = q(:,n+1)-q(:,n);
+        end
+    """
+    from math import gamma as _gamma
+    q = np.zeros(Nt + 2)                     # MATLAB index i  <->  q[i]
+    if alpha >= 1:
+        b = np.zeros(Nt + 1); b[0] = 1.0; c = 1.0 / dt
+    else:
+        j = np.arange(Nt + 1)
+        b = (j + 1) ** (1 - alpha) - j ** (1 - alpha)
+        c = dt ** (-alpha) / _gamma(2 - alpha)
+    fa = (np.full(Nt + 3, float(f)) if np.isscalar(f) else np.asarray(f, float))
+    q[2] = 0.5 * dt ** 2 * fa[1]
+    dq = np.zeros(Nt + 2); dq[1] = q[2] - q[1]
+    for n in range(2, Nt + 1):
+        js = np.arange(n - 1, 0, -1)         # MATLAB  n-1:-1:1
+        Dq = c * np.dot(dq[js], b[0:n - 1])  # MATLAB  b(1:n-1)
+        q[n + 1] = 2 * q[n] - q[n - 1] + dt ** 2 * (
+            fa[n] - w ** 2 * (q[n] + tau ** alpha * Dq))
+        dq[n] = q[n + 1] - q[n]
+    return q[1:Nt + 1]
 
 
-# ==========================================================================
-# modal truncation and domain comparison
-# ==========================================================================
+def _amp(qq, tt, Om):
+    m = tt > tt[-1] - 4 * 2 * np.pi / Om
+    M = np.vstack([np.sin(Om * tt[m]), np.cos(Om * tt[m])]).T
+    ab, *_ = np.linalg.lstsq(M, qq[m], rcond=None)
+    return float(np.hypot(*ab))
+
+
+def l1_scheme_check():
+    """Delivered L1 stencil against the analytic transfer function
+    H(Om) = 1/(-Om^2 + w0^2 (1 + (i Om tau)^alpha)) -- the only test that
+    actually exercises the memory discretisation."""
+    w0 = 2 * np.pi * 1e4
+    tau = 0.3 / w0
+    rows = []
+    for alpha in [1.0, 0.9, 0.7, 0.5, 0.3]:
+        for r in [0.25, 0.5, 1.0, 1.5, 2.0]:
+            Om = r * w0
+            ppd, nper = 200, 40
+            dt = (2 * np.pi / Om) / ppd
+            Nt = nper * ppd
+            tt = np.arange(1, Nt + 1) * dt
+            fa = np.sin(Om * np.arange(Nt + 3) * dt)
+            qq = l1_delivered_stencil(w0, fa, tau, alpha, dt, Nt)
+            amp = _amp(qq, tt, Om)
+            Ha = abs(1.0 / (-Om ** 2 + w0 ** 2 * (1 + (1j * Om * tau) ** alpha)))
+            rows.append({"alpha": alpha, "Omega_over_w0": r, "amp": amp,
+                         "amp_analytic": Ha, "ratio": amp / Ha})
+    worst = max(abs(r["ratio"] - 1) for r in rows)
+    conv = []
+    Om = w0
+    Ha = abs(1.0 / (-Om ** 2 + w0 ** 2 * (1 + (1j * Om * tau))))
+    for ppd in [50, 100, 200, 400]:
+        dt = (2 * np.pi / Om) / ppd
+        Nt = 40 * ppd
+        tt = np.arange(1, Nt + 1) * dt
+        fa = np.sin(Om * np.arange(Nt + 3) * dt)
+        amp = _amp(l1_delivered_stencil(w0, fa, tau, 1.0, dt, Nt), tt, Om)
+        conv.append({"ppd": ppd, "dt": dt, "amp": amp,
+                     "rel_err": abs(amp / Ha - 1)})
+    errs = [c["rel_err"] for c in conv]
+    order = float(np.log(errs[1] / errs[-1]) / np.log(4)) if errs[-1] > 0 else 0.0
+    log(f"  delivered L1 stencil vs analytic |H|: worst error "
+        f"{100*worst:.3f} % over alpha 1.0..0.3, Omega/w0 0.25..2")
+    return {"rows": rows, "worst_ratio_error": worst, "convergence": conv,
+            "observed_order": order, "pass": bool(worst < 0.01)}
+
+
 def v6_modal_truncation():
     mat = MAT_STEEL
     mesh = f6.mesh_rect(20, 4, 1.0, 0.2)
@@ -444,8 +478,22 @@ def write_markdown(R):
     A("\nL1 indexing of the delivered `modal_fractional` (weights b_1..b_{n-1} "
       "instead of b_0..b_{n-1}):\n")
     A("| alpha | delivered late oscillation | corrected late oscillation | ratio |\n|---|---|---|---|")
-    for k, v in R["l1_bug"].items():
-        A(f"| {k} | {v['delivered_osc']:.4e} | {v['corrected_osc']:.4e} | {v['ratio']:.2f} |")
+    L = R["l1_scheme"]
+    A("\n### Delivered L1 stencil vs the analytic transfer function\n")
+    A("Transcribed verbatim from `modal_fractional()`; `w0 tau = 0.3`.\n")
+    A("| alpha | Omega/w0 | amplitude | analytic |H| | ratio |")
+    A("|---|---|---|---|---|")
+    for r in L["rows"]:
+        A(f"| {r['alpha']:.1f} | {r['Omega_over_w0']:.2f} | {r['amp']:.4e} | "
+          f"{r['amp_analytic']:.4e} | {r['ratio']:.4f} |")
+    A(f"\nWorst deviation {100*L['worst_ratio_error']:.3f} % -> "
+      f"{'PASS' if L['pass'] else 'FAIL'}\n")
+    A("Time-step refinement at Omega = w0, alpha = 1:\n")
+    A("| pts/period | dt | rel. error |")
+    A("|---|---|---|")
+    for c in L["convergence"]:
+        A(f"| {c['ppd']} | {c['dt']:.3e} | {c['rel_err']:.2e} |")
+    A(f"\nObserved order {L['observed_order']:.2f}")
 
     A("\n## V6 Static modal truncation\n")
     A(f"Direct solution: {R['truncation']['u_direct']*1e6:.4f} um\n")
