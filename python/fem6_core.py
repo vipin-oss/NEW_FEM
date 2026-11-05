@@ -769,13 +769,19 @@ def damping_ratio(omega, tau, alpha):
     return 0.5 * (omega * tau) ** alpha * np.sin(0.5 * np.pi * alpha)
 
 
-def complex_frequency(omega0, tau, alpha, iters=200):
+def complex_frequency(omega0, tau, alpha, iters=200, s0=None):
     """Fundamental pole of  s^2 + omega0^2 (1 + (tau s)^alpha) = 0.
 
     Damped Newton iteration on the principal branch (as in the MATLAB
     helper cplx_root, but with a convergence check on the residual).
+
+    ``s0`` warm-starts the iteration.  The pole equation has several roots and
+    for alpha < 1 and omega*tau >~ 4 the plain iteration can jump to a
+    different one (it was observed to land on a root with a positive real
+    part); sweeping omega*tau with the previous root as s0 keeps the branch
+    continuous, which is what a damping map needs.
     """
-    s = omega0 * (-0.05 + 1.0j)
+    s = omega0 * (-0.05 + 1.0j) if s0 is None else complex(s0)
     for _ in range(iters):
         fv = s ** 2 + omega0 ** 2 * (1.0 + (tau * s) ** alpha)
         dfv = 2.0 * s + omega0 ** 2 * alpha * tau ** alpha * s ** (alpha - 1.0)

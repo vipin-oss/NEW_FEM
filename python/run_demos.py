@@ -199,10 +199,15 @@ def _static_k2(mesh, mats, Mg, pair):
     digits.
     """
     mdl = f6.assemble(mesh, mt.to_core(mats), Mg)
-    Koc, _, _, (d, beta) = f6.reduce(mdl, "open", pair=pair)
-    sd = np.sqrt(np.abs(np.diag(Koc)))
+    # K_uu is the SHORT-circuit stiffness: the energy the electrodes can pick
+    # up is measured against the grounded state.  (An earlier version of this
+    # helper solved against K_open and returned 0.358 instead of 0.560; the
+    # closed-form check in run_coupling_check.py is what exposed it.)
+    Ksc, _, _, _ = f6.reduce(mdl, "short", pair=pair)
+    _, _, _, (d, beta) = f6.reduce(mdl, "open", pair=pair)
+    sd = np.sqrt(np.abs(np.diag(Ksc)))
     S = 1.0 / sd
-    x = float((S * d) @ np.linalg.solve(Koc * S[:, None] * S[None, :], S * d))
+    x = float((S * d) @ np.linalg.solve(Ksc * S[:, None] * S[None, :], S * d))
     x /= beta
     return x / (1.0 + x)
 

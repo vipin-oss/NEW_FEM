@@ -9,47 +9,62 @@ averaging window*.
 
 ```
 pdflatex main
-pdflatex main          # twice, for \ref and the table numbers
+pdflatex main          # twice, for \ref and the generated table
 ```
 
 There is no bibliography database: the reference list is an inline
 `thebibliography` block, so `bibtex` is not needed.
 
-**Not compiled in this repository.** No TeX distribution is installed in the
-environment where the manuscript was written, so `main.tex` has been checked
-only mechanically (balanced environments, no non-ASCII characters, every
-`\ref` has a `\label`, every `\cite` has a `\bibitem`) — not by a LaTeX run.
-Compile it once on your side before reading it as finished.
+**Not compiled.** No TeX distribution exists in the environment where the
+manuscript was written (`pdflatex`, `latexmk`, `xelatex`, `tectonic` all
+absent; `pip install tectonic` finds no distribution).  What *was* checked
+mechanically is recorded in `results/paper_structure.md`:
+balanced braces and environments, every `\ref` having a `\label`, every
+`\cite` having a `\bibitem`, all ten included figures present, `\input`
+files present, and 26/26 quoted numbers agreeing with the JSON they came from.
+Compile it once before reading it as finished.
 
 ## Figures
 
-`figures/` holds copies of `results/figures/fig1..fig5`, produced by
-`python3 python/run_demos.py`.  They are copied, not generated in place: if you
-re-run the demos, copy them again.
+Ten vector figures, all produced by `python3 python/run_paper_figures.py`
+(part of `run_all.py`); the PDFs are copied into `figures/`.
 
-| file | in the paper |
-|---|---|
-| `fig1_k2_orientation.png` | Fig. 1, window orientation and aspect ratio |
-| `fig2_memory_response.png` | Fig. 5, ring-down for α = 1, 0.9, 0.7 |
-| `fig3_damping_ratio.png` | Fig. 4, damping ratio versus α |
-| `fig4_domain_comparison.png` | Fig. 3, window shape versus second moment |
-| `fig5_flexo_thickness.png` | Fig. 2, thickness sweep (flexo vs piezo) |
+| file | figure | message |
+|---|---|---|
+| `P1_geometry.pdf` | Fig. 1 | the two electrode configurations and the window |
+| `P2_petals.pdf` | Fig. 2 | f₁ and k² against window angle, as polar petals |
+| `P3_map_k2_AR_theta.pdf` | Fig. 3 | the same sweep over (θ, aspect ratio) |
+| `P4_mode_shape_potential.pdf` | Fig. 4 | deformed mode with the open-circuit potential in colour |
+| `P5_root_locus.pdf` | Fig. 5 | complex poles over α and ωτ |
+| `P6_ringdown.pdf` | Fig. 6 | ring-down for four Caputo orders |
+| `P7_thickness.pdf` | Fig. 7 | flexo size effect against a constant piezo coupling |
+| `P8_mode_tracking.pdf` | Fig. 8 | one mode shape at four thicknesses (MAC) |
+| `P9_damping_surface.pdf` | Fig. 9 | ζ over the (α, ωτ) plane |
+| `P10_window_shape.pdf` | Fig. 10 | window shape versus second moment |
+
+`results/figures/paper/` holds the same set as PDF + PNG; the PNGs are for
+quick inspection only.
 
 ## Where the numbers come from
 
 Every number in the text is a value from `python3 python/run_all.py`
-(29/29 checks, `results/SUMMARY.md`):
+(39/39 checks):
 
 | in the paper | source |
 |---|---|
-| Table 1 (29 checks) | `results/summary.json` → `checks` |
-| Table 2 (plane stress/strain) | `results/material_comparison.json` |
+| Table 1 (39 checks) | `results/summary.json` → `checks`, rendered by `python/make_paper_table.py` into `table_verification.tex` (never typed by hand) |
+| Table 2 (plane strain vs stress, four cases) | `results/application_table.json` → `rows` |
 | Table 3 (memory matrix, S1) | `results/memory_variants.json` → `S1` |
 | Table 4 (KV vs Zener, S2) | `results/memory_variants.json` → `S2` |
-| Table 5 (application) | `results/material_comparison.json` → `case` |
-| §5.1 orientation numbers | `results/demo.json` → `orientation` |
-| §5.5 thickness numbers | `results/demo.json` → `flexo_thickness` |
-| Fig. 4 damping numbers | `results/demo.json` → `damping` |
+| §5.1 orientation numbers | `results/paper_figures_data.json` → `polar` |
+| §5.4 thickness numbers | `results/demo.json` → `flexo_thickness` |
+| coupling closed forms (C1–C4) | `results/coupling_check.json` |
+| mode tracking (K1–K2) | `results/mode_tracking.json` |
+| poles and damping map | `python/fem6_core.py::complex_frequency` with branch continuation |
+
+`python3 python/check_paper_numbers.py` re-checks 26 of those claims against
+the JSON and writes `results/paper_number_audit.md`; it is graded as criterion
+N1, so a stale number in the text fails the suite.
 
 ## Placeholders that must be filled before submission
 
@@ -66,14 +81,21 @@ Each is marked `% TODO` in `main.tex`.
 
 ## Unverified items, restated
 
-The manuscript says these in §7 (Limitations) and repeats them where the
-numbers are used.  They are not placeholders in the text — they are stated as
-unverified on purpose:
+The manuscript says these in the Limitations section and repeats them where
+the numbers are used.  They are not placeholders in the text — they are stated
+as unverified on purpose:
 
 * `rho = 6020 kg/m³` — affects every frequency as `rho^-1/2`; no primary
   source in this work.
 * `mu = 1e-6 C/m` — nominal; the flexoelectric panels scale as `mu^2` and are
   sensitivity studies, not predictions for BaTiO₃.
-* The plane-stress reduction is a modelling choice (worth up to 35 % in k²).
+* The plane-stress reduction is a modelling choice (worth 12 % in k² for the
+  extensional case, 35 % for the y-coupled one, and 2.8 % below the 3-D
+  closed form before any kinematics is chosen).
 * The saturation of the flexoelectric size effect below 2 µm is converged but
   its attribution to the window/thickness ratio is an interpretation.
+
+## Reviewer risks
+
+`REVIEWER_RISKS.md` lists the eight points a referee is most likely to raise,
+each with the section that already addresses it and what is still missing.

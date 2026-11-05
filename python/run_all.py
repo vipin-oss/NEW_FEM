@@ -9,7 +9,13 @@ Runs, in order:
     run_flexo_check.py     F1-F5 flexoelectric
     run_material_check.py  plane strain vs plane stress, dielectric anisotropy
     run_memory_variants.py S1 memory matrix, S2 KV vs Zener
-    run_demos.py           figures 1-5 (optional)
+    run_coupling_check.py  C1-C4 piezo k^2 against the closed form
+    run_mode_tracking.py   K1-K2 the same mode shape at every thickness
+    run_application_table.py A1 the four polarisation/kinematics cases
+    run_demos.py           the thickness sweep (optional)
+    run_paper_figures.py   the paper figure set (optional)
+    check_paper_numbers.py N1 every number in the manuscript (optional)
+    check_paper_structure.py   manuscript structure, no TeX available (opt.)
 then applies the pass/fail criteria below to the generated JSON and writes
 results/SUMMARY.md and results/summary.json.
 
@@ -53,16 +59,26 @@ def main():
     figs = "--no-figs" not in sys.argv
     print("running the suite")
     scripts = ["run_verification.py", "run_flexo_check.py",
-               "run_material_check.py", "run_memory_variants.py"]
+               "run_material_check.py", "run_memory_variants.py",
+               "run_coupling_check.py", "run_mode_tracking.py",
+               "run_application_table.py"]
     if figs:
         scripts.append("run_demos.py")
+        scripts.append("run_paper_figures.py")
+        scripts.append("make_paper_table.py")
+        scripts.append("check_paper_numbers.py")
+        scripts.append("check_paper_structure.py")
     ran = {s: run(s) for s in scripts}
 
     V = load("verification.json")
     F = load("flexo_check.json")
     Mc = load("material_comparison.json")
     Mv = load("memory_variants.json")
+    Cc = load("coupling_check.json")
+    Kt = load("mode_tracking.json")
+    At = load("application_table.json")
     D = load("demo.json") if figs else None
+    Pg = load("paper_figures_data.json") if figs else None
 
     rows = []          # (id, what, value, criterion, ok)
 
@@ -154,6 +170,39 @@ def main():
         f"{kv['ratio_KV_over_Zener']:.3f}", "> 1.3 (KV unbounded)",
         kv["ratio_KV_over_Zener"] > 1.3)
 
+    cf = Cc["closed_form"]
+    chk("C1", "FEM k^2 (unconstrained plate) vs 2-D closed form e^T C^-1 e/kappa",
+        f"{Cc['fem']['plane_stress']['free_48x4']:.5f} vs {cf['k2_2d_closed']:.5f}",
+        "rel. diff < 1e-3", Cc["rel_err_free"] < 1e-3)
+    chk("C2", "2-D model vs 3-D free bar (plane-stress reduction)",
+        f"{100 * Cc['rel_gap_2d_vs_3d']:.2f} %",
+        "< 5 % (documented modelling gap)", Cc["rel_gap_2d_vs_3d"] < 0.05)
+    chk("C3", "FEM k^2, clamped plate, 96x4 vs 48x4",
+        f"{Cc['fem']['plane_stress']['clamped_96x4']:.5f} vs "
+        f"{Cc['fem']['plane_stress']['clamped_48x4']:.5f}",
+        "rel. diff < 1e-3", Cc["rel_mesh_96_vs_48"] < 1e-3)
+    chk("C4", "FEM k^2, clamped plate, 24x2 vs 48x4",
+        f"{100 * abs(Cc['fem']['plane_stress']['clamped_24x2'] / Cc['fem']['plane_stress']['clamped_48x4'] - 1):.2f} %",
+        "< 0.5 % (coarse mesh)", abs(
+            Cc["fem"]["plane_stress"]["clamped_24x2"] /
+            Cc["fem"]["plane_stress"]["clamped_48x4"] - 1) < 5e-3)
+
+    kmac = min(r["mac_mode1_vs_ref"] for r in Kt["rows"])
+    koff = max(max(r["mac_offdiag"]) for r in Kt["rows"])
+    chk("K1", "lowest MAC of mode 1 vs the h = 10 um shape (4 thicknesses)",
+        f"{kmac:.5f}", "> 0.999", kmac > 0.999)
+    krat = min(r["f_ratio_2_over_1"] for r in Kt["rows"])
+    chk("K2", "worst f2/f1 over the thickness sweep (mode off-diagonal)",
+        f"{koff:.1e}, f2/f1 >= {krat:.2f}", "off-diag < 1e-5, ratio > 6",
+        koff < 1e-5 and krat > 6.0)
+
+    ak2 = [r["k2"] for r in At["rows"]]
+    chk("A1", "application table: extensional plane stress is the strongest "
+        "coupling of the four", f"{max(ak2):.4f}",
+        "= 0.4580, largest, > 0.4",
+        abs(max(ak2) - 0.45797) < 1e-4 and ak2.index(max(ak2)) == 3
+        and max(ak2) > 0.4)
+
     if D is not None:
         # thickness sweep -- the panel that used to be a mode-selection
         # artefact, now graded on the properties that make it admissible:
@@ -178,6 +227,30 @@ def main():
         fl = max(abs(r["k2_floor"]) / r["k2_flexo"] for r in TH)
         chk("T5", "flexo k^2 at mu = 0 / value (residual)", f"{fl:.0e}",
             "< 1e-5", fl < 1e-5)
+
+    if Pg is not None:
+        pol = Pg["polar"]
+        nfig = sum(1 for f in os.listdir(os.path.join(RESULTS, "figures",
+                                                      "paper"))
+                   if f.endswith(".pdf"))
+        chk("P1", "paper figures: vector set written",
+            f"{nfig} PDF", "= 10 (P1-P10)", nfig == 10)
+        chk("P2", "orientation sweep rows / k^2 range",
+            f"{len(pol)} rows, {min(r['k2_axial'] for r in pol):.4f}"
+            f"-{max(r['k2_axial'] for r in pol):.4f}",
+            "168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50)",
+            len(pol) == 168 and 0.35 < min(r["k2_axial"] for r in pol)
+            and max(r["k2_axial"] for r in pol) < 0.50)
+
+        import re as _re
+        with open(os.path.join(RESULTS, "paper_number_audit.md")) as fh:
+            head = fh.readline()
+        with open(os.path.join(RESULTS, "paper_number_audit.md")) as fh:
+            txt = fh.read()
+        m = _re.search(r"(\d+)/(\d+) claims agree", txt)
+        nok, ntot = (int(m.group(1)), int(m.group(2))) if m else (0, 1)
+        chk("N1", "manuscript numbers vs the JSON they came from",
+            f"{nok}/{ntot}", "all agree", nok == ntot and ntot > 20)
 
     npass = sum(r["pass"] for r in rows)
     allok = npass == len(rows) and all(ran.values())
