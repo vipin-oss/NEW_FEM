@@ -10,7 +10,10 @@ The Python code is authoritative; the MATLAB file is a mirror for delivery.
 
 ```
 python/fem6_core.py          element, assembly, potential condensation,
-                             modes, L1 Caputo stepping, complex pole, materials
+                             modes, L1 Caputo stepping, complex pole
+python/materials.py          the material record (BaTiO3, Zgonik/FEM-5 set),
+                             plane-strain / plane-stress reduction, checks
+python/run_material_check.py plane strain vs stress comparison + anisotropy
 python/run_verification.py   V1–V7 verification suite (~40 s)
 python/run_demos.py          figures 1–4 + results/demo.json
 matlab/FEM6_memory_piezo_SG_2D_v2.m   corrected MATLAB mirror + self-tests
