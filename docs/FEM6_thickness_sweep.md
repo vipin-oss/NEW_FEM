@@ -58,7 +58,7 @@ noise of the difference is the size of the answer:
 | h = 1 µm, mesh | two-solve k² | secular k² (§1.2) |
 |---|---|---|
 | 24 × 2 | 3.94e-3 | 3.85e-3 |
-| 48 × 4 | 4.47e-3 | 4.17e-3 |
+| 48 × 4 | 4.47e-3 | 4.17e-3 (4.2e-3 to two significant digits) |
 | 96 × 4 | 3.30e-3 | 4.16e-3 |
 
 With `µ = 0` the two-solve column returned `−1.3e-7`, `+7.5e-4`,
@@ -103,7 +103,7 @@ witness, not as a second curve.
 | 2 | 2.6416e-03 | — | — | 1.0e-10 | 0.55858 |
 | 1 | 4.1736e-03 | 4.1589e-03 | 3.5e-3 | 1.0e-10 | 0.55861 |
 
-* flexo k² grows by **×23.9** from `h = 10 µm` to `1 µm`;
+* flexo k² grows by **×24** (23.94) from `h = 10 µm` to `1 µm`;
 * local log-log slopes **−1.92, −1.52, −0.66** (steep end approaching the
   `h⁻²` asymptote, shallow end flattening below `h ≈ 2 µm`);
 * piezo k² is **thickness independent to 0.09 %** (`0.55814 → 0.55861`) and
@@ -157,6 +157,18 @@ figure exists to show.
 | T5 | flexo k² at µ = 0 / value < 1e-5 |
 
 All five pass; the suite reports 51/51.
+
+## 5. Platform sensitivity of the h = 1 µm point
+
+k² at `h = 1 µm` is a small difference of two nearly equal eigenvalues of a
+pencil with condition ~10¹² there, so it moves at the 1e-3 relative level
+between numeric stacks while `h ≥ 5 µm` moves at 1e-7.  `python/run_sensitivity.py`
+runs the same model through four mathematically equivalent eigensolver paths
+and any number of numpy/scipy stacks (`--emit` per stack), and writes
+`results/sensitivity.md` and `Paper_12/table_sensitivity.tex`.  Quoted at two
+significant digits — 4.2e-3 and a factor 24 — the number is stable across
+every row; the fourth digit is not.  N1 in `run_all.py` therefore carries a
+5e-3 relative tolerance on exactly these rows.
 
 ## 4. Which modulus goes with which permittivity
 

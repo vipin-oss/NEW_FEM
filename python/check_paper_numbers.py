@@ -68,11 +68,31 @@ def g(path):
     return v
 
 
-def row(where, literal, source, value, fmt):
+def row(where, literal, source, value, fmt, rel_tol=1e-6):
+    """One claim.  It passes if the literal is the formatted JSON value, or if
+    the literal *as a number* is within ``rel_tol`` of the JSON value.
+
+    The second route is what keeps the suite portable.  A handful of numbers
+    in this paper are differences of nearly equal eigenvalues of a pencil with
+    condition ~1e12 (the h = 1 um flexoelectric coupling is the worst), and
+    they move at the 1e-3 relative level between numeric stacks; those rows
+    carry a wider tolerance and are quoted to two significant digits in the
+    text for exactly that reason.  Everything else keeps 1e-6, which is
+    stricter than the rounding of the printed literal, so a real drift still
+    fails.
+    """
     got = fmt.format(value)
     got = got.replace("e-0", "e-").replace("e+0", "e+")   # 1.74e-04 -> 1.74e-4
+    rel = None
+    try:
+        lit = float(literal)
+        rel = abs(lit - value) / abs(value) if value else abs(lit - value)
+    except ValueError:
+        pass
+    ok = (literal == got) or (rel is not None and rel <= rel_tol)
     return {"where": where, "tex": literal, "json": source,
-            "value": value, "formatted": got, "ok": literal == got}
+            "value": value, "formatted": got, "rel": rel, "rel_tol": rel_tol,
+            "ok": ok}
 
 
 def main():
@@ -102,13 +122,15 @@ def main():
     R.append(row("thickness, flexo k^2 at h=10", "1.74e-4",
                  "demo.json flexo_thickness[0].k2_flexo",
                  g("demo.json.flexo_thickness.0.k2_flexo"), "{:.2e}"))
-    R.append(row("thickness, flexo k^2 at h=1", "4.17e-3",
+    R.append(row("thickness, flexo k^2 at h=1", "4.2e-3",
                  "demo.json flexo_thickness[3].k2_flexo",
-                 g("demo.json.flexo_thickness.3.k2_flexo"), "{:.2e}"))
-    R.append(row("thickness, flexo growth factor", "23.9",
+                 g("demo.json.flexo_thickness.3.k2_flexo"), "{:.1e}",
+                 rel_tol=5e-3))
+    R.append(row("thickness, flexo growth factor", "24",
                  "demo.json flexo ratio",
                  g("demo.json.flexo_thickness.3.k2_flexo")
-                 / g("demo.json.flexo_thickness.0.k2_flexo"), "{:.1f}"))
+                 / g("demo.json.flexo_thickness.0.k2_flexo"), "{:.0f}",
+                 rel_tol=5e-3))
     R.append(row("coupling check, closed form", "0.56079",
                  "coupling_check.json closed_form.k2_2d_closed",
                  g("coupling_check.json.closed_form.k2_2d_closed"), "{:.5f}"))
@@ -191,7 +213,8 @@ def main():
                  * g("k2_closed_form.json.kappa_eff") * 1e10, "{:.4f}"))
     # the count is checked in words, because that is how the abstract says it
     words = {41: "forty-one", 49: "forty-nine", 50: "fifty",
-             51: "fifty-one", 54: "fifty-four"}
+             51: "fifty-one", 54: "fifty-four",
+             57: "fifty-seven"}
     nt = g("summary.json.n_total")
     R.append(row("criteria count", words.get(int(nt), str(nt)),
                  f"summary.json n_total = {int(nt)}", int(nt),
@@ -238,16 +261,20 @@ def main():
     R.append(row("independent, zeta at alpha=0.3", "0.108",
                  "independent F2 zeta at alpha=0.3, omega*tau=0.3", zc,
                  "{:.3f}"))
+    SN = J("sensitivity.json")
+    R.append(row("sensitivity, spread at h=1 um, per cent", "0.1",
+                 "sensitivity.json spread_h1_pct", SN["spread_h1_pct"],
+                 "{:.1f}"))
     CT = J("config_table.json")
     R.append(row("config table, flexo only at h=10", "1.76e-4",
                  "config_table rows[0] k2_flexo",
                  CT["rows"][0]["k2_flexo"], "{:.2e}"))
-    R.append(row("config table, flexo only at h=1", "5.47e-3",
+    R.append(row("config table, flexo only at h=1", "5.5e-3",
                  "config_table rows[3] k2_flexo",
-                 CT["rows"][3]["k2_flexo"], "{:.2e}"))
-    R.append(row("config table, growth with e=0", "31.1",
+                 CT["rows"][3]["k2_flexo"], "{:.1e}", rel_tol=5e-3))
+    R.append(row("config table, growth with e=0", "31",
                  "config_table growth_flexo_only",
-                 CT["growth_flexo_only"], "{:.1f}"))
+                 CT["growth_flexo_only"], "{:.0f}", rel_tol=5e-3))
     R.append(row("config table, piezo shift at h=1, per cent", "24",
                  "config_table min flexo_shift x100",
                  100 * abs(min(r["flexo_shift"] for r in CT["rows"])),

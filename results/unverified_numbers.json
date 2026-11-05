@@ -32,14 +32,14 @@
    "why": "FEM thickness sweep (T3, T2 for mesh independence); the spread is small but no closed form predicts it"
   },
   {
-   "literal": "31.1",
+   "literal": "31",
    "what": "the same growth with the piezoelectric terms switched off",
    "source": "abstract_audit.json",
    "why": "config_table: an FEM run with $e=0$ in the same solver; the two runs differ by the piezoelectric stiffness of the mode, and neither has a closed form"
   },
   {
-   "literal": "23.9",
-   "what": "growth of the flexoelectric $k^2$ over the same range",
+   "literal": "24",
+   "what": "growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports",
    "source": "abstract_audit.json",
    "why": "the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not"
   },

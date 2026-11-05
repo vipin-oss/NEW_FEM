@@ -48,7 +48,7 @@ quick inspection only.
 ## Where the numbers come from
 
 Every number in the text is a value from `python3 python/run_all.py`
-(54/54 checks):
+(57/57 checks):
 
 | in the paper | source |
 |---|---|
@@ -65,6 +65,7 @@ Every number in the text is a value from `python3 python/run_all.py`
 | `tab:axes` (axes, Voigt indices, the two poling configurations) | the same JSON, rendered into `table_axes.tex` (panel F5) |
 | `tab:config` (piezo-only / flexo-only / both on one bending mode) | `results/config_table.json`, rendered by `run_config_table.py` into `table_config.tex`, graded G1–G2 |
 | the list of unverified numbers | `results/unverified_numbers.md`, written by `list_unverified.py`, graded N2 |
+| `tab:sens` (platform sensitivity of the h = 1 µm point) | `results/sensitivity.json`, written by `run_sensitivity.py`, graded U1–U3 |
 | abstract, number by number | `results/abstract_audit.md`, `results/abstract_audit.json` (criterion A2) |
 | poles and damping map | `python/fem6_core.py::complex_frequency` with branch continuation |
 
@@ -100,9 +101,21 @@ geometry, the same mode.  With `μ = 0` the piezoelectric coupling of that mode
 is `1.0e-10` at every thickness — the piezoelectric charge of a bending mode is
 odd in `y − h/2` and integrates to zero over a face electrode — so the device
 is not piezoelectric by accident.  With `e = 0` the flexoelectric coupling
-grows by 31.1 instead of the 23.9 reported for the real crystal: the
+grows by 31 instead of the 24 reported for the real crystal: the
 piezoelectric terms shift the flexoelectric coupling by up to 24 % at the
 thinnest plate, through the elastic stiffness of the same mode.
+
+`python3 python/run_sensitivity.py` (criteria U1–U3, `tab:sens`) runs one
+model through four mathematically equivalent eigensolver paths on whatever
+numpy/scipy stack invoked it, and merges the runs of other stacks that were
+written with `--emit`.  The h = 1 µm flexoelectric coupling — a difference of
+nearly equal eigenvalues of a pencil with condition ~10¹² — spreads by 0.1 %
+over three stacks (numpy 1.26.4 / 2.0.2 / 2.4.6, scipy 1.11.4 / 1.13.1 /
+1.17.1) and four paths, while the h = 10 µm value spreads by 10⁻⁵ %.  The
+paper therefore quotes the thin-plate point as 4.2e-3 and the growth as 24,
+and N1 carries a 5e-3 relative tolerance on exactly those rows so that the
+suite passes on any stack.  Truncating the secular sum to twelve modes moves
+k² by 84 %, which is why the sum runs over the whole spectrum.
 
 `python3 python/list_unverified.py` (criterion N2) writes
 `results/unverified_numbers.md`: every number in the paper that no independent
@@ -117,7 +130,7 @@ a verdict, so the two cannot drift apart.  The six that are *not* checked
 independently are the extensional $k^2=0.4650$, the $\zeta$ ratio $0.449$,
 $\zeta_{\rm eff}=0.15023$ (only its distance from $0.15000$ has an exact
 reference), the $19\,\%$ window-orientation effect, the $0.09\,\%$ spread of
-the piezo $k^2$ over the thickness sweep, and the $23.9$ growth factor of the
+the piezo $k^2$ over the thickness sweep, and the $24$ growth factor of the
 flexoelectric one.  All six are finite element outputs; the operators behind
 them are verified, the numbers themselves are not.
 

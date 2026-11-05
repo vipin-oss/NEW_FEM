@@ -109,22 +109,22 @@
    "route": "FEM thickness sweep (T3, T2 for mesh independence); the spread is small but no closed form predicts it"
   },
   {
-   "literal": "31.1",
+   "literal": "31",
    "what": "the same growth with the piezoelectric terms switched off",
    "verdict": "nahi hua",
    "route": "config_table: an FEM run with $e=0$ in the same solver; the two runs differ by the piezoelectric stiffness of the mode, and neither has a closed form"
   },
   {
-   "literal": "23.9",
-   "what": "growth of the flexoelectric $k^2$ over the same range",
+   "literal": "24",
+   "what": "growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports",
    "verdict": "nahi hua",
    "route": "the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not"
   },
   {
-   "literal": "fifty-four",
+   "literal": "fifty-seven",
    "what": "the number of graded criteria",
    "verdict": "hua",
-   "route": "run\\_all.py: 54/54 pass, and check\\_paper\\_numbers.py compares the word against summary.json"
+   "route": "run\\_all.py: 57/57 pass, and check\\_paper\\_numbers.py compares the word against summary.json"
   }
  ],
  "n_hua": 10,
@@ -149,8 +149,8 @@
   "0.2",
   "0.5608",
   "0.09",
-  "23.9",
-  "31.1"
+  "24",
+  "31"
  ],
  "missing": [],
  "stale": []

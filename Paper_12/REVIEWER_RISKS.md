@@ -121,7 +121,7 @@ on this curve: the piezoelectric share of the bending coupling is at the
 round-off floor at every thickness (G1), while switching the piezoelectric
 constants off outright changes the flexoelectric coupling by 24 % at the
 thinnest plate (G2) — i.e. the roll-over is not a piezoelectric artefact, but
-the *size* of the reported growth (23.9 rather than 31.1) is set by the
+the *size* of the reported growth (24 rather than 31) is set by the
 piezoelectric stiffness of the same mode.
 
 **Still open.** The physical explanation is a story, not a measurement.  A
@@ -177,8 +177,11 @@ electrode vanishes and the piezoelectric-only `k²` of that mode is
 `1.0×10⁻¹⁰` at every thickness (G1).  The two effects are nevertheless not
 separable *inside one run*: the piezoelectric terms change the elastic
 stiffness of the same mode and shift the flexoelectric coupling by up to 24 %
-at the thinnest plate (G2), which is why the reported growth is 23.9 and the
-`e = 0` idealisation would be 31.1.
+at the thinnest plate (G2), which is why the reported growth is 24 and the
+`e = 0` idealisation would be 31.  Both are quoted to two significant digits
+because the `h = 1 µm` point itself moves at the 1e-3 level between numeric
+stacks (`tab:sens`); the sensitivity, and the tolerance it forces on N1, is
+now recorded rather than discovered by a reader running the suite.
 
 **Still open.** Nothing quantitative.  A referee could ask for the combined
 case at a *single* thickness with both couplings designed to be comparable,

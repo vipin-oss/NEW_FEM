@@ -64,7 +64,8 @@ def main():
                "run_coupling_check.py", "run_mode_tracking.py",
                "run_application_table.py", "derive_k2_closed_form.py",
                "run_independent_checks.py", "audit_abstract_claims.py",
-               "run_config_table.py", "list_unverified.py"]
+               "run_config_table.py", "list_unverified.py",
+               "run_sensitivity.py"]
     if figs:
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")
@@ -84,6 +85,7 @@ def main():
     Ab = load("abstract_audit.json")
     Gc = load("config_table.json")
     Uv = load("unverified_numbers.json")
+    Sn = load("sensitivity.json")
     Cf = load("k2_closed_form.json")
     D = load("demo.json") if figs else None
     Pg = load("paper_figures_data.json") if figs else None
@@ -255,9 +257,10 @@ def main():
         "< 1e-5 (electrically silent bending mode)", gmax < 1e-5)
     chk("G2", "flexo growth with and without the piezoelectric terms",
         f"{Gc['growth_both']:.1f} vs {Gc['growth_flexo_only']:.1f}",
-        "reported 23.9 uses the real crystal; 31.1 with e = 0, both graded",
-        abs(Gc["growth_both"] - 23.9) < 0.1
-        and abs(Gc["growth_flexo_only"] - 31.1) < 0.1)
+        "reported 24 (2 s.f.) uses the real crystal; 31 with e = 0, both "
+        "graded at 1 %",
+        abs(Gc["growth_both"] / 23.9 - 1) < 0.01
+        and abs(Gc["growth_flexo_only"] / 31.1 - 1) < 0.01)
     cfg = {r["configuration"]: r for r in Ic["F5_configurations"]["rows"]}
     yb = cfg["poling y, electrodes top/bottom"]
     xb = cfg["poling x, electrodes top/bottom"]
@@ -276,6 +279,17 @@ def main():
     chk("I8", "window second-moment factors 1/3, 1/4, 1/5 by quadrature",
         f"{mw:.1e}", "< 1e-5", mw < 1e-5)
 
+    chk("U1", "h = 1 um flexo k^2 over four equivalent solver paths and "
+        f"{Sn['n_stacks']} numeric stacks",
+        f"spread {Sn['spread_h1_pct']:.3f} %, k^2 {Sn['k2_h1_min']:.4e}"
+        f"..{Sn['k2_h1_max']:.4e}", "< 0.5 % (quoted to 2 s.f.)",
+        Sn["spread_h1_pct"] < 0.5)
+    chk("U2", "the same spread at h = 10 um", f"{Sn['spread_h10_pct']:.2e} %",
+        "< 1e-3 %", Sn["spread_h10_pct"] < 1e-3)
+    chk("U3", "truncating the secular sum to 12 modes is not an alternative",
+        f"{Sn['truncated_max_dev_pct']:.0f} % off",
+        "> 50 % (hence the sum runs over all modes)",
+        Sn["truncated_max_dev_pct"] > 50)
     chk("N2", "the list of unverified numbers cites only numbers still in the "
         "manuscript", f"{Uv['n']} entries, {len(Uv['stale'])} stale",
         "0 stale", not Uv["stale"] and Uv["n"] > 0)

@@ -24,12 +24,12 @@ Every numeric token of the abstract of `Paper_12/main.tex`, with the verdict `hu
 | `0.2` | distance between 0.5581 and the closed form | **hua** | D1, the same two numbers |
 | `0.5608` | $e^{\mathsf T}C^{-1}e/\kappa$, 2-D plane stress | **hua** | derive\_k2\_closed\_form.py from the constitutive tensors only; agreements 0.56079 vs 0.56079 (D1) |
 | `0.09` | spread of the piezo $k^2$ between 10 and 1 micron | *nahi hua* | FEM thickness sweep (T3, T2 for mesh independence); the spread is small but no closed form predicts it |
-| `31.1` | the same growth with the piezoelectric terms switched off | *nahi hua* | config_table: an FEM run with $e=0$ in the same solver; the two runs differ by the piezoelectric stiffness of the mode, and neither has a closed form |
-| `23.9` | growth of the flexoelectric $k^2$ over the same range | *nahi hua* | the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not |
-| `fifty-four` | the number of graded criteria | **hua** | run\_all.py: 54/54 pass, and check\_paper\_numbers.py compares the word against summary.json |
+| `31` | the same growth with the piezoelectric terms switched off | *nahi hua* | config_table: an FEM run with $e=0$ in the same solver; the two runs differ by the piezoelectric stiffness of the mode, and neither has a closed form |
+| `24` | growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports | *nahi hua* | the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not |
+| `fifty-seven` | the number of graded criteria | **hua** | run\_all.py: 57/57 pass, and check\_paper\_numbers.py compares the word against summary.json |
 
 ## Coverage
 
-Numeric tokens found in the abstract: 20 (`1`, `0.4650`, `0.3`, `0.449`, `0.15`, `0.15023`, `2`, `0.15000`, `3`, `4`, `5`, `19`, `200`, `10`, `0.5581`, `0.2`, `0.5608`, `0.09`, `23.9`, `31.1`).
+Numeric tokens found in the abstract: 20 (`1`, `0.4650`, `0.3`, `0.449`, `0.15`, `0.15023`, `2`, `0.15000`, `3`, `4`, `5`, `19`, `200`, `10`, `0.5581`, `0.2`, `0.5608`, `0.09`, `24`, `31`).
 
 Every token has a verdict.
