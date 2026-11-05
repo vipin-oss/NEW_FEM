@@ -25,6 +25,8 @@ docs/FEM6_checker_report.md           answers to the four blueprint questions,
 docs/FEM6_cuboid_coefficient.md       Q1 in full (second-moment derivation)
 docs/FEM6_thickness_sweep.md          figure 5: the three artefacts it had and
                                       the secular/static replacements
+Paper_12/main.tex                     the elsarticle manuscript (step 8);
+Paper_12/README.md                    placeholders and number provenance
 results/verification.{md,json}        verification output
 results/demo.json, results/figures/   demo output
 ```

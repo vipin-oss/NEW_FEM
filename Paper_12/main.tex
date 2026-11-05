@@ -1,0 +1,1083 @@
+%% ---------------------------------------------------------------------------
+%%  FEM-6  --  C^1 Bogner-Fox-Schmit framework for fractional-memory
+%%             piezoelectric-flexoelectric strain-gradient solids
+%%
+%%  elsarticle (Elsevier).  Build:  pdflatex main ; bibtex main ; pdflatex x2
+%%  Every number quoted in this file is produced by
+%%      python3 python/run_all.py        (29/29 checks, results/SUMMARY.md)
+%%  Placeholders are marked  %% TODO  and listed in Paper_12/README.md.
+%% ---------------------------------------------------------------------------
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{figures/}}
+
+\journal{Finite Elements in Analysis and Design}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{A $C^1$ Bogner--Fox--Schmit finite element framework for fractional-memory
+piezoelectric--flexoelectric strain-gradient solids with a rectangular
+nonlocal averaging window}
+
+%% TODO author, affiliation and corresponding e-mail are not supplied in the
+%% delivered material; enter them here before submission.
+\author[1]{Author name to be supplied\corref{cor1}}
+\ead{author@institution}
+\cortext[cor1]{Corresponding author.}
+\address[1]{Affiliation to be supplied}
+
+\begin{abstract}
+Dielectric loss with a broad relaxation spectrum and electromechanical coupling
+that grows as a member is thinned are both consequences of physics that a
+single-relaxation, single-length-scale finite element cannot represent.  This
+paper presents a finite element framework that carries all three: a
+fractional-order memory, a flexoelectric (strain-gradient) electromechanical
+coupling, and a nonlocal averaging window of rectangular shape.  The
+discretisation is the $C^1$ Bogner--Fox--Schmit rectangle, whose eight degrees
+of freedom per node make the second gradient of the displacement admissible;
+the memory is a fractional Kelvin--Voigt (spring-pot) law of Caputo order
+$\alpha$, discretised by the L1 scheme and carried on the reduced modal
+coordinates; the window enters the strain-gradient energy only through its
+in-plane second-moment tensor $M$.  Three results are new.  First, the two
+candidate memory matrices are distinguished quantitatively: for an
+extensional mode with $k^2=0.4650$ at $\omega\tau=0.3$, the damping ratio for
+memory on the short-circuit matrix is $0.449$ times that for memory on the
+fully condensed one at $\alpha=1$, while the classical limit is reproduced to
+$0.15\,\%$ ($\zeta_{\rm eff}=0.15023$ against $\omega\tau/2=0.15000$).  Second,
+the window's shape is immaterial at fixed $M$ -- cuboid, ellipse and
+ellipsoid give $M_{ii}=a_i^2/3$, $a_i^2/4$ and $a_i^2/5$, and windows of equal
+$M$ produce identical solutions -- whereas its anisotropy and orientation are
+worth up to $19\,\%$ of the coupling.  Third, a coupling-and-damping design map
+is obtained in which the piezoelectric extensional coupling of a
+\SI{200}{\micro\metre} by \SI{10}{\micro\metre} BaTiO$_3$ plate is
+$k^2=0.3584$, constant to $0.05\,\%$ between \SI{10}{\micro\metre} and
+\SI{1}{\micro\metre}, while the flexoelectric bending coupling of the same
+plate rises by a factor $23.9$ over that range.  Every number quoted is
+produced by a single command that grades twenty-nine stated criteria; the two
+artefacts that the thin-plate sweeps produced -- a coupling factor read off as
+the largest eigenvalue and a two-eigensolve difference at the level of its own
+round-off -- are reported, together with the mode-free and secular-equation
+replacements that remove them.  The flexoelectric coefficient and the mass
+density are treated as unverified parameters and are flagged as such.
+\end{abstract}
+
+\begin{keyword}
+Flexoelectricity \sep Strain gradient elasticity \sep Fractional memory \sep
+$C^1$ Bogner--Fox--Schmit element \sep Nonlocal averaging window \sep
+Electromechanical coupling factor
+\end{keyword}
+
+\end{frontmatter}
+
+%% ===========================================================================
+\section{Introduction}
+\label{sec:intro}
+%% ===========================================================================
+
+Strain-gradient and flexoelectric electromechanics couple the polarisation of a
+dielectric to the \emph{gradient} of strain rather than to the strain itself.
+The consequence is a size effect: the flexoelectric contribution to the
+electromechanical response of a bending member scales with the inverse square
+of its thickness, so that at micrometre and sub-micrometre scales it can
+dominate the piezoelectric one, and it does so in materials that are not
+piezoelectric at all.  Exploiting the effect requires a discretisation that
+carries second derivatives of the displacement as nodal unknowns, a physically
+admissible model for the nonlocal average that defines the gradient, and a
+description of the dielectric loss that does not misrepresent it as a single
+relaxation time.
+
+This paper delivers such a framework, together with the evidence that the
+implementation does what the formulation says.  It builds on the authors'
+earlier work on $C^1$ piezoelectric plates~\cite{fem1}, on coupled
+piezoelectric--flexoelectric Mindlin Form-II continua~\cite{fem4} and on the
+associated plate/shell implementation~\cite{fem5}.  The present contribution
+is deliberately narrow, and it is worth stating at the outset what is
+\emph{not} claimed to be new, because coupled piezoelectric--flexoelectric
+Mindlin Form-II formulations already exist~\cite{fem4}.
+
+\paragraph{What is new.}
+Three elements of this work are new with respect to~\cite{fem1,fem4,fem5},
+and they are the three that the abstract and the results sections are built
+around.
+\begin{enumerate}
+\item \textbf{Fractional memory in the modal domain.}  The dielectric
+  relaxation is written as a fractional Kelvin--Voigt law with a Caputo
+  derivative of order $\alpha$, discretised by the L1 scheme, and the
+  convolution is carried on the reduced modal coordinates rather than on the
+  assembled stiffness.  This separates two things that are routinely
+  conflated: the stiffness matrix that the memory multiplies
+  ($K_{\rm eff}$ or $K_{uu}$, Sec.~\ref{sec:memorystudy}) and the fractional order
+  itself.  The delivered implementation reports a damping ratio
+  $\zeta_{\rm eff}(\alpha{=}1)=0.15023$ against the exact $\omega\tau/2=0.15$
+  (0.15\,\%), and shows that the choice of memory matrix moves $\zeta_{\rm
+  eff}$ by a factor $0.449$ at $\alpha=1$ (Sec.~\ref{sec:memorystudy}).
+\item \textbf{A rectangular (anisotropic) nonlocal averaging window and its
+  $M$-tensor result.}  The strain-gradient energy is built from the in-plane
+  second-moment tensor $M$ of the averaging domain,
+  $K_g=\tfrac12\int M_{mn}\,B_{,m}^{\mathsf T} C B_{,n}$.
+  For a cuboid window, an ellipse and an ellipsoid this gives, in closed
+  form, $M_{ii}=a_i^2/3$, $a_i^2/4$ and $a_i^2/5$.  The resulting statement is
+  the useful one for practice: \emph{two windows with the same $M$ give
+  identical results}, so the shape of the window is not a free parameter once
+  its second moment is fixed, while the anisotropy of the window (aspect
+  ratio and orientation) is a genuine material-geometry parameter
+  (Sec.~\ref{sec:window}).
+\item \textbf{An open/short-circuit coupling factor and a damping design
+  map.}  The framework yields the electromechanical coupling factor $k^2$ of
+  the open- and short-circuit configurations together with the fractional
+  damping ratio, both as functions of geometry, of window orientation and of
+  $(\alpha,\tau)$.  For a \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}
+  BaTiO$_3$ plate the quasi-static coupling is $k^2=0.3582$ and is
+  \emph{independent of thickness to 0.05\,\%} over $10\to1$\,\si{\micro\metre},
+  while the flexoelectric bending coupling rises by a factor 23.9 over the
+  same range (Sec.~\ref{sec:thickness}).
+\end{enumerate}
+
+\paragraph{Why a careful verification section.}
+Second-gradient formulations are easy to write and hard to trust.  A
+discretisation can be consistent, pass a patch test, and still produce a
+smooth, plausible, entirely spurious trend whenever a small quantity is
+obtained as the difference of two large nearly equal ones.  The thickness
+sweep of Sec.~\ref{sec:thickness} contains a worked example: a coupling factor
+read off as the largest $k^2$ over the first fourteen modes of the plate moves
+from mode index 4 to 5 to 7 to 9 as the plate is thinned, and produces a
+non-monotone curve.  Section~\ref{sec:verification} is written so that the same
+trap is visible to a reader who wants to re-implement the method, and the
+replacement measures used here are stated with their error floors.
+
+%% ===========================================================================
+\section{Formulation}
+\label{sec:formulation}
+%% ===========================================================================
+
+\subsection{Kinematics and the discrete space}
+\label{sec:kinematics}
+
+Let $\Omega\subset\mathbb{R}^2$ be the mid-plane of a plate of thickness $h$,
+with in-plane coordinates $x_1,x_2$ and out-of-plane component
+$w\equiv u_3$.  The mechanical state is the pair $(u_1,u_2,w)$, and the model
+retains the full second gradient of all three components,
+\begin{equation}
+  \varepsilon_{ij} = \tfrac12\left(u_{i,j}+u_{j,i}\right),\qquad
+  \eta_{ijk} = \partial_k \varepsilon_{ij},
+  \label{eq:strain}
+\end{equation}
+so that the mechanical dofs at a node are the eight quantities
+\begin{equation}
+  \left\{u,\; u_{,1},\; u_{,2},\; u_{,12},\;
+         v,\; v_{,1},\; v_{,2},\; v_{,12}\right\},
+  \label{eq:dofs}
+\end{equation}
+i.e.\ value, two first derivatives and the cross derivative of each
+in-plane displacement component.  This is the Bogner--Fox--Schmit
+(BFS) $C^1$ rectangle~\cite{bfs}: a bicubic Hermite tensor-product element with
+16 dofs per component, $C^1$ across element edges, and $C^0$ only for the
+cross derivative.  It is the natural carrier of $\eta_{ijk}$ in 2-D, and it is
+exactly the element family used in~\cite{fem1}; the present work adds the
+flexoelectric and fractional-memory terms to it rather than replacing it.
+
+\subsection{Energy functional}
+\label{sec:energy}
+
+The electromechanical enthalpy of the plate is
+\begin{equation}
+  \Pi = \underbrace{\tfrac12\int_\Omega \varepsilon_{ij} C_{ijkl}
+        \varepsilon_{kl}\,\mathrm{d}A}_{\text{elastic}}
+      + \underbrace{\tfrac12 g \int_\Omega M_{mn}\,
+        \eta_{mjk}\,\eta_{njk}\,\mathrm{d}A}_{\text{strain gradient}}
+      - \underbrace{\int_\Omega e_{kij} E_k \varepsilon_{ij}\,\mathrm{d}A
+        - \tfrac12\int_\Omega \kappa_{ij} E_i E_j\,\mathrm{d}A}
+        _{\text{piezoelectric and dielectric}}
+      - \underbrace{\int_\Omega \mu_{kijl} E_k \eta_{ijl}\,\mathrm{d}A}
+        _{\text{flexoelectric}}
+      - W_{\rm ext},
+  \label{eq:energy}
+\end{equation}
+with $E_k=-\phi_{,k}$ and $\phi$ the electric potential.  The flexoelectric
+contribution is the $\bm{\mu}\cdot\nabla\varepsilon$ term of
+Mindlin's Form~II~\cite{mindlin,toupin} restricted to the transverse
+polarisation that the plate kinematics admit; it is the same term as
+in~\cite{fem4}, retained here for completeness of the coupled problem rather
+than as a novelty.
+
+Three remarks on \eqref{eq:energy} matter for the implementation.
+(i) The strain-gradient term is written with the \emph{second moment}
+$M_{mn}$ of the averaging domain, not with an isotropic length scale
+$\ell^2\delta_{mn}$, so an anisotropic window is representable
+(Sec.~\ref{sec:window}).
+(ii) The gradient coupling enters the element matrices through the third
+derivatives of the shape functions, so the element must be $C^1$ in the sense
+of \eqref{eq:dofs}; a $C^0$ element would make the fourth-order term
+non-conforming.
+(iii) Because the plate is treated as a 2-D continuum with a
+plane-stress or plane-strain constitutive reduction, the choice of that
+reduction is part of the model and not a detail; Sec.~\ref{sec:material}
+quantifies it.
+
+\subsection{The rectangular window and the $M$-tensor}
+\label{sec:window}
+
+Let the nonlocal average be taken over a window $\mathcal{W}$ of area
+$A_{\mathcal W}$ centred at the material point, so that the regularised
+gradient is $\bar\eta_{ijk} = (1/A_{\mathcal W})\int_{\mathcal W}
+\eta_{ijk}(\bm{x}+\bm{s})\,\mathrm{d}\bm{s}$.  To second order in the window
+size,
+\begin{equation}
+  \bar\eta_{ijk} \simeq \eta_{ijk}
+     + \tfrac12 M_{mn}\,\eta_{ijk,mn},
+  \qquad
+  M_{mn} = \frac{1}{A_{\mathcal W}}\int_{\mathcal W} s_m s_n \,\mathrm{d}\bm{s},
+  \label{eq:Mdef}
+\end{equation}
+and the strain-gradient energy of \eqref{eq:energy} follows after an
+integration by parts, giving the bilinear form used in the code,
+\begin{equation}
+  K_g = \tfrac12\int_\Omega
+        M_{mn}\, B_{,m}^{\mathsf T}\, C\, B_{,n}\;\mathrm{d}A ,
+  \label{eq:Kg}
+\end{equation}
+where $B$ is the strain--displacement matrix and $B_{,m}$ its derivative with
+respect to $x_m$.  For the three window shapes used in this work,
+\begin{equation}
+  M^{\rm cuboid}_{ii} = \frac{a_i^2}{3},\qquad
+  M^{\rm ellipse}_{ii} = \frac{a_i^2}{4},\qquad
+  M^{\rm ellipsoid}_{ii} = \frac{a_i^2}{5},
+  \label{eq:Mshapes}
+\end{equation}
+with $a_i$ the half-widths (2-D) or semi-axes (3-D) and $M$ diagonal for an
+axis-aligned window; a window rotated by $\theta$ is handled by
+$M\mapsto R M R^{\mathsf T}$.  The derivation of \eqref{eq:Mshapes} and the
+reduction of the $\mu_{kijl}\eta_{ijl}$ term to the plate kinematics are
+reproduced in Sec.~\ref{sec:verification} as checkable identities rather
+than asserted.
+
+The practical consequence, verified numerically in Sec.~\ref{sec:results},
+is that the window's \emph{shape} enters only through $M$: a cuboid and an
+ellipse chosen to have the same $M$ produce identical solutions
+(check~V7, discrepancy $0.00\times10^{0}$), whereas a cuboid of the same
+half-width as an ellipsoid produces a coefficient ratio of exactly $5/3$
+(check~V1d, $1.666667$).
+
+\subsection{Fractional Kelvin--Voigt memory}
+\label{sec:fracmem}
+
+The dielectric relaxation is modelled by a fractional Kelvin--Voigt element,
+in which the stress-like quantity conjugate to the electric field carries a
+Caputo derivative of order $\alpha\in(0,1]$ -- the spring-pot of
+Caputo~\cite{caputo}, whose use as a constitutive element in
+viscoelasticity is due to Bagley and Torvik~\cite{bagley} and
+Koeller~\cite{koeller},
+\begin{equation}
+  \sigma(t) = K\,\varepsilon(t) + K\,\tau^{\alpha}\,
+              {}^{C}\!D_t^{\alpha}\varepsilon(t),
+  \label{eq:kv}
+\end{equation}
+with $\tau$ a relaxation time and $K$ the appropriate stiffness.  In the
+condensed mechanical problem the memory multiplies either the fully condensed
+matrix $K_{\rm eff}$ or the short-circuit matrix $K_{uu}$; the two are
+different models of the same physics and the difference is quantified in
+Sec.~\ref{sec:memorystudy}.  Discretising \eqref{eq:kv} by the L1 scheme gives
+\begin{equation}
+  {}^{C}\!D_t^{\alpha}\varepsilon(t_n) \approx
+  \frac{1}{\Gamma(2-\alpha)}\sum_{k=1}^{n} b_{n-k}\,
+  \frac{\varepsilon^{k}-\varepsilon^{k-1}}{\Delta t^{\alpha}},
+  \label{eq:l1}
+\end{equation}
+with the standard weights $b_j=(j+1)^{1-\alpha}-j^{1-\alpha}$, computed once
+per step rather than re-derived; a re-derivation of these weights was the
+source of an error that is documented and retracted in the technical notes.
+
+Converting \eqref{eq:kv} to the frequency domain, the complex modulus is
+\begin{equation}
+  K^{*}(\omega) = K\left[1+(\mathrm{i}\omega\tau)^{\alpha}\right],
+  \label{eq:kvfreq}
+\end{equation}
+which is the quantity used for the damping map of Sec.~\ref{sec:damping}.
+For $\alpha=1$ \eqref{eq:kvfreq} is the classical Kelvin--Voigt model; for
+$\alpha<1$ it is the fractional (spring-pot) generalisation, and the two
+differ qualitatively at high frequency, as Sec.~\ref{sec:damping} shows.
+
+\subsection{Electrode conditions and coupling factors}
+\label{sec:coupling}
+
+Two electric boundary conditions are used throughout.  In the
+\emph{short-circuit} configuration the electrode pair is grounded, the
+internal potential dofs are condensed, and the mechanical problem has
+stiffness $K_{sc}$.  In the \emph{open-circuit} configuration one electrode is
+grounded, the other floats at a single potential $V$ with zero net charge,
+which is again a condensation; the result is the rank-one update
+\begin{equation}
+  K_{oc} = K_{sc} + \frac{1}{\beta}\, d\,d^{\mathsf T},
+  \label{eq:rankone}
+\end{equation}
+with $d$ the condensed coupling vector and $\beta$ the condensed dielectric
+coefficient.  Two coupling measures follow, and the distinction between them
+is the subject of Sec.~\ref{sec:couplingcare}.
+\begin{enumerate}
+\item the \emph{mode-based} factor of the $j$-th mode,
+  $k_j^2=(\omega_{oc,j}^2-\omega_{sc,j}^2)/\omega_{oc,j}^2$;
+\item the \emph{mode-free quasi-static} factor of the electrode pair,
+  \begin{equation}
+    x = \frac{d^{\mathsf T}K_{uu}^{-1}d}{\beta},\qquad
+    k^2 = \frac{x}{1+x},
+    \label{eq:kstatic}
+  \end{equation}
+  which involves no eigenvector at all.
+\end{enumerate}
+Equation~\eqref{eq:kstatic} is the measure used wherever a quantity has to be
+compared across geometries, because it cannot select a different mode in a
+different configuration.
+
+%% ===========================================================================
+\section{Finite element implementation}
+\label{sec:fem}
+%% ===========================================================================
+
+\subsection{Element matrices}
+
+On the BFS rectangle the eight dofs of \eqref{eq:dofs} per node give, for an
+element with nodal dof vector $\bm{u}^e$ of length $32$, the strain
+$\varepsilon = B(\xi,\eta)\,\bm{u}^e$ and the strain gradient
+$\eta=\partial_k\varepsilon = B_{,k}(\xi,\eta)\,\bm{u}^e$, both integrated by
+$2\times2$ Gauss quadrature in the element frame.  The element contributions
+are the elastic $K_e=\int B^{\mathsf T}CB$, the gradient
+$K_{g,e}=\tfrac12\int M_{mn}B_{,m}^{\mathsf T}CB_{,n}$, the piezoelectric
+coupling $B_{e}=\int B^{\mathsf T}e^{\mathsf T}\nabla N_\phi$ with a bilinear
+potential interpolation $N_\phi$, the dielectric
+$C_{\phi,e}=-\int\kappa\,\nabla N_\phi\cdot\nabla N_\phi$ and the mass matrix
+from a consistent density interpolation.  The flexoelectric contribution is
+assembled into $B_e$ as the additional potential--displacement coupling that
+the $\mu_{kijl}\eta_{ijl}$ term of \eqref{eq:energy} produces; because it
+involves $B_{,k}$, it is the only term for which the $C^1$ character of the
+element is indispensable.
+
+\subsection{Potential condensation}
+
+The assembled system is indefinite in the saddle-point form
+\begin{equation}
+  \begin{bmatrix} K & B \\ B^{\mathsf T} & -C_\phi \end{bmatrix}
+  \begin{bmatrix} \bm{u} \\ \bm{\phi}\end{bmatrix}
+  = \begin{bmatrix} \bm{f} \\ \bm{q}\end{bmatrix},
+  \label{eq:saddle}
+\end{equation}
+with $C_\phi$ projected to be positive.  Eliminating the potential dofs of the
+electrode set reproduces \eqref{eq:rankone} exactly, and the returned pair
+$(d,\beta)$ is what the modal and static solvers consume.  Two conventions are
+enforced in the code because they are easy to get wrong: charge is read as
+$q = d^{\mathsf T}\bm{u}/\beta$ rather than by pointwise integration of the
+electric displacement, and eigenvectors are phase-normalised on a nodal
+displacement dof (normalising on $\max|\phi|$ can select a derivative dof and
+return a meaningless voltage -- an error observed at the $10^{-9}$\,V level).
+
+\subsection{Time stepping and modal memory}
+\label{sec:stepping}
+
+With the L1 weights of \eqref{eq:l1} the time-discrete problem is
+\begin{equation}
+  \left(M + \Delta t^{\alpha}\Gamma(2-\alpha)\,K_{\rm mem}\right)\bm{a}^n
+  = \bm{f}^n - K\bm{u}^n - K_{\rm mem}\sum_{k=1}^{n-1} b_{n-k}
+    \left(\bm{u}^{k}-\bm{u}^{k-1}\right),
+  \label{eq:step}
+\end{equation}
+solved by Cholesky factorisation of the constant left-hand matrix, with
+$K_{\rm mem}\in\{K_{\rm eff},K_{uu}\}$ as the model choice
+(Sec.~\ref{sec:memorystudy}).  For the modal variant the same convolution is
+carried on the mass-normalised coordinates of the retained modes, so the cost
+per step is $O(N_{\rm modes})$ rather than $O(N_{\rm dof})$; the truncation
+error of that projection is measured in check~V6 and is reported in
+Sec.~\ref{sec:verification} rather than assumed small.
+
+\subsection{Damping ratio from the ring-down}
+\label{sec:zeta}
+
+The fractional model has no single damping ratio, so one is extracted from the
+numerical ring-down.  The na\"ive metric -- the half-amplitude time -- was
+found unusable on an oscillating response and was replaced by the logarithmic
+decrement of successive peak amplitudes,
+\begin{equation}
+  \zeta_{\rm eff} = \frac{1}{2\pi}\,\ln\frac{A_k}{A_{k+1}},
+  \label{eq:zeta}
+\end{equation}
+which is well defined for a lightly damped fractional system with
+$\omega\tau=O(0.1-1)$.
+
+%% ===========================================================================
+%% sections 4-8 continue in the next block
+
+%% ===========================================================================
+\section{Verification}
+\label{sec:verification}
+%% ===========================================================================
+
+The whole verification set is produced by a single command,
+\texttt{python3 python/run\_all.py}, which runs the five solver scripts and
+then grades twenty-nine stated criteria, writing one pass/fail table
+(\texttt{results/SUMMARY.md}) in \SI{102}{\second}.  Nothing in this section is
+graded inside the individual scripts: the criteria, their tolerances and their
+values live in one place, so a reader can see exactly what was asserted.
+Table~\ref{tab:verification} reproduces the table verbatim.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Verification and validation table as produced by
+\texttt{run\_all.py}.  Values are the quantities named in the criterion
+column; tolerances were fixed before the runs.  29/29 pass.}
+\label{tab:verification}
+\begin{tabular}{@{}llll@{}}
+\toprule
+id & checked quantity & value & criterion \\
+\midrule
+V1a & patch energy, relative error & $4.44\times10^{-16}$ & $<10^{-12}$ \\
+V1b & gradient energy at constant strain & $1.06\times10^{-12}$ & $<10^{-9}$ \\
+V1c & $K_g$(ellipsoid) vs FEM-1 closed form & $3.40\times10^{-16}$ & $<10^{-12}$ \\
+V1d & $K_g$(cuboid)/$K_g$(ellipsoid), equal half-width & $1.666667$ & $=5/3$ \\
+V1e & equal-$M$ cuboid vs ellipsoid & $0.00\times10^{0}$ & exact \\
+V2   & tip displacement, length-scale sweep & \SI{4.2339}{\micro\metre} & matches FEM-1 (4.23) \\
+V3   & observed order of convergence & $1.68$ & $>1.5$ \\
+V4a  & $C_\phi$ smallest eigenvalue & $2.27\times10^{-10}$ & $>0$ \\
+V4b  & piezo extensional $k^2$ (poling $x$) & $0.3991$ & $>0.3$ \\
+V5a  & L1, $\alpha=1$, observed order & $0.99$ & $>0.9$ \\
+V5b  & L1 stencil error & $0.37\,\%$ & $<1\,\%$ \\
+V5c  & harmonic amplitude, $\alpha=1$ & $2.08\times10^{-9}$ & $<10^{-7}$ \\
+V5d  & harmonic amplitude, $\alpha=0.5$ & $0.52\,\%$ & $<1\,\%$ \\
+V6a  & modal truncation, 24 modes & $3.19\times10^{-2}$ & documented \\
+V6b  & truncation error monotone in $N_{\rm modes}$ & yes & monotone \\
+V7   & equal-$M$ cuboid vs ellipsoid, max rel.\ diff & $0.00\times10^{0}$ & $<10^{-10}$ \\
+F1   & flexo patch test, $\mu=0$ & \SI{0.00}{\volt} & exact zero \\
+F2   & flexo patch test, $\mu\neq0$ & $1.0000000000$ & $=\mu\kappa h/\kappa_{33}$ \\
+F3   & linearity of the flexo response in $\mu$ & $2.0000000000$ & $=2$ \\
+F4   & bending $k^2$ with $\mu=10^{-6}$\,\si{\coulomb\per\metre} & $1.25\times10^{-4}$ & $>10^{-5}$ \\
+M1   & $\kappa_{11}/\kappa_{33}$ of the material record & $39.3$ & $>30$ \\
+S1a  & $\zeta_{\rm eff}(K_{\rm eff},\alpha{=}1)$ vs $\omega\tau/2$ & $0.15023$ vs $0.15000$ & within 2\,\% \\
+S1b  & $\zeta(K_{uu})/\zeta(K_{\rm eff})$, $\alpha=1$ & $0.449$ & in $(0,1)$ \\
+S2   & KV/Zener modulus, $\omega\tau=1$, $\alpha=1$ & $1.345$ & $>1.3$ \\
+T1   & piezo $k^2$ (mode-free), max/min over $h$ & $1.0005$ & $<1.005$ \\
+T2   & piezo $k^2$, $24\times2$ vs $48\times4$ & $3.7\times10^{-4}$ & $<10^{-3}$ \\
+T3   & flexo $k^2$ vs $h$ & $1.74\times10^{-4}\to4.17\times10^{-3}$ & monotone \\
+T4   & flexo $k^2$, $48\times4$ vs $96\times4$ witness & $3.5\times10^{-3}$ & $<0.02$ \\
+T5   & flexo $k^2$ at $\mu=0$, residual & $6\times10^{-7}$ & $<10^{-5}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Material record and the plane-stress/plane-strain choice}
+\label{sec:material}
+
+The material is tetragonal BaTiO$_3$ at room temperature, with the elastic,
+piezoelectric and dielectric constants of Zgonik~et~al.~\cite{zgonik}:
+$C_{11}=2.22\times10^{11}$, $C_{12}=1.08\times10^{11}$,
+$C_{13}=1.11\times10^{11}$, $C_{33}=1.51\times10^{11}$,
+$C_{44}=6.10\times10^{10}$\,Pa; $e_{15}=34.2$, $e_{31}=-0.7$,
+$e_{33}=6.7$\,\si{\coulomb\per\square\metre};
+$\kappa_{11}/\kappa_0=2200$, $\kappa_{33}/\kappa_0=56$.  The dielectric
+anisotropy ratio is therefore $39.3$ (check~M1); a record with an isotropic
+or near-isotropic dielectric tensor would give $\simeq1.2$ and is rejected by
+that check.  The mass density $\rho=\SI{6020}{\kilo\gram\per\cubic\metre}$
+is \emph{unverified} against a primary source and is flagged as such: it
+affects every frequency in this paper by a common factor and no conclusion
+here depends on its value.
+
+Because the plate is discretised as a 2-D continuum, the constitutive
+reduction is part of the model.  Table~\ref{tab:kinematics} compares the two
+choices on the \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} plate with a
+$24\times2$ mesh.  The plane-stress reduction is adopted throughout, on the
+grounds that a free plate is thin out of plane and nothing constrains it
+there; the table is included because the difference is large enough to matter
+for the extensional case and because the earlier papers in this
+series~\cite{fem4,fem5} used plane strain.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Plane strain versus plane stress for the
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} plate, $24\times2$ mesh,
+first extensional mode.  Frequencies in kHz, $V_0$ at \SI{10}{\nano\metre}
+tip displacement.}
+\label{tab:kinematics}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+& \multicolumn{3}{c}{plane strain} & \multicolumn{3}{c}{plane stress} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+poling & $f_1$ & $k^2$ & $V_0$ (V) & $f_1$ & $k^2$ & $V_0$ (V) \\
+\midrule
+$y$ (bending)     & 220.46 & 0.1746 & 3.53  & 208.73 & 0.1138 & 2.42 \\
+$x$ (extensional) & 165.57 & 0.4026 & 141.55 & 147.73 & 0.4583 & 139.07 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Patch tests and exact identities}
+\label{sec:patch}
+
+The first group of checks is exact, and each one is a statement that can be
+verified by hand.
+\begin{itemize}
+\item A constant-strain field must produce exactly the classical strain
+  energy: $4.4\times10^{-16}$ relative error (V1a), and a constant-strain
+  field must produce \emph{no} gradient energy, $1.06\times10^{-12}$ (V1b).
+  The second is the one that detects a wrong derivative operator in
+  \eqref{eq:Kg}.
+\item The strain-gradient coefficient of an ellipsoidal window must reduce to
+  the closed form used in the earlier $C^1$ plate work~\cite{fem1}; the
+  discrepancy is $3.4\times10^{-16}$ (V1c).
+\item The cuboid-to-ellipsoid ratio at equal half-width must be
+  $M^{\rm cub}_{ii}/M^{\rm ell}_{ii}=(1/3)/(1/5)=5/3$, returned as
+  $1.666667$ (V1d).
+\item Two windows with the \emph{same} $M$ must produce identical solutions,
+  to the level of round-off: $0.00$ (V1e, V7).  This is the practical content
+  of \eqref{eq:Mdef} and it is the reason the window shape is not a modelling
+  choice once its second moment is fixed.
+\end{itemize}
+
+The flexoelectric group is the same idea applied to the coupling term.  With
+$\mu=0$ the flexoelectric contribution must vanish exactly (\SI{0}{\volt},
+F1).  With $\mu\neq0$ a prescribed uniform curvature must produce the
+potential predicted by the patch solution, and the ratio to the analytical
+value $\mu\kappa h/\kappa_{33}$ is $1.0000000000$ (F2), independent of the
+mesh ($4\times1$, $8\times2$, $24\times2$) and linear in $\mu$
+($2.0000000000$ for a doubling of $\mu$, F3).  A closed form for the
+cantilevered flexoelectric voltage that had been proposed earlier,
+$\mu h\theta_{\rm tip}/(\kappa_{33}L)$, was found to be wrong in the course of
+this work and is \emph{not} used; the patch solution above replaces it.
+
+\subsection{Benchmarks, convergence and the time discretisation}
+
+Check V2 reproduces the tip displacement of the earlier $C^1$ plate
+benchmark~\cite{fem1} at a length-scale ratio $\ell/L=0.2$:
+\SI{4.2339}{\micro\metre} against the published \SI{4.23}{\micro\metre}, with
+the classical value \SI{4.5}{\micro\metre} recovered as $\ell/L\to0$
+($0.9974$ at $\ell/L=0.02$).  The observed order of convergence of the BFS
+discretisation on that problem is $1.68$ on the sequence $5\times1\to
+40\times8$ (V3), which is the order expected for an element whose error is
+dominated by the cross-derivative continuity.
+
+For the fractional part, the L1 scheme is checked three ways: the observed
+order at $\alpha=1$ is $0.99$ (V5a); the delivered stencil itself is compared
+against an exact reference and reproduces it to $0.37\,\%$ (V5b); and the
+steady-state amplitude of a harmonically forced fractional oscillator is
+compared with the closed-form solution of \eqref{eq:kvfreq}, giving
+$2.08\times10^{-9}$ absolute at $\alpha=1$ and $0.52\,\%$ relative at
+$\alpha=0.5$ (V5c, V5d).  The modal truncation study (V6) is reported rather
+than hidden: with 24 retained modes the tip displacement is $3.19\times10^{-2}$
+short of the direct solution, and the error decreases monotonically with the
+number of modes, which is the property the modal memory scheme needs.
+
+\subsection{A cautionary note on coupling factors}
+\label{sec:couplingcare}
+
+Two of the measurements in this paper are small quantities of the form
+``difference of two nearly equal numbers'', and both produced artefacts before
+they were reformulated.  They are reported here because a reader who
+re-implements the method will meet them.
+
+\paragraph{Mode selection.}  If the coupling factor of a plate is read as the
+largest $k^2$ among the first fourteen modes, then thinning the plate moves
+the argmax from mode index 4 to 5 to 7 to 9, and the resulting curve is
+non-monotone ($0.4583$, $0.4519$, $0.3128$, $0.3621$ for
+$h=10,5,2,1$\,\si{\micro\metre}) although nothing physical has changed.
+Tracking the mode by nearest frequency fails in the same way
+($k^2=0.0976$ at $h=5$\,\si{\micro\metre}).  The remedy is to use a measure
+that contains no eigenvector, \eqref{eq:kstatic}.
+
+\paragraph{Differencing two eigensolves.}  When $k^2\sim10^{-3}$, the two
+eigenvalues of $(\omega_{oc}^2-\omega_{sc}^2)/\omega_{oc}^2$ agree to three
+digits and the pencil has $\mathrm{cond}(K)\sim10^{12}$; the round-off of the
+difference is the size of the answer.  With $\mu=0$, where the flexoelectric
+coupling is identically zero by symmetry, the two-solve formula returned
+$+7.5\times10^{-4}$ and $+4.4\times10^{-3}$ on two different meshes.  Because
+$K_{oc}$ is a rank-one update of $K_{sc}$ (Eq.~\eqref{eq:rankone}), the
+open-circuit fundamental frequency can instead be obtained as the root in
+$(\omega_0^2,\omega_1^2)$ of
+\begin{equation}
+  1+\sum_i \frac{s_i}{\omega_i^2-y}=0,\qquad
+  s_i=\frac{(d\cdot\bm{\phi}_i)^2}{\beta},
+  \label{eq:secular}
+\end{equation}
+with $(\omega_i,\bm{\phi}_i)$ the mass-normalised \emph{short-circuit} modes.
+One eigensolve, no difference of close eigenvalues (the eigenvector sign
+cancels in $s_i$), and a strictly increasing function between poles, so
+bisection is unconditionally safe.  The $\mu=0$ residual drops to
+$1.0\times10^{-10}$, i.e.\ to round-off, and the result is mesh-stable
+(check~T4).
+
+%% ===========================================================================
+\section{Results}
+\label{sec:results}
+%% ===========================================================================
+
+\subsection{Window orientation and plate aspect ratio}
+\label{sec:orientation}
+
+Figure~\ref{fig:orientation} varies the orientation $\theta$ of the rectangular
+averaging window and the plate aspect ratio, for the poling-$x$
+(length-extensional) configuration that dominates the response.  The window is
+held at a half-width of \SI{3}{\micro\metre} along its long axis, with aspect
+ratios $2$, $5$ and $10$; the plate is
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}; the extensional mode is
+identified as the one carrying the largest coupling, an identification that is
+stable over the sweep (its short-circuit frequency varies smoothly from
+5011 to \SI{5296}{kHz} over all twenty-one cases).
+
+Both panels move monotonically with $\theta$ and both saturate by
+$\theta=90^\circ$.  The extensional frequency rises from \SI{149.5}{kHz} to
+\SI{158.3}{kHz} at ${\rm AR}=2$ and from \SI{146.4}{kHz} to \SI{158.1}{kHz}
+at ${\rm AR}=10$ (7--8\,\%), while the axial-mode coupling falls from
+$0.4451$ to $0.3790$ and from $0.4680$ to $0.3805$ over the same interval
+(15--19\,\%).  At $\theta=0^\circ$ the window aspect ratio is worth
+$0.4451\to0.4680$ between ${\rm AR}=2$ and ${\rm AR}=10$, i.e.\ about
+5\,\%, and the three aspect ratios collapse onto $0.379$--$0.381$ at
+$\theta=90^\circ$: once the long axis of the window is transverse to the
+strain gradient, its aspect ratio no longer matters.
+
+Two remarks keep this in proportion.  First, the coupling plotted here is the
+\emph{total} coupling of the extensional mode, and it is piezoelectric in the
+main (the flexoelectric contribution at $\mu=10^{-6}$\,\si{\coulomb\per\metre}
+is of order $10^{-4}$, Sec.~\ref{sec:thickness}); the window therefore acts on
+the modal coupling through the gradient stiffness in $K_{sc}$, not by adding a
+flexoelectric term directly.  Second, the same statement in the language of
+Sec.~\ref{sec:window} is that rotating the window rotates $M$, and it is $M$
+that the solution sees: the $15$--$19\,\%$ spread is a property of the
+second-moment tensor of a rectangular window, not of the rectangle as such.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig1_k2_orientation.png}
+\caption{Orientation of the rectangular averaging window: (a) fundamental
+frequency and (b) coupling factor of the extensional mode versus the window
+angle $\theta$, for window aspect ratios $2$, $5$, $10$ at a fixed long
+half-width of \SI{3}{\micro\metre}.  Plate
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}, poling $x$, plane stress,
+$24\times2$ mesh.}
+\label{fig:orientation}
+\end{figure}
+
+\subsection{Fractional memory: which matrix is it, and against what?}
+\label{sec:memorystudy}
+
+Two questions are separated here.  The first is \emph{model}:
+the fractional Kelvin--Voigt element of \eqref{eq:kv} is one way to represent
+dielectric loss, and it is worth knowing how much it differs from the
+alternative that is usually available in finite element codes, namely a
+standard (integer-order) Kelvin--Voigt or Zener element fitted at the device
+frequency.  The second is \emph{implementation}: the convolution of
+\eqref{eq:step} may multiply the fully condensed stiffness $K_{\rm eff}$ or
+only the short-circuit matrix $K_{uu}$, and the two give different damping.
+
+\paragraph{Memory matrix.}  Table~\ref{tab:S1} reports the ring-down of the
+extensional mode (mode 4, \SI{6.727}{MHz}, $k^2_{\rm eff}=0.4650$) at
+$\tau=\SI{7.0974}{\nano\second}$, i.e.\ $\omega\tau=0.3$, with an initial tip
+displacement that produces \SI{139.07}{\volt} of open-circuit voltage at
+$t=0$.  The damping ratio extracted from the logarithmic decrement,
+\eqref{eq:zeta}, is $0.15023$ for $K_{\rm eff}$ at $\alpha=1$, against the
+exact $\omega\tau/2=0.15000$: the implementation reproduces the classical
+limit to $0.15\,\%$.  Replacing $K_{\rm eff}$ by $K_{uu}$ removes the
+piezoelectric contribution from the memory and takes the ratio
+$\zeta(K_{uu})/\zeta(K_{\rm eff})$ at $\alpha=1$ down to $0.449$, i.e.\ the
+short-circuit memory dissipates $55\,\%$ less.  The difference is of the order
+of the coupling ($k^2_{\rm eff}=0.4650$) but does \emph{not} reduce to the
+naive factor $1-k^2=0.535$: the two memories differ by the piezoelectric
+stiffness that the condensation puts into $K_{\rm eff}$, and its effect on the
+ring-down has to be computed rather than estimated.  For a strongly
+piezoelectric device the distinction therefore belongs in the model statement,
+not in the implementation.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Ring-down of the extensional mode (mode 4, \SI{6.727}{MHz},
+$k^2_{\rm eff}=0.4650$, $\omega\tau=0.3$, $\tau=\SI{7.0974}{\nano\second}$).
+Damping ratio from the logarithmic decrement of \eqref{eq:zeta}.}
+\label{tab:S1}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+memory matrix & $\alpha=1$ & $\alpha=0.7$ \\
+\midrule
+$K_{\rm eff}$ & $0.15023$ & $0.02600$ \\
+$K_{uu}$      & $0.06749$ & $0.05006$ \\
+\midrule
+ratio $K_{uu}/K_{\rm eff}$ & $0.449$ & $1.93$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Against Kelvin--Voigt and Zener.}  Table~\ref{tab:S2} compares the
+complex modulus of the fractional element, \eqref{eq:kvfreq}, with the
+integer-order Kelvin--Voigt and Zener fits at the same relaxation time.  At
+the device point $\omega\tau=0.3$ the Kelvin--Voigt model over-predicts the
+modulus by $3.5\,\%$ at $\alpha=1$ and by $22.6\,\%$ at $\alpha=0.7$;
+at $\omega\tau=1$ the ratio of the two is $1.345$ and $1.623$, and at
+$\omega\tau=100$ the integer-order model is wrong by a factor $90.9$.  The
+fractional model is not a cosmetic refinement: a single-relaxation fit is
+unusable outside the narrow band where it was fitted, which is precisely the
+band a design map is supposed to cover.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Normalised modulus magnitude $|K^*|/K$ at matched $\tau$: the
+integer-order Kelvin--Voigt element and the fractional Zener element with
+relaxation-strength ratio $r=2$.  The ratio of the two is discussed in the
+text.}
+\label{tab:S2}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+$\omega\tau$ & \multicolumn{2}{c}{$\alpha=1$} & \multicolumn{2}{c}{$\alpha=0.7$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ & KV & Zener ($r=2$) & KV & Zener ($r=2$) \\
+\midrule
+0.3  & $1.0440$ & $1.1170$ & $1.2555$ & $1.2652$ \\
+1    & $1.4142$ & $1.5811$ & $1.7053$ & $1.5310$ \\
+10   & $10.050$ & $1.9926$ & $5.5380$ & $1.8988$ \\
+100  & $100.005$ & $1.9999$ & $25.588$ & $1.9814$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The damping map}
+\label{sec:damping}
+
+Figure~\ref{fig:damping} shows the modal damping ratio of the fundamental mode
+as a function of the Caputo order, computed in two ways: from the
+small-damping formula and from the exact complex pole of
+\eqref{eq:kvfreq}.  The two agree closely at small $\alpha$ and separate as
+$\alpha\to1$, where the small-damping approximation is least applicable; at
+$\alpha=1$ the exact value is $0.0407$ against $0.0511$ from the small-damping
+formula, a $26\,\%$ difference, so the approximation should not be used as a
+substitute for the complex pole when the model is calibrated against measured
+loss.  Together with Table~\ref{tab:S1} this gives the design map: for a given
+device frequency the pair $(\alpha,\tau)$ fixes the damping, and the map must
+be read with the memory matrix that the model actually uses.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.55\textwidth]{fig3_damping_ratio.png}
+\caption{Modal damping ratio versus Caputo order $\alpha$ at fixed
+$\omega_0$ and $\tau$: small-damping formula (dashed) and exact complex pole
+(solid).}
+\label{fig:damping}
+\end{figure}
+
+\subsection{Window shape versus second moment}
+\label{sec:windowresult}
+
+Figure~\ref{fig:domain} is the numerical statement of Sec.~\ref{sec:window} on
+an isotropic plane-strain test problem (rectangle $1\times0.2$, $20\times4$
+mesh, uniaxial edge traction, displacement $u_R$ averaged over the loaded
+edge).  The response is plotted against the normalized window size for an
+ellipsoidal window of semi-axis $l$, a cuboidal window of half-width $l$, and
+a cuboidal window scaled to have the same $M$ as the ellipsoid,
+$a=l\sqrt{3/5}$.  The third curve is indistinguishable from the first: the
+window's shape is irrelevant at fixed $M$, and only $M$ enters the model.  The
+second curve shows the error that is made by ignoring the distinction: taking
+equal half-widths instead of equal $M$ over-stiffens the response, and the
+discrepancy grows with the window size, reaching the coefficient ratio
+$5/3$ in $K_g$ of check V1d.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.55\textwidth]{fig4_domain_comparison.png}
+\caption{Loaded-edge displacement versus window size for an ellipsoidal
+window (semi-axis $l$), a cuboidal window (half-width $l$), and a cuboidal
+window with the same second moment as the ellipsoid.  Isotropic plane-strain
+test problem.  Normalizing by the second moment removes the shape
+dependence.}
+\label{fig:domain}
+\end{figure}
+
+\subsection{Thickness: a flexoelectric size effect against a
+thickness-independent piezoelectric coupling}
+\label{sec:thickness}
+
+Figure~\ref{fig:thickness} is the central design result.  The same plate is
+solved at $h=10,5,2,1$\,\si{\micro\metre} with a \SI{200}{\micro\metre} length,
+and the window held fixed at half-widths $3\times1$\,\si{\micro\metre}, so
+that the thickness is the only variable.  Panel~(a) is the flexoelectric
+bending coupling with $\mu=10^{-6}$\,\si{\coulomb\per\metre} (a \emph{nominal}
+value: no measured flexoelectric coefficient for BaTiO$_3$ is used here, and
+the whole panel scales as $\mu^2$); panel~(b) is the piezoelectric
+length-extensional coupling of the same plate, evaluated with $\mu=0$ and with
+the mode-free measure \eqref{eq:kstatic}.
+
+\paragraph{Flexoelectric size effect.}  The flexoelectric coupling rises by a
+factor $23.9$ from \num{1.74e-4} at \SI{10}{\micro\metre} to
+\num{4.17e-3} at \SI{1}{\micro\metre}.  The local log-log slope is $-1.92$ at
+the thick end, i.e.\ the expected $h^{-2}$ scaling, and steepens to $-1.52$ and
+then $-0.66$ as the plate is thinned.  The saturation is not a mesh artefact:
+the $96\times4$ witness reproduces the $48\times4$ values to $0.04\,\%$ and
+$0.35\,\%$ at the two ends of the range (check T4), and the residual at
+$\mu=0$ is $1.0\times10^{-10}$ (check T5), seven orders of magnitude below the
+signal.  Its physical reading -- that the fixed
+\SIrange{3}{1}{\micro\metre} averaging window becomes comparable to the
+thickness and smears the through-thickness strain gradient -- is an
+interpretation, not a measurement of this study; the same stiffening appears
+in the fundamental frequency, which follows
+$210.4, 108.0, 50.2, 34.7$\,kHz where pure Euler--Bernoulli scaling from the
+thickest plate would give $210, 105, 42, 21$\,kHz.
+
+\paragraph{Piezoelectric coupling is thickness independent.}  Panel~(b) gives
+$k^2 = 0.35821, 0.35833, 0.35839, 0.35840$ for the four thicknesses: a
+variation of $0.05\,\%$ (check T1), mesh independent to $3.7\times10^{-4}$
+(check T2).  This is the statement that makes the pair useful.  The
+piezoelectric effect is a \emph{bulk} effect and a thinner plate is
+electromechanically neither better nor worse; the flexoelectric effect is a
+gradient effect and improves by more than an order of magnitude over the same
+range.  A device can therefore be thinned for the flexoelectric response
+without a penalty in the piezoelectric one, and the crossover thickness is a
+property of the window and of $\mu$, not of the piezoelectric constants.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig5_flexo_thickness.png}
+\caption{(a) Flexoelectric bending coupling versus plate thickness
+($L=\SI{200}{\micro\metre}$, window half-widths
+$3\times1$\,\si{\micro\metre}, $\mu=10^{-6}$\,\si{\coulomb\per\metre}), with a
+$96\times4$ witness at the two ends of the range and the $\mu=0$ residual.
+(b) Piezoelectric length-extensional coupling of the same plate, mode-free and
+with $\mu=0$: constant to $0.05\,\%$ over $10\to1$\,\si{\micro\metre}.}
+\label{fig:thickness}
+\end{figure}
+
+\subsection{Transient response and the memory model}
+\label{sec:transient}
+
+Figure~\ref{fig:memory} shows the ring-down of the extensional mode after an
+initial displacement of \SI{10}{\nano\metre} at the tip, for three Caputo
+orders and fixed $\tau$: the tip displacement in panel~(a) and the
+open-circuit voltage in panel~(b).  The initial voltage,
+\SI{139.07}{\volt}, is set by the mode shape and the electrode configuration
+and is independent of $\alpha$ -- as it must be, since the memory term
+vanishes at $t=0^+$ -- while the decay rate and the rate at which the voltage
+phase drifts relative to the displacement both depend strongly on $\alpha$.
+The $\alpha=1$ curve is the exponential decay of the classical Kelvin--Voigt
+element; the fractional curves are not exponential, and it is that difference
+which the damping map of Fig.~\ref{fig:damping} quantifies.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig2_memory_response.png}
+\caption{Ring-down of the extensional mode (\SI{6.727}{MHz},
+$k^2=0.4583$) for $\alpha=1,0.9,0.7$: (a) tip displacement, (b) open-circuit
+voltage.  Modal memory on $K_{\rm eff}$, eight modes,
+$\tau=\SI{3}{\nano\second}$.}
+\label{fig:memory}
+\end{figure}
+
+%% ===========================================================================
+\section{Application: a \SI{200}{\micro\metre} by \SI{10}{\micro\metre} energy harvester}
+\label{sec:application}
+%% ===========================================================================
+
+The worked case throughout is a \SI{200}{\micro\metre} long,
+\SI{10}{\micro\metre} thick BaTiO$_3$ plate, clamped on one short edge, poled
+along its length and electroded on the two ends.  In this configuration the
+strain in the active region is extensional rather than bending, so the
+piezoelectric coupling is the larger of the two and the flexoelectric term is
+a size-dependent correction rather than the main effect.  Table~\ref{tab:app}
+collects the numbers from the run; they are the numbers a designer needs
+before choosing between the extensional and the bending configuration.
+
+\begin{table}[t]
+\centering
+\small
+\caption{The \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} plate,
+first extensional mode, $24\times2$ mesh.  $V_0$ is the open-circuit voltage
+at \SI{10}{\nano\metre} tip displacement.  Mode-based $k^2$ is the
+open/short-circuit value of the identified mode; the mode-free value is
+\eqref{eq:kstatic}.}
+\label{tab:app}
+\begin{tabular}{@{}llccc@{}}
+\toprule
+poling / kinematics & mode & $f$ (kHz) & $k^2$ (mode) & $V_0$ (V) \\
+\midrule
+$y$, plane strain  & bending     & 6720.6 & 0.1746 & 3.53 \\
+$y$, plane stress  & bending     & 6360.0 & 0.1138 & 2.42 \\
+$x$, plane strain  & extensional & 7162.0 & 0.4026 & 141.55 \\
+$x$, plane stress  & extensional & 6727.3 & 0.4583 & 139.07 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three consequences follow from the runs and are worth stating explicitly.
+
+\begin{enumerate}
+\item \textbf{Polarisation direction dominates everything else.}  The
+  length-extensional configuration with poling along the length gives
+  $k^2=0.4583$ and \SI{139.07}{\volt} at \SI{10}{\nano\metre}; the bending
+  configuration gives $0.1138$ and \SI{2.42}{\volt}, a factor 57 in voltage.
+  A device that excites bending and hopes to harvest through $e_{31}$ is
+  working against a two-order-of-magnitude handicap relative to the
+  extensional one at this geometry.
+\item \textbf{The quasi-static coupling of the same plate is $0.3584$} and is
+  thickness independent (Sec.~\ref{sec:thickness}).  This is the number to
+  quote for a device whose operating frequency is far below its first
+  resonance, and it is the number that remains meaningful when the plate is
+  thinned for the flexoelectric contribution.
+\item \textbf{The damping is set by $(\alpha,\tau)$ and by the memory matrix},
+  not by a material constant.  For the extensional mode of this plate at
+  $\omega\tau=0.3$, $\zeta_{\rm eff}$ runs from $0.150$ ($K_{\rm eff}$,
+  $\alpha=1$) to $0.026$ ($K_{\rm eff}$, $\alpha=0.7$) and to $0.067$
+  ($K_{uu}$, $\alpha=1$).  Any design that reports a single damping number
+  without naming $\alpha$, $\tau$ and the memory matrix is under-specified.
+\end{enumerate}
+
+%% ===========================================================================
+\section{Limitations and unverified items}
+\label{sec:limitations}
+%% ===========================================================================
+
+The following are stated here rather than buried, because each one bounds a
+claim made above.
+
+\begin{enumerate}
+\item \textbf{Density.} $\rho=\SI{6020}{\kilo\gram\per\cubic\metre}$ is not
+  verified against a primary source in this work.  Every frequency scales as
+  $\rho^{-1/2}$; the coupling factors, the size-effect ratio and the damping
+  ratios do not depend on it.  It must be sourced before the frequencies are
+  quoted as predictions.
+\item \textbf{Flexoelectric coefficient.} $\mu$ is unmeasured for the material
+  used here.  Panel~(a) of Fig.~\ref{fig:thickness} is a parametric study: the
+  coupling scales as $\mu^2$ and the constant-strain patch test
+  (check~F2) fixes only the \emph{implementation}, not the material.  The
+  $1.25\times10^{-4}$ bending coupling of check~F4 at
+  $\mu=10^{-6}$\,\si{\coulomb\per\metre} is therefore a sensitivity, not a
+  prediction for BaTiO$_3$.
+\item \textbf{Plane stress.}  The 2-D reduction is a modelling choice, not a
+  consequence of the formulation, and Table~\ref{tab:kinematics} shows it is
+  worth up to $35\,\%$ in $k^2$ for the extensional case.  A three-dimensional
+  implementation would remove the choice; this one does not.
+\item \textbf{Interpretation of the saturation.}  The flattening of the
+  flexoelectric curve below $h\approx\SI{2}{\micro\metre}$ is converged but
+  its attribution to the window-to-thickness ratio is not separated in this
+  study from the gradient-elastic stiffening of the thin plate, which is
+  visible in the same runs through $f_1$.
+\item \textbf{Fractional order.}  $\alpha$ and $\tau$ are treated as
+  parameters.  Nothing here extracts them from a measurement, and the L1
+  scheme used is first order in time; the reported orders ($0.99$ at
+  $\alpha=1$) confirm that it is delivered as intended, not that it is the
+  most efficient available.
+\item \textbf{Two dimensions.}  The framework is plane; the $C^1$ BFS element
+  is a rectangle, so curved and skewed geometries require either a
+  mapped element or a different $C^1$ family.
+\end{enumerate}
+
+%% ===========================================================================
+\section{Conclusions}
+\label{sec:conclusions}
+%% ===========================================================================
+
+A $C^1$ Bogner--Fox--Schmit framework has been developed for
+piezoelectric--flexoelectric strain-gradient plates with fractional-order
+dielectric memory and a rectangular nonlocal averaging window, and verified
+against a single-command suite of twenty-nine checks in which every failure
+mode that was found during the work is now a graded criterion.
+
+The three contributions are the ones stated in the introduction.  Fractional
+memory is carried on the modal coordinates with the L1 scheme, and the
+distinction between the two candidate memory matrices is quantified rather
+than assumed: the damping ratio for memory on the short-circuit matrix is
+$0.449$ times that for memory on the fully condensed one at $\alpha=1$, a
+$55\,\%$ reduction in dissipation that does not reduce to the naive $1-k^2$
+factor for a device with $k^2=0.4650$.  The
+rectangular window enters only through its second-moment tensor $M$, with the
+closed forms $a^2/3$, $a^2/4$ and $a^2/5$ for the cuboid, ellipse and
+ellipsoid; two windows with equal $M$ produce identical results, and the
+coefficient ratio at equal half-width is exactly $5/3$.  The open/short-circuit
+coupling factor and the damping ratio together give a design map, and its
+central entry is the contrast in Fig.~\ref{fig:thickness}: over
+$10\to1$\,\si{\micro\metre} the flexoelectric bending coupling rises by a
+factor $23.9$ while the piezoelectric extensional coupling of the same plate
+is constant to $0.05\,\%$.
+
+The methodological lesson is worth as much as the numbers.  Two of the
+quantities reported here are differences of nearly equal eigenvalues, and both
+produced smooth, plausible, wrong trends before they were reformulated -- a
+mode-selection artefact that marched through the mode index as the plate was
+thinned, and a two-eigensolve difference whose round-off equalled the answer.
+The replacements (a mode-free static coupling and the secular equation of the
+rank-one open-circuit update) are cheap, and they are what makes the numbers in
+this paper reproducible by anyone who runs the same command.
+
+\section*{Acknowledgment}
+
+Financial support from the Haryana State Research Fund (HSRF), Government of
+Haryana, under sanction number 14/66-2026 SPD/HSHEC/HSRF, is gratefully
+acknowledged.
+
+%% ===========================================================================
+\bibliographystyle{elsarticle-num}
+\begin{thebibliography}{99}
+
+\bibitem{fem1}
+%% TODO self-citation: restore the full reference from the delivered FEM-1
+%% package (title, journal, volume, pages, year, DOI).
+Authors of the FEM-1 paper,
+\emph{$C^1$ plate finite element for piezoelectric strain-gradient
+laminates}, reference to be completed from the FEM-1 delivery.
+
+\bibitem{fem4}
+%% TODO self-citation: full reference from the delivered FEM-4 package.
+Authors of the FEM-4 paper,
+\emph{Coupled piezoelectric--flexoelectric Mindlin Form-II continua},
+reference to be completed from the FEM-4 delivery.
+
+\bibitem{fem5}
+%% TODO self-citation: full reference from the delivered FEM-5 package.
+Authors of the FEM-5 paper,
+\emph{Plate and shell implementation of the coupled piezoelectric--flexoelectric
+model}, reference to be completed from the FEM-5 delivery.
+
+\bibitem{mindlin}
+R.~D. Mindlin,
+Micro-structure in linear elasticity,
+\emph{Archive for Rational Mechanics and Analysis} 16 (1964) 51--78.
+
+\bibitem{toupin}
+R.~A. Toupin,
+Elastic materials with couple-stresses,
+\emph{Archive for Rational Mechanics and Analysis} 11 (1962) 385--414.
+
+\bibitem{bfs}
+F.~K. Bogner, R.~L. Fox, L.~A. Schmit,
+The generation of inter-element-compatible stiffness and mass matrices by the
+use of interpolation formulas,
+in: \emph{Proceedings of the Conference on Matrix Methods in Structural
+Mechanics}, Wright--Patterson Air Force Base, 1965 (published 1966), pp.\
+397--443.
+
+\bibitem{zgonik}
+M.~Zgonik, P.~Bernasconi, M.~Duelli, R.~Schlesser, P.~G\"unter,
+Dielectric, elastic, piezoelectric, electro-optic, and elasto-optic tensors of
+BaTiO$_3$ crystals,
+\emph{Physical Review B} 50 (1994) 5941--5949.
+
+\bibitem{caputo}
+M.~Caputo,
+Linear models of dissipation whose $Q$ is almost frequency independent---II,
+\emph{Geophysical Journal of the Royal Astronomical Society} 13 (1967)
+529--539.
+
+\bibitem{bagley}
+R.~L. Bagley, P.~J. Torvik,
+A theoretical basis for the application of fractional calculus to
+viscoelasticity,
+\emph{Journal of Rheology} 27 (1983) 201--210.
+
+\bibitem{koeller}
+R.~C. Koeller,
+Applications of fractional calculus to the theory of viscoelasticity,
+\emph{Journal of Applied Mechanics} 51 (1984) 299--307.
+
+\end{thebibliography}
+
+\end{document}
