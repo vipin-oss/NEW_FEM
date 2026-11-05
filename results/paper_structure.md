@@ -8,7 +8,7 @@
 - undefined \\cite: none
 - missing graphics: none (10 included)
 - missing \\input: none
-- numbers audit:   32/32 agree -> results/paper_number_audit.md
+- numbers audit:   41/41 agree -> results/paper_number_audit.md
 
 ## Detail
 - nothing to report

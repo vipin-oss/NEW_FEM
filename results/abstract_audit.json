@@ -1,0 +1,150 @@
+{
+ "claims": [
+  {
+   "literal": "200",
+   "what": "plate length and width, \\SI{200}{\\micro\\metre}",
+   "verdict": "n/a",
+   "route": "an input of the model, not a measured quantity"
+  },
+  {
+   "literal": "10",
+   "what": "plate thickness, \\SI{10}{\\micro\\metre}",
+   "verdict": "n/a",
+   "route": "an input of the model"
+  },
+  {
+   "literal": "0.4650",
+   "what": "extensional $k^2$ at $\\omega\\tau=0.3$",
+   "verdict": "nahi hua",
+   "route": "FEM modal coupling (memory\\_variants S1, criterion S1a); the closed form of Sec.~\\ref{sec:closedform} covers the free plate (0.5608), not this mode"
+  },
+  {
+   "literal": "0.3",
+   "what": "$\\omega\\tau$ of the damping study",
+   "verdict": "n/a",
+   "route": "a chosen operating point"
+  },
+  {
+   "literal": "0.449",
+   "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
+   "verdict": "nahi hua",
+   "route": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
+  },
+  {
+   "literal": "1",
+   "what": "$\\alpha=1$",
+   "verdict": "n/a",
+   "route": "the classical limit, chosen for the comparison"
+  },
+  {
+   "literal": "0.15",
+   "what": "distance of $\\zeta_{\\rm eff}$ from the classical limit",
+   "verdict": "hua",
+   "route": "I5: at $\\alpha=1$ the pole equation is quadratic and gives $\\omega\\tau/2=0.15000$ exactly, so the $0.15\\,\\%$ is a comparison with an exact value"
+  },
+  {
+   "literal": "0.15023",
+   "what": "$\\zeta_{\\rm eff}$ from the finite element matrices",
+   "verdict": "nahi hua",
+   "route": "FEM value (memory\\_variants S1); only its *distance* from 0.15000 has an independent reference"
+  },
+  {
+   "literal": "0.15000",
+   "what": "$\\omega\\tau/2$",
+   "verdict": "hua",
+   "route": "I5, and exactly the classical Kelvin--Voigt result"
+  },
+  {
+   "literal": "2",
+   "what": "the factor $1/2$ in $\\omega\\tau/2$",
+   "verdict": "hua",
+   "route": "at $\\alpha=1$ the pole equation is a quadratic whose root is $s=\\omega_0(-\\zeta+i\\sqrt{1-\\zeta^2})$ with $\\zeta=\\omega\\tau/2$; the polynomial route returns the same root (I4, I5)"
+  },
+  {
+   "literal": "3",
+   "what": "$M_{ii}=a_i^2/3$ for a cuboid",
+   "verdict": "hua",
+   "route": "I8: quadrature over the box, 0.3333333333"
+  },
+  {
+   "literal": "4",
+   "what": "$M_{ii}=a_i^2/4$ for an ellipse",
+   "verdict": "hua",
+   "route": "I8: quadrature over the ellipse, 0.2499991667"
+  },
+  {
+   "literal": "5",
+   "what": "$M_{ii}=a_i^2/5$ for an ellipsoid",
+   "verdict": "hua",
+   "route": "I8: quadrature over the ellipsoid, 0.2000000000"
+  },
+  {
+   "literal": "19",
+   "what": "effect of window anisotropy and orientation on the coupling",
+   "verdict": "nahi hua",
+   "route": "FEM rotation study (criterion T5 for the mesh/rotation trend); no independent route"
+  },
+  {
+   "literal": "0.5581",
+   "what": "piezoelectric extensional $k^2$ of the 200x10 plate",
+   "verdict": "hua",
+   "route": "D1/C1: the closed form built from $e$, $C$, $\\kappa$ alone gives 0.56079, and the free-plate FEM matches it to $10^{-10}$"
+  },
+  {
+   "literal": "0.2",
+   "what": "distance between 0.5581 and the closed form",
+   "verdict": "hua",
+   "route": "D1, the same two numbers"
+  },
+  {
+   "literal": "0.5608",
+   "what": "$e^{\\mathsf T}C^{-1}e/\\kappa$, 2-D plane stress",
+   "verdict": "hua",
+   "route": "derive\\_k2\\_closed\\_form.py from the constitutive tensors only; agreements 0.56079 vs 0.56079 (D1)"
+  },
+  {
+   "literal": "0.09",
+   "what": "spread of the piezo $k^2$ between 10 and 1 micron",
+   "verdict": "nahi hua",
+   "route": "FEM thickness sweep (T3, T2 for mesh independence); the spread is small but no closed form predicts it"
+  },
+  {
+   "literal": "23.9",
+   "what": "growth of the flexoelectric $k^2$ over the same range",
+   "verdict": "nahi hua",
+   "route": "the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not"
+  },
+  {
+   "literal": "fifty",
+   "what": "the number of graded criteria",
+   "verdict": "hua",
+   "route": "run\\_all.py: 49/49 pass, and check\\_paper\\_numbers.py compares the word against summary.json"
+  }
+ ],
+ "n_hua": 10,
+ "n_nahi_hua": 6,
+ "n_input": 4,
+ "tokens": [
+  "1",
+  "0.4650",
+  "0.3",
+  "0.449",
+  "0.15",
+  "0.15023",
+  "2",
+  "0.15000",
+  "3",
+  "4",
+  "5",
+  "19",
+  "200",
+  "10",
+  "0.5581",
+  "0.2",
+  "0.5608",
+  "0.09",
+  "23.9"
+ ],
+ "missing": [],
+ "stale": []
+}

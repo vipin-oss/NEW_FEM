@@ -62,7 +62,8 @@ def main():
     scripts = ["run_verification.py", "run_flexo_check.py",
                "run_material_check.py", "run_memory_variants.py",
                "run_coupling_check.py", "run_mode_tracking.py",
-               "run_application_table.py", "derive_k2_closed_form.py"]
+               "run_application_table.py", "derive_k2_closed_form.py",
+               "run_independent_checks.py", "audit_abstract_claims.py"]
     if figs:
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")
@@ -78,6 +79,8 @@ def main():
     Cc = load("coupling_check.json")
     Kt = load("mode_tracking.json")
     At = load("application_table.json")
+    Ic = load("independent_checks.json")
+    Ab = load("abstract_audit.json")
     Cf = load("k2_closed_form.json")
     D = load("demo.json") if figs else None
     Pg = load("paper_figures_data.json") if figs else None
@@ -205,6 +208,47 @@ def main():
     wid = max(abs(w["k2_over_1p"] - w["recorded"]) for w in Cf["wrong_series"])
     chk("D2", "the superseded series is exactly k^2/(1+k^2) of the new one",
         f"{wid:.1e}", "< 1e-5 (same formula applied twice)", wid < 1e-5)
+
+    # ---- independent routes (nothing here reuses the assembly path) ----
+    e1 = {c["case"]: c for c in Ic["F1_frequencies"]["cases"]}
+    co = e1["clamped-free"]["mesh"][0]
+    cc = e1["clamped-clamped"]["mesh"][0]
+    chk("I1", "clamped-free f1, FEM 48x4 vs Euler-Bernoulli closed form",
+        f"{co['f_FEM_kHz']:.1f} vs {e1['clamped-free']['f_EB_kHz']:.1f} kHz",
+        f"|err| < 1 % ({co['err_vs_EB_pct']:+.2f} %)",
+        abs(co["err_vs_EB_pct"]) < 1.0)
+    chk("I2", "clamped-clamped f1, FEM 48x4 vs Euler-Bernoulli closed form",
+        f"{cc['f_FEM_kHz']:.1f} vs {e1['clamped-clamped']['f_EB_kHz']:.1f} kHz",
+        f"|err| < 1 % ({cc['err_vs_EB_pct']:+.2f} %)",
+        abs(cc["err_vs_EB_pct"]) < 1.0)
+    chk("I3", "clamped-free f1 at 128x4 vs Euler-Bernoulli (mesh refinement)",
+        f"{e1['clamped-free']['mesh'][2]['f_FEM_kHz']:.2f} kHz",
+        f"|err| < 0.5 % ({e1['clamped-free']['mesh'][2]['err_vs_EB_pct']:+.2f} %)",
+        abs(e1["clamped-free"]["mesh"][2]["err_vs_EB_pct"]) < 0.5)
+    worst = max(r["rel_diff"] for r in Ic["F2_damping"]["rows"]
+                if r["rel_diff"] is not None)
+    chk("I4", "zeta from Newton pole vs polynomial roots (10 alpha, 2 omega*tau)",
+        f"{worst:.1e}", "< 1e-8", worst < 1e-8)
+    zerr = max(abs(r["zeta_newton"] - r["zeta_kv_exact"])
+               for r in Ic["F2_damping"]["rows"] if r["alpha"] == 1.0)
+    chk("I5", "zeta at alpha = 1 vs omega*tau/2 (both omega*tau)",
+        f"{zerr:.1e}", "< 1e-9", zerr < 1e-9)
+    fx = Ic["F3_flexo_curvature"]
+    fx_worst = max(r["rel_diff"] for r in fx["mesh"])
+    chk("I6", "flexo x, uniform curvature: FEM energy triple vs 3 mu^2/(C11 h^2 kappa33)",
+        f"{fx['mesh'][0]['x_fem']:.6e} vs {fx['x_analytic']:.6e}",
+        f"rel. diff < 1e-8 (worst {fx_worst:.1e})", fx_worst < 1e-8)
+    v_worst = max(abs(r["V"] / r["V_analytic"] - 1) for r in fx["mesh"])
+    chk("I7", "flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33",
+        f"{v_worst:.1e}", "< 1e-10", v_worst < 1e-10)
+    chk("A2", "every number in the abstract has an independent-check verdict",
+        f"{Ab['n_hua']} hua / {Ab['n_nahi_hua']} nahi hua / {Ab['n_input']} "
+        f"inputs, {len(Ab['tokens'])} tokens",
+        "0 uncovered, 0 stale",
+        not Ab["missing"] and not Ab["stale"])
+    mw = Ic["F4_window_moments"]["worst_rel"]
+    chk("I8", "window second-moment factors 1/3, 1/4, 1/5 by quadrature",
+        f"{mw:.1e}", "< 1e-5", mw < 1e-5)
 
     ak2 = [r["k2"] for r in At["rows"]]
     chk("A1", "application table: extensional plane stress is the strongest "

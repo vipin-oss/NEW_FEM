@@ -1,6 +1,6 @@
 # Verification table as it appears in the manuscript
 
-41/41 checks pass.
+50/50 checks pass.
 
 | id | checked quantity | value | criterion | source |
 |---|---|---|---|---|
@@ -36,6 +36,15 @@
 | K2 | worst f2/f1 over the thickness sweep (mode off-diagonal) | 2.3e-06, f2/f1 >= 6.21 | off-diag < 1e-5, ratio > 6 | `results/mode_tracking.json` |
 | D1 | closed form e'C^-1 e/kappa vs FEM coupling (free plate) | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/?` |
 | D2 | the superseded series is exactly k^2/(1+k^2) of the new one | 3.5e-06 | < 1e-5 (same formula applied twice) | `results/?` |
+| I1 | clamped-free f1, FEM 48x4 vs Euler-Bernoulli closed form | 144.6 vs 143.8 kHz | |err| < 1 % (+0.54 %) | `results/?` |
+| I2 | clamped-clamped f1, FEM 48x4 vs Euler-Bernoulli closed form | 919.2 vs 915.0 kHz | |err| < 1 % (+0.46 %) | `results/?` |
+| I3 | clamped-free f1 at 128x4 vs Euler-Bernoulli (mesh refinement) | 144.08 kHz | |err| < 0.5 % (+0.20 %) | `results/?` |
+| I4 | zeta from Newton pole vs polynomial roots (10 alpha, 2 omega*tau) | 1.4e-10 | < 1e-8 | `results/?` |
+| I5 | zeta at alpha = 1 vs omega*tau/2 (both omega*tau) | 0.0e+00 | < 1e-9 | `results/?` |
+| I6 | flexo x, uniform curvature: FEM energy triple vs 3 mu^2/(C11 h^2 kappa33) | 3.570415e-04 vs 3.570415e-04 | rel. diff < 1e-8 (worst 1.8e-10) | `results/?` |
+| I7 | flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33 | 1.7e-13 | < 1e-10 | `results/?` |
+| A2 | every number in the abstract has an independent-check verdict | 10 hua / 6 nahi hua / 4 inputs, 19 tokens | 0 uncovered, 0 stale | `results/?` |
+| I8 | window second-moment factors 1/3, 1/4, 1/5 by quadrature | 3.3e-06 | < 1e-5 | `results/?` |
 | A1 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | T1 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |
 | T2 | piezo k^2, 24x2 vs 48x4, max rel. diff | 5.7e-04 | < 1e-3 | `results/demo.json` |
@@ -44,4 +53,4 @@
 | T5 | flexo k^2 at mu = 0 / value (residual) | 6e-07 | < 1e-5 | `results/demo.json` |
 | P1 | paper figures: vector set written | 10 PDF | = 10 (P1-P10) | `results/paper_figures_data.json` |
 | P2 | orientation sweep rows / k^2 range | 168 rows, 0.3786-0.4677 | 168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
-| N1 | manuscript numbers vs the JSON they came from | 32/32 | all agree | `results/?` |
+| N1 | manuscript numbers vs the JSON they came from | 41/41 | all agree | `results/?` |

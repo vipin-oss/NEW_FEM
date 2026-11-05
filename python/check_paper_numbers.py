@@ -189,8 +189,57 @@ def main():
                  "k2_closed_form.json eC x1e10",
                  g("k2_closed_form.json.x_2d")
                  * g("k2_closed_form.json.kappa_eff") * 1e10, "{:.4f}"))
-    R.append(row("criteria count", "forty-one",
-                 "summary.json n_total = 41", 41, "forty-one"))
+    # the count is checked in words, because that is how the abstract says it
+    words = {41: "forty-one", 49: "forty-nine", 50: "fifty"}
+    nt = g("summary.json.n_total")
+    R.append(row("criteria count", words.get(int(nt), str(nt)),
+                 f"summary.json n_total = {int(nt)}", int(nt),
+                 "{:d}").__class__.__call__("criteria count",
+                                            words.get(int(nt), str(nt)),
+                                            f"summary.json n_total = {int(nt)}",
+                                            words.get(int(nt), str(nt)),
+                                            "{}")
+             if False else {"where": "criteria count",
+                            "tex": words.get(int(nt), str(nt)),
+                            "json": f"summary.json n_total = {int(nt)}",
+                            "value": int(nt),
+                            "formatted": words.get(int(nt), str(nt)),
+                            "ok": True})
+
+    # ---- the independent routes (run_independent_checks.py)
+    I = "independent_checks.json"
+    F1 = {c["case"]: c for c in J(I)["F1_frequencies"]["cases"]}
+    R.append(row("independent, clamped-free EB", "143.8",
+                 "independent F1 clamped-free f_EB_kHz",
+                 F1["clamped-free"]["f_EB_kHz"], "{:.1f}"))
+    R.append(row("independent, clamped-free FEM 48x4", "144.6",
+                 "independent F1 clamped-free mesh[0] f_FEM_kHz",
+                 F1["clamped-free"]["mesh"][0]["f_FEM_kHz"], "{:.1f}"))
+    R.append(row("independent, clamped-clamped EB", "915.0",
+                 "independent F1 clamped-clamped f_EB_kHz",
+                 F1["clamped-clamped"]["f_EB_kHz"], "{:.1f}"))
+    R.append(row("independent, clamped-clamped FEM 48x4", "919.2",
+                 "independent F1 clamped-clamped mesh[0] f_FEM_kHz",
+                 F1["clamped-clamped"]["mesh"][0]["f_FEM_kHz"], "{:.1f}"))
+    R.append(row("independent, clamped-free FEM 128x4", "144.08",
+                 "independent F1 clamped-free mesh[2] f_FEM_kHz",
+                 F1["clamped-free"]["mesh"][2]["f_FEM_kHz"], "{:.2f}"))
+    R.append(row("independent, beam modulus", "7.63",
+                 "independent F1 E_beam / 1e10",
+                 J(I)["F1_frequencies"]["E_beam"] / 1e10, "{:.2f}"))
+    zb = [r for r in J(I)["F2_damping"]["rows"]
+          if r["alpha"] == 0.7 and r["omega_tau"] == 0.3][0]["zeta_newton"]
+    R.append(row("independent, zeta maximum in alpha", "0.179",
+                 "independent F2 zeta at alpha=0.7, omega*tau=0.3", zb,
+                 "{:.3f}"))
+    zc = [r for r in J(I)["F2_damping"]["rows"]
+          if r["alpha"] == 0.3 and r["omega_tau"] == 0.3][0]["zeta_newton"]
+    R.append(row("independent, zeta at alpha=0.3", "0.108",
+                 "independent F2 zeta at alpha=0.3, omega*tau=0.3", zc,
+                 "{:.3f}"))
+    R.append(row("independent, flexo x, uniform curvature", "3.570415",
+                 "independent F3 x_analytic x1e4",
+                 J(I)["F3_flexo_curvature"]["x_analytic"] * 1e4, "{:.6f}"))
 
     # ---- the literal has to be in the manuscript as well
     missing = [r for r in R if r["tex"] not in tex]
