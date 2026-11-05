@@ -170,8 +170,27 @@ def main():
     R.append(row("application, f mode extensional plane strain", "7161.0",
                  "application_table.json rows[2].f_kHz",
                  g("application_table.json.rows.2.f_kHz"), "{:.1f}"))
-    R.append(row("criteria count", "thirty-nine",
-                 "summary.json n_total = 39", 39, "thirty-nine"))
+    R.append(row("closed form, 3-D free bar", "0.5771",
+                 "k2_closed_form.json k2_3d_free",
+                 g("k2_closed_form.json.k2_3d_free"), "{:.4f}"))
+    R.append(row("closed form, 3-D uniaxial", "0.3748",
+                 "k2_closed_form.json k2_3d_uniaxial",
+                 g("k2_closed_form.json.k2_3d_uniaxial"), "{:.4f}"))
+    R.append(row("closed form, 2-D plane strain", "0.5132",
+                 "k2_closed_form.json k2_2d_plane_strain",
+                 g("k2_closed_form.json.k2_2d_plane_strain"), "{:.4f}"))
+    R.append(row("closed form, x_2D", "1.2768",
+                 "k2_closed_form.json x_2d",
+                 g("k2_closed_form.json.x_2d"), "{:.4f}"))
+    R.append(row("closed form, C_p[0][0]", "9.5500",
+                 "k2_closed_form.json C_p[0][0] / 1e10",
+                 g("k2_closed_form.json.C_p.0.0") / 1e10, "{:.4f}"))
+    R.append(row("closed form, e'C^-1 e", "6.3308",
+                 "k2_closed_form.json eC x1e10",
+                 g("k2_closed_form.json.x_2d")
+                 * g("k2_closed_form.json.kappa_eff") * 1e10, "{:.4f}"))
+    R.append(row("criteria count", "forty-one",
+                 "summary.json n_total = 41", 41, "forty-one"))
 
     # ---- the literal has to be in the manuscript as well
     missing = [r for r in R if r["tex"] not in tex]

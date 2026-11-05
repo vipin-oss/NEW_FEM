@@ -1,6 +1,6 @@
 # Verification table as it appears in the manuscript
 
-39/39 checks pass.
+41/41 checks pass.
 
 | id | checked quantity | value | criterion | source |
 |---|---|---|---|---|
@@ -34,6 +34,8 @@
 | C4 | FEM k^2, clamped plate, 24x2 vs 48x4 | 0.13 % | < 0.5 % (coarse mesh) | `results/coupling_check.json` |
 | K1 | lowest MAC of mode 1 vs the h = 10 um shape (4 thicknesses) | 0.99919 | > 0.999 | `results/mode_tracking.json` |
 | K2 | worst f2/f1 over the thickness sweep (mode off-diagonal) | 2.3e-06, f2/f1 >= 6.21 | off-diag < 1e-5, ratio > 6 | `results/mode_tracking.json` |
+| D1 | closed form e'C^-1 e/kappa vs FEM coupling (free plate) | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/?` |
+| D2 | the superseded series is exactly k^2/(1+k^2) of the new one | 3.5e-06 | < 1e-5 (same formula applied twice) | `results/?` |
 | A1 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | T1 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |
 | T2 | piezo k^2, 24x2 vs 48x4, max rel. diff | 5.7e-04 | < 1e-3 | `results/demo.json` |
@@ -42,4 +44,4 @@
 | T5 | flexo k^2 at mu = 0 / value (residual) | 6e-07 | < 1e-5 | `results/demo.json` |
 | P1 | paper figures: vector set written | 10 PDF | = 10 (P1-P10) | `results/paper_figures_data.json` |
 | P2 | orientation sweep rows / k^2 range | 168 rows, 0.3786-0.4677 | 168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
-| N1 | manuscript numbers vs the JSON they came from | 26/26 | all agree | `results/?` |
+| N1 | manuscript numbers vs the JSON they came from | 32/32 | all agree | `results/?` |

@@ -12,6 +12,7 @@ Runs, in order:
     run_coupling_check.py  C1-C4 piezo k^2 against the closed form
     run_mode_tracking.py   K1-K2 the same mode shape at every thickness
     run_application_table.py A1 the four polarisation/kinematics cases
+    derive_k2_closed_form.py D1-D2 the coupling factor from the material
     run_demos.py           the thickness sweep (optional)
     run_paper_figures.py   the paper figure set (optional)
     check_paper_numbers.py N1 every number in the manuscript (optional)
@@ -61,7 +62,7 @@ def main():
     scripts = ["run_verification.py", "run_flexo_check.py",
                "run_material_check.py", "run_memory_variants.py",
                "run_coupling_check.py", "run_mode_tracking.py",
-               "run_application_table.py"]
+               "run_application_table.py", "derive_k2_closed_form.py"]
     if figs:
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")
@@ -77,6 +78,7 @@ def main():
     Cc = load("coupling_check.json")
     Kt = load("mode_tracking.json")
     At = load("application_table.json")
+    Cf = load("k2_closed_form.json")
     D = load("demo.json") if figs else None
     Pg = load("paper_figures_data.json") if figs else None
 
@@ -195,6 +197,14 @@ def main():
     chk("K2", "worst f2/f1 over the thickness sweep (mode off-diagonal)",
         f"{koff:.1e}, f2/f1 >= {krat:.2f}", "off-diag < 1e-5, ratio > 6",
         koff < 1e-5 and krat > 6.0)
+
+    cf_err = abs(Cf["fem"]["FEM free 48x4"] / Cf["k2_2d_closed"] - 1.0)
+    chk("D1", "closed form e'C^-1 e/kappa vs FEM coupling (free plate)",
+        f"{Cf['k2_2d_closed']:.5f} vs {Cf['fem']['FEM free 48x4']:.5f}",
+        "rel. diff < 1e-3", cf_err < 1e-3)
+    wid = max(abs(w["k2_over_1p"] - w["recorded"]) for w in Cf["wrong_series"])
+    chk("D2", "the superseded series is exactly k^2/(1+k^2) of the new one",
+        f"{wid:.1e}", "< 1e-5 (same formula applied twice)", wid < 1e-5)
 
     ak2 = [r["k2"] for r in At["rows"]]
     chk("A1", "application table: extensional plane stress is the strongest "

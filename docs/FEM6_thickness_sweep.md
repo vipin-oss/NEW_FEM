@@ -98,16 +98,26 @@ witness, not as a second curve.
 
 | h (µm) | flexo k² (48×4) | 96×4 witness | rel. diff | µ = 0 residual | k² piezo (mode-free) |
 |---|---|---|---|---|---|
-| 10 | 1.7437e-04 | 1.7444e-04 | 4e-4 | 1.0e-10 | 0.35821 |
-| 5 | 6.5873e-04 | — | — | 1.0e-10 | 0.35833 |
-| 2 | 2.6416e-03 | — | — | 1.0e-10 | 0.35839 |
-| 1 | 4.1736e-03 | 4.1589e-03 | 3.5e-3 | 1.0e-10 | 0.35840 |
+| 10 | 1.7437e-04 | 1.7444e-04 | 4e-4 | 1.0e-10 | 0.55814 |
+| 5 | 6.5873e-04 | — | — | 1.0e-10 | 0.55843 |
+| 2 | 2.6416e-03 | — | — | 1.0e-10 | 0.55858 |
+| 1 | 4.1736e-03 | 4.1589e-03 | 3.5e-3 | 1.0e-10 | 0.55861 |
 
 * flexo k² grows by **×23.9** from `h = 10 µm` to `1 µm`;
 * local log-log slopes **−1.92, −1.52, −0.66** (steep end approaching the
   `h⁻²` asymptote, shallow end flattening below `h ≈ 2 µm`);
-* piezo k² is **thickness independent to 0.05 %** (`0.35821 → 0.35840`) and
-  mesh independent to `3.7e-4`.
+* piezo k² is **thickness independent to 0.09 %** (`0.55814 → 0.55861`) and
+  mesh independent to `5.7e-4`.
+
+> **Correction (this revision).** An earlier version of this table reported the
+> piezo column as `0.35821 → 0.35840`.  That number came from `_static_k2`
+> solving `x = dᵀK⁻¹d/β` against the **open-circuit** matrix and then applying
+> `k² = x/(1+x)`; by Sherman–Morrison the first step already returns `k²`, so
+> the helper produced `k²/(1+k²)` — `0.55814/(1+0.55814) = 0.35821` exactly.
+> The corrected values are the ones above; the closed form from the material
+> constants (`eᵀC⁻¹e/κ`, plane stress) gives `0.56079`, and the free-plate FEM
+> reproduces it to the fifth decimal.  See
+> `python/derive_k2_closed_form.py` and `results/k2_closed_form.md`.
 
 The piezo statement is the predictive one: the same plate keeps the same
 electromechanical coupling whatever its thickness, while the flexoelectric

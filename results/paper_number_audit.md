@@ -1,6 +1,6 @@
 # Every number in the manuscript against the JSON it came from
 
-26/26 claims agree; 0 disagree with the JSON, 0 are not found in the text.
+32/32 claims agree; 0 disagree with the JSON, 0 are not found in the text.
 
 | # | claim | manuscript | json | value | status |
 |---|---|---|---|---|---|
@@ -29,4 +29,10 @@
 | 23 | application, V0 bending plane stress | `2.41` | `application_table.json rows[1].V0_V` | `2.41` | ok |
 | 24 | application, f1 extensional plane stress | `147.73` | `application_table.json rows[3].f1_kHz` | `147.73` | ok |
 | 25 | application, f mode extensional plane strain | `7161.0` | `application_table.json rows[2].f_kHz` | `7161.0` | ok |
-| 26 | criteria count | `thirty-nine` | `summary.json n_total = 39` | `thirty-nine` | ok |
+| 26 | closed form, 3-D free bar | `0.5771` | `k2_closed_form.json k2_3d_free` | `0.5771` | ok |
+| 27 | closed form, 3-D uniaxial | `0.3748` | `k2_closed_form.json k2_3d_uniaxial` | `0.3748` | ok |
+| 28 | closed form, 2-D plane strain | `0.5132` | `k2_closed_form.json k2_2d_plane_strain` | `0.5132` | ok |
+| 29 | closed form, x_2D | `1.2768` | `k2_closed_form.json x_2d` | `1.2768` | ok |
+| 30 | closed form, C_p[0][0] | `9.5500` | `k2_closed_form.json C_p[0][0] / 1e10` | `9.5500` | ok |
+| 31 | closed form, e'C^-1 e | `6.3308` | `k2_closed_form.json eC x1e10` | `6.3308` | ok |
+| 32 | criteria count | `forty-one` | `summary.json n_total = 41` | `forty-one` | ok |

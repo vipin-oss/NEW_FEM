@@ -4,7 +4,7 @@
 %%
 %%  elsarticle (Elsevier).  Build:  pdflatex main ; bibtex main ; pdflatex x2
 %%  Every number quoted in this file is produced by
-%%      python3 python/run_all.py        (39/39 checks, results/SUMMARY.md)
+%%      python3 python/run_all.py        (41/41 checks, results/SUMMARY.md)
 %%  Placeholders are marked  %% TODO  and listed in Paper_12/README.md.
 %% ---------------------------------------------------------------------------
 \documentclass[preprint,12pt]{elsarticle}
@@ -60,10 +60,12 @@ $M$ produce identical solutions -- whereas its anisotropy and orientation are
 worth up to $19\,\%$ of the coupling.  Third, a coupling-and-damping design map
 is obtained in which the piezoelectric extensional coupling of a
 \SI{200}{\micro\metre} by \SI{10}{\micro\metre} BaTiO$_3$ plate is
-$k^2=0.5581$, constant to $0.09\,\%$ between \SI{10}{\micro\metre} and
-\SI{1}{\micro\metre}, while the flexoelectric bending coupling of the same
-plate rises by a factor $23.9$ over that range.  Every number quoted is
-produced by a single command that grades thirty-nine stated criteria; the two
+$k^2=0.5581$ -- within $0.2\,\%$ of the value the constitutive tensors
+predict on their own, $e^{\mathsf T}C^{-1}e/\kappa=0.5608$
+(Sec.~\ref{sec:closedform}) -- constant to $0.09\,\%$ between
+\SI{10}{\micro\metre} and \SI{1}{\micro\metre}, while the flexoelectric bending
+coupling of the same plate rises by a factor $23.9$ over that range.  Every number quoted is
+produced by a single command that grades forty-one stated criteria; the two
 artefacts that the thin-plate sweeps produced -- a coupling factor read off as
 the largest eigenvalue and a two-eigensolve difference at the level of its own
 round-off -- are reported, together with the mode-free and secular-equation
@@ -137,8 +139,10 @@ around.
   the open- and short-circuit configurations together with the fractional
   damping ratio, both as functions of geometry, of window orientation and of
   $(\alpha,\tau)$.  For a \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}
-  BaTiO$_3$ plate the quasi-static coupling is $k^2=0.3582$ and is
-  \emph{independent of thickness to 0.05\,\%} over $10\to1$\,\si{\micro\metre},
+  BaTiO$_3$ plate the quasi-static coupling is $k^2=0.5581$ -- a value that
+  follows from the material constants alone, see Sec.~\ref{sec:closedform} --
+  and is \emph{independent of thickness to 0.09\,\%} over
+  $10\to1$\,\si{\micro\metre},
   while the flexoelectric bending coupling rises by a factor 23.9 over the
   same range (Sec.~\ref{sec:thickness}).
 \end{enumerate}
@@ -436,7 +440,7 @@ $\omega\tau=O(0.1-1)$.
 
 The whole verification set is produced by a single command,
 \texttt{python3 python/run\_all.py}, which runs the six solver scripts and the
-figure script and then grades thirty-nine stated criteria, writing one
+figure script and then grades forty-one stated criteria, writing one
 pass/fail table (\texttt{results/SUMMARY.md}) in about \SI{170}{\second}.  Nothing in this section is
 graded inside the individual scripts: the criteria, their tolerances and their
 values live in one place, so a reader can see exactly what was asserted.
@@ -449,7 +453,7 @@ Table~\ref{tab:verification} reproduces the table verbatim.
 \texttt{python/make\_paper\_table.py} from \texttt{results/summary.json} so
 that it cannot drift from the run.  Values are the quantities named in the
 criterion column; the tolerances were fixed before the runs.
-\textbf{39/39 pass.}}
+\textbf{41/41 pass.}}
 \label{tab:verification}
 \input{table_verification}
 \end{table}
@@ -566,12 +570,122 @@ than hidden: with 24 retained modes the tip displacement is $3.19\times10^{-2}$
 short of the direct solution, and the error decreases monotonically with the
 number of modes, which is the property the modal memory scheme needs.
 
+\subsection{The coupling factor from the material constants}
+\label{sec:closedform}
+
+Before the coupling factor is used anywhere, it is worth obtaining it without
+the finite element code at all.  The quasi-static factor of an electrode pair
+is
+\begin{equation}
+  x=\frac{d^{\mathsf T}K_{uu}^{-1}d}{\beta},\qquad k^2=\frac{x}{1+x},
+  \label{eq:kx}
+\end{equation}
+with $K_{uu}$ the \emph{short-circuit} stiffness; for a homogeneous body whose
+strain is free, the same $x$ follows from the constitutive tensors, because the
+mechanical energy released by the polarisation is $\tfrac12\bm e^{\mathsf T}
+\bm C^{-1}\bm e\,E^2$ per unit volume against $\tfrac12\kappa E^2$ of
+electrical energy:
+\begin{equation}
+  x=\frac{\bm e^{\mathsf T}\bm C^{-1}\bm e}{\kappa},\qquad k^2=\frac{x}{1+x}.
+  \label{eq:kclosed}
+\end{equation}
+Nothing in \eqref{eq:kclosed} knows about the mesh, the element, the potential
+condensation or the floating-electrode update, so the comparison of the two is
+a check of the whole piezoelectric path.
+
+\paragraph{Step 1: the record.}  Poling along $x$ makes the polar axis the
+$3$-axis, so the 3-D stiffness in the $(x,y,z)$ frame is
+\begin{equation}
+  \bm C_3=\begin{pmatrix}C_{33}&C_{13}&C_{13}\\ C_{13}&C_{11}&C_{12}\\
+  C_{13}&C_{12}&C_{11}\end{pmatrix}
+  =\begin{pmatrix}15.10&11.10&11.10\\ 11.10&22.20&10.80\\
+  11.10&10.80&22.20\end{pmatrix}\times10^{10}\ \mathrm{Pa},
+\end{equation}
+and the piezoelectric row that couples to the field along $x$ is
+$\bm e_3=(e_{33},e_{31},e_{31})=(6.7,-0.7,-0.7)$\,\si{\coulomb\per\metre\squared}
+with $\kappa_{33}=56\varepsilon_0=\SI{4.9583e-10}{\farad\per\metre}$.
+
+\paragraph{Step 2: the three-dimensional free bar.}
+With every normal strain free, $\bm s_3=\bm C_3^{-1}$ and
+\begin{equation}
+  x_{3D}=\frac{\bm e_3^{\mathsf T}\bm s_3\bm e_3}{\kappa_{33}}
+  =\frac{6.7667\times10^{-10}}{4.9583\times10^{-10}}=1.3647,
+  \qquad k^2_{3D}=\frac{1.3647}{2.3647}=0.5771 .
+\end{equation}
+The blocked textbook value is $k_{33}^2=e_{33}^2/(C_{33}\kappa_{33})=0.5996$,
+whose free counterpart $k^2=x/(1+x)$ with $x=k_{33}^2$ is $0.3748$: the three
+numbers $0.5771$, $0.5996$ and $0.3748$ differ only in how much the body is
+allowed to relax, and a table that quotes one of them without saying which is
+a common source of disagreement.
+
+\paragraph{Step 3: the plane-stress reduction.}  The model is plane stress,
+$\sigma_{zz}=0$, so the out-of-plane normal is condensed:
+\begin{equation}
+  \bm C_p=\bm C_{2d}-\frac{\bm c_3\bm c_3^{\mathsf T}}{C_{33}^{(zz)}},
+  \qquad \bm c_3=(11.10,\,10.80)\times10^{10}\ \mathrm{Pa},
+\end{equation}
+\begin{equation}
+  \bm C_p=\begin{pmatrix}9.5500&5.7000\\ 5.7000&16.9459\end{pmatrix}\times10^{10}\
+  \mathrm{Pa},\qquad C_{44}=6.10\times10^{10}\ \mathrm{Pa}.
+\end{equation}
+The reduction carries its own check: the plane-stress compliance must be the
+corresponding block of the 3-D compliance, and here
+$\max|\bm C_p^{-1}-(\bm s_3)_{2\times2}|=3\times10^{-27}$\,\si{\per\pascal},
+i.e.\ exact.  The piezoelectric and dielectric tensors are \emph{not} reduced:
+with $\sigma_{zz}=0$ and $D_z=0$ the eliminated out-of-plane strain re-enters
+only through the $e_{31}$ terms that the in-plane block already contains, so
+$\bm e_p=\bm e_{2d}$ and $\kappa_{\rm eff}=\kappa_{xx}=\kappa_{33}$.
+
+\paragraph{Step 4: the two-dimensional closed form.}  With
+$\bm e_p=(6.7,-0.7,0)$ and $\bm C_p^{-1}$ as above,
+\begin{equation}
+  \bm e_p^{\mathsf T}\bm C_p^{-1}\bm e_p=6.3308\times10^{-10}\
+  \frac{\mathrm{C}^2}{\mathrm{N\,m^2}},\quad
+  \kappa_{xx}=4.9583\times10^{-10}\ \frac{\mathrm{F}}{\mathrm{m}},
+\end{equation}
+\begin{equation}
+  x=\frac{6.3308}{4.9583}=1.2768,\qquad
+  k^2=\frac{1.2768}{2.2768}=0.5608 .
+\end{equation}
+The arithmetic can be repeated by hand from
+$\det\bm C_p=1.2934\times10^{22}\,\mathrm{Pa}^2$ and the three numbers above;
+no step needs the finite element code.
+
+\paragraph{Step 5: the finite element model against it.}
+Table~\ref{tab:closedform} puts the two side by side.  The unconstrained plate
+reproduces the closed form to the fifth decimal ($0.56079$ against $0.56079$),
+which is the check that the $e$ tensor, the plane-stress reduction, the
+condensation of the internal potential dofs and the rank-one electrode update
+are all consistent with each other and with \eqref{eq:kclosed}.  Clamping one
+edge lowers the coupling by $0.2\,\%$ and refining the mesh recovers it
+monotonically ($0.55884\to0.55957\to0.55992$), so the clamping is a physical
+boundary effect and the remaining gap is discretisation.  The plane-strain
+model gives $0.5132$ against a finite element value of $0.5115$; the
+$2.8\,\%$ gap between the 2-D plane-stress value and the 3-D free bar is the
+$\sigma_{zz}=0$ assumption itself, not the discretisation, and it is reported
+separately for that reason.
+
+\begin{table}[t]
+\centering
+\small
+\caption{The extensional coupling factor of the
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} BaTiO$_3$ plate: constitutive
+closed forms \eqref{eq:kclosed} against the finite element model of the same
+plate.  $x$ is the reduced coupling of \eqref{eq:kx}.  The finite element
+values contain no material input beyond the record of Step 1; the closed form
+contains no geometry.  Generated by
+\texttt{python/derive\_k2\_closed\_form.py}.}
+\label{tab:closedform}
+\input{table_closed_form}
+\end{table}
+
 \subsection{A cautionary note on coupling factors}
 \label{sec:couplingcare}
 
-Two of the measurements in this paper are small quantities of the form
-``difference of two nearly equal numbers'', and both produced artefacts before
-they were reformulated.  They are reported here because a reader who
+Three of the measurements in this paper are easy to get wrong -- two because
+they are differences of nearly equal numbers, one because the same coupling map
+was applied twice -- and all three produced smooth, plausible, wrong numbers
+before they were reformulated.  They are reported here because a reader who
 re-implements the method will meet them.
 
 \paragraph{Mode selection.}  If the coupling factor of a plate is read as the
@@ -626,6 +740,39 @@ both modes together and neither overtakes the other.  Numbers from
 \texttt{results/mode\_tracking.json}.}
 \label{fig:modetrack}
 \end{figure}
+
+\paragraph{A coupling map applied twice.}  The thickness sweep of
+Fig.~\ref{fig:thickness}(b) first reported this plate's coupling as
+$0.3582$, constant to $0.05\,\%$ over the range -- plausible, smooth, and
+wrong.  The number came from a helper that evaluated \eqref{eq:kx} with the
+\emph{open-circuit} matrix in place of $K_{uu}$:
+$x'=d^{\mathsf T}K_{oc}^{-1}d/\beta$, and then applied $x/(1+x)$ to $x'$.
+Because $K_{oc}$ is the rank-one update \eqref{eq:rankone},
+\[
+  \frac{d^{\mathsf T}K_{oc}^{-1}d}{\beta}
+  =x-\frac{x^2}{1+x}=\frac{x}{1+x}=k^2
+\]
+by Sherman--Morrison, so the first substitution already returned $k^2$ and the
+map turned it into $k^2/(1+k^2)$.  The identity reproduces the quoted series
+digit for digit (Table~\ref{tab:wrongk}) -- which is what identifies the error
+as an algebra slip rather than a different material, geometry or mesh, and is
+why the closed form of Sec.~\ref{sec:closedform} is graded (check C1) rather
+than trusted.  Two things made it visible: the closed form disagreed with the
+finite element model by $56\,\%$, and the corrected value
+$k^2=0.5581$ is the one the material constants predict.
+
+\begin{table}[t]
+\centering
+\small
+\caption{The superseded coupling series of Fig.~\ref{fig:thickness}(b), and
+the corrected values it was produced from.  The fourth column is
+$k^2/(1+k^2)$ evaluated on the third, to five decimals; it agrees with what the
+earlier helper printed for all four thicknesses, which fixes the error as
+\eqref{eq:kx} applied twice.  Generated by
+\texttt{python/derive\_k2\_closed\_form.py}.}
+\label{tab:wrongk}
+\input{table_wrong_series}
+\end{table}
 
 \paragraph{Differencing two eigensolves.}  When $k^2\sim10^{-3}$, the two
 eigenvalues of $(\omega_{oc}^2-\omega_{sc}^2)/\omega_{oc}^2$ agree to three
@@ -1097,7 +1244,7 @@ claim made above.
 A $C^1$ Bogner--Fox--Schmit framework has been developed for
 piezoelectric--flexoelectric strain-gradient plates with fractional-order
 dielectric memory and a rectangular nonlocal averaging window, and verified
-against a single-command suite of thirty-nine checks in which every failure
+against a single-command suite of forty-one checks in which every failure
 mode that was found during the work is now a graded criterion.
 
 The three contributions are the ones stated in the introduction.  Fractional

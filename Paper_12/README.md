@@ -48,21 +48,27 @@ quick inspection only.
 ## Where the numbers come from
 
 Every number in the text is a value from `python3 python/run_all.py`
-(39/39 checks):
+(41/41 checks):
 
 | in the paper | source |
 |---|---|
-| Table 1 (39 checks) | `results/summary.json` → `checks`, rendered by `python/make_paper_table.py` into `table_verification.tex` (never typed by hand) |
+| Table 1 (41 checks) | `results/summary.json` → `checks`, rendered by `python/make_paper_table.py` into `table_verification.tex` (never typed by hand) |
 | Table 2 (plane strain vs stress, four cases) | `results/application_table.json` → `rows` |
 | Table 3 (memory matrix, S1) | `results/memory_variants.json` → `S1` |
 | Table 4 (KV vs Zener, S2) | `results/memory_variants.json` → `S2` |
 | §5.1 orientation numbers | `results/paper_figures_data.json` → `polar` |
 | §5.4 thickness numbers | `results/demo.json` → `flexo_thickness` |
 | coupling closed forms (C1–C4) | `results/coupling_check.json` |
+| §4.4 derivation and Table 3 | `results/k2_closed_form.json`, `table_closed_form.tex`, `table_wrong_series.tex` |
 | mode tracking (K1–K2) | `results/mode_tracking.json` |
 | poles and damping map | `python/fem6_core.py::complex_frequency` with branch continuation |
 
-`python3 python/check_paper_numbers.py` re-checks 26 of those claims against
+`python3 python/derive_k2_closed_form.py` reproduces the coupling factor from
+the material constants, step by step, and also reproduces the superseded
+`0.3582` series as `k^2/(1+k^2)` of the corrected one — that identity is what
+identifies the earlier number as the same formula applied twice.
+
+`python3 python/check_paper_numbers.py` re-checks 32 of those claims against
 the JSON and writes `results/paper_number_audit.md`; it is graded as criterion
 N1, so a stale number in the text fails the suite.
 

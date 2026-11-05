@@ -33,6 +33,8 @@ C3 & FEM $k^2$, clamped, $96\times4$ vs $48\times4$ & 0.55992 vs 0.55957 & rel. 
 C4 & FEM $k^2$, clamped, $24\times2$ vs $48\times4$ & 0.13 \% & < 0.5 \% (coarse mesh) \\
 K1 & lowest MAC of mode 1, $h=10\to1$\,\si{\micro\metre} & 0.99919 & > 0.999 \\
 K2 & worst MAC off-diagonal / $f_2/f_1$ & $2.3\times10^{-6}$, f2/f1 >= 6.21 & off-diag < $1\times10^{-5}$, ratio > 6 \\
+D1 & closed form e'C\^{}-1 e/kappa vs FEM coupling (free plate) & 0.56079 vs 0.56079 & rel. diff < $1\times10^{-3}$ \\
+D2 & the superseded series is exactly k\^{}2/(1+k\^{}2) of the new one & $3.5\times10^{-6}$ & < $1\times10^{-5}$ (same formula applied twice) \\
 A1 & application table: extensional plane stress is the strongest coupling of the four & 0.4580 & = 0.4580, largest, > 0.4 \\
 T1 & piezo $k^2$ (mode-free), max/min over $h$ & 1.0009 & < 1.005 (thickness independent) \\
 T2 & piezo $k^2$, $24\times2$ vs $48\times4$ & $5.7\times10^{-4}$ & < $1\times10^{-3}$ \\
@@ -41,6 +43,6 @@ T4 & flexo $k^2$, $48\times4$ vs $96\times4$ witness & $3.5\times10^{-3}$ & < 0.
 T5 & flexo $k^2$ at $\mu=0$, residual / value & $6\times10^{-7}$ & < $1\times10^{-5}$ \\
 P1 & paper figure set, vector files written & 10 PDF & = 10 (P1-P10) \\
 P2 & orientation sweep, rows / $k^2$ range & 168 rows, 0.3786-0.4677 & 168 rows (144 cuboid + 24 ellipse), k\^{}2 in (0.35, 0.50) \\
-N1 & manuscript numbers vs the JSON they came from & 26/26 & all agree \\
+N1 & manuscript numbers vs the JSON they came from & 32/32 & all agree \\
 \bottomrule
 \end{tabular}

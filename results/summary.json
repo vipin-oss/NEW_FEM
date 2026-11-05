@@ -211,6 +211,20 @@
    "pass": true
   },
   {
+   "id": "D1",
+   "what": "closed form e'C^-1 e/kappa vs FEM coupling (free plate)",
+   "value": "0.56079 vs 0.56079",
+   "criterion": "rel. diff < 1e-3",
+   "pass": true
+  },
+  {
+   "id": "D2",
+   "what": "the superseded series is exactly k^2/(1+k^2) of the new one",
+   "value": "3.5e-06",
+   "criterion": "< 1e-5 (same formula applied twice)",
+   "pass": true
+  },
+  {
    "id": "A1",
    "what": "application table: extensional plane stress is the strongest coupling of the four",
    "value": "0.4580",
@@ -269,13 +283,13 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "26/26",
+   "value": "32/32",
    "criterion": "all agree",
    "pass": true
   }
  ],
- "n_pass": 39,
- "n_total": 39,
+ "n_pass": 41,
+ "n_total": 41,
  "scripts_ok": {
   "run_verification.py": true,
   "run_flexo_check.py": true,
@@ -284,6 +298,7 @@
   "run_coupling_check.py": true,
   "run_mode_tracking.py": true,
   "run_application_table.py": true,
+  "derive_k2_closed_form.py": true,
   "run_demos.py": true,
   "run_paper_figures.py": true,
   "make_paper_table.py": true,
