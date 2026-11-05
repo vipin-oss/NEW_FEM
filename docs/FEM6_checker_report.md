@@ -312,8 +312,11 @@ exactly this constraint bookkeeping.
 ### B5 — "cuboid vs ellipsoid" is not identifiable
 
 See Q1 and the memo. At second order only `M` matters; equal `M` gives
-identical matrices (difference `0.0`). Either reframe (recommended) or go to
-fourth order (needs C2, out of scope for BFS C1).
+identical matrices (difference `0.0`). Paper claim (adopted): compare at **equal half-width**, report the `5/3`
+stiffness ratio, and state that at equal `M` the two windows coincide — i.e.
+the response is governed by `M`, and the shape enters only through it. Going to
+fourth order (needs C2, out of scope for BFS C1) is not necessary for this
+claim.
 
 ### C1 — efficiency
 

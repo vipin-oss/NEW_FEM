@@ -15,6 +15,7 @@ python/materials.py          the material record (BaTiO3, Zgonik/FEM-5 set),
                              plane-strain / plane-stress reduction, checks
 python/run_material_check.py plane strain vs stress comparison + anisotropy
 python/run_flexo_check.py    flexoelectric patch test F1-F5 (exact, mesh independent)
+python/run_memory_variants.py memory on K_eff vs K_uu; KV vs fractional Zener
 python/run_verification.py   V1–V7 verification suite (~40 s)
 python/run_demos.py          figures 1–4 + results/demo.json
 matlab/FEM6_memory_piezo_SG_2D_v2.m   corrected MATLAB mirror + self-tests
