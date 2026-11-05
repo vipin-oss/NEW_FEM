@@ -194,6 +194,8 @@ class Material:
     kappa: np.ndarray
     rho: float
     name: str = "material"
+    mu: float = 0.0          # flexoelectric constant, C/m (single-constant,
+                             # shear-free: D = e eps + mu grad(tr eps) + kappa E)
 
 
 def isotropic_plane_strain(E: float, nu: float, rho: float) -> Material:
@@ -433,6 +435,16 @@ def element_matrices(hx, hy, mat: Material, Mg: np.ndarray,
             Ke += 0.5 * Kg * W[g] * jac
         Me += mat.rho * (Nmat[g].T @ Nmat[g]) * W[g] * jac
         Kuphi += (Bg.T @ e.T @ Bp[g]) * W[g] * jac
+        if mat.mu:
+            # strain-gradient operator, rows
+            #   (eps_xx,x, eps_xx,y, eps_yy,x, eps_yy,y, gamma_xy,x, gamma_xy,y)
+            Beta = np.stack([Bxg[0], Byg[0], Bxg[1], Byg[1],
+                             Bxg[2], Byg[2]], axis=0)          # 6 x 32
+            # shear-free single-constant coupling: D = mu * grad(eps_xx + eps_yy)
+            # (rows: D_x, D_y; the shear-gradient columns are identically zero)
+            muV = mat.mu * np.array([[1.0, 0.0, 1.0, 0.0, 0.0, 0.0],
+                                     [0.0, 1.0, 0.0, 1.0, 0.0, 0.0]])
+            Kuphi += (Beta.T @ muV.T @ Bp[g]) * W[g] * jac
         Kpp += (Bp[g].T @ kap @ Bp[g]) * W[g] * jac
 
     return Ke, Me, Kuphi, Kpp

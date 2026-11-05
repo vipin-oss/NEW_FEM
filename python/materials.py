@@ -67,6 +67,7 @@ class Material:
     rho: float
     poling: str = "y"            # "y" (through width) or "x" (along length)
     kinematics: str = "plane_strain"
+    mu: float = 0.0              # C/m, flexoelectric (parametric, see below)
 
     # ---------------- derived tensors ----------------
     def full_3d(self):
@@ -140,6 +141,7 @@ BATIO3 = Material(
     kappa_r11=2200.0,  # -   Zgonik 1994, clamped-order relative permittivity
     kappa_r33=56.0,    # -   Zgonik 1994
     rho=6020.0,        # kg/m^3  UNVERIFIED (not in the FEM-5 record)
+    mu=1.0e-6,         # C/m  FEM-5 sensitivity value, NOT source controlled
 )
 
 
@@ -183,4 +185,4 @@ def to_core(m: "Material", **kw):
     """Adapter to the solver's material container (python/fem6_core.py)."""
     import fem6_core as f6
     return f6.Material(C=m.C(), e=m.e(), kappa=m.kappa(), rho=m.rho,
-                       name=m.name, **kw)
+                       name=m.name, mu=m.mu, **kw)
