@@ -397,8 +397,12 @@ Paper: classical 4.50 µm, `l/L = 0.2` → 4.23 µm (ratio 0.94). Agreement
 second-order expected; the gradient term degrades it — worth one sentence).
 
 **V4 piezo.** See A3 for the tables. Extras: `β = 9.9166×10⁻⁹ F` for the
-through-thickness pair (matches `κ33 A/L` analytically), `min eig(K_sc) > 0`,
-`min eig(K_oc − K_sc) ≈ 0`.
+through-thickness pair (matches `κ33 A/L` analytically), and
+`min eig(K_sc)/max|eig| = −2.4×10⁻¹⁶`, `min eig(K_oc − K_sc)/max|eig| =
+−3.7×10⁻¹⁶` — both zero to round-off. *Note for the self-test*: a strict
+`min eig(K_sc) > 0` test will fail spuriously, because the 12-dof Hermite
+assembly is badly scaled (condition number ~10¹⁵); use a `−1e-10` tolerance and
+say "positive semi-definite to round-off".
 
 **V5 memory.** `α = 1` vs closed form: `7.96e-3/4.04e-3/2.04e-3/1.02e-3`
 (order 0.99); harmonic `|H|` ratios `0.9963–1.0037` across `α = 1.0/0.7/0.5` and
