@@ -47,21 +47,49 @@ def scan():
     return floats, refs
 
 
+def expand(path):
+    """A source file with every \input{table_x} replaced by that table."""
+    raw = open(path).read()
+    base = os.path.dirname(path)
+    for m in set(re.findall(r"\\input\{([^}]+)\}", raw)):
+        for cand in (os.path.join(base, m), os.path.join(PAPER, m),
+                     os.path.join(base, m + ".tex"), os.path.join(PAPER, m + ".tex")):
+            if os.path.exists(cand):
+                inc = cand
+                break
+        else:
+            inc = None
+        if inc:
+            raw = raw.replace("\\input{%s}" % m, open(inc).read())
+    return raw
+
+
+def appendix_order():
+    """Labels of every float inside each appendix, \\input files expanded."""
+    letters = {"91_appendixA.tex": "A", "92_appendixB.tex": "B",
+               "93_appendixC.tex": "C"}
+    out = {}
+    for name, a in letters.items():
+        path = os.path.join(PAPER, "sec", name)
+        labs = re.findall(r"\\label\{((?:fig|tab):[^}]+)\}", expand(path))
+        for i, lab in enumerate(labs, 1):
+            out[lab] = f"{a}.{i}"
+    return out
+
+
 def number(floats):
     """The number each figure/table will print."""
     main_fig = main_tab = 0
     letters = {"sec/91_appendixA.tex": "A", "sec/92_appendixB.tex": "B",
                "sec/93_appendixC.tex": "C"}
-    app = {}
+    appnum = appendix_order()
     out = {}
     for f in floats:
         lab, path = f["label"], f["file"]
-        if lab.startswith(("sec:", "eq:")):
+        if lab.startswith(("sec:", "eq:", "app:")):
             continue
         if path in letters:
-            a = letters[path]
-            app[a] = app.get(a, 0) + 1
-            out[lab] = f"{a}.{app[a]}"
+            out[lab] = appnum.get(lab, "?")
         elif lab.startswith("fig:"):
             main_fig += 1
             out[lab] = str(main_fig)

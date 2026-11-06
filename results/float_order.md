@@ -20,14 +20,11 @@
 | `fig:ringdown` | 10 | sec/06_results.tex:729 | sec/06_results.tex:698 |
 | `tab:application` | 7 | sec/06_results.tex:760 | sec/06_results.tex:743 |
 | `tab:protocol` | 8 | sec/07_calibration_limitations.tex:43 | sec/07_calibration_limitations.tex:26 |
-| `app:Mcoeff` | A.1 | sec/91_appendixA.tex:5 | sec/02_formulation.tex:13 |
-| `app:verification` | B.1 | sec/92_appendixB.tex:4 | main.tex:119 |
-| `tab:verification` | B.2 | sec/92_appendixB.tex:31 | sec/92_appendixB.tex:15 |
-| `tab:independent` | B.3 | sec/92_appendixB.tex:75 | sec/92_appendixB.tex:59 |
-| `fig:modeshape` | B.4 | sec/92_appendixB.tex:100 | sec/92_appendixB.tex:82 |
-| `tab:sens` | B.5 | sec/92_appendixB.tex:129 | sec/92_appendixB.tex:108 |
-| `app:data` | C.1 | sec/93_appendixC.tex:2 | main.tex:117 |
-| `tab:modulus` | C.2 | sec/93_appendixC.tex:40 | sec/06_results.tex:435 |
+| `tab:verification` | B.1 | sec/92_appendixB.tex:31 | sec/92_appendixB.tex:15 |
+| `tab:independent` | B.2 | sec/92_appendixB.tex:75 | sec/92_appendixB.tex:59 |
+| `fig:modeshape` | B.3 | sec/92_appendixB.tex:100 | sec/92_appendixB.tex:82 |
+| `tab:sens` | B.4 | sec/92_appendixB.tex:129 | sec/92_appendixB.tex:108 |
+| `tab:modulus` | C.6 | sec/93_appendixC.tex:40 | sec/06_results.tex:435 |
 
 ## Main-text floats: numbering against first citation
 
