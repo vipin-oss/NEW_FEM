@@ -484,11 +484,9 @@ $\Delta t/4$, so they are a property of the fractional element -- whose
 relaxation is a Mittag-Leffler function, not an exponential -- and not of the
 step, while the third is a near-cancellation between two peaks of comparable
 height, where a ratio of amplitudes does not resolve a decrement. A straight line fitted to $\ln A_k$ over
-the twenty periods therefore returns a number that is not a damping ratio; the
-entries $0.026$ and $0.050$ that the $\alpha=0.7$ column of
-Table~\ref{tab:memory} carried in an earlier version came from such a fit and
-are withdrawn, together with the ratio $1.93$ derived from them. What the
-column can carry is the first-period decrement, which is what it now lists.
+the twenty periods therefore returns a number that is not a damping ratio,
+which is why the $\alpha=0.7$ column of Table~\ref{tab:memory} carries the
+first-period decrement rather than a fitted slope.
 The $\alpha=1$ entries are unaffected: there the twenty successive decrements
 agree to $7\times10^{-10}$ relative, which is why \eqref{eq:zeta} applies.
 
@@ -553,7 +551,13 @@ fractional curves fan upward because the spring-pot modulus grows
 sub-linearly in frequency. (b) Damping ratio
 $\zeta=-\mathrm{Re}\,s/(\omega_0|s|)$ over the wider plane
 $\omega\tau=10^{-1.5}\ldots10^{1.5}$ and $\alpha=0.2\ldots1$, with the same
-branch continuation; contours every $0.1$.}
+branch continuation; contours every $0.1$. The ratio here is that of the
+complex pole, $\zeta=-\mathrm{Re}\,s/(\omega_0|s|)$, and not a decrement of a
+time record: for $\alpha<1$ the two coincide only to the extent that the free
+decay is exponential, so the ring-down of
+Sec.~\ref{sec:transient} is read with the first-period decrement of its table
+and this pole ratio is used as a map of the element rather than as a
+prediction of the decay.}
 \label{fig:damping}
 \end{figure}
 
@@ -777,14 +781,14 @@ the classical Kelvin--Voigt element, while the fractional curves are not
 exponential, and it is that difference which the damping map of
 Fig.~\ref{fig:damping}(b) quantifies. The voltage is a linear functional of the
 same modal coordinate and inherits the ring-down shape. Over the eight orders
-plotted, the decrement of the tip displacement over the first two peaks
-divided by $2\pi$ -- the lightly damped approximation to $\zeta$, and at
-$\delta=0.66$ within $0.3\,\%$ of the exact $\delta/\sqrt{4\pi^{2}+\delta^{2}}$
--- runs from $0.064$ at $\alpha=1$ to a maximum of $0.105$ at $\alpha=0.6$ and
-back to $0.085$ at $\alpha=0.4$ (Table~\ref{tab:ringdown}). It is a
-first-period measure, because the $\alpha<1$ records are not exponential; a
-design that takes the integer-order early decay as representative is in error
-by $65\,\%$ at $\alpha=0.6$, and the sign of the error cannot be guessed from
+plotted, the decrement of the tip displacement over the first two peaks,
+converted with the exact relation $\zeta=\delta/\sqrt{4\pi^{2}+\delta^{2}}$ of
+\eqref{eq:zeta}, runs from $0.063$ at $\alpha=1$ to a maximum of $0.104$ at
+$\alpha=0.6$ and back to $0.085$ at $\alpha=0.4$
+(Table~\ref{tab:ringdown}). For $\alpha<1$ it is a first-period decrement and
+not a damping ratio, because those records are not exponential; a design that
+takes the integer-order early decay as representative is in error by
+$64\,\%$ at $\alpha=0.6$, and the sign of the error cannot be guessed from
 $\alpha$ alone.
 
 \begin{figure}[!htbp]
@@ -799,7 +803,10 @@ $K_{\rm eff}$ with eight modes retained, $\tau=\SI{3}{\nano\second}$
 ($\omega\tau=0.13$, against $\tau=\SI{7.0974}{\nano\second}$ and
 $\omega\tau=0.3$ in Table~\ref{tab:memory}), initial tip displacement
 \SI{10}{\nano\metre}. Each curve is an independent L1 time march of $4000$
-steps; all eight share the initial condition and differ only in $\alpha$.}
+steps; all eight share the initial condition and differ only in $\alpha$. The
+numbers quoted from these curves are the first-period decrements of
+Table~\ref{tab:ringdown}, converted with \eqref{eq:zeta}; they are damping
+ratios at $\alpha=1$ only.}
 \label{fig:ringdown}
 \end{figure}
 
@@ -856,10 +863,13 @@ Three consequences follow from the runs and are worth stating explicitly.
   contribution.
 \item \textbf{The damping is set by $(\alpha,\tau)$ and by the memory matrix},
   not by a material constant. For the extensional mode of this strip at
-  $\omega\tau=0.3$, $\zeta_{\rm eff}$ runs from $0.150$ ($K_{\rm eff}$,
-  $\alpha=1$) to $0.026$ ($K_{\rm eff}$, $\alpha=0.7$) and to $0.067$
-  ($K_{uu}$, $\alpha=1$). A design that reports a single damping number without
-  naming $\alpha$, $\tau$ and the memory matrix is under-specified.
+  $\omega\tau=0.3$ and $\alpha=1$, $\zeta_{\rm eff}=0.15003$ with the memory
+  on $K_{\rm eff}$ and $0.0675$ with it on $K_{uu}$, a ratio of $0.450$. At
+  $\alpha=0.7$ the decay is not exponential and the quantity that survives is
+  the first-period decrement: $0.194$ on $K_{\rm eff}$ against $0.083$ on
+  $K_{uu}$, both first-period decrements and not damping ratios. A design that
+  reports a single damping number without naming $\alpha$, $\tau$ and the
+  memory matrix is under-specified.
 \end{enumerate}
 
 \FloatBarrier

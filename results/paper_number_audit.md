@@ -50,10 +50,10 @@
 | 44 | independent, zeta at alpha=0.3 | `0.108` | `independent F2 zeta at alpha=0.3, omega*tau=0.3` | `0.108` | ok |
 | 45 | sensitivity, spread at h=1 um, per cent, upper bound | `0.5\,\%` | `sensitivity.json spread_h1_pct (range/midpoint)` | `<= 0.5` | ok |
 | 46 | sensitivity, spread at h=10 um, per cent, upper bound | `10^{-4}\,\%` | `sensitivity.json spread_h10_pct (range/midpoint)` | `<= 0.0001` | ok |
-| 47 | ring-down, decrement at alpha=1 | `0.064` | `paper_figures_data.json notes.P6 zeta_1.0` | `0.064` | ok |
-| 48 | ring-down, peak decrement at alpha=0.6 | `0.105` | `paper_figures_data.json notes.P6 zeta_0.6` | `0.105` | ok |
+| 47 | ring-down, decrement at alpha=1 | `0.063` | `paper_figures_data.json notes.P6 zeta_1.0` | `0.063` | ok |
+| 48 | ring-down, peak decrement at alpha=0.6 | `0.104` | `paper_figures_data.json notes.P6 zeta_0.6` | `0.104` | ok |
 | 49 | ring-down, decrement at alpha=0.4 | `0.085` | `paper_figures_data.json notes.P6 zeta_0.4` | `0.085` | ok |
-| 50 | ring-down, error at alpha=0.6 against alpha=1 | `65` | `paper_figures_data.json notes.P6 zeta_0.6/zeta_1.0 - 1, in percent` | `65` | ok |
+| 50 | ring-down, error at alpha=0.6 against alpha=1 | `64` | `paper_figures_data.json notes.P6 zeta_0.6/zeta_1.0 - 1, in percent` | `64` | ok |
 | 51 | config table, flexo only at h=10 | `1.76e-4` | `config_table rows[0] k2_flexo` | `1.76e-4` | ok |
 | 52 | config table, flexo only at h=1 | `5.5e-3` | `config_table rows[3] k2_flexo` | `5.5e-3` | ok |
 | 53 | config table, growth with e=0 | `31` | `config_table growth_flexo_only` | `31` | ok |
@@ -89,3 +89,8 @@
 | 83 | worked, logarithmic decrement | `0.95345` | `ln(peak ratio)` | `0.95345` | ok |
 | 84 | worked, L1 weight b1 at alpha=0.5 | `0.414214` | `sqrt(2)-1` | `0.414214` | ok |
 | 85 | worked, L1 weight b2 at alpha=0.7 | `0.159245` | `3^0.3-2^0.3` | `0.159245` | ok |
+
+## Forbidden stale tokens
+
+0 hits of 12 forbidden tokens.
+

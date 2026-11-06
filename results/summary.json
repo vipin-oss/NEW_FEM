@@ -170,7 +170,7 @@
   },
   {
    "id": "C1",
-   "what": "FEM k^2 (unconstrained plate) vs 2-D closed form e^T C^-1 e/kappa",
+   "what": "FEM k^2 (unconstrained strip) vs 2-D closed form e^T C^-1 e/kappa",
    "value": "0.56079 vs 0.56079",
    "criterion": "rel. diff < 1e-3",
    "pass": true
@@ -184,14 +184,14 @@
   },
   {
    "id": "C3",
-   "what": "FEM k^2, clamped plate, 96x4 vs 48x4",
+   "what": "FEM k^2, clamped strip, 96x4 vs 48x4",
    "value": "0.55992 vs 0.55957",
    "criterion": "rel. diff < 1e-3",
    "pass": true
   },
   {
    "id": "C4",
-   "what": "FEM k^2, clamped plate, 24x2 vs 48x4",
+   "what": "FEM k^2, clamped strip, 24x2 vs 48x4",
    "value": "0.13 %",
    "criterion": "< 0.5 % (coarse mesh)",
    "pass": true
@@ -212,7 +212,7 @@
   },
   {
    "id": "D1",
-   "what": "closed form e'C^-1 e/kappa vs FEM coupling (free plate)",
+   "what": "closed form e'C^-1 e/kappa vs FEM coupling (free strip)",
    "value": "0.56079 vs 0.56079",
    "criterion": "rel. diff < 1e-3",
    "pass": true
@@ -330,6 +330,13 @@
    "pass": true
   },
   {
+   "id": "N3",
+   "what": "no quantity replaced in the round-16 audit has come back",
+   "value": "0 hits of 12 forbidden tokens",
+   "criterion": "0 hits",
+   "pass": true
+  },
+  {
    "id": "N2",
    "what": "the list of unverified numbers cites only numbers still in the manuscript",
    "value": "29 entries, 0 stale",
@@ -407,8 +414,8 @@
    "pass": true
   }
  ],
- "n_pass": 58,
- "n_total": 58,
+ "n_pass": 59,
+ "n_total": 59,
  "scripts_ok": {
   "run_verification.py": true,
   "run_flexo_check.py": true,
@@ -427,12 +434,12 @@
   "../Paper_12/check_refs.py": true,
   "run_demos.py": true,
   "run_paper_figures.py": true,
-  "make_paper_table.py": true,
   "make_appendix_tables.py": true,
   "worked_example.py": true,
   "check_paper_numbers.py": true,
   "check_paper_structure.py": true,
-  "check_float_order.py": true
+  "check_float_order.py": true,
+  "make_paper_table.py (second pass)": true
  },
  "figures": true,
  "all_pass": true,

@@ -136,3 +136,19 @@ the page count, the float placement, the overfull boxes and the reference
 resolution were not measured; the typeset equations of A1, A2 and B12 must be
 read once on Overleaf. The $\alpha<1$ first-period decrements are dt-converged
 to three digits but are not damping ratios, and no claim beyond that is made.
+
+## 11. What round 17 corrected (consistency sweep, no new physics)
+
+| # | item | defect | correction |
+|---|---|---|---|
+| 1 | Sec. 6.9, item 3 | still quoted $\zeta=0.026$ ($K_{\rm eff}$, $\alpha=0.7$) and $0.067$ ($K_{uu}$), the first of them withdrawn in round 16 | rewritten: $\zeta_{\rm eff}=0.15003$ ($K_{\rm eff}$, $\alpha=1$) and $0.0675$ ($K_{uu}$, $\alpha=1$), ratio $0.450$; at $\alpha=0.7$ the first-period decrement $0.194$ against $0.083$, named as a decrement and not as a damping ratio |
+| 2 | Sec. 6.7 | the $65\,\%$ at $\alpha=0.6$ was checked against its source: it comes from `run_paper_figures.py` (`notes.P6`), which forms the decrement on the **first two peaks** -- not from a global exponential fit -- so the number was sound in method but quoted through the small-damping form | the extraction in `run_paper_figures.py` now converts with $\zeta=\delta/\sqrt{4\pi^{2}+\delta^{2}}$ (and stores $\delta$ as well); the recomputed values are $0.06343$ ($\alpha=1$), $0.10408$ ($\alpha=0.6$), $0.08461$ ($\alpha=0.4$), so the text quotes $0.063$, $0.104$, $0.085$ and the error at $\alpha=0.6$ becomes $64\,\%$ instead of $65\,\%$ |
+| 3 | whole package | a scan for the round-16 tokens found: `0.026` at `sec/06_results.tex` lines 488 and 860, `1.93` at line 490, and `plate` in `table_C1_orientation.tex`, `table_C3_damping.tex`, `table_C4_convergence.tex`, `table_verification.tex` and one panel title of the window figure | all removed: the withdrawal sentence was rewritten without the literals, the Sec. 6.9 bullet was replaced, the generators (`make_appendix_tables.py`, `make_paper_table.py`, `run_all.py`, `run_paper_figures.py`) now say "strip", and the affected tables and figures were regenerated |
+| 3b | `check_paper_numbers.py` | no guard against a withdrawn number coming back | `STALE_TOKENS`, 12 entries (`2.5700`, `0.94392`, `0.15023`, `0.06749`, `0.449`, `0.15\,\%`, `0.026`, `0.05006`, `1.93`, `$2\times2$`, `plate`, `Plate`), scanned over every `.tex` of the package and written to `results/stale_tokens.json`; `run_all.py` gates it as check **N3** |
+| 4 | Fig. 6 and Fig. 10 (ring-down) | the captions did not say which $\zeta$ is quoted | Fig. 6: the pole ratio is now stated to be a map of the element, not a prediction of the decay, with the ring-down read from the first-period decrement. Fig. 10 and Table C.5: the caption states the exact conversion, that the entry is a damping ratio only at $\alpha=1$, and that it is a first-period decrement otherwise. The plotted curves are unchanged; the figures were regenerated anyway, and the window-figure panel title that said "clamped plate" now says "clamped strip" |
+| 5 | `run_all.py` | `make_paper_table.py` ran before `summary.json` was written, so the verification table lagged one run behind | it is now regenerated after the summary and the two text checks are repeated on the final table, so N1 and N3 grade what is in the package |
+
+**Still unverified after round 17.** No TeX here: compilation, page count,
+float placement and overfull boxes are unmeasured, and the new caption text has
+never been typeset. The $64\,\%$ at $\alpha=0.6$ is a first-period measure of
+two curves, not a damping ratio of a fractional element.

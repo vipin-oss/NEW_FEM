@@ -70,7 +70,6 @@ def main():
     if figs:
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")
-        scripts.append("make_paper_table.py")
         scripts.append("make_appendix_tables.py")
         scripts.append("worked_example.py")
         scripts.append("check_paper_numbers.py")
@@ -186,17 +185,17 @@ def main():
         kv["ratio_KV_over_Zener"] > 1.3)
 
     cf = Cc["closed_form"]
-    chk("C1", "FEM k^2 (unconstrained plate) vs 2-D closed form e^T C^-1 e/kappa",
+    chk("C1", "FEM k^2 (unconstrained strip) vs 2-D closed form e^T C^-1 e/kappa",
         f"{Cc['fem']['plane_stress']['free_48x4']:.5f} vs {cf['k2_2d_closed']:.5f}",
         "rel. diff < 1e-3", Cc["rel_err_free"] < 1e-3)
     chk("C2", "2-D model vs 3-D free bar (plane-stress reduction)",
         f"{100 * Cc['rel_gap_2d_vs_3d']:.2f} %",
         "< 5 % (documented modelling gap)", Cc["rel_gap_2d_vs_3d"] < 0.05)
-    chk("C3", "FEM k^2, clamped plate, 96x4 vs 48x4",
+    chk("C3", "FEM k^2, clamped strip, 96x4 vs 48x4",
         f"{Cc['fem']['plane_stress']['clamped_96x4']:.5f} vs "
         f"{Cc['fem']['plane_stress']['clamped_48x4']:.5f}",
         "rel. diff < 1e-3", Cc["rel_mesh_96_vs_48"] < 1e-3)
-    chk("C4", "FEM k^2, clamped plate, 24x2 vs 48x4",
+    chk("C4", "FEM k^2, clamped strip, 24x2 vs 48x4",
         f"{100 * abs(Cc['fem']['plane_stress']['clamped_24x2'] / Cc['fem']['plane_stress']['clamped_48x4'] - 1):.2f} %",
         "< 0.5 % (coarse mesh)", abs(
             Cc["fem"]["plane_stress"]["clamped_24x2"] /
@@ -212,7 +211,7 @@ def main():
         koff < 1e-5 and krat > 6.0)
 
     cf_err = abs(Cf["fem"]["FEM free 48x4"] / Cf["k2_2d_closed"] - 1.0)
-    chk("D1", "closed form e'C^-1 e/kappa vs FEM coupling (free plate)",
+    chk("D1", "closed form e'C^-1 e/kappa vs FEM coupling (free strip)",
         f"{Cf['k2_2d_closed']:.5f} vs {Cf['fem']['FEM free 48x4']:.5f}",
         "rel. diff < 1e-3", cf_err < 1e-3)
     wid = max(abs(w["k2_over_1p"] - w["recorded"]) for w in Cf["wrong_series"])
@@ -295,6 +294,11 @@ def main():
         f"{Sn['truncated_max_dev_pct']:.0f} % off",
         "> 50 % (hence the sum runs over all modes)",
         Sn["truncated_max_dev_pct"] > 50)
+    St = load("stale_tokens.json")
+    chk("N3", "no quantity replaced in the round-16 audit has come back",
+        f"{St['n_hits']} hits of {St['n_tokens']} forbidden tokens", "0 hits",
+        St["n_hits"] == 0 and St["n_tokens"] >= 10)
+
     chk("N2", "the list of unverified numbers cites only numbers still in the "
         "manuscript", f"{Uv['n']} entries, {len(Uv['stale'])} stale",
         "0 stale", not Uv["stale"] and Uv["n"] > 0)
@@ -373,6 +377,33 @@ def main():
     os.makedirs(RESULTS, exist_ok=True)
     with open(os.path.join(RESULTS, "summary.json"), "w") as fh:
         json.dump(out, fh, indent=1)
+    # the verification table is built from summary.json, so it has to be
+    # regenerated after the summary exists; the two text checks are then run
+    # again on the final table, otherwise the stale-token gate would grade the
+    # previous version of the table.
+    if figs:
+        ran["make_paper_table.py (second pass)"] = run("make_paper_table.py")
+        run("check_paper_numbers.py")
+        run("check_float_order.py")
+        md_txt = open(os.path.join(RESULTS,
+                                   "paper_number_audit.md")).read()
+        m = _re.search(r"(\d+)/(\d+) claims agree", md_txt)
+        nok, ntot = (int(m.group(1)), int(m.group(2))) if m else (0, 1)
+        St2 = load("stale_tokens.json")
+        for r in rows:
+            if r["id"] == "N1":
+                r["value"] = f"{nok}/{ntot}"
+                r["pass"] = bool(nok == ntot and ntot > 20)
+            elif r["id"] == "N3":
+                r["value"] = (f"{St2['n_hits']} hits of "
+                              f"{St2['n_tokens']} forbidden tokens")
+                r["pass"] = bool(St2["n_hits"] == 0 and St2["n_tokens"] >= 10)
+        npass = sum(r["pass"] for r in rows)
+        allok = npass == len(rows) and all(ran.values())
+        out.update({"checks": rows, "n_pass": npass, "scripts_ok": ran,
+                    "all_pass": bool(allok)})
+        with open(os.path.join(RESULTS, "summary.json"), "w") as fh:
+            json.dump(out, fh, indent=1)
 
     w = max(len(r["id"]) for r in rows)
     md = ["# FEM-6 verification summary", "",

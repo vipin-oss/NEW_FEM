@@ -27,13 +27,13 @@ $\kappa_{11}/\kappa_{33}$ of the material record & 39.3 & > 30 (real crystal, wa
 $\zeta_{\rm eff}(K_{\rm eff},\alpha{=}1)$ vs $\omega\tau/2$ & 0.15003 vs 0.15000 & within 2 \% \\
 $\zeta(K_{uu})/\zeta(K_{\rm eff})$, $\alpha=1$ & 0.450 & in (0, 1) -- the choice matters \\
 KV/Zener modulus, $\omega\tau=1$, $\alpha=1$ & 1.345 & > 1.3 (KV unbounded) \\
-FEM $k^2$ (free plate) vs 2-D closed form $e^{\rm T}C^{-1}e/\kappa$ & 0.56079 vs 0.56079 & rel. diff < $1\times10^{-3}$ \\
+FEM $k^2$ (free strip) vs 2-D closed form $e^{\rm T}C^{-1}e/\kappa$ & 0.56079 vs 0.56079 & rel. diff < $1\times10^{-3}$ \\
 2-D model vs 3-D free bar (plane-stress reduction) & 2.83 \% & < 5 \% (documented modelling gap) \\
 FEM $k^2$, clamped, $96\times4$ vs $48\times4$ & 0.55992 vs 0.55957 & rel. diff < $1\times10^{-3}$ \\
 FEM $k^2$, clamped, $24\times2$ vs $48\times4$ & 0.13 \% & < 0.5 \% (coarse mesh) \\
 lowest MAC of mode 1, $h=10\to1$\,\si{\micro\metre} & 0.99919 & > 0.999 \\
 worst MAC off-diagonal / $f_2/f_1$ & $2.3\times10^{-6}$, f2/f1 >= 6.21 & off-diag < $1\times10^{-5}$, ratio > 6 \\
-closed form e'C\^{}-1 e/kappa vs FEM coupling (free plate) & 0.56079 vs 0.56079 & rel. diff < $1\times10^{-3}$ \\
+closed form e'C\^{}-1 e/kappa vs FEM coupling (free strip) & 0.56079 vs 0.56079 & rel. diff < $1\times10^{-3}$ \\
 the superseded series is exactly k\^{}2/(1+k\^{}2) of the new one & $3.5\times10^{-6}$ & < $1\times10^{-5}$ (same formula applied twice) \\
 clamped-free f1, FEM 48x4 vs Euler-Bernoulli closed form & 144.6 vs 143.8 \,\si{\kilo\hertz} & |err| < 1 \% (+0.54 \%) \\
 clamped-clamped f1, FEM 48x4 vs Euler-Bernoulli closed form & 919.2 vs 915.0 \,\si{\kilo\hertz} & |err| < 1 \% (+0.46 \%) \\
@@ -50,6 +50,7 @@ window second-moment factors 1/3, 1/4, 1/5 by quadrature & $3.3\times10^{-6}$ & 
 h = 1\,\si{\micro\metre} flexo k\^{}2 over four equivalent solver paths and 4 numeric stacks & spread 0.182 \%, k\^{}2 $4.1705\times10^{-3}$..$4.1781\times10^{-3}$ & < 0.5 \% (quoted to 2 s.f.) \\
 the same spread at h = 10\,\si{\micro\metre} & $1.49\times10^{-5}$ \% & < $1\times10^{-3}$ \% \\
 truncating the secular sum to 12 modes is not an alternative & 85 \% off & > 50 \% (hence the sum runs over all modes) \\
+no quantity replaced in the round-16 audit has come back & 0 hits of 12 forbidden tokens & 0 hits \\
 the list of unverified numbers cites only numbers still in the manuscript & 29 entries, 0 stale & 0 stale \\
 application table: extensional plane stress is the strongest coupling of the four & 0.4580 & = 0.4580, largest, > 0.4 \\
 piezo $k^2$ (mode-free), max/min over $h$ & 1.0009 & < 1.005 (thickness independent) \\

@@ -524,11 +524,16 @@ def fig_p6_waterfall():
         c = (OI + ["#8250A0"])[i % 9]
         ax[0].plot(t * 1e6, u, color=c, lw=1.1, label=rf"$\alpha={a:g}$")
         ax[1].plot(t * 1e6, V, color=c, lw=1.1)
-        # log-decrement estimate on the first two positive peaks
+        # first-period decrement on the first two positive peaks, converted
+        # with the exact relation zeta = delta / sqrt(4 pi^2 + delta^2).
+        # For alpha < 1 this is a first-period measure, not a damping ratio:
+        # the free decay of a fractional element is not exponential.
         pk = [n for n in range(1, len(u) - 1)
               if u[n] > u[n - 1] and u[n] > u[n + 1] and u[n] > 0]
         if len(pk) >= 2:
-            out[f"zeta_{a}"] = float(np.log(u[pk[0]] / u[pk[1]]) / (2 * np.pi))
+            dl = float(np.log(u[pk[0]] / u[pk[1]]))
+            out[f"delta_{a}"] = dl
+            out[f"zeta_{a}"] = float(dl / np.sqrt(4 * np.pi ** 2 + dl ** 2))
     ax[0].set_xlabel(r"$t$ ($\mu$s)")
     ax[0].set_ylabel(r"$u_{\rm tip}$ (nm)")
     ax[1].set_xlabel(r"$t$ ($\mu$s)")
@@ -912,7 +917,7 @@ def fig_window():
     axb.set_xlabel(r"$x/L$")
     axb.set_ylabel(r"$w(x)/w(L)$")
     axb.tick_params(labelsize=6.5)
-    axb.set_title("(b) clamped plate", fontsize=7.8, loc="left")
+    axb.set_title("(b) clamped strip", fontsize=7.8, loc="left")
     axb.legend(frameon=False, fontsize=6.2, loc="upper left")
     axc.set_xlabel(r"$x/L$")
     axc.set_ylabel(r"$|w-w_{\rm cl}|/w_{\rm cl}(L)$")

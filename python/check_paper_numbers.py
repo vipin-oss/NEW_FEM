@@ -117,6 +117,45 @@ def manuscript_text():
             parts.append(open(os.path.join(base, fn)).read())
     return "\n".join(parts)
 
+# ---------------------------------------------------------------------------
+# Forbidden tokens: quantities that round 16 replaced.  They must not come back
+# into the manuscript, its tables, its captions or its highlights.
+# ---------------------------------------------------------------------------
+STALE_TOKENS = {
+    "2.5700": "peak ratio of the ring-down (round 16: 2.5947)",
+    "0.94392": "logarithmic decrement (round 16: 0.95345)",
+    "0.15023": "zeta(K_eff, alpha=1) (round 16: 0.15003)",
+    "0.06749": "zeta(K_uu, alpha=1) (round 16: 0.06746 / 0.0675)",
+    "0.449": "K_uu/K_eff ratio (round 16: 0.450)",
+    "0.15\\,\\%": "integer-order error (round 16: 0.02 %)",
+    "0.026": "alpha=0.7 zeta from a global fit, withdrawn in round 16",
+    "0.05006": "alpha=0.7 zeta from a global fit, withdrawn in round 16",
+    "1.93": "alpha=0.7 ratio from a global fit, withdrawn in round 16",
+    "$2\\times2$": "'2x2 Gauss' quadrature (round 16: $4\\times4$)",
+    "plate": "'plate' for a plane-stress strip (round 16: 'strip')",
+    "Plate": "capitalised 'Plate' (round 16: 'Strip')",
+}
+
+
+def stale_scan():
+    """Every .tex of the package, plus the highlights file."""
+    base = os.path.dirname(TEX)
+    texts = {}
+    for dirpath, _dirs, files in os.walk(base):
+        for fn in files:
+            if fn.endswith(".tex"):
+                full = os.path.join(dirpath, fn)
+                texts[os.path.relpath(full, base)] = open(full).read()
+    hits = []
+    for tok, why in STALE_TOKENS.items():
+        for rel, body in sorted(texts.items()):
+            for i, line in enumerate(body.splitlines(), 1):
+                if tok in line:
+                    hits.append({"token": tok, "why": why, "file": rel,
+                                 "line": i, "text": line.strip()[:120]})
+    return hits
+
+
 def main():
     tex = manuscript_text()
     R = []
@@ -320,16 +359,16 @@ def main():
     # now stated as "two orders of magnitude" in the conclusion, so this slot
     # carries the ring-down decrements that the rewritten Sec. 6.7 quotes.
     P6 = J("paper_figures_data.json")["notes"]["P6"]
-    R.append(row("ring-down, decrement at alpha=1", "0.064",
+    R.append(row("ring-down, decrement at alpha=1", "0.063",
                  "paper_figures_data.json notes.P6 zeta_1.0",
                  P6["zeta_1.0"], "{:.3f}", rel_tol=1e-2))
-    R.append(row("ring-down, peak decrement at alpha=0.6", "0.105",
+    R.append(row("ring-down, peak decrement at alpha=0.6", "0.104",
                  "paper_figures_data.json notes.P6 zeta_0.6",
                  P6["zeta_0.6"], "{:.3f}", rel_tol=1e-2))
     R.append(row("ring-down, decrement at alpha=0.4", "0.085",
                  "paper_figures_data.json notes.P6 zeta_0.4",
                  P6["zeta_0.4"], "{:.3f}", rel_tol=1e-2))
-    R.append(row("ring-down, error at alpha=0.6 against alpha=1", "65",
+    R.append(row("ring-down, error at alpha=0.6 against alpha=1", "64",
                  "paper_figures_data.json notes.P6 zeta_0.6/zeta_1.0 - 1, in percent",
                  100.0 * (P6["zeta_0.6"] / P6["zeta_1.0"] - 1.0), "{:.0f}",
                  rel_tol=1e-2))
@@ -454,15 +493,30 @@ def main():
             "MISMATCH" if not r["ok"] else "NOT IN TEXT")
         lines.append(f"| {i} | {r['where']} | `{r['tex']}` | `{r['json']}` | "
                      f"`{r['formatted']}` | {st} |")
+    # ---- forbidden stale tokens (round 16 replacements)
+    hits = stale_scan()
+    lines += ["", "## Forbidden stale tokens", "",
+              f"{len(hits)} hits of {len(STALE_TOKENS)} forbidden tokens.", ""]
+    if hits:
+        lines += ["| token | file | line | text |", "|---|---|---|---|"]
+        for h in hits:
+            lines.append(f"| `{h['token']}` | {h['file']} | {h['line']} | "
+                         f"`{h['text']}` |")
+    with open(os.path.join(RES, "stale_tokens.json"), "w") as fh:
+        json.dump({"n_tokens": len(STALE_TOKENS), "n_hits": len(hits),
+                   "hits": hits}, fh, indent=1)
     with open(os.path.join(RES, "paper_number_audit.md"), "w") as fh:
         fh.write("\n".join(lines) + "\n")
     for r in R:
         st = "ok" if r["ok"] and r["tex"] in tex else (
             "MISMATCH" if not r["ok"] else "NOT IN TEXT")
         print(f"  {r['where']:48s} {r['tex']:>10s}  {r['json'][:44]:44s} {st}")
-    print(f"\n  {len(R) - len(missing) - len(bad)}/{len(R)} agree "
+    for h in hits:
+        print(f"  STALE {h['token']:>10s}  {h['file']}:{h['line']}  {h['text']}")
+    print(f"\n  {len(R) - len(missing) - len(bad)}/{len(R)} agree; "
+          f"{len(hits)} stale-token hits of {len(STALE_TOKENS)} "
           f"-> results/paper_number_audit.md")
-    return 0 if not (missing or bad) else 1
+    return 0 if not (missing or bad or hits) else 1
 
 
 if __name__ == "__main__":

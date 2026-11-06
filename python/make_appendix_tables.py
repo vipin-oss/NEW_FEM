@@ -50,7 +50,7 @@ def table_orientation():
 \centering
 \caption{Window orientation: frequency of the extensional mode and its coupling
 factor, for the three aspect ratios of Fig.~\ref{fig:orientation}, on the
-\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} plate with
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} strip with
 $h=\SI{10}{\micro\metre}$, poling $x$, plane stress, $24\times2$ mesh,
 $\mu=0$ and $\alpha=1$. Every fifth degree is listed; the figure uses the same
 sweep at $5^\circ$ spacing. The remaining orientations follow from
@@ -130,7 +130,7 @@ Kelvin--Voigt element of \eqref{eq:kvfreq}, on the grid behind
 Fig.~\ref{fig:damping}(b), from the complex pole with branch continuation. The
 ratio rises with both $\alpha$ and $\omega\tau$ and reaches unity at
 $\alpha=1$, $\omega\tau=10$, where the integer-order element is critically
-damped. The band used for the plate mode of this paper is
+damped. The band used for the strip mode of this paper is
 $\omega\tau\le1$.}
 \label{tab:damping}
 \begin{tabular}{@{}l r r r r r@{}}
@@ -178,7 +178,7 @@ def table_convergence():
     text = r"""\begin{table}[!htbp]
 \centering
 \caption{Convergence of the extensional mode behind
-Fig.~\ref{fig:convergence}: plate \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre},
+Fig.~\ref{fig:convergence}: strip \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre},
 poling $x$, plane stress, $\mu=0$, $a_1\times a_2=3\times1$\,\si{\micro\metre}.
 The frequency is that of the extensional mode of the short-circuit eigenvalue
 problem and the coupling is the mode-free quasi-static value of
@@ -208,10 +208,12 @@ def table_ringdown():
         body.append(" & ".join([a, "%.5f" % notes[key]]) + r" \\")
     text = r"""\begin{table}[!htbp]
 \centering
-\caption{Ring-down behind Fig.~\ref{fig:ringdown}: the logarithmic decrement
-of the tip displacement over the first two peaks divided by $2\pi$,
-$\zeta_{\rm dec}$, which equals the damping ratio only in the lightly damped
-limit, for each Caputo order. The mode is the extensional one at \SI{%.1f}{kHz}
+\caption{Ring-down behind Fig.~\ref{fig:ringdown}: the decrement $\delta$ of
+the tip displacement over the first two peaks, converted with the exact
+relation $\zeta=\delta/\sqrt{4\pi^{2}+\delta^{2}}$ of \eqref{eq:zeta}, for
+each Caputo order. The entry is a damping ratio only at $\alpha=1$; for
+$\alpha<1$ it is the first-period decrement, because the free decay of a
+fractional element is not exponential. The mode is the extensional one at \SI{%.1f}{kHz}
 ($k^2=0.4583$), with $\tau=\SI{3}{\nano\second}$ and
 $\omega\tau=%.2f$; the open-circuit voltage at the initial instant is
 \SI{%.2f}{\volt} for a \SI{10}{\nano\metre} tip displacement. The decrement is
@@ -220,7 +222,7 @@ response becomes slower and more heavily damped.}
 \label{tab:ringdown}
 \begin{tabular}{@{}l r@{}}
 \toprule
-$\alpha$ & $\zeta_{\rm dec}$ \\
+$\alpha$ & $\zeta$ of the first period \\
 \midrule
 """ % (notes["f_kHz"], 2 * np.pi * notes["f_kHz"] * 1e3 * notes["tau_s"],
        notes["V0"]) + "\n".join(body) + r"""

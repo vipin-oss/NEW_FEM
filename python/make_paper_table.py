@@ -49,7 +49,7 @@ TEX_WHAT = {
     "S1a": r"$\zeta_{\rm eff}(K_{\rm eff},\alpha{=}1)$ vs $\omega\tau/2$",
     "S1b": r"$\zeta(K_{uu})/\zeta(K_{\rm eff})$, $\alpha=1$",
     "S2": r"KV/Zener modulus, $\omega\tau=1$, $\alpha=1$",
-    "C1": r"FEM $k^2$ (free plate) vs 2-D closed form $e^{\rm T}C^{-1}e/\kappa$",
+    "C1": r"FEM $k^2$ (free strip) vs 2-D closed form $e^{\rm T}C^{-1}e/\kappa$",
     "C2": r"2-D model vs 3-D free bar (plane-stress reduction)",
     "C3": r"FEM $k^2$, clamped, $96\times4$ vs $48\times4$",
     "C4": r"FEM $k^2$, clamped, $24\times2$ vs $48\times4$",
@@ -132,7 +132,7 @@ def main():
 
 
 def application_table():
-    """The four polarisation/kinematics combinations of the worked plate."""
+    """The four polarisation/kinematics combinations of the worked strip."""
     import json
     with open(os.path.join(RES, "application_table.json")) as fh:
         A = json.load(fh)["rows"]

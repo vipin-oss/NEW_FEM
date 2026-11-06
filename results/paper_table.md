@@ -1,6 +1,6 @@
 # Verification table as it appears in the manuscript
 
-58/58 checks pass.
+59/59 checks pass.
 
 | quantity | value obtained | requirement | source |
 |---|---|---|---|
@@ -28,13 +28,13 @@
 | zeta(K_eff, alpha=1) vs omega*tau/2 | 0.15003 vs 0.15000 | within 2 % | `results/memory_variants.json` |
 | zeta(K_uu)/zeta(K_eff) at alpha=1 | 0.450 | in (0, 1) -- the choice matters | `results/memory_variants.json` |
 | KV/Zener modulus at omega*tau = 1, alpha = 1 | 1.345 | > 1.3 (KV unbounded) | `results/memory_variants.json` |
-| FEM k^2 (unconstrained plate) vs 2-D closed form e^T C^-1 e/kappa | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/coupling_check.json` |
+| FEM k^2 (unconstrained strip) vs 2-D closed form e^T C^-1 e/kappa | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/coupling_check.json` |
 | 2-D model vs 3-D free bar (plane-stress reduction) | 2.83 % | < 5 % (documented modelling gap) | `results/coupling_check.json` |
-| FEM k^2, clamped plate, 96x4 vs 48x4 | 0.55992 vs 0.55957 | rel. diff < 1e-3 | `results/coupling_check.json` |
-| FEM k^2, clamped plate, 24x2 vs 48x4 | 0.13 % | < 0.5 % (coarse mesh) | `results/coupling_check.json` |
+| FEM k^2, clamped strip, 96x4 vs 48x4 | 0.55992 vs 0.55957 | rel. diff < 1e-3 | `results/coupling_check.json` |
+| FEM k^2, clamped strip, 24x2 vs 48x4 | 0.13 % | < 0.5 % (coarse mesh) | `results/coupling_check.json` |
 | lowest MAC of mode 1 vs the h = 10 um shape (4 thicknesses) | 0.99919 | > 0.999 | `results/mode_tracking.json` |
 | worst f2/f1 over the thickness sweep (mode off-diagonal) | 2.3e-06, f2/f1 >= 6.21 | off-diag < 1e-5, ratio > 6 | `results/mode_tracking.json` |
-| closed form e'C^-1 e/kappa vs FEM coupling (free plate) | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/?` |
+| closed form e'C^-1 e/kappa vs FEM coupling (free strip) | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/?` |
 | the superseded series is exactly k^2/(1+k^2) of the new one | 3.5e-06 | < 1e-5 (same formula applied twice) | `results/?` |
 | clamped-free f1, FEM 48x4 vs Euler-Bernoulli closed form | 144.6 vs 143.8 kHz | |err| < 1 % (+0.54 %) | `results/?` |
 | clamped-clamped f1, FEM 48x4 vs Euler-Bernoulli closed form | 919.2 vs 915.0 kHz | |err| < 1 % (+0.46 %) | `results/?` |
@@ -51,6 +51,7 @@
 | h = 1 um flexo k^2 over four equivalent solver paths and 4 numeric stacks | spread 0.182 %, k^2 4.1705e-03..4.1781e-03 | < 0.5 % (quoted to 2 s.f.) | `results/?` |
 | the same spread at h = 10 um | 1.49e-05 % | < 1e-3 % | `results/?` |
 | truncating the secular sum to 12 modes is not an alternative | 85 % off | > 50 % (hence the sum runs over all modes) | `results/?` |
+| no quantity replaced in the round-16 audit has come back | 0 hits of 12 forbidden tokens | 0 hits | `results/?` |
 | the list of unverified numbers cites only numbers still in the manuscript | 29 entries, 0 stale | 0 stale | `results/?` |
 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |
