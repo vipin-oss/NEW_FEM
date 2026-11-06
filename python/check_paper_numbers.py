@@ -192,6 +192,15 @@ def main():
                  g("demo.json.flexo_thickness.7.k2_flexo")
                  / g("demo.json.flexo_thickness.0.k2_flexo"), "{:.0f}",
                  rel_tol=5e-3))
+    _wf = J("worked_example.json")["flexo"]
+    R.append(row("worked, analytic flexo growth, h^-2 over 10 -> 1 um",
+                 "100", "worked_example.json flexo (h_max/h_min)^2",
+                 (_wf["h_um"][0] / _wf["h_um"][-1]) ** 2, "{:.0f}"))
+    R.append(row("worked, FEM flexo below the analytic x at h=10", "2.05",
+                 "worked_example.json x_analytic_h10 / demo k2_flexo[0]",
+                 _wf["x_analytic_h10"]
+                 / g("demo.json.flexo_thickness.0.k2_flexo"), "{:.2f}",
+                 rel_tol=5e-3))
     R.append(row("orientation, extensional f at 0 deg, AR=2", "5012",
                  "paper_figures_data.json polar[AR=2,th=0].f_ext_kHz",
                  [r for r in J("paper_figures_data.json")["polar"]

@@ -186,15 +186,34 @@ stood.
 | B4 | Sec. 2 | the memory, the window and the flexoelectric coefficient were never set apart in one place | one sentence: the memory acts on the damping at fixed eigenfrequency, the window on the stiffness at fixed memory, $\mu$ on the coupling at fixed geometry |
 | B5 | Sec. 7.3, Sec. 6.3 | $a/L\le0.2$ was called "the bound claimed for the model" and "the bound set by" a figure | an "assumed operating range, not a validated truncation threshold", stated twice, with the reason (no experiment and no exact averaging operator available here) |
 | B6 | Sec. 7.2 | the small-loss decrement was printed as $\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2)/2$ and "a measurement at two amplitudes fixes the pair" | that expression is $\zeta$, not $\delta$: the decrement is $\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2)$, checked against $\delta=\pi\omega\tau$ at $\alpha=1$; a single decrement fixes only the product, so the pair needs two frequencies |
-| C1 | run-in headings | all 21 `\paragraph{}` headings end with a period inside the braces | already consistent; left unchanged |
+| C1 | run-in headings | all 21 `\paragraph{}` headings end with a period inside the braces | ~~already consistent; left unchanged~~ -- wrong: see Sec. 13, the class adds its own period and the compiled PDF shows "Window..". Corrected in round 19 |
 | C2 | editorial asides | "easy to get wrong", "worth recording", "The exponent and the gamma factor are both easy to misplace" | reworded as statements of fact |
 | C5 | Sec. 6.5 | "eight thicknesses" | checked against Table C.2: the eight are 10, 7, 5, 3.5, 2.7, 2, 1.4 and 1 \si{\micro\metre}, in the table and in the figure; unchanged |
 
 Items the brief listed that the audit could **not** confirm in the current
-files are recorded as such in `ROUND18_REPORT.md` and were not edited.
+files are recorded as such in `ROUND18_REPORT.md` and were not edited -- except
+C3, which turned out to be reproducible and is corrected in Sec. 13.
 
 **Still unverified after round 18.** No TeX distribution is installed here, so
 compilation, the page count (30 pages, 28 for the letter), float placement,
 overfull boxes and the rendered reference numbering are unmeasured; the new
 Table `tab:coupling` has never been typeset and, at seven columns, it may need
 `\small` or a landscape float. DOI resolution for `fem1` is unchecked (offline).
+(Round 19 addresses the last point: the table is now six columns at `\small`,
+see Sec. 13.)
+
+## 13. What round 19 corrected (four leftovers)
+
+Full detail, with the changed lines, in `ROUND18_REPORT.md` (round-19
+addendum). Summary:
+
+| # | item | correction |
+|---|---|---|
+| 1 | run-in headings printed `Window..` | the period inside the braces is removed at all 21 `\paragraph{}` sites (14 in `sec/06_results.tex`, 1 in `sec/07_calibration_limitations.tex`, 6 in `sec/91_appendixA.tex`); the class supplies the single terminator. **The typeset output is unverified** -- no TeX here -- so if the class turns out to print none, restore the 21 periods |
+| 2 | the flexoelectric growth sentence | it claimed the analytic route "gives the factor by which it grows"; that factor is $100$ ($x\propto h^{-2}$), against $24$ for the finite element, and the FEM value is $2.05$ times below the analytic $x$ at \SI{10}{\micro\metre}. The gap is read as the $3\times1$\,\si{\micro\metre} window averaging the through-thickness gradient, **stated as a hypothesis**. `tab:worked` now reads `100 (h^-2) vs 24 (FEM)` |
+| 3 | `references.bib` | the "part 3: placeholders for self-citations" comment block is deleted (no entry removed: 62 entries, all cited), and a **stray brace** left by the round-18 `fem1` replacement -- the file ended `}}`, 596 closing against 595 opening -- is removed. `nanos` appears only inside `nanostructures`, which is a word, not a unit |
+| 4 | `tab:coupling` width | seven natural-width columns (~540 pt) became six columns at `\small` with two short `p{}` columns (~370 pt estimated); no value changed and N4 still passes 10/10 |
+
+**Still unverified after round 19.** Compilation, page count, float placement,
+overfull boxes; the `\paragraph` output after the edit; the estimated width of
+`tab:coupling`; DOI resolution.

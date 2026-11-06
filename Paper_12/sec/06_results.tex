@@ -98,18 +98,19 @@ on.
 
 \begin{table}[!htbp]
 \centering
-\footnotesize
+\small
 \caption{Every coupling factor quoted in this paper, one row each, with the
 measure that produced it. All rows are plane stress, poled along $x$, with the
 electrode pair on the short faces; the window is
-$a_1\times a_2=3\times1$\,\si{\micro\metre} where it is switched on. The
-mode-free rows are $x/(1+x)$ with $x=d^{\mathsf T}K_{sc}^{-1}d/\beta$ and use no
-eigenvector; the mode-based rows are the extensional mode (mode~4) of the
-$24\times2$ mesh, $(\omega_{oc}^{2}-\omega_{s}^{2})/\omega_{oc}^{2}$ with $s$
-the matrix named in the fifth column. Rows 1 and 8 are the same number by
-construction and are the validation of the assembled route; row 2 isolates the
-clamped edge, row 3 the window, row 4 the mesh, and rows 6 and 7 differ only in
-$\mu$.\ The last column is the entry of
+$a_1\times a_2=3\times1$\,\si{\micro\metre} where it is switched on, and
+$\mu$ is in \si{\coulomb\per\metre}. The mode-free rows quote $x/(1+x)$ with
+$x=d^{\mathsf T}K_{sc}^{-1}d/\beta$ and use no eigenvector; the mode-based rows
+are the extensional mode (mode~4), $k^{2}_{s}=
+(\omega_{oc}^{2}-\omega_{s}^{2})/\omega_{oc}^{2}$ with $s$ the matrix named in
+the measure column. Rows 1 and 8 are the same number by construction and are
+the validation of the assembled route; row 2 isolates the clamped edge, row 3
+the window, row 4 the mesh, and rows 6 and 7 differ only in $\mu$.\ The
+\emph{archive} column is the entry of
 \texttt{results/coupling\_provenance.json} that reproduces the row; that file
 also records the upstream key each entry was checked against.}
 \label{tab:coupling}
@@ -189,7 +190,7 @@ the route from a material constant to a coupling factor is visible and not only
 its outcome. Each value below is the one carried into the figures and tables of
 this section.
 
-\paragraph{Window.} For half-widths $a_1=\SI{3}{\micro\metre}$ and
+\paragraph{Window} For half-widths $a_1=\SI{3}{\micro\metre}$ and
 $a_2=\SI{1}{\micro\metre}$ the second-moment tensor of the cuboid window is
 diagonal with
 \begin{equation}
@@ -206,7 +207,7 @@ the cuboid value of \eqref{eq:Mnumber} exactly, and the reciprocal statement,
 $a_{\rm cub}=0.7746\,a_{\rm ell}=\sqrt{3/5}\,a_{\rm ell}$, is the one used for
 the equal-$M$ pair of Sec.~\ref{sec:windowshape}.
 
-\paragraph{Plane-stress reduction.} The strip is free out of plane, so the
+\paragraph{Plane-stress reduction} The strip is free out of plane, so the
 stiffness that multiplies $\varepsilon_{xx}$ is not $C_{11}$ but the reduced
 entry
 \begin{equation}
@@ -223,7 +224,7 @@ two poling directions, and not a change of material, is what makes the
 extensional and the bending configuration different electrical problems
 (Table~\ref{tab:axes}).
 
-\paragraph{Closed form and the assembled route.} From the quantities above,
+\paragraph{Closed form and the assembled route} From the quantities above,
 \begin{equation}
   x=\frac{e^{\mathsf T}C_{p}^{-1}e}{\kappa}=1.2768,
   \qquad
@@ -249,7 +250,7 @@ unconstrained strip without the window reproduces \eqref{eq:xclosed} to
 $1.2\times10^{-11}$ relative and the mesh refinement of the working build moves
 the value by $0.03\,\%$ (Table~\ref{tab:convergence}).
 
-\paragraph{Flexoelectric bending.} With the piezoelectric constants switched
+\paragraph{Flexoelectric bending} With the piezoelectric constants switched
 off, the same reduction gives the smallness parameter of the bending
 configuration,
 \begin{equation}
@@ -260,15 +261,26 @@ configuration,
   \label{eq:xflexo}
 \end{equation}
 at $h=\SI{10}{\micro\metre}$, against a finite element value of
-\num{1.7437e-4}: the analytic route gives the order of the effect and the
-factor by which it grows, the finite element gives its value. Both are listed in
-Table~\ref{tab:worked}, where the local log--log slope of the finite element
-series is formed as $\ln(k^2_{i+1}/k^2_{i})/\ln(h_{i+1}/h_i)$ on consecutive
-thicknesses: $-1.96$ between $10$ and \SI{7}{\micro\metre}, $-1.52$ between $5$
-and \SI{3.5}{\micro\metre}, and $-0.43$ between $1.4$ and
-\SI{1}{\micro\metre}.
+\num{1.7437e-4}. The two routes do not agree, and the disagreement has a shape.
+$x$ of \eqref{eq:xflexo} scales as $h^{-2}$, so it would grow by a factor
+$100$ between \SI{10}{} and \SI{1}{\micro\metre}, whereas the finite element
+coupling -- $k^{2}$, which equals $x$ to first order while $k^{2}\ll1$ -- grows
+by a factor $24$ over the same range, and at \SI{10}{\micro\metre} the finite
+element value is $2.05$ times below the analytic $x$. Both routes are listed in
+Table~\ref{tab:worked}. We read the gap as the window: the
+$3\times1$\,\si{\micro\metre} window averages the through-thickness gradient
+over its own thickness, which attenuates the gradient the flexoelectric term
+sees, and the attenuation weakens as the strip thins. That reading is a
+hypothesis and is stated as one -- the second-moment model carries no
+through-thickness resolution, so the averaged gradient it produces has no
+closed-form counterpart to be compared with. What the numbers do establish is the
+trend. The local log--log slope of the finite element series, formed as
+$\ln(k^2_{i+1}/k^2_{i})/\ln(h_{i+1}/h_i)$ on consecutive thicknesses, approaches
+the analytic $h^{-2}$ at the large-$h$ end: $-1.96$ between $10$ and
+\SI{7}{\micro\metre}, $-1.52$ between $5$ and \SI{3.5}{\micro\metre}, and
+$-0.43$ between $1.4$ and \SI{1}{\micro\metre}.
 
-\paragraph{Memory.} The L1 weights of \eqref{eq:l1} are fixed numbers that do
+\paragraph{Memory} The L1 weights of \eqref{eq:l1} are fixed numbers that do
 not depend on the model,
 \begin{equation}
   \alpha=0.5:\; (b_0,b_1,b_2)=(1,\;0.414214,\;0.317837),\qquad
@@ -307,7 +319,7 @@ thickness independence & $k^{2}$ at $10$ and \SI{1}{\micro\metre} &
 $0.55814\to0.55861$ & $0.09\,\%$ \\
 flexoelectric growth & $\mu$, $C^{p}_{xx}$, $h$, $\kappa_{yy}$ &
 $x=3.5704\times10^{-4}$ at \SI{10}{\micro\metre};
-$1.7437\times10^{-4}\to4.1736\times10^{-3}$ & factor $24$ \\
+$1.7437\times10^{-4}\to4.1736\times10^{-3}$ & $100$ ($h^{-2}$) vs $24$ (FEM) \\
 flexoelectric slope & the eight thicknesses & local log--log slopes &
 $-1.96\to-0.43$ \\
 window anisotropy & $M_{11}$, $M_{22}$, $\theta$ & $M$ rotates, the
@@ -429,7 +441,7 @@ codes usually provide. The second is \emph{implementation}: the convolution of \
 fully condensed stiffness $K_{\rm eff}$ or only the short-circuit matrix
 $K_{uu}$, and the two give different damping.
 
-\paragraph{Memory matrix.} Table~\ref{tab:memory} reports the ring-down of the
+\paragraph{Memory matrix} Table~\ref{tab:memory} reports the ring-down of the
 extensional mode (mode 4, \SI{6.727}{MHz}) at
 $\tau=\SI{7.0974}{\nano\second}$, that is $\omega\tau=0.3$, with an initial tip
 displacement that produces \SI{139.07}{\volt} of open-circuit voltage at
@@ -497,7 +509,7 @@ ratio $K_{uu}/K_{\rm eff}$ & $0.450$ & $0.428$ \\
 \end{tabular}
 \end{table}
 
-\paragraph{What the two memories stand for.} Neither matrix is derived from a
+\paragraph{What the two memories stand for} Neither matrix is derived from a
 dielectric relaxation; both are placements of the fractional element inside a
 condensed model, and the choice is treated here as a model statement rather
 than as a material property. One law can be derived exactly. If the
@@ -512,7 +524,7 @@ $K_{\rm eff}$ remembers the whole condensed stiffness and $K_{uu}$ none of it.
 The ratio $0.450$ is a statement about the $\alpha=1$ row of
 Table~\ref{tab:memory} and about this device, not a universal factor.
 
-\paragraph{Decay at $\alpha<1$.} At $\alpha=0.7$ the free decay is not
+\paragraph{Decay at $\alpha<1$} At $\alpha=0.7$ the free decay is not
 exponential and a single damping ratio does not exist: the successive
 decrements of the $K_{\rm eff}$ ring-down are $1.244$, $1.547$, $0.010$,
 $0.403$, $0.240$ and $0.151$; the first, second, fourth, fifth and sixth of
@@ -527,7 +539,7 @@ first-period decrement rather than a fitted slope.
 The $\alpha=1$ entries are unaffected: there the twenty successive decrements
 agree to $7\times10^{-10}$ relative, which is why \eqref{eq:zeta} applies.
 
-\paragraph{Fractional against integer-order element.} Table~\ref{tab:modulus}
+\paragraph{Fractional against integer-order element} Table~\ref{tab:modulus}
 compares the complex modulus of the fractional element \eqref{eq:kvfreq} with
 the integer-order Kelvin--Voigt element and a Zener element fitted to it at the
 device point $\omega\tau=0.3$ and held fixed afterwards. At that point the
@@ -540,7 +552,7 @@ which is the band a design map is meant to cover.
 
 
 
-\paragraph{The damping map.} Figure~\ref{fig:damping}(a) is the pole of
+\paragraph{The damping map} Figure~\ref{fig:damping}(a) is the pole of
 \eqref{eq:kvfreq} in the complex plane, traced over $\omega\tau$ for seven
 relaxation times and coloured by $\tau$, with markers at five Caputo orders;
 Fig.~\ref{fig:damping}(b) is the damping ratio
@@ -705,7 +717,7 @@ $L=\SI{200}{\micro\metre}$.)}
 \label{fig:thickness}
 \end{figure}
 
-\paragraph{Flexoelectric size effect.} The flexoelectric coupling rises by a
+\paragraph{Flexoelectric size effect} The flexoelectric coupling rises by a
 factor $24$ from \num{1.74e-4} at \SI{10}{\micro\metre} to \num{4.2e-3} at
 \SI{1}{\micro\metre}. Its local log--log slope is $-1.96$ at the thick end,
 close to the $h^{-2}$ scaling of a gradient effect with a window much smaller
@@ -747,7 +759,7 @@ makes the tracking unambiguous.}
 \label{fig:modetrack}
 \end{figure}
 
-\paragraph{What the piezoelectric terms do on the bending device.} The bending
+\paragraph{What the piezoelectric terms do on the bending device} The bending
 configuration is poled along $y$ with electrodes on the long faces, and the
 crystal carries $e_{31}$ and $e_{33}$ as well, so the two effects are
 separated inside one run. Table~\ref{tab:config} does it: three materials, one geometry, the same bending mode. With $\mu=0$ the
@@ -777,7 +789,7 @@ Fig.~\ref{fig:thickness}(a).}
 \input{table_config}
 \end{table}
 
-\paragraph{Numerical reproducibility of the thinnest point.} The
+\paragraph{Numerical reproducibility of the thinnest point} The
 $h=\SI{1}{\micro\metre}$ point is the least reproducible number in the paper.
 Its $k^2$ is a difference of two nearly equal eigenvalues of a pencil whose
 condition number is $\sim10^{12}$ at that thickness, so it inherits the accuracy
@@ -791,7 +803,7 @@ why the two-significant-digit form is used here and in the abstract. The
 platform-sensitivity table behind this statement is in
 \ref{app:verification}.
 
-\paragraph{The piezoelectric coupling is thickness independent.} Panel~(b) of
+\paragraph{The piezoelectric coupling is thickness independent} Panel~(b) of
 Fig.~\ref{fig:thickness} is the counterpart of panel~(a). The quasi-static
 extensional coupling takes the values $0.55814$, $0.55843$, $0.55858$ and
 $0.55861$ at $10$, $5$, $2$ and \SI{1}{\micro\metre}, that is it changes by

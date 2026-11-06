@@ -52,9 +52,9 @@ search-and-replace.
 
 | # | claim in the brief | finding | class | evidence |
 |---|---|---|---|---|
-| C1 | periods in run-in headings | **disproved as a defect.** All 21 `\paragraph{}` headings end with the period inside the braces, i.e. consistently | consistent, unchanged | `grep -rho "\\\\paragraph{[^}]*}"` → 21 hits, all `….` |
+| C1 | periods in run-in headings | ~~disproved as a defect~~ **corrected in round 19: confirmed defect.** I checked only that all 21 sites were *consistent*; consistency was the wrong question, because the class prints its own terminator, so `\paragraph{Window.}` sets as "Window.." — visible about 20 times in the compiled `Paper_12_4.pdf` | **CONFIRMED** — my "consistent, unchanged" verdict was wrong | `grep -rho "\\\\paragraph{[^}]*}"` → 21 hits, all `….`; the compiled PDF supplied by the author shows the doubled periods. Fixed in round 19 (see the addendum) |
 | C2 | unit macros and editorial asides | `{\nano\second}` is correct siunitx in every one of the 8 occurrences (the plural defect of an earlier round is gone). The asides "easy to get wrong", "worth recording", "both easy to misplace" survived | manuscript-only | `grep -n "nano"`, `grep -n "easy to\|worth recording"` |
-| C3 | equation (27) text, table row 100 vs 24 | **not confirmed.** No such defect is present in the current files: the thickness table has rows 10, 7, 5, 3.5, 2.7, 2, 1.4, 1 and no 100/24 pair to reconcile | no edit | `Paper_12/table_C2_thickness.tex` |
+| C3 | equation (27) text, table row 100 vs 24 | **not confirmed in round 18; confirmed and fixed in round 19.** I looked for the pair 100/24 in the thickness table (`tab:C2`), where it is not; it belongs to the worked-example table `tab:worked`, whose "flexoelectric growth" row quoted only the FEM factor 24 while the text claimed the analytic route "gives the factor by which it grows" — that factor is 100, because $x\propto h^{-2}$ | **CONFIRMED** (round 19) | `sec/06_results.tex` "Flexoelectric bending" paragraph and the `tab:worked` row; see the addendum |
 | C4 | a suspicious row of the anisotropy table | **not confirmed.** `table_C1_orientation.tex` is monotone in θ for all three aspect ratios and consistent with the sweep of Fig. 4 | no edit | `Paper_12/table_C1_orientation.tex`, `check_paper_numbers` row "orientation sweep" |
 | C5 | "eight thicknesses" | **disproved as a defect.** The eight are 10, 7, 5, 3.5, 2.7, 2, 1.4, 1 µm, listed once in Table C.2 and matched by the text and the figure | consistent, unchanged | `table_C2_thickness.tex:23–31` |
 | C6 | page count ≤ 30 | **unmeasurable here.** No TeX in the environment. Nothing was cut for length in this round, because a cut made without a page count would be a guess | UNVERIFIED | — |
@@ -168,5 +168,124 @@ check_coupling_provenance.py` and gates the result as **N4**.
 * **DOI resolution** for `fem1` (10.1016/j.finel.2026.104681) and for the 13
   entries carrying `TO VERIFY`: Crossref is unreachable, so they are
   unchecked, not confirmed.
-* **C3 and C4** of the brief could not be reproduced in the current files and
-  were therefore not edited.
+* ~~**C3**~~ — reproducible after all, and fixed in round 19 (see the addendum
+  at the end); **C4** could not be reproduced in the current files and was
+  therefore not edited.
+
+---
+
+# Round 19 addendum — the four leftovers
+
+Nothing else was touched. Each item below is one of the four, with the lines it
+changed.
+
+### 1. Run-in headings printed ".."
+
+**Confirmed, and my round-18 verdict was wrong.** I had checked only that the 21
+sites were *consistent* with each other; consistency was the wrong question,
+because the class prints its own terminator, so a source title ending in a
+period sets as `Window..`. The compiled `Paper_12_4.pdf` the author supplied
+shows it about 20 times. The period inside the braces is removed at all 21
+sites:
+
+| file | sites (line of the `\paragraph`) |
+|---|---|
+| `Paper_12/sec/06_results.tex` | 193, 210, 227, 253, 283, 444, 512, 527, 542, 555, 720, 762, 792, 806 (14) |
+| `Paper_12/sec/07_calibration_limitations.tex` | 67 (1) |
+| `Paper_12/sec/91_appendixA.tex` | 24, 37, 46, 56, 67, 79 (6) |
+
+`grep -c '\\paragraph{[^}]*\.}'` over `main.tex` and `sec/*.tex` is **0** after
+the edit. **The typeset heading output is UNVERIFIED**: there is no TeX here, so
+the only evidence for the class behaviour is the PDF the author compiled. If the
+class turns out to print no terminator at all, the fix is to restore the 21
+periods, which is a one-line `sed`.
+
+### 2. The flexoelectric growth sentence (round-18 item C3)
+
+The sentence claimed that "the analytic route gives the order of the effect and
+the factor by which it grows". It gives a factor of **100**, because
+$x=3\mu^{2}/(C^{p}_{xx}h^{2}\kappa_{yy})$ scales as $h^{-2}$, while the finite
+element coupling — $k^{2}$, which equals $x$ to first order while
+$k^{2}\ll1$ — grows by **24** over the same span. The two routes are not the same
+quantity and the text now says so, with the gap read as the window averaging the
+through-thickness gradient, **stated as a hypothesis** because the
+second-moment model carries no through-thickness resolution. At
+$h=\SI{10}{\micro\metre}$ the FEM value is **2.05** times below the analytic $x$
+($3.5704\times10^{-4}/1.7437\times10^{-4}=2.047$).
+
+| where | change |
+|---|---|
+| `Paper_12/sec/06_results.tex:263–283` | new sentence set: $h^{-2}$ (100) against FEM (24), the 2.05 factor, the window-average hypothesis, and the local slopes ($-1.96$, $-1.52$, $-0.43$) now described as approaching the analytic $h^{-2}$ at large $h$ |
+| `Paper_12/sec/06_results.tex:320` | `tab:worked`, row "flexoelectric growth": `factor $24$` → `$100$ ($h^{-2}$) vs $24$ (FEM)`; the other cells of the row are unchanged |
+| `python/check_paper_numbers.py` | two rows added so the new numbers are graded: `100` from `worked_example.json` $(h_{\max}/h_{\min})^{2}$ and `2.05` from `x_analytic_h10 / demo k2_flexo[0]` (rel. tol. 5e-3) |
+
+No other number moved: `demo.json` and `worked_example.json` were not re-run,
+they already held `x_analytic_h10 = 3.57041e-4` and `growth = 23.935`.
+
+### 3. `references.bib` comments and the "nanos" typo
+
+| change | detail |
+|---|---|
+| comment block removed | the four lines from `%% --- part 3: placeholders for self-citations ---` through the note naming `[FEM-1]`, `[FEM-4]`, `[FEM-5]`. No entry was removed: the file still holds **62** entries, all cited. `grep -n "FEM-4\|FEM-5\|placeholder" references.bib` is now **empty** |
+| **defect found and fixed** | the file ended with `}}`: **595 opening and 596 closing braces**, a stray brace left by the round-18 `fem1` replacement (it is present in `8c07ba8` and absent in `2a88232`). BibTeX would have had to recover from it; it is removed, and the braces now balance 595/595 |
+| "nanos" | one hit in the whole repository, `nanostructures` (`sec/01_introduction.tex:67,110`), which is a word and not a unit. Nothing to fix |
+
+`Paper_12/check_refs.py` re-run: 62 entries, 47/58 FEM-1 references carried,
+0 field mismatches (Crossref still offline).
+
+### 4. `tab:coupling` width
+
+The first version was seven natural-width columns plus a
+`p{0.30\textwidth}` source column, about **540 pt** against a `\textwidth` of
+about 470 pt — that is why it had never been typeset: it would have been
+overfull. It is now six columns at `\small`, `\tabcolsep` 4 pt, two short
+`p{}` columns (0.20 and 0.24 of the text width) and abbreviated measure and
+header labels:
+
+```
+$k^{2}$ | build | mesh | $\mu$ | measure | archive
+```
+
+with $x=d^{\mathsf T}K_{sc}^{-1}d/\beta$ and
+$k^{2}_{s}=(\omega_{oc}^{2}-\omega_{s}^{2})/\omega_{oc}^{2}$ defined once in the
+caption, and the $\mu$ unit moved into the caption as well. Estimated width
+$0.44\,\textwidth+160\,\mathrm{pt}\approx370$ pt at
+$\textwidth\approx470$ pt, i.e. about 0.78 of the text block.
+
+* **Every value is unchanged**: the eight numbers, their order, their build,
+  mesh, $\mu$ and matrix are the same. `check_coupling_provenance.py` still
+  passes 10/10 and still finds `$%.5f$` of every row in the table.
+* Files: `python/make_coupling_table.py` (rewritten to emit the six-column
+  body), `Paper_12/table_coupling.tex` (regenerated), and the caption and
+  `\footnotesize → \small` in `Paper_12/sec/06_results.tex:96–116`.
+* **The width is still UNVERIFIED**: the 370 pt figure is arithmetic on
+  nominal character widths, not a measurement. If it is overfull on Overleaf,
+  the next step is to drop the `mesh` column into the `build` column (it is the
+  same for six of the eight rows).
+
+---
+
+## Round 19 — gates actually run
+
+| gate | result |
+|---|---|
+| `python/check_paper_numbers.py` | **87/87 agree** (85 round-18 rows + the 2 new ones), 0 stale-token hits of 12 |
+| `python/check_coupling_provenance.py` | 10/10, table still quotes all 8 rows |
+| `python/check_float_order.py` | agrees: figs 1–10, tabs 1–9 |
+| `python/check_paper_structure.py` | nothing to report |
+| `python/list_unverified.py` | 29 entries, 0 stale |
+| `python/audit_abstract_claims.py` | 0 uncovered tokens |
+| `Paper_12/check_refs.py` | 62 entries, 0 field mismatches |
+| `python/run_all.py` | **60/60 checks pass** |
+
+## Round 19 — UNVERIFIED
+
+* **Compilation, page count, float placement, overfull boxes.** No TeX in this
+  environment. In particular the doubled-period fix is verified only against the
+  compiled PDF the author supplied, not re-compiled here.
+* **The heading output of `\paragraph`** after the edit: the class must supply
+  the single terminator for the text to read "Window. For half-widths …".
+* **The width of `tab:coupling`**: 370 pt is an estimate from nominal widths,
+  not a measurement; and it has still never been typeset.
+* **DOI resolution** for `fem1` and the 13 `TO VERIFY` entries (Crossref
+  unreachable).
