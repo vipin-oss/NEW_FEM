@@ -276,7 +276,7 @@
   {
    "id": "A2",
    "what": "every number in the abstract has an independent-check verdict",
-   "value": "10 hua / 7 nahi hua / 4 inputs, 20 tokens",
+   "value": "8 hua / 7 nahi hua / 3 inputs, 15 tokens",
    "criterion": "0 uncovered, 0 stale",
    "pass": true
   },
@@ -381,8 +381,8 @@
   {
    "id": "P1",
    "what": "paper figures: vector set written",
-   "value": "10 PDF",
-   "criterion": "= 10 (P1-P10)",
+   "value": "14 PDF",
+   "criterion": "= 14 (P1-P14)",
    "pass": true
   },
   {
@@ -395,7 +395,7 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "53/53",
+   "value": "52/52",
    "criterion": "all agree",
    "pass": true
   }

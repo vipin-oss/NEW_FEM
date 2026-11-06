@@ -43,7 +43,7 @@
 | I5 | zeta at alpha = 1 vs omega*tau/2 (both omega*tau) | 0.0e+00 | < 1e-9 | `results/?` |
 | I6 | flexo x, uniform curvature: FEM energy triple vs 3 mu^2/(C11 h^2 kappa33) | 3.570415e-04 vs 3.570415e-04 | rel. diff < 1e-8 (worst 1.8e-10) | `results/?` |
 | I7 | flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33 | 1.7e-13 | < 1e-10 | `results/?` |
-| A2 | every number in the abstract has an independent-check verdict | 10 hua / 7 nahi hua / 4 inputs, 20 tokens | 0 uncovered, 0 stale | `results/?` |
+| A2 | every number in the abstract has an independent-check verdict | 8 hua / 7 nahi hua / 3 inputs, 15 tokens | 0 uncovered, 0 stale | `results/?` |
 | G1 | piezoelectric share of the bending device (poling y, long faces) at every thickness | 5.7e-07 | < 1e-5 (electrically silent bending mode) | `results/?` |
 | G2 | flexo growth with and without the piezoelectric terms | 23.9 vs 31.1 | reported 24 (2 s.f.) uses the real crystal; 31 with e = 0, both graded at 1 % | `results/?` |
 | I9 | the same bending field, four poling/electrode pairings: only the long faces collect it, and each pairing with its own permittivity | poled y 3.570e-04 vs 3.570e-04; poled x 1.613e-05 vs 1.613e-05; short-face pairs 7.5e-14 V | rel. diff < 1e-6, short-face charge < 1e-12 | `results/?` |
@@ -58,6 +58,6 @@
 | T3 | flexo k^2, 48x4 (monotone in h) | 1.74e-04 -> 4.17e-03 | strictly increasing as h falls | `results/demo.json` |
 | T4 | flexo k^2, 48x4 vs 96x4 witness | 3.5e-03 | < 0.02 | `results/demo.json` |
 | T5 | flexo k^2 at mu = 0 / value (residual) | 6e-07 | < 1e-5 | `results/demo.json` |
-| P1 | paper figures: vector set written | 10 PDF | = 10 (P1-P10) | `results/paper_figures_data.json` |
+| P1 | paper figures: vector set written | 14 PDF | = 14 (P1-P14) | `results/paper_figures_data.json` |
 | P2 | orientation sweep rows / k^2 range | 168 rows, 0.3786-0.4677 | 168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
-| N1 | manuscript numbers vs the JSON they came from | 53/53 | all agree | `results/?` |
+| N1 | manuscript numbers vs the JSON they came from | 52/52 | all agree | `results/?` |

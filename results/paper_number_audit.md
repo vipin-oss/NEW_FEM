@@ -1,6 +1,6 @@
 # Every number in the manuscript against the JSON it came from
 
-53/53 claims agree; 0 disagree with the JSON, 0 are not found in the text.
+52/52 claims agree; 0 disagree with the JSON, 0 are not found in the text.
 
 | # | claim | manuscript | json | value | status |
 |---|---|---|---|---|---|
@@ -13,8 +13,8 @@
 | 7 | thickness, flexo k^2 at h=10 | `1.74e-4` | `demo.json flexo_thickness[0].k2_flexo` | `1.74e-4` | ok |
 | 8 | thickness, flexo k^2 at h=1 | `4.2e-3` | `demo.json flexo_thickness[3].k2_flexo` | `4.2e-3` | ok |
 | 9 | thickness, flexo growth factor | `24` | `demo.json flexo ratio` | `24` | ok |
-| 10 | coupling check, closed form | `0.56079` | `coupling_check.json closed_form.k2_2d_closed` | `0.56079` | ok |
-| 11 | coupling check, free 48x4 | `0.56079` | `coupling_check.json fem.plane_stress.free_48x4` | `0.56079` | ok |
+| 10 | coupling check, closed form | `0.5608` | `coupling_check.json closed_form.k2_2d_closed` | `0.56079` | ok |
+| 11 | coupling check, free 48x4 | `0.5608` | `coupling_check.json fem.plane_stress.free_48x4` | `0.56079` | ok |
 | 12 | coupling check, 2-D vs 3-D gap | `2.8` | `coupling_check.json rel_gap_2d_vs_3d x100` | `2.8` | ok |
 | 13 | mode tracking, worst MAC | `0.9992` | `mode_tracking.json rows min mac` | `0.9992` | ok |
 | 14 | orientation, k2 at 0 deg, AR=2 | `0.4448` | `paper_figures_data.json polar[AR=2,th=0]` | `0.4448` | ok |
@@ -35,25 +35,24 @@
 | 29 | closed form, x_2D | `1.2768` | `k2_closed_form.json x_2d` | `1.2768` | ok |
 | 30 | closed form, C_p[0][0] | `9.5500` | `k2_closed_form.json C_p[0][0] / 1e10` | `9.5500` | ok |
 | 31 | closed form, e'C^-1 e | `6.3308` | `k2_closed_form.json eC x1e10` | `6.3308` | ok |
-| 32 | criteria count | `fifty-seven` | `summary.json n_total = 57` | `fifty-seven` | ok |
-| 33 | independent, clamped-free EB | `143.8` | `independent F1 clamped-free f_EB_kHz` | `143.8` | ok |
-| 34 | independent, clamped-free FEM 48x4 | `144.6` | `independent F1 clamped-free mesh[0] f_FEM_kHz` | `144.6` | ok |
-| 35 | independent, clamped-clamped EB | `915.0` | `independent F1 clamped-clamped f_EB_kHz` | `915.0` | ok |
-| 36 | independent, clamped-clamped FEM 48x4 | `919.2` | `independent F1 clamped-clamped mesh[0] f_FEM_kHz` | `919.2` | ok |
-| 37 | independent, clamped-free FEM 128x4 | `144.08` | `independent F1 clamped-free mesh[2] f_FEM_kHz` | `144.08` | ok |
-| 38 | independent, beam modulus | `7.63` | `independent F1 E_beam / 1e10` | `7.63` | ok |
-| 39 | independent, zeta maximum in alpha | `0.179` | `independent F2 zeta at alpha=0.7, omega*tau=0.3` | `0.179` | ok |
-| 40 | independent, zeta at alpha=0.3 | `0.108` | `independent F2 zeta at alpha=0.3, omega*tau=0.3` | `0.108` | ok |
-| 41 | sensitivity, spread at h=1 um, per cent, upper bound | `0.5\,\%` | `sensitivity.json spread_h1_pct (range/midpoint)` | `<= 0.5` | ok |
-| 42 | sensitivity, spread at h=10 um, per cent, upper bound | `10^{-4}\,\%` | `sensitivity.json spread_h10_pct (range/midpoint)` | `<= 0.0001` | ok |
-| 43 | config table, flexo only at h=10 | `1.76e-4` | `config_table rows[0] k2_flexo` | `1.76e-4` | ok |
-| 44 | config table, flexo only at h=1 | `5.5e-3` | `config_table rows[3] k2_flexo` | `5.5e-3` | ok |
-| 45 | config table, growth with e=0 | `31` | `config_table growth_flexo_only` | `31` | ok |
-| 46 | config table, piezo shift at h=1, per cent | `24` | `config_table min flexo_shift x100` | `24` | ok |
-| 47 | axes, C_xx poled y | `1.6946` | `independent F5 poling y C_xx / 1e11` | `1.6946` | ok |
-| 48 | axes, E_b poled y | `1.3544` | `independent F5 E_beam_pol_y / 1e11` | `1.3544` | ok |
-| 49 | axes, kappa11/kappa33 | `39` | `independent F5 kappa_ratio_11_over_33` | `39` | ok |
-| 50 | pairing, the hybrid x | `6.34` | `independent F5 x_hybrid x1e4` | `6.34` | ok |
-| 51 | pairing, distance from the FEM value | `77` | `independent F5 hybrid_vs_fem_rel x100` | `77` | ok |
-| 52 | pairing, poled x on the long faces | `1.61` | `independent F5 poling x top/bottom x_fem x1e5` | `1.61` | ok |
-| 53 | independent, flexo x, uniform curvature | `3.570415` | `independent F3 x_analytic x1e4` | `3.570415` | ok |
+| 32 | independent, clamped-free EB | `143.8` | `independent F1 clamped-free f_EB_kHz` | `143.8` | ok |
+| 33 | independent, clamped-free FEM 48x4 | `144.6` | `independent F1 clamped-free mesh[0] f_FEM_kHz` | `144.6` | ok |
+| 34 | independent, clamped-clamped EB | `915.0` | `independent F1 clamped-clamped f_EB_kHz` | `915.0` | ok |
+| 35 | independent, clamped-clamped FEM 48x4 | `919.2` | `independent F1 clamped-clamped mesh[0] f_FEM_kHz` | `919.2` | ok |
+| 36 | independent, clamped-free FEM 128x4 | `144.08` | `independent F1 clamped-free mesh[2] f_FEM_kHz` | `144.08` | ok |
+| 37 | independent, beam modulus | `7.63` | `independent F1 E_beam / 1e10` | `7.63` | ok |
+| 38 | independent, zeta maximum in alpha | `0.179` | `independent F2 zeta at alpha=0.7, omega*tau=0.3` | `0.179` | ok |
+| 39 | independent, zeta at alpha=0.3 | `0.108` | `independent F2 zeta at alpha=0.3, omega*tau=0.3` | `0.108` | ok |
+| 40 | sensitivity, spread at h=1 um, per cent, upper bound | `0.5\,\%` | `sensitivity.json spread_h1_pct (range/midpoint)` | `<= 0.5` | ok |
+| 41 | sensitivity, spread at h=10 um, per cent, upper bound | `10^{-4}\,\%` | `sensitivity.json spread_h10_pct (range/midpoint)` | `<= 0.0001` | ok |
+| 42 | config table, flexo only at h=10 | `1.76e-4` | `config_table rows[0] k2_flexo` | `1.76e-4` | ok |
+| 43 | config table, flexo only at h=1 | `5.5e-3` | `config_table rows[3] k2_flexo` | `5.5e-3` | ok |
+| 44 | config table, growth with e=0 | `31` | `config_table growth_flexo_only` | `31` | ok |
+| 45 | config table, piezo shift at h=1, per cent | `24` | `config_table min flexo_shift x100` | `24` | ok |
+| 46 | axes, C_xx poled y | `1.6946` | `independent F5 poling y C_xx / 1e11` | `1.6946` | ok |
+| 47 | axes, E_b poled y | `1.3544` | `independent F5 E_beam_pol_y / 1e11` | `1.3544` | ok |
+| 48 | axes, kappa11/kappa33 | `39` | `independent F5 kappa_ratio_11_over_33` | `39` | ok |
+| 49 | pairing, the hybrid x | `6.34` | `independent F5 x_hybrid x1e4` | `6.34` | ok |
+| 50 | pairing, distance from the FEM value | `77` | `independent F5 hybrid_vs_fem_rel x100` | `77` | ok |
+| 51 | pairing, poled x on the long faces | `1.61` | `independent F5 poling x top/bottom x_fem x1e5` | `1.61` | ok |
+| 52 | independent, flexo x, uniform curvature | `3.570415` | `independent F3 x_analytic x1e4` | `3.570415` | ok |

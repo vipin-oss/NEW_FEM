@@ -1,0 +1,120 @@
+%% ===========================================================================
+\section{Boundary conditions}
+\label{sec:bc}
+%% ===========================================================================
+
+The fourth-order character of \eqref{eq:gov1} means that a boundary condition
+on the displacement is not enough: the gradient theory requires a second,
+higher-order condition on each edge, and the electrical condition decides
+which of the two coupling factors the model returns. This section fixes both,
+together with the axes that the rest of the paper refers to.
+
+\subsection{Mechanical and higher-order conditions}
+\label{sec:bc_mech}
+
+On an edge with unit outward normal $\bm{n}$ and tangent $\bm{t}$, stationarity
+of \eqref{eq:energy} gives the classical traction
+\begin{equation}
+  t_i = \sigma_{ij}n_j - \partial_m\!\left(\varsigma_{ijm}\right)n_j
+      + \partial_t\!\left(\varsigma_{ijm}\,t_m n_j\right),
+  \label{eq:traction}
+\end{equation}
+and the higher-order double traction
+\begin{equation}
+  m_i = \varsigma_{ijm}\,n_j n_m ,
+  \label{eq:doubletraction}
+\end{equation}
+which is conjugate to the normal derivative of the displacement. Three
+combinations are used in the results:
+
+\begin{enumerate}
+\item \emph{clamped}: $u_i=0$ and $u_{i,j}n_j=0$ on the edge, so that both the
+  displacement and its normal derivative -- the two quantities carried by the
+  element \eqref{eq:dofs} -- are prescribed;
+\item \emph{simply supported}: $u_i=0$ together with $m_i=0$, which leaves the
+  slope free and removes the double force;
+\item \emph{free}: $t_i=0$ and $m_i=0$, the natural conditions of the weak
+  form, which are satisfied automatically by the discretisation.
+\end{enumerate}
+
+The clamped condition is the one that produces the boundary layer of a
+gradient theory: the gradient energy penalises the curvature that the
+prescribed slope forces at the edge, so the solution relaxes over a length set
+by the window. Section~\ref{sec:windowshape} measures that layer against
+$a/L$, and the results are consistent with the ratio $a/L\le0.2$ that the
+paper adopts as its validity window.
+
+\subsection{Electrical conditions: open and short circuit}
+\label{sec:bc_elec}
+
+Two electrical conditions are used. In the \emph{short-circuit} configuration
+the electrode pair is grounded, the internal potential degrees of freedom are
+condensed, and the mechanical problem has stiffness $K_{sc}$. In the
+\emph{open-circuit} configuration one electrode is grounded and the other
+floats at a single potential $V$ carrying zero net charge, which is again a
+condensation and gives the rank-one update
+\begin{equation}
+  K_{oc} = K_{sc} + \frac{1}{\beta}\, d\,d^{\mathsf T},
+  \label{eq:rankone}
+\end{equation}
+with $d$ the condensed coupling vector and $\beta$ the condensed dielectric
+coefficient. Two coupling measures follow from this pair, and the difference
+between them matters for the interpretation of every coupling number in the
+paper:
+\begin{enumerate}
+\item the \emph{mode-based} factor of the $j$-th mode,
+  $k_j^2=(\omega_{oc,j}^2-\omega_{sc,j}^2)/\omega_{oc,j}^2$, which depends on
+  the eigenvector that the solver happened to return;
+\item the \emph{mode-free quasi-static} factor of the electrode pair,
+  \begin{equation}
+    x = \frac{d^{\mathsf T}K_{uu}^{-1}d}{\beta},\qquad
+    k^2 = \frac{x}{1+x},
+    \label{eq:kstatic}
+  \end{equation}
+  which involves no eigenvector at all.
+\end{enumerate}
+Equation~\eqref{eq:kstatic} is the measure used wherever a quantity has to be
+compared across geometries or across thicknesses, because it cannot select a
+different mode in a different configuration. The extensional coupling factor
+of the \SI{200}{\micro\metre} by \SI{10}{\micro\metre} plate obtained from
+\eqref{eq:kstatic} is $k^2=0.5581$, within $0.2\,\%$ of the constitutive
+prediction $e^{\mathsf T}C^{-1}e/\kappa=0.5608$ derived in
+Sec.~\ref{sec:verification}.
+
+\subsection{Poling axes and Voigt indices}
+\label{sec:axes}
+
+The material is tetragonal $\mathrm{BaTiO_3}$ at room temperature, and the
+crystal is anisotropic, so the two configurations of Fig.~\ref{fig:geometry}
+do not share a modulus: poling along $x$ pairs the strain $\varepsilon_{xx}$
+with $C^p_{xx}=9.5500\times10^{10}$\,Pa, while poling along $y$ pairs the same
+strain with $C^p_{xx}=1.6946\times10^{11}$\,Pa, the two being exchanged by the
+rotation that takes one poling axis into the other. Table~\ref{tab:axes} fixes
+the axes, the Voigt indices and the tensors once, so that every later formula
+can be read against it; a modulus may only be paired with the permittivity of
+its own configuration, and the wrong pairing is examined, and excluded, in
+Sec.~\ref{sec:verification}.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Which axis, which Voigt index, which modulus. (a) The axes of the
+model: Voigt indices are $1=x$, $2=y$, $3=z$ throughout, and $z$ is a basal
+direction of the $4mm$ crystal in both orientations. (b) The two
+configurations used in the paper. They share the geometry and the material
+record but not the poling axis, and a modulus may only be paired with the
+permittivity of its own configuration. Generated by
+\texttt{run\_independent\_checks.py} from
+\texttt{results/independent\_checks.json}.}
+\label{tab:axes}
+\input{table_axes}
+\end{table}
+
+The pairing rule has a quantitative consequence that the paper relies on. The
+extensional configuration is poled along $x$ with electrodes on the short
+faces and the gap $L=\SI{200}{\micro\metre}$; the bending configuration is
+poled along $y$ with electrodes on the long faces and the gap
+$h=\SI{10}{\micro\metre}$. The two gaps differ by a factor of twenty, and so do
+the electric fields produced by the same polarization, which is why the
+extensional coupling is an electromechanical property of the material and the
+bending coupling is a size effect of the geometry.

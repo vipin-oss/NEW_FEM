@@ -36,11 +36,6 @@ CLAIMS = [
      "n/a", "an input of the model, not a measured quantity"),
     ("10", "plate thickness, \\SI{10}{\\micro\\metre}",
      "n/a", "an input of the model"),
-    ("0.4650", "extensional $k^2$ at $\\omega\\tau=0.3$",
-     "nahi hua", "FEM modal coupling (memory\\_variants S1, criterion S1a); "
-     "the closed form of Sec.~\\ref{sec:closedform} covers the free plate "
-     "(0.5608), not this mode"),
-    ("0.3", "$\\omega\\tau$ of the damping study", "n/a", "a chosen operating point"),
     ("0.449", "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
      "nahi hua", "a property of the two condensation choices, read off the "
      "FEM matrices (S1b); the pole solver that converts the pole into "
@@ -50,11 +45,6 @@ CLAIMS = [
      "hua", "I5: at $\\alpha=1$ the pole equation is quadratic and gives "
      "$\\omega\\tau/2=0.15000$ exactly, so the $0.15\\,\\%$ is a comparison "
      "with an exact value"),
-    ("0.15023", "$\\zeta_{\\rm eff}$ from the finite element matrices",
-     "nahi hua", "FEM value (memory\\_variants S1); only its *distance* from "
-     "0.15000 has an independent reference"),
-    ("0.15000", "$\\omega\\tau/2$",
-     "hua", "I5, and exactly the classical Kelvin--Voigt result"),
     ("2", "the factor $1/2$ in $\\omega\\tau/2$",
      "hua", "at $\\alpha=1$ the pole equation is a quadratic whose root is "
      "$s=\\omega_0(-\\zeta+i\\sqrt{1-\\zeta^2})$ with "
@@ -84,19 +74,25 @@ CLAIMS = [
      "nahi hua", "config_table: an FEM run with $e=0$ in the same solver; the "
      "two runs differ by the piezoelectric stiffness of the mode, and neither "
      "has a closed form"),
+    ("1.7", "the flexoelectric coupling at $h=\\SI{10}{\\micro\\metre}$",
+     "nahi hua", "FEM value of the thickness sweep (criterion T3); the h = 10 um "
+     "point is reproducible to 1e-5 per cent (Tab.~\\ref{tab:sens}), but it is "
+     "still a finite element value"),
+    ("4.2", "the flexoelectric coupling at $h=\\SI{1}{\\micro\\metre}$, "
+     "to two significant digits",
+     "nahi hua", "FEM value (criterion T3); the two-significant-digit form is "
+     "forced by the platform spread measured in Tab.~\\ref{tab:sens}, not by "
+     "an independent calculation"),
     ("24", "growth of the flexoelectric $k^2$ over the same range, to the two "
      "significant digits the platform supports",
      "nahi hua", "the same FEM sweep (T3); the flexoelectric operator itself "
      "is verified against the uniform-curvature limit (I6, I7), the growth "
      "factor is not"),
-    ("fifty-seven", "the number of graded criteria",
-     "hua", "run\\_all.py: 57/57 pass, and check\\_paper\\_numbers.py compares "
-     "the word against summary.json"),
 ]
 
 
 def abstract_text():
-    tex = open(TEX).read()
+    tex = manuscript_text()
     m = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", tex, re.S)
     body = m.group(1) if m else ""
     # superscripts are exponents, not quantities
@@ -112,6 +108,21 @@ def tokens(body):
             seen.append(t)
     return seen
 
+
+
+def manuscript_text():
+    """main.tex plus every section file it includes, concatenated."""
+    base = os.path.dirname(TEX)
+    parts = [open(TEX).read()]
+    sec = os.path.join(base, "sec")
+    if os.path.isdir(sec):
+        for fn in sorted(os.listdir(sec)):
+            if fn.endswith(".tex"):
+                parts.append(open(os.path.join(sec, fn)).read())
+    for fn in sorted(os.listdir(base)):
+        if fn.startswith("table_") and fn.endswith(".tex"):
+            parts.append(open(os.path.join(base, fn)).read())
+    return "\n".join(parts)
 
 def main():
     body = abstract_text()

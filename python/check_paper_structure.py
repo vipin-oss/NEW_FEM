@@ -34,8 +34,22 @@ def strip_comments(s):
     return "\n".join(re.sub(r"(?<!\\)%.*", "", ln) for ln in s.splitlines())
 
 
+def manuscript_sources():
+    """main.tex plus every file it includes with \\input, as one string."""
+    out = [open(os.path.join(PAPER, "main.tex")).read()]
+    sec = os.path.join(PAPER, "sec")
+    if os.path.isdir(sec):
+        for fn in sorted(os.listdir(sec)):
+            if fn.endswith(".tex"):
+                out.append(open(os.path.join(sec, fn)).read())
+    for fn in sorted(os.listdir(PAPER)):
+        if fn.startswith("table_") and fn.endswith(".tex"):
+            out.append(open(os.path.join(PAPER, fn)).read())
+    return "\n".join(out)
+
+
 def main():
-    src = open(os.path.join(PAPER, "main.tex")).read()
+    src = manuscript_sources()
     body = strip_comments(src)
     problems = []
 
@@ -72,6 +86,10 @@ def main():
     for m in re.finditer(r"\\cite\{([^}]+)\}", body):
         cites |= {c.strip() for c in m.group(1).split(",")}
     bibs = set(re.findall(r"\\bibitem\{([^}]+)\}", body))
+    for fn in ("references.bib",):
+        fp = os.path.join(PAPER, fn)
+        if os.path.exists(fp):
+            bibs |= set(re.findall(r"^@\w+\{([^,]+),", open(fp).read(), re.M))
     missing_ref = sorted(refs - labels)
     missing_cite = sorted(cites - bibs)
     unused_bib = sorted(bibs - cites)

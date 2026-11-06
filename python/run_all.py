@@ -332,7 +332,7 @@ def main():
                                                       "paper"))
                    if f.endswith(".pdf"))
         chk("P1", "paper figures: vector set written",
-            f"{nfig} PDF", "= 10 (P1-P10)", nfig == 10)
+            f"{nfig} PDF", "= 14 (P1-P14)", nfig == 14)
         chk("P2", "orientation sweep rows / k^2 range",
             f"{len(pol)} rows, {min(r['k2_axial'] for r in pol):.4f}"
             f"-{max(r['k2_axial'] for r in pol):.4f}",

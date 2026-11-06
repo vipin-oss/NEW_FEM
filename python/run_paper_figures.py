@@ -69,15 +69,17 @@ LPLATE, HPLATE = 200e-6, 10e-6
 
 
 def save(fig, name):
-    fig.savefig(os.path.join(FIG, name + ".pdf"))
-    fig.savefig(os.path.join(FIG, name + ".png"), dpi=300)
+    """Write the vector PDF and a PNG preview, and keep the copy that the
+    manuscript includes in Paper_12/figures."""
+    import shutil
+    for d in (FIG, os.path.join(ROOT, "Paper_12", "figures")):
+        os.makedirs(d, exist_ok=True)
+        fig.savefig(os.path.join(d, name + ".pdf"))
+        fig.savefig(os.path.join(d, name + ".png"), dpi=220)
     plt.close(fig)
     print(f"    {name}.pdf")
+    return os.path.join(FIG, name + ".pdf")
 
-
-# ---------------------------------------------------------------------------
-# physics helpers
-# ---------------------------------------------------------------------------
 def static_k2(mats, Mg, pair, L=LPLATE, h=HPLATE, nx=24, ny=2):
     """Mode-free quasi-static coupling, K_uu = SHORT-circuit stiffness."""
     mesh = f6.mesh_rect(nx, ny, L, h)
@@ -667,7 +669,11 @@ def main():
                 "P5": lambda p: fig_p5_rootlocus(),
                 "P6": lambda p: fig_p6_waterfall(),
                 "P9": lambda p: fig_p9_damping_surface(),
-                "P10": lambda p: fig_p10_window()}
+                "P10": lambda p: fig_p10_window(),
+                "P11": lambda p: fig_p11_convergence(),
+                "P12": lambda p: fig_p12_fields(),
+                "P13": lambda p: fig_p13_boundary_layer(),
+                "P14": lambda p: fig_p14_design_space(p)}
         for k in only:
             if k in figs:
                 figs[k](pol)
@@ -692,10 +698,241 @@ def main():
     fig_p8_mac(mtdata)
     fig_p9_damping_surface()
     fig_p10_window()
+    print("  new panels")
+    info.update(main_new_figures(pol))
     with open(os.path.join(ROOT, "results", "paper_figures_data.json"), "w") as fh:
         json.dump({"polar": pol, "notes": info}, fh, indent=1)
     print(f"  done in {time.time() - t0:.0f} s -> results/figures/paper/")
     return 0
+
+
+
+
+# ---------------------------------------------------------------------------
+# P11  convergence of the discretisation
+# ---------------------------------------------------------------------------
+def fig_p11_convergence():
+    """Convergence of the extensional coupling and of the frequency of the
+    mode that carries it, against the mesh."""
+    MAT = mt.Material(**{**mt.batio3("x", "plane_stress").__dict__, "mu": 0.0})
+    Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)
+    meshes = [(12, 2), (24, 2), (36, 2), (48, 4)]
+    rec = []
+    for nx, ny in meshes:
+        mesh = f6.mesh_rect(nx, ny, LPLATE, HPLATE)
+        mdl = f6.assemble(mesh, mt.to_core(MAT), Mg)
+        Ksc, M, idx, _ = f6.reduce(mdl, "short", pair=("left", "right"))
+        _, _, _, (d, beta) = f6.reduce(mdl, "open", pair=("left", "right"))
+        w2, Phi = f6.modes(Ksc, M, 8)
+        s = (Phi.T @ d) ** 2 / beta
+        x = s / w2
+        k2m = x / (1.0 + x)
+        j = int(np.argmax(k2m))
+        f1 = float(np.sqrt(w2[j]) / 2e3 / np.pi)
+        k2 = float(static_k2(MAT, Mg, ("left", "right"), nx=nx, ny=ny))
+        rec.append({"nx": nx, "ny": ny, "ndof": int(mdl.ndof_mech),
+                    "f_coupled_kHz": f1, "k2_static": k2,
+                    "k2_mode": float(k2m[j]), "mode_index": j})
+    nd = np.array([r["ndof"] for r in rec], float)
+    k2 = np.array([r["k2_static"] for r in rec], float)
+    f1 = np.array([r["f_coupled_kHz"] for r in rec], float)
+    ek = np.abs(k2 / k2[-1] - 1.0)
+    ef = np.abs(f1 / f1[-1] - 1.0)
+
+    fig, axs = plt.subplots(1, 2, figsize=(6.2, 2.4), layout="constrained")
+    ax = axs[0]
+    ax.loglog(nd, np.maximum(ek, 1e-9), "o-", color="#0072B2", label=r"$k^2$")
+    ax.loglog(nd, np.maximum(ef, 1e-9), "s-", color="#D55E00", label=r"$f$ of the mode")
+    ax.loglog(nd, np.maximum(ek[0] * (nd[0] / nd) ** 2.0, 1e-9), "k--", lw=0.9,
+              label=r"$\propto N^{-2}$")
+    ax.set_xlabel("degrees of freedom"); ax.set_ylabel("relative error")
+    ax.legend(frameon=False, loc="lower left"); ax.set_title("(a)", loc="left")
+    ax = axs[1]
+    ax.plot(nd, k2, "o-", color="#0072B2", label=r"$k^2$ (mode-free)")
+    ax.axhline(k2[-1], color="k", ls=":", lw=0.8)
+    ax.set_xlabel("degrees of freedom"); ax.set_ylabel(r"$k^2$")
+    ax2 = ax.twinx()
+    ax2.plot(nd, f1, "s-", color="#D55E00", label=r"$f$ (kHz)")
+    ax2.set_ylabel(r"$f$ (kHz)", color="#D55E00")
+    ax2.tick_params(axis="y", colors="#D55E00")
+    ax2.grid(False); ax2.spines["right"].set_visible(True)
+    ax.set_title("(b)", loc="left")
+    save(fig, "P11_convergence")
+    return {"convergence": rec}
+
+
+# ---------------------------------------------------------------------------
+# P12  field panels of the coupled mode (open circuit)
+# ---------------------------------------------------------------------------
+def fig_p12_fields():
+    """u_x, w, phi and |E| of the coupled bending mode, open circuit."""
+    Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)
+    mesh = f6.mesh_rect(48, 4, LPLATE, HPLATE)
+    mat = mt.batio3("y", "plane_stress")
+    mdl = f6.assemble(mesh, mt.to_core(mat), Mg)
+    Ksc, M, idx, _ = f6.reduce(mdl, "short", pair=("bottom", "top"))
+    _, _, _, (d, beta) = f6.reduce(mdl, "open", pair=("bottom", "top"))
+    ws, Phi = f6.modes(Ksc, M, 3)
+    mode = Phi[:, 0].copy()
+    vpk = np.abs(mode[[np.searchsorted(idx, mdl.mech_dof[n][4])
+                       for n in range(mesh.nnode)]]).max()
+    mode *= 10.0e-9 / vpk
+    V = float(d @ mode) / beta
+    allp = np.arange(mdl.ndof_phi)
+    bot, top = mdl.electrodes["bottom"], mdl.electrodes["top"]
+    inter = np.setdiff1d(np.setdiff1d(allp, bot), top)
+    u_full = np.zeros(mdl.ndof_mech)
+    u_full[idx] = mode
+    b = mdl.B.T @ u_full
+    Cin = mdl.Cphi[np.ix_(inter, inter)]
+    Cif = mdl.Cphi[np.ix_(inter, np.r_[bot, top])]
+    phi_f = np.r_[np.zeros(len(bot)), np.full(len(top), V)]
+    phi = np.zeros(mdl.ndof_phi)
+    phi[inter] = np.linalg.solve(Cin, b[inter] - Cif @ phi_f)
+    phi[top] = V
+
+    nn = mesh.nnode
+    phin = 1e3 * np.array([phi[int(mdl.phi_dof[n])] if mdl.phi_dof[n] >= 0
+                           else 0.0 for n in range(nn)])
+    ux = np.array([u_full[mdl.mech_dof[n][0]] for n in range(nn)])
+    w = np.array([u_full[mdl.mech_dof[n][4]] for n in range(nn)])
+    ph = phin.reshape(5, 49)
+    Ey, Ex = np.gradient(ph, axis=0), np.gradient(ph, axis=1)
+    Emag = np.sqrt(Ex ** 2 + Ey ** 2)
+
+    X = (mesh.nodes[:, 0] * 1e6).reshape(5, 49)
+    Y = (mesh.nodes[:, 1] * 1e6).reshape(5, 49)
+    uxn = ux.reshape(5, 49) / np.abs(ux).max()
+    wn = w.reshape(5, 49) / np.abs(w).max()
+    fields = [(uxn, "(a)", r"$u_x/|u_x|_{\max}$"),
+              (wn, "(b)", r"$w/|w|_{\max}$"),
+              (ph, "(c)", r"$\phi$ (mV)"),
+              (Emag, "(d)", r"$|\nabla\phi|$ (mV/$\mu$m)")]
+    fig, axs = plt.subplots(2, 2, figsize=(6.4, 3.2), layout="constrained")
+    for ax, (Z, tag, lab) in zip(axs.ravel(), fields):
+        m = ax.pcolormesh(X, Y, Z, shading="gouraud", cmap="viridis")
+        cb = fig.colorbar(m, ax=ax, pad=0.02, fraction=0.046)
+        cb.set_label(lab, fontsize=7)
+        cb.ax.tick_params(labelsize=6)
+        ax.set_xlabel(r"$x$ ($\mu$m)"); ax.set_ylabel(r"$y$ ($\mu$m)")
+        ax.set_title(tag, loc="left")
+        ax.set_aspect("auto")
+        ax.grid(False)
+    save(fig, "P12_fields")
+    return {"V_open_V": V, "u_peak_nm": 10.0}
+
+
+# ---------------------------------------------------------------------------
+# P13  boundary layer at the clamped edge versus a/L
+# ---------------------------------------------------------------------------
+def _static_w(Mg, nx=48, ny=4, L=LPLATE, h=HPLATE):
+    mesh = f6.mesh_rect(nx, ny, L, h)
+    mat = mt.batio3("y", "plane_stress")
+    mdl = f6.assemble(mesh, mt.to_core(mat), Mg)
+    Ksc, _, idx, _ = f6.reduce(mdl, "short", pair=("bottom", "top"))
+    n = Ksc.shape[0]
+    fixed = [np.searchsorted(idx, mdl.mech_dof[node][k])
+             for node in range(mesh.nnode) if abs(mesh.nodes[node, 0]) < 1e-15
+             for k in range(8)]
+    load = [np.searchsorted(idx, mdl.mech_dof[node][4])
+            for node in range(mesh.nnode) if abs(mesh.nodes[node, 0] - L) < 1e-12]
+    free = np.setdiff1d(np.arange(n), np.array(fixed, int))
+    f = np.zeros(n)
+    f[np.array(load, int)] = 1.0 / len(load)
+    u = np.zeros(n)
+    u[free] = np.linalg.solve(Ksc[np.ix_(free, free)], f[free])
+    w = np.array([u[np.searchsorted(idx, mdl.mech_dof[node][4])]
+                  for node in range(mesh.nnode)])
+    x = mesh.nodes[:, 0]
+    return x, w
+
+
+def fig_p13_boundary_layer():
+    """The clamped-edge boundary layer: the gradient solution against the
+    classical one of the same geometry and load."""
+    x0, w_el = _static_w(np.zeros((2, 2)))          # Mg = 0: classical
+    grid = x0.reshape(5, 49)[2]
+    w_el = w_el.reshape(5, 49)[2]
+    recs = []
+    for ratio in (0.05, 0.1, 0.2):
+        a1 = ratio * LPLATE
+        x, w = _static_w(f6.second_moment("cuboid", a1, 1e-6, 0.0))
+        pw = w.reshape(5, 49)[2]
+        recs.append((ratio, pw))
+        # decay length: where the difference falls to 1/e of its edge value
+    fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.5))
+    ax = axs[0]
+    for k, (ratio, pw) in enumerate(recs):
+        ax.plot(grid / LPLATE, pw / pw[-1], "-",
+                color=["#0072B2", "#D55E00", "#009E73"][k],
+                label=rf"$a/L={ratio}$")
+    ax.set_xlabel(r"$x/L$"); ax.set_ylabel(r"$w(x)/w(L)$")
+    ax.legend(frameon=False, fontsize=6.5); ax.set_title("(a)", loc="left")
+    ax = axs[1]
+    lens = []
+    for k, (ratio, pw) in enumerate(recs):
+        d = np.abs(pw - w_el) / abs(w_el[-1])
+        ax.semilogy(grid / LPLATE, np.maximum(d, 1e-12), "-",
+                    color=["#0072B2", "#D55E00", "#009E73"][k],
+                    label=rf"$a/L={ratio}$")
+        i0 = int(np.argmax(d))
+        target = d[i0] / np.e
+        idxs = np.where(d[i0:] < target)[0]
+        lens.append(float(grid[idxs[0]]) if len(idxs) else np.nan)
+    ax.set_xlabel(r"$x/L$"); ax.set_ylabel(r"$|w-w_{\rm class}|/w_{\rm class}(L)$")
+    ax.set_xlim(0, 0.3); ax.legend(frameon=False, fontsize=6.5)
+    ax.set_title("(b)", loc="left")
+    save(fig, "P13_boundary_layer")
+    return {"ratios": [r[0] for r in recs],
+            "decay_length_um": [l * 1e6 for l in lens]}
+
+
+# ---------------------------------------------------------------------------
+# P14  design-space map over window angle and window aspect ratio
+# ---------------------------------------------------------------------------
+def fig_p14_design_space(pol):
+    import numpy as np
+    th = np.array([r["theta_deg"] for r in pol], float)
+    ar = np.array([r["AR"] for r in pol], float)
+    k2 = np.array([r["k2_axial"] for r in pol], float)
+    f1 = np.array([r["f_axial_kHz"] for r in pol], float)
+    cub = np.array([r["shape"] == "cuboid" for r in pol])
+    TH, AR = np.meshgrid(np.unique(th), np.unique(ar))
+    def grid(v):
+        out = np.full(TH.shape, np.nan)
+        for i, a in enumerate(np.unique(ar)):
+            sel = cub & (ar == a)
+            o = np.argsort(th[sel])
+            out[i, :] = v[sel][o]
+        return out
+    K2, F1 = grid(k2), grid(f1)
+    rel = K2 / K2[:, :1] - 1.0
+    M11 = np.array([r["Mg_xx"] for r in pol])
+    M22 = np.array([r["Mg_yy"] for r in pol])
+    aniso = grid((M11 - M22) / (M11 + M22))
+    fig, axs = plt.subplots(2, 2, figsize=(6.6, 4.2), layout="constrained")
+    for ax, (Z, tag, lab, cm) in zip(axs.ravel(), [
+            (F1, "(a)", r"$f_1$ (kHz)", "viridis"),
+            (K2, "(b)", r"$k^2$", "viridis"),
+            (100 * rel, "(c)", r"$\Delta k^2/k^2(\theta{=}0)$ (%)", "cividis"),
+            (aniso, "(d)", r"$(M_{11}-M_{22})/(M_{11}+M_{22})$", "cividis")]):
+        m = ax.pcolormesh(TH, AR, Z, shading="gouraud", cmap=cm)
+        cb = fig.colorbar(m, ax=ax, pad=0.02, fraction=0.046)
+        cb.set_label(lab, fontsize=7); cb.ax.tick_params(labelsize=6)
+        ax.set_xlabel(r"window angle $\theta$ (deg)")
+        ax.set_ylabel("aspect ratio")
+        ax.set_title(tag, loc="left"); ax.grid(False)
+    save(fig, "P14_design_space")
+    return {"n": int(len(pol))}
+
+
+def main_new_figures(pol):
+    out = {}
+    out["P11"] = fig_p11_convergence()
+    out["P12"] = fig_p12_fields()
+    out["P13"] = fig_p13_boundary_layer()
+    out["P14"] = fig_p14_design_space(pol)
+    return out
 
 
 if __name__ == "__main__":

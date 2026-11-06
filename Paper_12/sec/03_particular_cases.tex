@@ -1,0 +1,86 @@
+%% ===========================================================================
+\section{Particular cases}
+\label{sec:limits}
+%% ===========================================================================
+
+The general model of Sec.~\ref{sec:formulation} contains four switches, and
+each of them has to reproduce a known theory when it is turned off. This
+section states those reductions; the numerical results that follow are read
+against them, and Sec.~\ref{sec:verification} checks two of them as exact
+identities rather than as trends.
+
+\subsection{Classical elasticity: $M_{mn}\to0$}
+\label{sec:limit_classical}
+
+If the averaging window shrinks to a point, $M_{mn}\to0$, the gradient energy
+in \eqref{eq:energy} vanishes, the higher-order stress \eqref{eq:tau} vanishes
+with it, and the double-traction condition of Sec.~\ref{sec:bc} drops out of
+the formulation. What remains is the classical piezoelectric plate: the weak
+form keeps only the elastic, piezoelectric and dielectric terms, the
+displacement field needs $C^0$ continuity only, and the coupling factor is the
+purely piezoelectric one. The window size is therefore the single parameter
+that switches the model from a local electromechanical theory to a
+strain-gradient one, and it does so without changing any other term.
+
+\subsection{Purely piezoelectric response: $\mu_{kijl}=0$}
+\label{sec:limit_piezo}
+
+With the flexoelectric tensor set to zero the electric displacement
+\eqref{eq:D} loses its strain-gradient contribution and the model reduces to
+the piezoelectric plate of~\cite{fem1}. On the extensional configuration of
+Fig.~\ref{fig:geometry} the coupling factor is $k^2=0.5581$ and is unchanged by
+the switch, because that configuration collects the piezoelectric charge only.
+On the bending configuration the piezoelectric charge of the mode integrates
+to zero over a face electrode, and the piezoelectric-only coupling factor of
+that mode falls to $1.0\times10^{-10}$, which is the round-off floor of the
+secular equation rather than a physical value. The comparison of the two
+configurations therefore cannot be read as a competition between the two
+effects; it is a statement about which electrode pair can collect which
+polarization.
+
+\subsection{Purely flexoelectric response: $e_{kij}=0$}
+\label{sec:limit_flexo}
+
+Removing the piezoelectric coupling instead leaves the flexoelectric bending
+response of the same plate. Over the thickness range
+$\SI{10}{\micro\metre}\to\SI{1}{\micro\metre}$ the flexoelectric coupling of
+that configuration then rises from $1.76\times10^{-4}$ to
+$5.5\times10^{-3}$, a factor $31$. With the piezoelectric terms present the
+same sweep gives a rise from $1.74\times10^{-4}$ to $4.2\times10^{-3}$, a
+factor $24$. The piezoelectric terms are electrically silent on that device,
+but they are not mechanically silent: they change the elastic stiffness of the
+mode that carries the gradient, and the difference between $24$ and $31$ is
+the measure of that change. Both are reported, and the paper quotes the factor
+$24$ because it is the response of the real crystal.
+
+\subsection{Classical Kelvin--Voigt and undamped limits: $\alpha=1$ and
+$\tau\to0$}
+\label{sec:limit_memory}
+
+For $\alpha=1$ the fractional element \eqref{eq:kvfreq} becomes the classical
+Kelvin--Voigt element, whose exact damping ratio is $\omega\tau/2$. The
+implementation reproduces it: at $\omega\tau=0.3$ the ring-down of
+Sec.~\ref{sec:memorystudy} returns $\zeta_{\rm eff}=0.15023$ against the exact
+$0.15000$, a difference of $0.15\,\%$. For $\tau\to0$ the memory term of
+\eqref{eq:kv} vanishes, the time-discrete problem \eqref{eq:step} becomes the
+undamped one, and the eigenvalues of the pencil are those of the short-circuit
+matrix. Between these two limits the model is genuinely fractional: the
+damping ratio is no longer proportional to $\omega\tau$, and the memory matrix
+that the derivative multiplies changes $\zeta_{\rm eff}$ by a factor $0.449$
+at $\alpha=1$ (Sec.~\ref{sec:memorystudy}).
+
+\subsection{Recovery of the one-scale gradient theory}
+\label{sec:limit_fem1}
+
+Finally, the models of the authors' earlier work are recovered as special
+choices of $M$ and of the coupling tensors. Setting
+$M_{mn}=\tfrac1{20}L_{mn}$ with a constant second-order tensor reproduces the
+tensorial strain-gradient energy of~\cite{fem1}, for which the cuboid, ellipse
+and ellipsoid windows give the scalar coefficients that
+Appendix~\ref{app:Mcoeff} lists; setting $M_{mn}=\ell^2\delta_{mn}$ reduces the
+same expression to the isotropic Aifantis form. Keeping both coupling tensors
+and dropping the memory reproduces the coupled continuum of~\cite{fem4}, and a
+plane-stress reduction of that continuum is the plate model of~\cite{fem5}.
+The present work differs from all three in carrying the fractional memory on
+the reduced modal coordinates and in treating the window's second moment,
+rather than a scalar length, as the object that the discretisation sees.

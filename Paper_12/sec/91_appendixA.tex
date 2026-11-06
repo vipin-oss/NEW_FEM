@@ -1,0 +1,77 @@
+%% ===========================================================================
+\section{Coefficients of the rectangular, elliptical and ellipsoidal averaging
+windows}
+\label{app:Mcoeff}
+%% ===========================================================================
+
+For a uniform kernel over a window $\mathcal{W}$ centred at the origin, the
+normalised second moment is
+\begin{equation}
+  M_{mn} = \frac{1}{|\mathcal{W}|}\int_{\mathcal W} s_m s_n \,\mathrm{d}\bm{s},
+  \label{eq:appM}
+\end{equation}
+which is diagonal for a window whose axes are aligned with the coordinate axes
+and which transforms as $M\mapsto RMR^{\mathsf T}$ under a rotation $R$ of the
+window. The three closed forms used in the paper follow from
+\eqref{eq:appM} by elementary integration.
+
+\paragraph{Cuboid.} For $\mathcal W=[-a_1,a_1]\times[-a_2,a_2]$ the area is
+$4a_1a_2$ and
+\begin{equation}
+  M_{11} = \frac{1}{4a_1a_2}\int_{-a_1}^{a_1}\!\!\int_{-a_2}^{a_2}
+           s_1^{2}\,\mathrm{d}s_1\,\mathrm{d}s_2
+         = \frac{1}{4a_1a_2}\cdot 2a_2\cdot\frac{2a_1^{3}}{3}
+         = \frac{a_1^{2}}{3},
+  \label{eq:Mcub}
+\end{equation}
+and identically $M_{22}=a_2^{2}/3$; the off-diagonal integral vanishes by the
+oddness of $s_1s_2$. A three-dimensional cuboid of half-widths $a_i$ gives the
+same coefficient along each axis.
+
+\paragraph{Ellipse.} For $\mathcal W=\{s: (s_1/a_1)^{2}+(s_2/a_2)^{2}\le1\}$ the
+area is $\pi a_1a_2$ and the polar second moment of the semi-axis is
+$\int_{\mathcal W}s_1^{2}\,\mathrm{d}A = \pi a_1^{3}a_2/4$, so that
+\begin{equation}
+  M_{11} = \frac{\pi a_1^{3}a_2/4}{\pi a_1a_2} = \frac{a_1^{2}}{4},
+  \qquad M_{22}=\frac{a_2^{2}}{4}.
+  \label{eq:Mell}
+\end{equation}
+
+\paragraph{Ellipsoid.} For the three-dimensional ellipsoid of semi-axes $a_i$
+the volume is $4\pi a_1a_2a_3/3$ and
+$\int_{\mathcal W}s_1^{2}\,\mathrm{d}V = 4\pi a_1^{3}a_2a_3/15$, hence
+\begin{equation}
+  M_{11} = \frac{a_1^{2}}{5},\qquad
+  M_{22}=\frac{a_2^{2}}{5},\qquad
+  M_{33}=\frac{a_3^{2}}{5}.
+  \label{eq:Mellip}
+\end{equation}
+
+\paragraph{Equal-second-moment windows.} Equations~\eqref{eq:Mcub}--\eqref{eq:Mellip}
+are the reason the shape of the window drops out of the model. A cuboid of
+half-width $a$ and an ellipsoid of semi-axis $l$ carry the same second moment
+when $a^{2}/3=l^{2}/5$, that is when $a=l\sqrt{3/5}$; for an ellipse the same
+condition reads $a=l\sqrt{3/4}$. Two windows related in this way produce the
+same gradient stiffness $K_g$ and therefore the same solution, which is what
+Fig.~\ref{fig:domain} and the polar panel of Fig.~\ref{fig:petals} show
+numerically, and what the ratio $5/3$ between the coefficients of an equal
+half-width pair expresses analytically.
+
+\paragraph{Rotated window.} A rectangular window whose long axis makes an angle
+$\theta$ with $x$ has
+\begin{equation}
+  M_{11}(\theta) = M_{11}\cos^{2}\theta + M_{22}\sin^{2}\theta,\qquad
+  M_{22}(\theta) = M_{11}\sin^{2}\theta + M_{22}\cos^{2}\theta,\qquad
+  M_{12}(\theta) = \tfrac12\left(M_{22}-M_{11}\right)\sin2\theta,
+  \label{eq:Mrot}
+\end{equation}
+so that the off-diagonal coupling is largest at $\theta=45^\circ$ and vanishes
+when the window is aligned with the axes. This is the tensor that the
+orientation sweep of Sec.~\ref{sec:orientation} rotates.
+
+\paragraph{Reduction to a scalar length.} Setting
+$M_{mn}=\tfrac1{20}L_{mn}$ with a constant tensor recovers the gradient energy
+of the one-scale theory used in the authors' earlier
+work~\cite{fem1}, and setting $M_{mn}=\ell^{2}\delta_{mn}$ reduces the same
+expression to the isotropic Aifantis form, for which the boundary-layer length
+of a clamped bar is $\sqrt{\ell^{2}/10}$.

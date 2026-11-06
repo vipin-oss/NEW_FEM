@@ -37,8 +37,23 @@ def J(name):
         return json.load(fh)
 
 
+
+def manuscript_text():
+    """main.tex plus every section file it includes, concatenated."""
+    base = os.path.dirname(TEX)
+    parts = [open(TEX).read()]
+    sec = os.path.join(base, "sec")
+    if os.path.isdir(sec):
+        for fn in sorted(os.listdir(sec)):
+            if fn.endswith(".tex"):
+                parts.append(open(os.path.join(sec, fn)).read())
+    for fn in sorted(os.listdir(base)):
+        if fn.startswith("table_") and fn.endswith(".tex"):
+            parts.append(open(os.path.join(base, fn)).read())
+    return "\n".join(parts)
+
 def main():
-    tex = open(TEX).read()
+    tex = manuscript_text()
     rows = []          # (literal, what, source, why)
 
     # ---- 1. everything the abstract audit already calls "nahi hua"

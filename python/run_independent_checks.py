@@ -488,8 +488,8 @@ def write_axes(F1, F3, F5):
          "@@BS@@multicolumn{4}{@{}l}{@@BS@@emph{(b) the two configurations; "
          "they differ in the poling axis, and therefore in which entry of "
          "$@@BS@@bm C_p$ multiplies $@@BS@@varepsilon_{xx}$}}@@ROW@@",
-         "& & piezo $k^2$ (@@BS@@ref{sec:closedform}) & flexo check "
-         "(@@BS@@ref{sec:independent})@@ROW@@",
+         "& & piezo $k^2$ (@@BS@@ref{sec:verification}) & flexo check "
+         "(@@BS@@ref{app:verification})@@ROW@@",
          "@@BS@@midrule",
          "poling axis & & $x$ & $y$@@ROW@@",
          "electrodes & & $x=0$, $x=L$ (short faces) & $y=0$, $y=h$ (long "

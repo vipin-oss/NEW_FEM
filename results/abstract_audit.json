@@ -13,18 +13,6 @@
    "route": "an input of the model"
   },
   {
-   "literal": "0.4650",
-   "what": "extensional $k^2$ at $\\omega\\tau=0.3$",
-   "verdict": "nahi hua",
-   "route": "FEM modal coupling (memory\\_variants S1, criterion S1a); the closed form of Sec.~\\ref{sec:closedform} covers the free plate (0.5608), not this mode"
-  },
-  {
-   "literal": "0.3",
-   "what": "$\\omega\\tau$ of the damping study",
-   "verdict": "n/a",
-   "route": "a chosen operating point"
-  },
-  {
    "literal": "0.449",
    "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
    "verdict": "nahi hua",
@@ -41,18 +29,6 @@
    "what": "distance of $\\zeta_{\\rm eff}$ from the classical limit",
    "verdict": "hua",
    "route": "I5: at $\\alpha=1$ the pole equation is quadratic and gives $\\omega\\tau/2=0.15000$ exactly, so the $0.15\\,\\%$ is a comparison with an exact value"
-  },
-  {
-   "literal": "0.15023",
-   "what": "$\\zeta_{\\rm eff}$ from the finite element matrices",
-   "verdict": "nahi hua",
-   "route": "FEM value (memory\\_variants S1); only its *distance* from 0.15000 has an independent reference"
-  },
-  {
-   "literal": "0.15000",
-   "what": "$\\omega\\tau/2$",
-   "verdict": "hua",
-   "route": "I5, and exactly the classical Kelvin--Voigt result"
   },
   {
    "literal": "2",
@@ -115,42 +91,43 @@
    "route": "config_table: an FEM run with $e=0$ in the same solver; the two runs differ by the piezoelectric stiffness of the mode, and neither has a closed form"
   },
   {
+   "literal": "1.7",
+   "what": "the flexoelectric coupling at $h=\\SI{10}{\\micro\\metre}$",
+   "verdict": "nahi hua",
+   "route": "FEM value of the thickness sweep (criterion T3); the h = 10 um point is reproducible to 1e-5 per cent (Tab.~\\ref{tab:sens}), but it is still a finite element value"
+  },
+  {
+   "literal": "4.2",
+   "what": "the flexoelectric coupling at $h=\\SI{1}{\\micro\\metre}$, to two significant digits",
+   "verdict": "nahi hua",
+   "route": "FEM value (criterion T3); the two-significant-digit form is forced by the platform spread measured in Tab.~\\ref{tab:sens}, not by an independent calculation"
+  },
+  {
    "literal": "24",
    "what": "growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports",
    "verdict": "nahi hua",
    "route": "the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not"
-  },
-  {
-   "literal": "fifty-seven",
-   "what": "the number of graded criteria",
-   "verdict": "hua",
-   "route": "run\\_all.py: 57/57 pass, and check\\_paper\\_numbers.py compares the word against summary.json"
   }
  ],
- "n_hua": 10,
+ "n_hua": 8,
  "n_nahi_hua": 7,
- "n_input": 4,
+ "n_input": 3,
  "tokens": [
   "1",
-  "0.4650",
-  "0.3",
-  "0.449",
-  "0.15",
-  "0.15023",
-  "2",
-  "0.15000",
-  "3",
-  "4",
-  "5",
-  "19",
   "200",
   "10",
+  "3",
   "0.5581",
   "0.2",
   "0.5608",
   "0.09",
+  "1.7",
+  "4.2",
   "24",
-  "31"
+  "31",
+  "19",
+  "0.15",
+  "0.449"
  ],
  "missing": [],
  "stale": []

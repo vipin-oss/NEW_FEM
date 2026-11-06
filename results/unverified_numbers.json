@@ -2,22 +2,10 @@
  "n": 31,
  "rows": [
   {
-   "literal": "0.4650",
-   "what": "extensional $k^2$ at $\\omega\\tau=0.3$",
-   "source": "abstract_audit.json",
-   "why": "FEM modal coupling (memory\\_variants S1, criterion S1a); the closed form of Sec.~\\ref{sec:closedform} covers the free plate (0.5608), not this mode"
-  },
-  {
    "literal": "0.449",
    "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
    "source": "abstract_audit.json",
    "why": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
-  },
-  {
-   "literal": "0.15023",
-   "what": "$\\zeta_{\\rm eff}$ from the finite element matrices",
-   "source": "abstract_audit.json",
-   "why": "FEM value (memory\\_variants S1); only its *distance* from 0.15000 has an independent reference"
   },
   {
    "literal": "19",
@@ -36,6 +24,18 @@
    "what": "the same growth with the piezoelectric terms switched off",
    "source": "abstract_audit.json",
    "why": "config_table: an FEM run with $e=0$ in the same solver; the two runs differ by the piezoelectric stiffness of the mode, and neither has a closed form"
+  },
+  {
+   "literal": "1.7",
+   "what": "the flexoelectric coupling at $h=\\SI{10}{\\micro\\metre}$",
+   "source": "abstract_audit.json",
+   "why": "FEM value of the thickness sweep (criterion T3); the h = 10 um point is reproducible to 1e-5 per cent (Tab.~\\ref{tab:sens}), but it is still a finite element value"
+  },
+  {
+   "literal": "4.2",
+   "what": "the flexoelectric coupling at $h=\\SI{1}{\\micro\\metre}$, to two significant digits",
+   "source": "abstract_audit.json",
+   "why": "FEM value (criterion T3); the two-significant-digit form is forced by the platform spread measured in Tab.~\\ref{tab:sens}, not by an independent calculation"
   },
   {
    "literal": "24",

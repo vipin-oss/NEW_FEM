@@ -102,8 +102,23 @@ def row(where, literal, source, value, fmt, rel_tol=1e-6, upper=None):
             "ok": ok}
 
 
+
+def manuscript_text():
+    """main.tex plus every section file it includes, concatenated."""
+    base = os.path.dirname(TEX)
+    parts = [open(TEX).read()]
+    sec = os.path.join(base, "sec")
+    if os.path.isdir(sec):
+        for fn in sorted(os.listdir(sec)):
+            if fn.endswith(".tex"):
+                parts.append(open(os.path.join(sec, fn)).read())
+    for fn in sorted(os.listdir(base)):
+        if fn.startswith("table_") and fn.endswith(".tex"):
+            parts.append(open(os.path.join(base, fn)).read())
+    return "\n".join(parts)
+
 def main():
-    tex = open(TEX).read()
+    tex = manuscript_text()
     R = []
     R.append(row("abstract, memory coupling", "0.4650",
                  "memory_variants.json k2", g("memory_variants.json.k2"),
@@ -138,12 +153,14 @@ def main():
                  g("demo.json.flexo_thickness.3.k2_flexo")
                  / g("demo.json.flexo_thickness.0.k2_flexo"), "{:.0f}",
                  rel_tol=5e-3))
-    R.append(row("coupling check, closed form", "0.56079",
+    R.append(row("coupling check, closed form", "0.5608",
                  "coupling_check.json closed_form.k2_2d_closed",
-                 g("coupling_check.json.closed_form.k2_2d_closed"), "{:.5f}"))
-    R.append(row("coupling check, free 48x4", "0.56079",
+                 g("coupling_check.json.closed_form.k2_2d_closed"), "{:.5f}",
+                 rel_tol=1e-3))
+    R.append(row("coupling check, free 48x4", "0.5608",
                  "coupling_check.json fem.plane_stress.free_48x4",
-                 g("coupling_check.json.fem.plane_stress.free_48x4"), "{:.5f}"))
+                 g("coupling_check.json.fem.plane_stress.free_48x4"), "{:.5f}",
+                 rel_tol=1e-3))
     R.append(row("coupling check, 2-D vs 3-D gap", "2.8",
                  "coupling_check.json rel_gap_2d_vs_3d x100",
                  100 * g("coupling_check.json.rel_gap_2d_vs_3d"), "{:.1f}"))
@@ -223,19 +240,10 @@ def main():
              51: "fifty-one", 54: "fifty-four",
              57: "fifty-seven"}
     nt = g("summary.json.n_total")
-    R.append(row("criteria count", words.get(int(nt), str(nt)),
-                 f"summary.json n_total = {int(nt)}", int(nt),
-                 "{:d}").__class__.__call__("criteria count",
-                                            words.get(int(nt), str(nt)),
-                                            f"summary.json n_total = {int(nt)}",
-                                            words.get(int(nt), str(nt)),
-                                            "{}")
-             if False else {"where": "criteria count",
-                            "tex": words.get(int(nt), str(nt)),
-                            "json": f"summary.json n_total = {int(nt)}",
-                            "value": int(nt),
-                            "formatted": words.get(int(nt), str(nt)),
-                            "ok": True})
+    R.append(row("__skip__", "__skip__", "skip", 0, "{}").__class__ and {"where": "skip", "tex": "", "json": "", "value": 0, "formatted": "", "rel": None, "rel_tol": None, "ok": True}) if False else None
+    # the graded-criteria count is no longer quoted in the manuscript: the
+    # paper describes the verification, not the harness that produced it
+    _ = g("summary.json.n_total")
 
     # ---- the independent routes (run_independent_checks.py)
     I = "independent_checks.json"
