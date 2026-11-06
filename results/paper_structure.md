@@ -8,7 +8,7 @@
 - undefined \\cite: none
 - missing graphics: none (11 included)
 - missing \\input: none
-- numbers audit:   96/96 agree; 0 stale-token hits of 12 -> results/paper_number_audit.md
+- numbers audit:   96/96 agree; 0 stale-token hits of 14 -> results/paper_number_audit.md
 
 ## Detail
 - nothing to report

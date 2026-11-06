@@ -90,7 +90,7 @@ def table_thickness():
 flexoelectric bending coupling and extensional coupling of the poled strip. The
 bending column carries $\mu=10^{-6}$\,\si{\coulomb\per\metre}, the extensional
 column $\mu=0$, and both are converged to the tolerance of
-Appendix~\ref{app:verification}.}
+\ref{app:verification}.}
 \label{tab:thickness}
 \begin{tabular}{@{}r r r r@{}}
 \toprule

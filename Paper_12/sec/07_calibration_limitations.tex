@@ -134,8 +134,7 @@ than a numerical tolerance.
 \item \emph{Small coupling at the operator level.} \eqref{eq:kstatic} is used
   with the uncoupled denominator only where $k^{2}\ll1$; here
   $k^{2}=0.5581$, which is \emph{not} small, so the coupled denominator is used
-  and the uncoupled form appears only in the comparison with the closed form,
-  where it is stated.
+  and the uncoupled form appears only in the comparison with the closed form.
 \item \emph{Small window.} The truncation \eqref{eq:Mdef} is written for a
   window small against the length over which the strain gradient varies, and
   for the strip of Table~\ref{tab:params} we take $a/L\le0.2$. That is an
@@ -158,18 +157,17 @@ than a numerical tolerance.
 The formulation is two-dimensional with a plane-stress reduction, which is a
 modelling choice: plane strain would change the extensional coupling to
 $0.5132$, and the three-dimensional solution differs from both, so the
-thin-strip results of Sec.~\ref{sec:thickness} are two-dimensional results. The
-two inputs that are not material constants of this crystal enter in one way
-only, stated once in Sec.~\ref{sec:material}: the density rescales every
-frequency by a common factor, so the kilohertz numbers of
+thin-strip results of Sec.~\ref{sec:thickness} are two-dimensional results. Of
+the inputs, two are not material constants of this crystal. The density
+rescales every frequency by a common factor, so the kilohertz numbers of
 Secs.~\ref{sec:orientation} and~\ref{sec:application} move while the ratios
-stand, and the flexoelectric coefficient scales every flexoelectric coupling as
+stand. The flexoelectric coefficient scales every flexoelectric coupling as
 $\mu^{2}$, so the growth factor, the saturation and the comparison with the
 piezoelectric response are unaffected while the absolute coupling is not.
 
-The two-significant-digit statement of Sec.~\ref{sec:thickness} is a limitation
-as much as a result: the third digit there is not a property of the model, and
-the same holds, less visibly, for any difference of nearly equal eigenvalues.
+The precision of Sec.~\ref{sec:thickness} is a limitation as much as a result:
+the third digit there is not a property of the model, and the same holds, less
+visibly, for any difference of nearly equal eigenvalues.
 The verification of Secs.~\ref{sec:verification}
 and~\ref{app:verification} shows that the implementation solves the stated
 equations; it does not show that they describe a particular material, which

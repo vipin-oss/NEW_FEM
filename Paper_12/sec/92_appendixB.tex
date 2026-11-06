@@ -7,22 +7,21 @@
 %% ===========================================================================
 
 This appendix collects the benchmarks behind Sec.~\ref{sec:verification} in
-full. Two tables are given: the benchmark, identity and independent-route
-record, and the convergence study. The numerical precision of the thinnest
-point, which is not a tabulated quantity, is stated in the text that follows
-them.
+full: the benchmark, identity and independent-route record, and the
+convergence study. The numerical precision of the thinnest point follows the
+two tables.
 
 Table~\ref{tab:verification} lists the benchmark problems, the exact
 identities and the tolerance each was required to meet, together with the value
 obtained. The identities are the ones that a re-implementation can reproduce
 without any of the data of this paper: the patch-test energy of a constant
-strain field, the second-moment coefficients of Appendix~\ref{app:Mcoeff}
+strain field, the second-moment coefficients of \ref{app:Mcoeff}
 recovered from a numerical integration of the window, the closed-form coupling
 factor of a uniaxial crystal, and the analytical damping ratio of the classical
 Kelvin--Voigt element. The rows marked as independent routes are values
 recomputed along a path that does not use the assembled matrices at all --
 Euler--Bernoulli theory for the bar frequency, the constitutive tensors for the
-coupling factor, the closed forms of Appendix~\ref{app:Mcoeff} for the window
+coupling factor, the closed forms of \ref{app:Mcoeff} for the window
 coefficients, and the analytical limit for the damping ratio.
 
 \begin{table}[!htbp]
@@ -82,8 +81,8 @@ spread is at most $10^{-4}\,\%$. Every path keeps the whole spectrum in the
 secular sum: truncating it to twelve modes moves $k^{2}$ by more than
 $80\,\%$, which is a different approximation and not a different round-off. A
 run of the same suite on a later numeric stack returns
-$4.18\times10^{-3}$ ($+0.2\,\%$), consistent with this statement. The
-two-significant-digit form used in the text and in the abstract is set by this
-spread.
+$4.18\times10^{-3}$ ($+0.2\,\%$), consistent with this statement. This
+spread fixes the two significant digits quoted in the text and in the
+abstract.
 
 \FloatBarrier

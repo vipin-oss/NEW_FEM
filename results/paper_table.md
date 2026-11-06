@@ -1,4 +1,4 @@
-# Verification table as it appears in the manuscript
+# The full criterion table (archive copy)
 
 62/62 checks pass.
 
@@ -52,7 +52,7 @@
 | h = 1 um flexo k^2 over four equivalent solver paths and 4 numeric stacks | spread 0.182 %, k^2 4.1705e-03..4.1781e-03 | < 0.5 % (quoted to 2 s.f.) | `results/?` |
 | the same spread at h = 10 um | 1.49e-05 % | < 1e-3 % | `results/?` |
 | truncating the secular sum to 12 modes is not an alternative | 85 % off | > 50 % (hence the sum runs over all modes) | `results/?` |
-| no quantity replaced in the round-16 audit has come back | 0 hits of 12 forbidden tokens | 0 hits | `results/?` |
+| no quantity replaced in the round-16 audit has come back | 0 hits of 14 forbidden tokens | 0 hits | `results/?` |
 | every coupling factor recomputed and quoted in one row of the coupling table | 10/10 | all, no averaging | `results/?` |
 | every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive | 37/37 traced, 0 untraced | 0 untraced | `results/?` |
 | the list of unverified numbers cites only numbers still in the manuscript | 29 entries, 0 stale | 0 stale | `results/?` |

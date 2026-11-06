@@ -26,8 +26,6 @@ any ratio; the flexoelectric coefficient $\mu$ enters every flexoelectric
 energy linearly and every flexoelectric coupling as $\mu^{2}$, so the growth
 factors and the comparison with the piezoelectric response stand whatever its
 value, while the absolute flexoelectric coupling follows it quadratically.
-These two sentences are the whole of the dependence, and they are not repeated
-below.
 
 \FloatBarrier
 \subsection{Verification and convergence}
@@ -35,7 +33,7 @@ below.
 
 The numerical evidence is summarized here in a form that a reader can check
 against a re-implementation; the full record of benchmarks, identities and
-independent routes is Appendix~\ref{app:verification}.
+independent routes is \ref{app:verification}.
 
 \subsubsection{Benchmarks and mesh convergence}
 
@@ -80,7 +78,7 @@ of every assembled value that follows. From the constitutive tensors alone,
 which is the closed-form value for the plane-stress strip; the
 three-dimensional free bar gives $0.5771$, the three-dimensional uniaxial case
 $0.3748$ and the two-dimensional plane-strain case $0.5132$, all from the same
-tensors and all listed in Appendix~\ref{app:data}. The plane-stress value is
+tensors and all listed in \ref{app:data}. The plane-stress value is
 the relevant one, because the strip is free out of plane.
 
 The assembled model returns three numbers that belong to this same closed
@@ -110,8 +108,7 @@ period), against the exact $\omega\tau/2=0.150000$: halving the step halves the
 residual, an observed order of $0.97$, and the sequence extrapolates to the
 exact value. The ring-downs of Sec.~\ref{sec:memorystudy} are run at the $4N$
 step. The eight curves of Sec.~\ref{sec:transient} are a coarser march, $400$
-steps per period, and their decrements carry the step in the last decimal,
-which is stated where they are quoted.
+steps per period, and their decrements carry the step in the last decimal.
 
 \subsubsection{Fields of the coupled bending mode}
 
@@ -486,7 +483,7 @@ answers it by solving the same strip at eight thicknesses between
 \SI{10}{\micro\metre} and \SI{1}{\micro\metre} with a \SI{200}{\micro\metre}
 length and the window held at half-widths $3\times1$\,\si{\micro\metre}, so that
 the thickness is the only variable; Table~\ref{tab:thickness} lists the sweep, and
-Appendix~\ref{app:verification} carries the mesh witnesses. One qualification belongs to the two
+\ref{app:verification} carries the mesh witnesses. One qualification belongs to the two
 thinnest points: the window half-thickness is \SI{1}{\micro\metre} throughout,
 so at $h=\SI{2}{\micro\metre}$ it is half the strip and at
 $h=\SI{1}{\micro\metre}$ it equals the strip. The second-moment tensor of the
@@ -591,9 +588,8 @@ equivalent eigensolver paths and four numeric stacks agree on
 $4.2\times10^{-3}$ and on the factor $24$ to within $0.5\,\%$, and not more
 closely. The spread is the range over its midpoint and is therefore a property
 of the model rather than of the machine that computed it; at
-$h=\SI{10}{\micro\metre}$ the same spread is at most $10^{-4}\,\%$. A better
-solver does not recover further digits, which is why the
-two-significant-digit form is used here and in the abstract.
+$h=\SI{10}{\micro\metre}$ the same spread is at most $10^{-4}\,\%$. Values
+are quoted to two significant digits.
 
 \FloatBarrier
 \subsection{The design map}

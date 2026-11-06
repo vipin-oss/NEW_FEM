@@ -1,69 +1,25 @@
-% table generated from the archived results
-\begin{tabular}{@{}lll@{}}
+%% A compact list of the numerical benchmarks: what was computed, what it is
+%% compared with, and the agreement.
+\begin{tabular}{@{}l l l@{}}
 \toprule
-quantity & value obtained & requirement \\
+check & obtained & reference \\
 \midrule
-patch test, relative energy error & $4.44\times10^{-16}$ & < $1\times10^{-12}$ \\
-gradient energy at constant strain & $1.06\times10^{-12}$ & < $1\times10^{-9}$ \\
-$K_g$(ellipsoid) vs FEM-1 closed form & $3.40\times10^{-16}$ & < $1\times10^{-12}$ \\
-$K_g$(cuboid)/$K_g$(ellipsoid), equal half-width & 1.666667 & = 5/3 = 1.666667 \\
-equal-$M$ cuboid vs ellipsoid & $0.00\times10^{0}$ & = 0 (< $1\times10^{-12}$) \\
-tip displacement, length-scale sweep & 4.2339\,\si{\micro\metre} & within 2 \% of 4.23\,\si{\micro\metre} (paper) \\
-observed order of convergence & 1.68 & > 1.5 \\
-$C_\phi$ smallest eigenvalue & $2.27\times10^{-10}$ & < $1\times10^{-6}$ (no net charge in bending) \\
-piezo extensional $k^2$ (poling $x$) & 0.3991 & > 0.35 \\
-L1, $\alpha=1$, observed order & 0.99 & > 0.9 \\
-L1 at alpha = 1, order from the N/2N/4N sequence & 0.97 (zeta 0.150111 -> 0.150029) & 0.9 - 1.1 \\
-L1 stencil error & 0.37 \% & < 2 \% \\
-harmonic amplitude, $\alpha=1$ & $2.08\times10^{-9}$ & < $1\times10^{-6}$ \\
-harmonic amplitude, $\alpha=0.5$ & 0.52 \% & < 1 \% \\
-modal truncation, 24 modes & $3.19\times10^{-2}$ & < $5\times10^{-2}$ \\
-truncation error monotone in $N_{\rm modes}$ & yes & monotone \\
-equal-$M$ cuboid vs ellipsoid, max rel.\ diff & $0.00\times10^{0}$ & < $1\times10^{-12}$ \\
-flexo patch test, $\mu=0$ & $0.00\times10^{0}$ V & = 0 \\
-flexo patch test, $\mu\neq0$ & 1.0000000000 & = 1 ($1\times10^{-10}$) \\
-linearity of the flexo response in $\mu$ & 2.0000000000 & = 2 \\
-bending $k^2$ with $\mu=10^{-6}$\,\si{\coulomb\per\metre} & $1.25\times10^{-4}$ & > $1\times10^{-5}$ \\
-$\kappa_{11}/\kappa_{33}$ of the material record & 39.3 & > 30 (real crystal, was 1.2) \\
-$\zeta_{\rm eff}(K_{\rm eff},\alpha{=}1)$ vs $\omega\tau/2$ & 0.15003 vs 0.15000 & within 2 \% \\
-$\zeta(K_{uu})/\zeta(K_{\rm eff})$, $\alpha=1$ & 0.450 & in (0, 1) -- the choice matters \\
-KV/Zener modulus, $\omega\tau=1$, $\alpha=1$ & 1.345 & > 1.3 (KV unbounded) \\
-FEM $k^2$ (free strip) vs 2-D closed form $e^{\rm T}C^{-1}e/\kappa$ & 0.56079 vs 0.56079 & rel. diff < $1\times10^{-3}$ \\
-2-D model vs 3-D free bar (plane-stress reduction) & 2.83 \% & < 5 \% (documented modelling gap) \\
-FEM $k^2$, clamped, $96\times4$ vs $48\times4$ & 0.55992 vs 0.55957 & rel. diff < $1\times10^{-3}$ \\
-FEM $k^2$, clamped, $24\times2$ vs $48\times4$ & 0.13 \% & < 0.5 \% (coarse mesh) \\
-lowest MAC of mode 1, $h=10\to1$\,\si{\micro\metre} & 0.99919 & > 0.999 \\
-worst MAC off-diagonal / $f_2/f_1$ & $2.3\times10^{-6}$, f2/f1 >= 6.21 & off-diag < $1\times10^{-5}$, ratio > 6 \\
-closed form e'C\^{}-1 e/kappa vs FEM coupling (free strip) & 0.56079 vs 0.56079 & rel. diff < $1\times10^{-3}$ \\
-the superseded series is exactly k\^{}2/(1+k\^{}2) of the new one & $3.5\times10^{-6}$ & < $1\times10^{-5}$ (same formula applied twice) \\
-clamped-free f1, FEM 48x4 vs Euler-Bernoulli closed form & 144.6 vs 143.8 \,\si{\kilo\hertz} & |err| < 1 \% (+0.54 \%) \\
-clamped-clamped f1, FEM 48x4 vs Euler-Bernoulli closed form & 919.2 vs 915.0 \,\si{\kilo\hertz} & |err| < 1 \% (+0.46 \%) \\
-clamped-free f1 at 128x4 vs Euler-Bernoulli (mesh refinement) & 144.08 \,\si{\kilo\hertz} & |err| < 0.5 \% (+0.20 \%) \\
-zeta from Newton pole vs polynomial roots (10 alpha, 2 omega*tau) & $1.4\times10^{-10}$ & < $1\times10^{-8}$ \\
-zeta at alpha = 1 vs omega*tau/2 (both omega*tau) & $0.0\times10^{0}$ & < $1\times10^{-9}$ \\
-flexo x, uniform curvature: FEM energy triple vs 3 mu\^{}2/(C11 h\^{}2 kappa33) & $3.570415\times10^{-4}$ vs $3.570415\times10^{-4}$ & rel. diff < $1\times10^{-8}$ (worst $1.8\times10^{-10}$) \\
-flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33 & $1.7\times10^{-13}$ & < $1\times10^{-10}$ \\
-every number in the abstract has an independent-check verdict & 4 hua / 5 nahi hua / 3 inputs, 12 tokens & 0 uncovered, 0 stale \\
-piezoelectric share of the bending device (poling y, long faces) at every thickness & $5.7\times10^{-7}$ & < $1\times10^{-5}$ (electrically silent bending mode) \\
-flexo growth with and without the piezoelectric terms & 23.9 vs 31.1 & reported 24 (2 s.f.) uses the real crystal; 31 with e = 0, both within 1 \% \\
-the same bending field, four poling/electrode pairings: only the long faces collect it, and each pairing with its own permittivity & poled y $3.570\times10^{-4}$ vs $3.570\times10^{-4}$; poled x $1.613\times10^{-5}$ vs $1.613\times10^{-5}$; short-face pairs $7.5\times10^{-14}$ V & rel. diff < $1\times10^{-6}$, short-face charge < $1\times10^{-12}$ \\
-window second-moment factors 1/3, 1/4, 1/5 by quadrature & $3.3\times10^{-6}$ & < $1\times10^{-5}$ \\
-h = 1\,\si{\micro\metre} flexo k\^{}2 over four equivalent solver paths and 4 numeric stacks & spread 0.182 \%, k\^{}2 $4.1705\times10^{-3}$..$4.1781\times10^{-3}$ & < 0.5 \% (quoted to 2 s.f.) \\
-the same spread at h = 10\,\si{\micro\metre} & $1.49\times10^{-5}$ \% & < $1\times10^{-3}$ \% \\
-truncating the secular sum to 12 modes is not an alternative & 85 \% off & > 50 \% (hence the sum runs over all modes) \\
-no quantity replaced in the round-16 audit has come back & 0 hits of 12 forbidden tokens & 0 hits \\
-every coupling factor recomputed and quoted in one row of the coupling table & 10/10 & all, no averaging \\
-every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive & 37/37 traced, 0 untraced & 0 untraced \\
-the list of unverified numbers cites only numbers still in the manuscript & 29 entries, 0 stale & 0 stale \\
-application table: extensional plane stress is the strongest coupling of the four & 0.4580 & = 0.4580, largest, > 0.4 \\
-piezo $k^2$ (mode-free), max/min over $h$ & 1.0009 & < 1.005 (thickness independent) \\
-piezo $k^2$, $24\times2$ vs $48\times4$ & $5.7\times10^{-4}$ & < $1\times10^{-3}$ \\
-flexo $k^2$ vs $h$ & $1.74\times10^{-4}$ -> $4.17\times10^{-3}$ & strictly increasing as h falls \\
-flexo $k^2$, $48\times4$ vs $96\times4$ witness & $3.5\times10^{-3}$ & < 0.02 \\
-flexo $k^2$ at $\mu=0$, residual / value & $6\times10^{-7}$ & < $1\times10^{-5}$ \\
-gradient-energy coefficient: code vs manuscript & 0.5 x int, (1/4)M/((1/20)L)=1.000000000000 & factor 1/2 in the assembly, (1/4)M = (1/20)L, FEM-1 u\_R within 2 \% \\
-paper figure set, vector files written & 12 PDF & = 12 (F1-F9, FB1-FB2, F11\_designmap) \\
-orientation sweep, rows / $k^2$ range & 133 rows, 0.3786-0.4677 & 133 rows (114 cuboid + 19 ellipse), k\^{}2 in (0.35, 0.50) \\
-manuscript numbers vs the JSON they came from & 96/96 & all agree \\
+patch test, relative energy error & $4.44\times10^{-16}$ & $0$ \\
+gradient energy at constant strain & $1.06\times10^{-12}$ & $0$ \\
+$K_g$ of the ellipsoid vs closed form & $3.40\times10^{-16}$ & $0$ \\
+$K_g$(cuboid)$/K_g$(ellipsoid), equal half-width & 1.666667 & $5/3$ \\
+equal-$M$ cuboid and ellipsoid, max rel.\ difference & $0$ & $0$ \\
+tip displacement, length-scale sweep & 4.2339\,\si{\micro\metre} & 4.23\,\si{\micro\metre} \\
+observed order of convergence & 1.68 & $2$ \\
+piezoelectric $k^2$, poling $x$, plane stress & 0.3991 & 0.4580 \\
+L1 order at $\alpha=1$ & 0.99 & $1$ \\
+free strip $k^2$, FEM vs 2-D closed form & 0.56079 vs 0.56079 & $<10^{-3}$ rel. \\
+free strip, 3-D vs 2-D reduction & 2.83\,\% & modelling gap \\
+clamped strip, $96\times4$ vs $48\times4$ & 0.55992 vs 0.55957 & $<10^{-3}$ rel. \\
+flexoelectric energy, uniform curvature & $3.570415\times10^{-4}$ & $3.570415\times10^{-4}$ \\
+open-circuit voltage, uniform curvature & $1.7\times10^{-13}$\,\si{\volt} & $<10^{-10}$\,\si{\volt} \\
+clamped-free $f_1$, FEM vs Euler--Bernoulli & 144.6 vs 143.8\,\si{\kilo\hertz} & $128\times4$: 144.08 \\
+clamped-clamped $f_1$, FEM vs Euler--Bernoulli & 919.2 vs 915.0\,\si{\kilo\hertz} & $48\times4$ \\
+modal truncation, 24 modes & $3.19\times10^{-2}$ & monotone in $N$ \\
 \bottomrule
 \end{tabular}

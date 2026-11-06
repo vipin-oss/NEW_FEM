@@ -103,5 +103,5 @@
 
 ## Forbidden stale tokens
 
-0 hits of 12 forbidden tokens.
+0 hits of 14 forbidden tokens.
 

@@ -1,17 +1,15 @@
 """
-make_paper_table.py -- regenerate the verification table of the manuscript
-from results/summary.json, so that the paper can never drift from the run.
+make_paper_table.py -- the full criterion table behind the manuscript.
 
     python3 python/make_paper_table.py
 
 writes
-    Paper_12/table_verification.tex   the tabular rows, \\input by main.tex
-    results/paper_table.md            the same table in markdown
-and prints a provenance line for every row (which JSON file it came from).
+    results/paper_table.md   every criterion of the suite, one row each
 
-The table is *generated*, never typed: the manuscript says so, and the caption
-carries the number of criteria and the date is deliberately absent -- the
-reader is meant to run the command.
+This is the archive copy.  The table typeset in the appendix is a hand-curated,
+compact selection of the same benchmarks (Paper_12/table_verification.tex): a
+manuscript table summarises the evidence, it is not the evidence, so this
+script no longer writes it.
 """
 from __future__ import annotations
 
@@ -105,7 +103,7 @@ def main():
     with open(os.path.join(RES, "summary.json")) as fh:
         S = json.load(fh)
     rows = S["checks"]
-    body, md = [], ["# Verification table as it appears in the manuscript", "",
+    body, md = [], ["# The full criterion table (archive copy)", "",
                     f"{S['n_pass']}/{S['n_total']} checks pass.", "",
                     "| quantity | value obtained | requirement | source |",
                     "|---|---|---|---|"]
@@ -117,17 +115,9 @@ def main():
                     f"{pretty(r['criterion'])} \\\\")
         md.append(f"| {r['what']} | {r['value']} | {r['criterion']} | "
                   f"`results/{src}` |")
-    tex = ["% table generated from the archived results",
-           r"\begin{tabular}{@{}lll@{}}", r"\toprule",
-           r"quantity & value obtained & requirement \\", r"\midrule"]
-    tex += body
-    tex += [r"\bottomrule", r"\end{tabular}"]
-    with open(os.path.join(OUT, "table_verification.tex"), "w") as fh:
-        fh.write("\n".join(tex) + "\n")
     with open(os.path.join(RES, "paper_table.md"), "w") as fh:
         fh.write("\n".join(md) + "\n")
-    print(f"  {S['n_pass']}/{S['n_total']} rows -> Paper_12/table_verification.tex")
-    print(f"  -> results/paper_table.md")
+    print(f"  {S['n_pass']}/{S['n_total']} criteria -> results/paper_table.md (the typeset table is hand-curated)")
     return 0
 
 

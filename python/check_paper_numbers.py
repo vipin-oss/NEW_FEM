@@ -149,6 +149,9 @@ STALE_TOKENS = {
     "$2\\times2$": "'2x2 Gauss' quadrature (round 16: $4\\times4$)",
     "plate": "'plate' for a plane-stress strip (round 16: 'strip')",
     "Plate": "capitalised 'Plate' (round 16: 'Strip')",
+    "Appendix~\\ref{app:": "the class prints 'Appendix' inside \\thesection, so "
+                            "the literal word doubles it ('Appendix Appendix A')",
+    "Appendix \\ref{app:": "same doubling without the tie",
 }
 
 
