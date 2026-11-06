@@ -754,12 +754,14 @@ def fig_p11_convergence():
     ax.loglog(nd, np.maximum(ef, 1e-9), "s-", color="#D55E00", label=r"$f$ of the mode")
     ax.loglog(nd, np.maximum(ek[0] * (nd[0] / nd) ** 2.0, 1e-9), "k--", lw=0.9,
               label=r"$\propto N^{-2}$")
+    ax.axvline(nd[-1], color="0.55", ls="-.", lw=0.8)
     ax.set_xlabel("degrees of freedom"); ax.set_ylabel("relative error")
     ax.legend(frameon=False, loc="lower left"); ax.set_title("(a)", loc="left")
     ax = axs[1]
     ax.plot(nd, k2, "o-", color="#0072B2", label=r"$k^2$ (mode-free)")
     ax.axhline(k2[-1], color="k", ls=":", lw=0.8)
-    ax.set_xlabel("degrees of freedom"); ax.set_ylabel(r"$k^2$")
+    ax.axvline(nd[-1], color="0.55", ls="-.", lw=0.8)
+    ax.set_xlabel("degrees of freedom"); ax.set_ylabel(r"$k^2$", labelpad=2)
     ax2 = ax.twinx()
     ax2.plot(nd, f1, "s-", color="#D55E00", label=r"$f$ (kHz)")
     ax2.set_ylabel(r"$f$ (kHz)", color="#D55E00")

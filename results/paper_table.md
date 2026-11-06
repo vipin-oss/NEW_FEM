@@ -1,6 +1,6 @@
 # Verification table as it appears in the manuscript
 
-57/58 checks pass.
+58/58 checks pass.
 
 | quantity | value obtained | requirement | source |
 |---|---|---|---|
