@@ -156,7 +156,7 @@ would have flagged.
   `python/worked_example.py` and audited by `check_paper_numbers.py`.
 - Conclusion rewritten to the requested structure: one paragraph of model, six
   findings, one paragraph of use; 258 words, no figures.
-- Length: `\linespread` 1.3 -> 1.15, the parameter list of Sec. 6.1 no longer
+- Length: `\linespread` 1.3 -> 1.0 (the class default at 10 pt), the parameter list of Sec. 6.1 no longer
   repeats Table 1, the benchmark paragraph and the mu caveat were cut, and the
   modulus table moved to Appendix C.
 - `python/check_float_order.py` rebuilds the numbering from the source and

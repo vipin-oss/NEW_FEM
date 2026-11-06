@@ -98,5 +98,5 @@ and the audit file `results/paper_number_audit.md` names the row.
 | item | why it is still open |
 |---|---|
 | compile | this environment has no TeX, so the page count, the float-vs-citation page numbers and `pdftotext | grep -c "Appendix Appendix"` were not measured here; compile on Overleaf and check the number is 0 |
-| length | `\linespread` went from 1.3 to 1.15, the parameter list of Sec. 6.1, the benchmark paragraph and the mu caveat were cut, the modulus table moved to Appendix C, and Sec. 6.3 was added: the net effect on the page count is unverified, so compile and, if it is still above 30 pages, the next candidates are Secs. 3 and 4, which have not been shortened |
+| length | `\linespread` went from 1.3 to 1.0, the parameter list of Sec. 6.1, the benchmark paragraph and the mu caveat were cut, the modulus table moved to Appendix C, and Sec. 6.3 was added: the net effect on the page count is unverified, so compile and, if it is still above 30 pages, the next candidates are Secs. 3 and 4, which have not been shortened |
 | worked subsection | every number in it is produced by `python/worked_example.py` and audited by `check_paper_numbers.py`; if a parameter changes, re-run `python/run_all.py` before touching the text |
