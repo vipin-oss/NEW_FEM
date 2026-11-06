@@ -26,7 +26,15 @@ and the higher-order double traction
   m_i = \varsigma_{ijm}\,n_j n_m ,
   \label{eq:doubletraction}
 \end{equation}
-which is conjugate to the normal derivative of the displacement. Three
+which is conjugate to the normal derivative of the displacement. The
+flexoelectric part of $\varsigma$ in \eqref{eq:tau} is carried by these two
+expressions without further change: it contributes $\mu(\nabla\cdot\bm E)n_i$
+to \eqref{eq:traction} away from the tangent term,
+$-\partial_t[\mu(\bm E\cdot\bm t)n_i]$ through the tangential derivative, and
+$-\mu(\bm E\cdot\bm n)n_i$ to \eqref{eq:doubletraction}. The weak form
+assembles all three as the single coupling term
+$\int\mu\nabla N_\phi^{\mathsf T}\nabla(\varepsilon_{xx}+\varepsilon_{yy})$, so
+no assembled matrix changes when the term is written out. Three
 combinations are used in the results:
 
 \begin{enumerate}
@@ -86,7 +94,7 @@ $e^{\mathsf T}C^{-1}e/\kappa$; $k^2_{j}$ is the mode-based factor of the
 $j$-th mode; and $k^2_{j}(K_{uu})$ or $k^2_{j}(K_{sc})$ names the matrix whose
 short-circuit eigenvalues enter it. An unsubscripted $k^2$ in the results is
 $k^2_{\rm qs}$. The extensional coupling factor
-of the \SI{200}{\micro\metre} by \SI{10}{\micro\metre} plate obtained from
+of the \SI{200}{\micro\metre} by \SI{10}{\micro\metre} strip obtained from
 \eqref{eq:kstatic} is $k^2=0.5581$, within $0.5\,\%$ of the constitutive
 prediction $0.5608$ obtained from the constitutive tensors in
 Sec.~\ref{sec:verification}.

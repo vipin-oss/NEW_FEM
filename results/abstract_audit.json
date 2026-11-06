@@ -55,16 +55,16 @@
    "route": "the same rotation study (T5); the spread is a property of the second-moment tensor, which is verified (I8), the spread is not"
   },
   {
-   "literal": "0.449",
+   "literal": "0.450",
    "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
    "verdict": "nahi hua",
    "route": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
   },
   {
-   "literal": "0.15",
+   "literal": "0.02",
    "what": "distance of $\\zeta_{\\rm eff}$ from the classical limit",
    "verdict": "hua",
-   "route": "I5: at $\\alpha=1$ the pole equation is quadratic and gives $\\omega\\tau/2=0.15000$ exactly, so the $0.15\\,\\%$ is a comparison with an exact value"
+   "route": "I5: at $\\alpha=1$ the pole equation is quadratic and gives $\\omega\\tau/2=0.15000$ exactly, so the $0.02\\,\\%$ is a comparison with an exact value"
   }
  ],
  "n_hua": 3,
@@ -80,8 +80,8 @@
   "24",
   "15",
   "19",
-  "0.449",
-  "0.15"
+  "0.450",
+  "0.02"
  ],
  "missing": [],
  "stale": []

@@ -25,8 +25,8 @@
 | flexo linearity V(2mu)/V(mu) | 2.0000000000 | = 2 | `results/flexo_check.json` |
 | bending k_eff^2 with flexo (mu=1e-6) | 1.25e-04 | > 1e-5 | `results/flexo_check.json` |
 | kappa11/kappa33 | 39.3 | > 30 (real crystal, was 1.2) | `results/material_comparison.json` |
-| zeta(K_eff, alpha=1) vs omega*tau/2 | 0.15023 vs 0.15000 | within 2 % | `results/memory_variants.json` |
-| zeta(K_uu)/zeta(K_eff) at alpha=1 | 0.449 | in (0, 1) -- the choice matters | `results/memory_variants.json` |
+| zeta(K_eff, alpha=1) vs omega*tau/2 | 0.15003 vs 0.15000 | within 2 % | `results/memory_variants.json` |
+| zeta(K_uu)/zeta(K_eff) at alpha=1 | 0.450 | in (0, 1) -- the choice matters | `results/memory_variants.json` |
 | KV/Zener modulus at omega*tau = 1, alpha = 1 | 1.345 | > 1.3 (KV unbounded) | `results/memory_variants.json` |
 | FEM k^2 (unconstrained plate) vs 2-D closed form e^T C^-1 e/kappa | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/coupling_check.json` |
 | 2-D model vs 3-D free bar (plane-stress reduction) | 2.83 % | < 5 % (documented modelling gap) | `results/coupling_check.json` |

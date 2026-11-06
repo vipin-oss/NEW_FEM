@@ -100,3 +100,39 @@ and the audit file `results/paper_number_audit.md` names the row.
 | compile | this environment has no TeX, so the page count, the float-vs-citation page numbers and `pdftotext | grep -c "Appendix Appendix"` were not measured here; compile on Overleaf and check the number is 0 |
 | length | `\linespread` went from 1.3 to 1.0, the parameter list of Sec. 6.1, the benchmark paragraph and the mu caveat were cut, the modulus table moved to Appendix C, and Sec. 6.3 was added: the net effect on the page count is unverified, so compile and, if it is still above 30 pages, the next candidates are Secs. 3 and 4, which have not been shortened |
 | worked subsection | every number in it is produced by `python/worked_example.py` and audited by `check_paper_numbers.py`; if a parameter changes, re-run `python/run_all.py` before touching the text |
+
+## 10. What round 16 corrected (scientific audit)
+
+Every item below is a defect the audit proved either from the code (file and
+function named) or from a re-run; the numbers that changed were recomputed by
+the scripts in `python/` and are audited again by
+`python/check_paper_numbers.py`.
+
+| # | item | defect | correction | numbers that changed |
+|---|---|---|---|---|
+| A1 | Eq. (6)/(9) | the dielectric energy was printed as $+\tfrac12\int\kappa E E$, whose derivative is $-\kappa E$, while Eq. (9) prints $+\kappa E$; the two could not both be right | the enthalpy now carries $-\tfrac12\int\kappa E E$ and a paragraph states which sign each assembled block has (`fem6_core.element_matrices`: `Kuphi = B^T e^T Bp`, `Kpp = +Bp^T k Bp`, `Bp = grad N_phi`) | none; the code was already consistent |
+| A2 | Eq. (8) | the higher-order stress omitted the flexoelectric term, so it did not vanish with $M$ | $\varsigma_{ijm}=\tfrac12 M_{mn}C_{ijkl}\varepsilon_{kl,n}-\mu_{kijm}E_k$, with the single-constant form $\mu_{kijl}=\mu\delta_{ij}\delta_{kl}$ the code uses; the traction and double traction of Sec. 4 and the two strong forms are now consistent with it | none; the flexoelectric coupling is assembled once, in `Kuphi` |
+| A3 | Sec. 5.2 | "2x2 Gauss" contradicted `ngauss=4` in `element_matrices`, which no caller overrides | 4x4, with the measured rule sensitivity: $3\times3$ vs $4\times4$ vs $5\times5$ differ by $5.8\times10^{-6}$ in $k^2$ and $7.1\times10^{-6}$ in $f_1$ | none |
+| A4 | Eq. (31) | the flexoelectric calibration divided by $\varepsilon_0$ although $\kappa_{yy}=4.9583\times10^{-10}$ F/m is already absolute | $V=\mu\kappa_c h/\kappa_{yy}$, with the unit chain printed | none in the model; the formula was never used numerically |
+| A5 | Sec. 7.2 | $\tan\delta$ was said to have a maximum in $\omega\tau$; it increases monotonically to $\tan(\pi\alpha/2)$ | replaced by the two-parameter fit of $(|K^*|/K,\tan\delta)$ over two decades, with $\tan\delta(\omega\tau=1)=\tan(\pi\alpha/4)$ | none |
+| A6 | damping extraction | $\zeta=\delta/2\pi$ is the small-damping form and the peak interpolation was coarse; the quoted 0.15 % was really 1.2 % | $\zeta=\delta/\sqrt{4\pi^2+\delta^2}$ on successive-peak ratios at $4N$ steps, with the $\Delta t$ sequence printed | $\delta$ 0.94392 -> 0.95345; peak ratio 2.5700 -> 2.5947; $\zeta(K_{\rm eff})$ 0.15023 -> 0.15003; $\zeta(K_{uu})$ 0.06749 -> 0.06746; error 0.15 % -> 0.02 %; $K_{uu}/K_{\rm eff}$ 0.449 -> 0.450 |
+| A6b | Table 5, $\alpha=0.7$ column | at $\alpha<1$ the free decay is not exponential, so the global log-linear fit that produced 0.026 / 0.050 / 1.93 measured nothing | the column now carries the first-period local decrement (0.1942, 0.0831, ratio 0.428) and the withdrawn numbers are named in the text | 0.02600 -> 0.1942; 0.05006 -> 0.0831; 1.93 -> 0.428 |
+| A7 | Sec. 6.4 symmetry | "$\theta\to-\theta$ because $M_{12}$ enters quadratically" was wrong: the gradient energy is linear in $M$ | the invariance is attributed to the reflection $y\to-y$, which maps strip, electrodes and the poled material onto themselves for poling $x$ only; stated as such, with the 3e-11 evidence kept | none |
+| B8 | Sec. 3.1 | classical piezoelectricity was said to need $M\to0$ alone | the higher-order stress survives as $-\mu E$ and the limit needs $\mu\to0$ as well | none |
+| B9 | Sec. 2.2 | the gradient energy was presented as a derivation | it is now stated as the second-moment truncation, phenomenological, exact for a strain affine across the window and in error at the next order | none |
+| B10 | abstract, Sec. 6.6, App. A, conclusion | "equal $M$ gives identical solutions" was stated without its scope | "within the adopted second-moment model" added in all four places | none |
+| B11 | Sec. 6.5 | at $h=1\,\mu$m the window half-thickness equals the thickness and no boundary correction is applied | stated that $M$ is a local effective gradient tensor there and that the $h\le2\,\mu$m points are read under that assumption | none |
+| B12 | Eq. (22) | $M+\Delta t^{\alpha}\Gamma(2-\alpha)K_{\rm mem}$ is dimensionally wrong and is not what `fem6_core.transient` factorizes | the semi-discrete equation and the Newmark matrix $M+\beta\Delta t^2K+\beta\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ are given, with $K_{\rm mem}=\tau^\alpha K$, the initial acceleration and both limits; the modal truncation is now measured (8 vs 40 modes: $2.3\times10^{-14}$ for $K_{\rm eff}$, $3.6\times10^{-4}$ for $K_{uu}$) | none |
+| B13 | Sec. 6.6 | $K_{\rm eff}$ vs $K_{uu}$ was described as a choice without saying what a derivation would give | added: a relaxing permittivity puts the memory on $B_iC^{-1}B_i^T$ alone, so the two matrices bracket it; $0.450$ is restricted to $\alpha=1$ and to this device | none |
+| B14 | Sec. 6.7, conclusion | the 58x voltage factor could be read as a sensing figure of merit | restricted to equal tip displacement, with the caveat printed | none |
+| B15 | whole manuscript | "plate" for a plane-stress strip with in-plane fields only | "strip" (66 occurrences); "plate theory"/"plate kinematics" removed | none |
+| B16 | Sec. 6.2 | three values near 0.56 for one set of tensors were not labelled | the three are now listed with their boundary condition, mesh and measure, and the abstract's choice is named | none |
+| B17 | Sec. 6.2 | the time-step claim was not tied to the rerun | the $\zeta$ sequence $0.15011/0.15006/0.15003$ at $N/2N/4N$ is given | see A6 |
+| B18 | Sec. 6.5 | flexoelectric saturation | kept as a hypothesis, now explicitly labelled as untested | none |
+| B19 | Sec. 1 | four contribution bullets, one of them a protocol | three bullets against the FEM-1/FEM-4/FEM-5 comparison, plus one sentence on which observable fixes each parameter and a statement that joint identifiability was not tested | none |
+
+**Still unverified after round 16.** No TeX distribution is installed here, so
+the page count, the float placement, the overfull boxes and the reference
+resolution were not measured; the typeset equations of A1, A2 and B12 must be
+read once on Overleaf. The $\alpha<1$ first-period decrements are dt-converged
+to three digits but are not damping ratios, and no claim beyond that is made.

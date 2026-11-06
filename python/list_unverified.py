@@ -104,12 +104,19 @@ def main():
 
     # ---- 5. the memory study
     mv = J("memory_variants.json")
-    for key, what in (("Keff_alpha1.0", "$\\zeta_{\\rm eff}$ at $\\alpha=1$"),
-                      ("Kuu_alpha1.0", "$\\zeta(K_{uu})$ at $\\alpha=1$"),
-                      ("Keff_alpha0.7", "$\\zeta_{\\rm eff}$ at $\\alpha=0.7$"),
-                      ("Kuu_alpha0.7", "$\\zeta(K_{uu})$ at $\\alpha=0.7$")):
-        rows.append((f"{mv['S1'][key]['zeta_eff']:.5f}", what,
-                     "memory_variants.json S1",
+    # alpha = 1: zeta from the successive-peak decrement (exact conversion);
+    # alpha < 1: only the first-period local value, the decay being
+    # non-exponential (round 16).
+    for key, what, field in (
+            ("Keff_alpha1.0", "$\\zeta_{\\rm eff}$ at $\\alpha=1$", "zeta_eff"),
+            ("Kuu_alpha1.0", "$\\zeta(K_{uu})$ at $\\alpha=1$", "zeta_eff"),
+            ("Keff_alpha0.7", "first-period $\\zeta_{\\rm eff}$ at $\\alpha=0.7$",
+             "zeta_first"),
+            ("Kuu_alpha0.7", "first-period $\\zeta(K_{uu})$ at $\\alpha=0.7$",
+             "zeta_first")):
+        prec = 4 if field == "zeta_first" else 5
+        rows.append((f"{mv['S1'][key][field]:.{prec}f}", what,
+                     f"memory_variants.json S1 {field}",
                      "a logarithmic decrement of an FEM ring-down; the "
                      "closed-form $\\omega\\tau/2$ is the $\\alpha=1$, "
                      "$K_{\\rm eff}$ limit only"))

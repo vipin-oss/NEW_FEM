@@ -2,29 +2,29 @@
 
 | float | number | defined in | first cited in |
 |---|---|---|---|
-| `tab:params` | 1 | sec/02_formulation.tex:246 | main.tex:119 |
-| `fig:geometry` | 1 | sec/02_formulation.tex:285 | sec/02_formulation.tex:231 |
-| `tab:axes` | 2 | sec/04_boundary_conditions.tex:118 | sec/04_boundary_conditions.tex:103 |
-| `fig:convergence` | 2 | sec/06_results.tex:107 | sec/06_results.tex:52 |
-| `tab:closedform` | 3 | sec/06_results.tex:117 | sec/06_results.tex:80 |
-| `fig:fields` | 3 | sec/06_results.tex:143 | sec/06_results.tex:121 |
-| `tab:worked` | 4 | sec/06_results.tex:258 | sec/06_results.tex:225 |
-| `fig:orientation` | 4 | sec/06_results.tex:356 | sec/06_results.tex:289 |
-| `fig:design` | 5 | sec/06_results.tex:370 | sec/06_results.tex:333 |
-| `tab:memory` | 5 | sec/06_results.tex:422 | sec/06_results.tex:384 |
-| `fig:damping` | 6 | sec/06_results.tex:497 | sec/06_results.tex:448 |
-| `fig:window` | 7 | sec/06_results.tex:553 | sec/06_results.tex:504 |
-| `fig:thickness` | 8 | sec/06_results.tex:592 | sec/06_results.tex:561 |
-| `fig:modetrack` | 9 | sec/06_results.tex:634 | sec/06_results.tex:615 |
-| `tab:config` | 6 | sec/06_results.tex:663 | sec/06_results.tex:640 |
-| `fig:ringdown` | 10 | sec/06_results.tex:729 | sec/06_results.tex:698 |
-| `tab:application` | 7 | sec/06_results.tex:760 | sec/06_results.tex:743 |
+| `tab:params` | 1 | sec/02_formulation.tex:281 | main.tex:119 |
+| `fig:geometry` | 1 | sec/02_formulation.tex:320 | sec/02_formulation.tex:266 |
+| `tab:axes` | 2 | sec/04_boundary_conditions.tex:126 | sec/04_boundary_conditions.tex:111 |
+| `fig:convergence` | 2 | sec/06_results.tex:113 | sec/06_results.tex:52 |
+| `tab:closedform` | 3 | sec/06_results.tex:123 | sec/06_results.tex:80 |
+| `fig:fields` | 3 | sec/06_results.tex:149 | sec/06_results.tex:127 |
+| `tab:worked` | 4 | sec/06_results.tex:264 | sec/06_results.tex:231 |
+| `fig:orientation` | 4 | sec/06_results.tex:370 | sec/06_results.tex:295 |
+| `fig:design` | 5 | sec/06_results.tex:384 | sec/06_results.tex:347 |
+| `tab:memory` | 5 | sec/06_results.tex:449 | sec/06_results.tex:398 |
+| `fig:damping` | 6 | sec/06_results.tex:557 | sec/06_results.tex:508 |
+| `fig:window` | 7 | sec/06_results.tex:614 | sec/06_results.tex:564 |
+| `fig:thickness` | 8 | sec/06_results.tex:662 | sec/06_results.tex:622 |
+| `fig:modetrack` | 9 | sec/06_results.tex:704 | sec/06_results.tex:685 |
+| `tab:config` | 6 | sec/06_results.tex:733 | sec/06_results.tex:710 |
+| `fig:ringdown` | 10 | sec/06_results.tex:803 | sec/06_results.tex:768 |
+| `tab:application` | 7 | sec/06_results.tex:834 | sec/06_results.tex:817 |
 | `tab:protocol` | 8 | sec/07_calibration_limitations.tex:43 | sec/07_calibration_limitations.tex:26 |
 | `tab:verification` | B.1 | sec/92_appendixB.tex:31 | sec/92_appendixB.tex:15 |
 | `tab:independent` | B.2 | sec/92_appendixB.tex:75 | sec/92_appendixB.tex:59 |
 | `fig:modeshape` | B.3 | sec/92_appendixB.tex:100 | sec/92_appendixB.tex:82 |
 | `tab:sens` | B.4 | sec/92_appendixB.tex:129 | sec/92_appendixB.tex:108 |
-| `tab:modulus` | C.6 | sec/93_appendixC.tex:40 | sec/06_results.tex:435 |
+| `tab:modulus` | C.6 | sec/93_appendixC.tex:40 | sec/06_results.tex:495 |
 
 ## Main-text floats: numbering against first citation
 

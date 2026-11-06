@@ -93,7 +93,11 @@ def pretty(s):
             i += 1
     s = "".join(out)
     for k, v in UNIT.items():
-        s = s.replace(k, v)
+        if k == "um":
+            # only a length written after a number, never the "um" of a word
+            s = re.sub(r"(?<=[0-9])\s*um\b", lambda m, v=v: v, s)
+        else:
+            s = s.replace(k, v)
     return s
 
 
@@ -107,6 +111,7 @@ def main():
                     "|---|---|---|---|"]
     for r in rows:
         what = TEX_WHAT.get(r["id"], texify(r["what"]))
+        what = re.sub(r"(?<=[0-9])\s*um\b", lambda m: r"\,\si{\micro\metre}", what)
         src = SOURCE.get(r["id"].rstrip("ab")[0], "?")
         body.append(f"{what} & {pretty(r['value'])} & "
                     f"{pretty(r['criterion'])} \\\\")

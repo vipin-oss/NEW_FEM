@@ -150,14 +150,14 @@
   {
    "id": "S1a",
    "what": "zeta(K_eff, alpha=1) vs omega*tau/2",
-   "value": "0.15023 vs 0.15000",
+   "value": "0.15003 vs 0.15000",
    "criterion": "within 2 %",
    "pass": true
   },
   {
    "id": "S1b",
    "what": "zeta(K_uu)/zeta(K_eff) at alpha=1",
-   "value": "0.449",
+   "value": "0.450",
    "criterion": "in (0, 1) -- the choice matters",
    "pass": true
   },

@@ -11,13 +11,17 @@ against them, and Sec.~\ref{sec:verification} checks two of them as exact
 identities rather than as trends.
 
 \FloatBarrier
-\subsection{Classical elasticity: $M_{mn}\to0$}
+\subsection{Classical piezoelectricity: $M_{mn}\to0$ and $\mu_{kijl}\to0$}
 \label{sec:limit_classical}
 
 If the averaging window shrinks to a point, $M_{mn}\to0$, the gradient energy
-in \eqref{eq:energy} vanishes, the higher-order stress \eqref{eq:tau} vanishes
-with it, and the double-traction condition of Sec.~\ref{sec:bc} drops out of
-the formulation. What remains is the classical piezoelectric plate: the weak
+in \eqref{eq:energy} vanishes. That alone does not remove the higher-order
+stress: by \eqref{eq:tau} it reduces to $-\mu_{kijm}E_k$, so a model with a
+window of zero size and a nonzero flexoelectric coefficient keeps a
+higher-order stress, a double traction and a fourth-order character. Classical
+piezoelectricity is therefore the double limit $M_{mn}\to0$ \emph{and}
+$\mu_{kijl}\to0$, in which the double-traction condition of Sec.~\ref{sec:bc}
+drops out of the formulation. What remains is the classical piezoelectric strip: the weak
 form keeps only the elastic, piezoelectric and dielectric terms, the
 displacement field needs $C^0$ continuity only, and the coupling factor is the
 purely piezoelectric one. The window size is therefore the single parameter
@@ -30,7 +34,7 @@ strain-gradient one, and it does so without changing any other term.
 
 With the flexoelectric tensor set to zero the electric displacement
 \eqref{eq:D} loses its strain-gradient contribution and the model reduces to
-the piezoelectric plate of~\cite{fem1}. On the extensional configuration of
+the piezoelectric strip of~\cite{fem1}. On the extensional configuration of
 Fig.~\ref{fig:geometry} the coupling factor is $k^2=0.5581$ and is unchanged by
 the switch, because that configuration collects the piezoelectric charge only.
 On the bending configuration the piezoelectric charge of the mode integrates
@@ -46,7 +50,7 @@ polarization.
 \label{sec:limit_flexo}
 
 Removing the piezoelectric coupling instead leaves the flexoelectric bending
-response of the same plate. Over the thickness range
+response of the same strip. Over the thickness range
 $\SI{10}{\micro\metre}\to\SI{1}{\micro\metre}$ the flexoelectric coupling of
 that configuration then rises from $1.76\times10^{-4}$ to
 $5.5\times10^{-3}$, a factor $31$. With the piezoelectric terms present the
@@ -65,13 +69,13 @@ $\tau\to0$}
 For $\alpha=1$ the fractional element \eqref{eq:kvfreq} becomes the classical
 Kelvin--Voigt element, whose exact damping ratio is $\omega\tau/2$. The
 implementation reproduces it: at $\omega\tau=0.3$ the ring-down of
-Sec.~\ref{sec:memorystudy} returns $\zeta_{\rm eff}=0.15023$ against the exact
-$0.15000$, a difference of $0.15\,\%$. For $\tau\to0$ the memory term of
+Sec.~\ref{sec:memorystudy} returns $\zeta_{\rm eff}=0.15003$ against the exact
+$0.15000$, a difference of $0.02\,\%$. For $\tau\to0$ the memory term of
 \eqref{eq:kv} vanishes, the time-discrete problem \eqref{eq:step} becomes the
 undamped one, and the eigenvalues of the pencil are those of the short-circuit
 matrix. Between these two limits the model is genuinely fractional: the
 damping ratio is no longer proportional to $\omega\tau$, and the memory matrix
-that the derivative multiplies changes $\zeta_{\rm eff}$ by a factor $0.449$
+that the derivative multiplies changes $\zeta_{\rm eff}$ by a factor $0.450$
 at $\alpha=1$ (Sec.~\ref{sec:memorystudy}).
 
 \FloatBarrier
@@ -87,7 +91,7 @@ and ellipsoid windows give the scalar coefficients that
 \ref{app:Mcoeff} lists; setting $M_{mn}=\ell^2\delta_{mn}$ reduces the
 same expression to the isotropic Aifantis form. Keeping both coupling tensors
 and dropping the memory reproduces the coupled continuum of~\cite{fem4}, and a
-plane-stress reduction of that continuum is the plate model of~\cite{fem5}.
+plane-stress reduction of that continuum is the strip model of~\cite{fem5}.
 The present work differs from all three in carrying the fractional memory on
 the reduced modal coordinates and in treating the window's second moment,
 rather than a scalar length, as the object that the discretization sees.

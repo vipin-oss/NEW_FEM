@@ -15,11 +15,11 @@ Every numeric token of the abstract of `Paper_12/main.tex`, with the verdict `hu
 | `24` | growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports | *nahi hua* | the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not |
 | `15` | lower end of the effect of window anisotropy and orientation on the coupling | *nahi hua* | FEM rotation study (criterion T5 for the mesh/rotation trend); no independent route |
 | `19` | upper end of the same range | *nahi hua* | the same rotation study (T5); the spread is a property of the second-moment tensor, which is verified (I8), the spread is not |
-| `0.449` | $\zeta$ ratio, memory on $K_{uu}$ over $K_{\rm eff}$ | *nahi hua* | a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\zeta$ is itself checked (I4) |
-| `0.15` | distance of $\zeta_{\rm eff}$ from the classical limit | **hua** | I5: at $\alpha=1$ the pole equation is quadratic and gives $\omega\tau/2=0.15000$ exactly, so the $0.15\,\%$ is a comparison with an exact value |
+| `0.450` | $\zeta$ ratio, memory on $K_{uu}$ over $K_{\rm eff}$ | *nahi hua* | a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\zeta$ is itself checked (I4) |
+| `0.02` | distance of $\zeta_{\rm eff}$ from the classical limit | **hua** | I5: at $\alpha=1$ the pole equation is quadratic and gives $\omega\tau/2=0.15000$ exactly, so the $0.02\,\%$ is a comparison with an exact value |
 
 ## Coverage
 
-Numeric tokens found in the abstract: 11 (`1`, `200`, `10`, `0.5581`, `0.5`, `0.09`, `24`, `15`, `19`, `0.449`, `0.15`).
+Numeric tokens found in the abstract: 11 (`1`, `200`, `10`, `0.5581`, `0.5`, `0.09`, `24`, `15`, `19`, `0.450`, `0.02`).
 
 Every token has a verdict.

@@ -46,9 +46,13 @@ the element are
   \eta_k = \partial_k\varepsilon = B_{,k}(\xi,\eta)\,\bm{u}^e,
   \label{eq:Bmat}
 \end{equation}
-both integrated by $2\times2$ Gauss quadrature in the element frame; the
-gradient matrix $B_{,k}$ contains the third derivatives of the shape functions
-and is the reason the element has to be $C^1$. The element contributions are
+both integrated by $4\times4$ Gauss quadrature in the element frame, which is
+the rule the implementation uses for every element; $3\times3$, $4\times4$ and
+$5\times5$ rules change $k^2$ by at most $5.8\times10^{-6}$ and the fundamental
+frequency by at most $7.1\times10^{-6}$ relative on the $48\times4$ mesh, so
+the rule is converged and the value quoted in the results is the
+$4\times4$ one. The gradient matrix $B_{,k}$ contains the third derivatives of
+the shape functions and is the reason the element has to be $C^1$. The element contributions are
 the elastic $K_e=\int B^{\mathsf T}CB$, the gradient
 $K_{g,e}=\tfrac12\int M_{mn}B_{,m}^{\mathsf T}CB_{,n}$, the piezoelectric coupling
 $B_e=\int B^{\mathsf T}e^{\mathsf T}\nabla N_\phi$, the dielectric
@@ -86,19 +90,50 @@ meaningless voltage.
 
 With the L1 weights of \eqref{eq:l1} the time-discrete problem is
 \begin{equation}
-  \left(M + \Delta t^{\alpha}\Gamma(2-\alpha)\,K_{\rm mem}\right)\bm{a}^n
-  = \bm{f}^n - K\bm{u}^n - K_{\rm mem}\sum_{k=1}^{n-1} b_{n-k}
-    \left(\bm{u}^{k}-\bm{u}^{k-1}\right),
+  M\bm{a}^{n+1} + K\bm{u}^{n+1} + \frac{K_{\rm mem}}{\Gamma(2-\alpha)}
+  \sum_{k=0}^{n} b_{n-k}\,\frac{\bm{u}^{n+1-k}-\bm{u}^{n-k}}{\Delta t^{\alpha}}
+  = \bm{f}^{n+1},
   \label{eq:step}
 \end{equation}
-solved by a Cholesky factorization of the constant left-hand matrix, with
-$K_{\rm mem}\in\{K_{\rm eff},K_{uu}\}$ the model choice quantified in
-Sec.~\ref{sec:memorystudy}. In the modal variant used for the long ring-downs,
+with $K_{\rm mem}\equiv\tau^{\alpha}K$ the remembered operator -- the stiffness
+times the relaxation time to the power $\alpha$, so that $K_{\rm mem}$ carries
+mass over time to the power $\alpha-2$ and $\tau^{\alpha}K\,\mathrm{D}^{\alpha}
+\bm{u}$ has the units of a force -- and $K\in\{K_{\rm eff},K_{uu}\}$ the model
+choice quantified in Sec.~\ref{sec:memorystudy}. Inserting the Newmark
+expressions for $\bm{u}^{n+1}$ and $\bm{a}^{n+1}$ ($\beta=\tfrac14$,
+$\gamma=\tfrac12$) moves every unknown of step $n+1$ into one constant
+matrix,
+\begin{equation}
+  \left[M + \beta\Delta t^{2}K +
+    \frac{\beta\,\Delta t^{2-\alpha}}{\Gamma(2-\alpha)}K_{\rm mem}\right]
+  \bm{a}^{n+1} = \bm{r}^{n+1},
+  \label{eq:stepA}
+\end{equation}
+which is factorized once by Cholesky, the elastic and the memory stiffness both
+appearing on the left; $\bm{r}^{n+1}$ collects the known displacements,
+velocities and the history sum $\sum_{k\ge1}b_{n-k}\Delta\bm{u}^{n+1-k}$ of
+\eqref{eq:l1}. The first step has no history, so the initial acceleration is
+$\bm{a}^{0}=M^{-1}(\bm{f}^{0}-K\bm{u}^{0})$ with $\bm{v}^{0}$ supplied by the
+initial condition. Two limits check the expression: at $\alpha=1$ the weights
+are $b_j=1$, the sum telescopes to $\Delta\bm{u}/\Delta t$ and
+\eqref{eq:step} becomes $M\bm{a}+K\bm{u}+\tau K\bm{v}=\bm{f}$, the classical
+Kelvin--Voigt equation, with \eqref{eq:stepA} reducing to the standard Newmark
+matrix for that model; at $\tau\to0$ the memory matrix vanishes and the elastic
+problem is recovered. The exponent and the gamma factor are both easy to
+misplace: a left-hand matrix written $M+\Delta t^{\alpha}\Gamma(2-\alpha)
+K_{\rm mem}$ would not have the dimensions of $M$, whereas
+$\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ does. In the modal variant used for the long ring-downs,
 the same convolution is carried on the mass-normalized coordinates of the
 retained modes, so the cost per step is proportional to the number of retained
-modes rather than to the number of degrees of freedom; the truncation error of
-that projection is measured against the full-order solution rather than
-assumed small (Sec.~\ref{sec:verification}).
+modes rather than to the number of degrees of freedom. The truncation of that
+projection was measured on the ring-down of Sec.~\ref{sec:memorystudy}: with
+the memory on $K_{\rm eff}$ the motion is a single mode and eight modes
+reproduce a forty-mode projection to $2.3\times10^{-14}$ of the initial
+voltage, whereas with the memory on $K_{uu}$ the projected memory couples the
+modes and eight modes differ from forty by $3.6\times10^{-4}$ (twenty modes:
+$5.9\times10^{-5}$). Eight modes are therefore converged for the
+$\alpha=1$ decay quoted below, and the $\alpha<1$ decays are read with that
+difference in mind.
 
 \FloatBarrier
 \subsection{Implementation remarks}
@@ -111,7 +146,7 @@ govern both cost and accuracy.
 \item \emph{Scaling.} The gradient block is $O(M/h^4)$ while the elastic block
   is $O(C/h)$, so the assembled pencil becomes badly scaled as the thickness
   falls. The implementation scales the two blocks separately before the
-  eigensolve and returns the eigenpairs unscaled; the thin-plate limit of
+  eigensolve and returns the eigenpairs unscaled; the thinnest case of
   Sec.~\ref{sec:thickness} is at a condition number of about $10^{12}$, and the
   sensitivity of the resulting small differences is measured rather than
   assumed (\ref{app:verification}).
@@ -120,7 +155,7 @@ govern both cost and accuracy.
   workhorse of the results; the mesh-refinement study of
   Sec.~\ref{sec:verification} shows that on that mesh the frequency of the
   extensional mode is within $0.05\,\%$ and its quasi-static coupling factor
-  within $0.03\,\%$ of a $96\times4$ refinement, and the thinnest plates are
+  within $0.03\,\%$ of a $96\times4$ refinement, and the thinnest strips are
   solved on it because the conditioning, not the number of elements, is the
   binding constraint.
 \end{enumerate}

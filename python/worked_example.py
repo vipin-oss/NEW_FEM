@@ -128,9 +128,12 @@ def memory():
     keff = s1["Keff_alpha1.0"]["zeta_eff"]
     kuu = s1["Kuu_alpha1.0"]["zeta_eff"]
     exact = mv["omega_tau"] / 2.0
+    delta = s1["Keff_alpha1.0"]["delta"]
     out["zeta"] = {"Keff_alpha1": keff, "Kuu_alpha1": kuu, "exact": exact,
                    "error_percent": 100.0 * abs(keff - exact) / exact,
-                   "peak_ratio": float(np.exp(2 * np.pi * keff))}
+                   "delta": delta,
+                   "peak_ratio": float(np.exp(delta)),
+                   "zeta_small": float(delta / (2 * np.pi))}
     out["ratio"] = {"Kuu_over_Keff": kuu / keff,
                     "naive_1_minus_k2": 1.0 - mv["k2"]}
     out["tau_s"] = mv["tau"]

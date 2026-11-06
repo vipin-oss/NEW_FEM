@@ -68,11 +68,14 @@ $f_{1}$ against ${\rm AR}$ and $\theta$ & a prediction, not a fit \\
 bending test on a poled dielectric bar with electrodes on the two faces: for the geometry of Fig.~\ref{fig:geometry}(a) the
 open-circuit voltage under a known curvature $\kappa_{c}$ is
 \begin{equation}
-  V = \frac{\mu\,\kappa_{c}\,h}{\kappa_{yy}\,\varepsilon_{0}},
+  V = \frac{\mu\,\kappa_{c}\,h}{\kappa_{yy}},
   \label{eq:muV}
 \end{equation}
 which fixes $\mu$ from a voltage, a curvature and the permittivity, with no
-discretization involved. The inverse route measures the charge released by a
+discretization involved. Here $\kappa_{yy}=4.9583\times10^{-10}$\,\si{\farad
+\per\metre} is the absolute permittivity of \eqref{eq:D}, so $\varepsilon_0$
+does not appear again: $\si{\coulomb\per\metre}\times\si{\per\metre}
+\times\si{\metre}/(\si{\farad\per\metre})=\si{\coulomb\per\farad}=\si{\volt}$. The inverse route measures the charge released by a
 device whose curvature is known from its deflection. In both routes the
 measured quantity is linear in $\mu$, so one measurement fixes the magnitude
 and the sign has to be taken from the crystal symmetry. The value used in this
@@ -88,9 +91,15 @@ coefficient is substituted.
 The pair $(\alpha,\tau)$ is obtained from a dielectric loss measurement. In the
 frequency domain the fractional Kelvin--Voigt element \eqref{eq:kvfreq} has
 $\tan\delta = (\omega\tau)^{\alpha}\sin(\pi\alpha/2)/
-[1+(\omega\tau)^{\alpha}\cos(\pi\alpha/2)]$, so a log--log plot of
-$\tan\delta(\omega)$ over two decades gives $\alpha$ as the low-frequency
-slope and $\tau$ from the frequency at which $\tan\delta$ reaches its maximum.
+[1+(\omega\tau)^{\alpha}\cos(\pi\alpha/2)]$, and both $|K^{*}|/K$ and $\tan\delta$ are monotone in $\omega\tau$, so no
+single frequency of $\tan\delta$ carries $\tau$: a plot of the pair
+$(|K^{*}|/K,\tan\delta)$ over two decades or more is fitted with the two free
+parameters $(\alpha,\tau)$, and at the point $\omega\tau=1$ the loss is
+$\tan\delta=\sin(\pi\alpha/2)/[1+\cos(\pi\alpha/2)]=\tan(\pi\alpha/4)$, which
+gives $\alpha$ from one decade of $\tan\delta$ alone once $\tau$ is known. The
+earlier form of this paragraph, which put $\tau$ at a maximum of $\tan\delta$,
+was wrong: $\tan\delta$ increases monotonically to the finite limit
+$\tan(\pi\alpha/2)$ and has no maximum.
 The ring-down of a driven device gives the same information in the time domain:
 the logarithmic decrement of \eqref{eq:zeta} is $\pi(\omega\tau)^{\alpha}
 \sin(\pi\alpha/2)/2$ for small loss, so a measurement at two amplitudes fixes
@@ -100,7 +109,7 @@ Two cautions follow from Sec.~\ref{sec:memorystudy}. First, the calibration
 must state which matrix the memory multiplies, because the same measured
 decrement corresponds to two different $(\alpha,\tau)$ pairs under
 $K_{\rm eff}$ and under $K_{uu}$ -- the ratio of the resulting damping ratios
-is $0.449$ at $\alpha=1$. Second, the fit is valid where the measurement is:
+is $0.450$ at $\alpha=1$. Second, the fit is valid where the measurement is:
 the fractional element describes a broadened, single-power-law loss, and a
 material with two well-separated loss peaks needs two elements rather than one.
 
@@ -120,7 +129,7 @@ than a numerical tolerance.
   constitutive closed form, where it is stated explicitly.
 \item \emph{Small window.} The second-order truncation \eqref{eq:Mdef} of the
   averaging operator is valid while the window is small against the length over
-  which the strain gradient varies, which for the plate of
+  which the strain gradient varies, which for the strip of
   Table~\ref{tab:params} means $a/L\le0.2$. The bound is set by
   Fig.~\ref{fig:window}(a): beyond it the retained second moment no longer
   represents the average, independently of the mesh.
@@ -140,7 +149,7 @@ than a numerical tolerance.
 two-dimensional, with a plane-stress reduction of the constitutive tensors; the
 reduction is a modeling choice, since plane strain would change the extensional
 coupling and the three-dimensional solution differs from both, so the
-thin-plate results of Sec.~\ref{sec:thickness} are two-dimensional results
+thin-strip results of Sec.~\ref{sec:thickness} are two-dimensional results
 consistent with the plane-stress law of Table~\ref{tab:params}. Two inputs are
 nominal rather than measured. The mass density
 $\rho=\SI{6020}{\kilo\gram\per\cubic\metre}$ scales every frequency by a common
@@ -154,7 +163,7 @@ is.
 
 \emph{What the numbers and the verification do not establish.} The
 two-significant-digit statement of Sec.~\ref{sec:thickness} is a limitation as
-much as a result: the third digit of the thin-plate coupling is not a property
+much as a result: the third digit of the thin-strip coupling is not a property
 of the model, and the same applies, with smaller amplitude, to any quantity
 obtained as a difference of nearly equal eigenvalues. The verification of
 Sec.~\ref{sec:verification} and \ref{app:verification} shows that the

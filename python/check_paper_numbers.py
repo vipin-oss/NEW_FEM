@@ -123,12 +123,12 @@ def main():
     R.append(row("abstract, memory coupling", "0.4650",
                  "memory_variants.json k2", g("memory_variants.json.k2"),
                  "{:.4f}"))
-    R.append(row("abstract, zeta ratio", "0.449",
+    R.append(row("abstract, zeta ratio", "0.450",
                  "memory_variants.json S1 Kuu/Keff",
                  g("memory_variants.json.S1.Kuu_alpha1.0.zeta_eff")
                  / g("memory_variants.json.S1.Keff_alpha1.0.zeta_eff"),
                  "{:.3f}"))
-    R.append(row("abstract, classical limit", "0.15023",
+    R.append(row("abstract, classical limit", "0.15003",
                  "memory_variants.json S1 Keff zeta",
                  g("memory_variants.json.S1.Keff_alpha1.0.zeta_eff"),
                  "{:.5f}"))
@@ -430,9 +430,9 @@ def main():
                  "worked_example diff_percent", cf["diff_percent"], "{:.2f}"))
     R.append(row("worked, flexoelectric x at h=10", "3.5704e-4",
                  "worked_example x_analytic_h10", fx["x_analytic_h10"], "{:.4e}"))
-    R.append(row("worked, peak ratio of the ring-down", "2.5700",
-                 "exp(2 pi zeta_eff)", mm["zeta"]["peak_ratio"], "{:.4f}"))
-    R.append(row("worked, logarithmic decrement", "0.94392",
+    R.append(row("worked, peak ratio of the ring-down", "2.5947",
+                 "exp(delta) from memory_variants.json", mm["zeta"]["peak_ratio"], "{:.4f}"))
+    R.append(row("worked, logarithmic decrement", "0.95345",
                  "ln(peak ratio)", float(__import__("math").log(mm["zeta"]["peak_ratio"])),
                  "{:.5f}"))
     R.append(row("worked, L1 weight b1 at alpha=0.5", "0.414214",

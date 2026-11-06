@@ -26,7 +26,7 @@
    "why": "the same rotation study (T5); the spread is a property of the second-moment tensor, which is verified (I8), the spread is not"
   },
   {
-   "literal": "0.449",
+   "literal": "0.450",
    "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
    "source": "abstract_audit.json",
    "why": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
@@ -140,27 +140,27 @@
    "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
   {
-   "literal": "0.15023",
+   "literal": "0.15003",
    "what": "$\\zeta_{\\rm eff}$ at $\\alpha=1$",
-   "source": "memory_variants.json S1",
+   "source": "memory_variants.json S1 zeta_eff",
    "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
   },
   {
-   "literal": "0.06749",
+   "literal": "0.06746",
    "what": "$\\zeta(K_{uu})$ at $\\alpha=1$",
-   "source": "memory_variants.json S1",
+   "source": "memory_variants.json S1 zeta_eff",
    "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
   },
   {
-   "literal": "0.02600",
-   "what": "$\\zeta_{\\rm eff}$ at $\\alpha=0.7$",
-   "source": "memory_variants.json S1",
+   "literal": "0.1942",
+   "what": "first-period $\\zeta_{\\rm eff}$ at $\\alpha=0.7$",
+   "source": "memory_variants.json S1 zeta_first",
    "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
   },
   {
-   "literal": "0.05006",
-   "what": "$\\zeta(K_{uu})$ at $\\alpha=0.7$",
-   "source": "memory_variants.json S1",
+   "literal": "0.0831",
+   "what": "first-period $\\zeta(K_{uu})$ at $\\alpha=0.7$",
+   "source": "memory_variants.json S1 zeta_first",
    "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
   },
   {

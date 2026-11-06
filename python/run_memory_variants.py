@@ -46,10 +46,10 @@ def build(kin="plane_stress"):
     return mdl, core, Koc, Kuu, M, idx, d, beta
 
 
-def ringdown(Kd, Koc, M, idx, d, beta, alpha, tau, j, x0, nm=8):
+def ringdown(Kd, Koc, M, idx, d, beta, alpha, tau, j, x0, nm=8, nsteps=48000):
     wo = f6.modes(Koc, M, nm)[0]
     T = 20 * 2 * np.pi / wo[j]
-    N = 12000
+    N = nsteps
     dt = T / N
     t, x, y, v, a = f6.transient(Koc, M, Kd, np.zeros(idx.size), alpha, tau,
                                  dt, N, nmodes=nm, x0=x0,
@@ -59,22 +59,45 @@ def ringdown(Kd, Koc, M, idx, d, beta, alpha, tau, j, x0, nm=8):
     return t, V
 
 
-def zeta_eff(t, s, w):
-    """Effective damping ratio from the logarithmic decrement of the peaks."""
+def peaks_of(t, s, w):
+    """Local maxima of |s|, at least 0.7 period apart."""
     a = np.abs(s)
     per = int(len(t) / (t[-1] * w / (2 * np.pi)))          # samples per period
-    peaks, idx = [], []
-    for i in range(per, len(t) - 1, max(1, per // 4)):
-        lo, hi = max(0, i - per // 2), min(len(t), i + per // 2)
-        k = lo + int(np.argmax(a[lo:hi]))
-        if not idx or k > idx[-1] + per // 2:
-            peaks.append(a[k]); idx.append(k)
-    if len(peaks) < 3:
-        return float("nan")
-    x = t[np.array(idx)]
-    y = np.log(np.array(peaks))
-    slope = np.polyfit(x, y, 1)[0]
-    return float(-slope / w)
+    cand = [i for i in range(1, len(a) - 1)
+            if a[i] > a[i - 1] and a[i] >= a[i + 1]]
+    keep = []
+    for i in cand:
+        if not keep or i - keep[-1] > 0.7 * per:
+            keep.append(i)
+    return a[np.array(keep)]
+
+
+def zeta_eff(t, s, w):
+    """Damping ratio from the successive-peak decrements.
+
+    delta_k = ln(A_k/A_{k+1});  zeta = delta/sqrt(4 pi^2 + delta^2) exactly.
+    `delta` is the mean over all successive pairs and `zeta_eff` the exact
+    conversion of it; `zeta_small` = delta/(2 pi) is retained only to show how
+    far the small-damping form is off. `zeta_first` is the first-period value,
+    which is the only meaningful entry for alpha < 1, where the free decay of a
+    fractional element is not exponential.
+    """
+    pk = peaks_of(t, s, w)
+    if len(pk) < 3:
+        return {}
+    d = np.log(pk[:-1] / pk[1:])
+    delta = float(d.mean())
+    d1 = float(d[0])
+    out = {"delta": delta,
+           "peak_ratio": float(pk[0] / pk[1]),
+           "zeta_eff": float(delta / np.sqrt(4 * np.pi ** 2 + delta ** 2)),
+           "zeta_small": float(delta / (2 * np.pi)),
+           "delta_spread": float(d.max() - d.min()),
+           "first_delta": d1,
+           "zeta_first": float(d1 / np.sqrt(4 * np.pi ** 2 + d1 ** 2)),
+           "npeaks": int(len(pk))}
+    out["zeta_eff"] = out["zeta_eff"]
+    return out
 
 
 def main():
@@ -98,10 +121,12 @@ def main():
         for alpha in (1.0, 0.7):
             t, V = ringdown(Kd, Koc, M, idx, d, beta, alpha, tau, j, x0)
             z = zeta_eff(t, V, wo[j])
-            out["S1"][f"{tag}_alpha{alpha}"] = {"V0": float(abs(V[0])),
-                                                "zeta_eff": z}
+            out["S1"][f"{tag}_alpha{alpha}"] = {"V0": float(abs(V[0])), **z}
             print(f"    Kd={tag:5s} alpha={alpha}: V(0)={abs(V[0]):8.4f} V, "
-                  f"zeta_eff = {z:.5f}")
+                  f"delta = {z['delta']:.6f}, zeta_eff = {z['zeta_eff']:.6f}, "
+                  f"zeta_small = {z['zeta_small']:.6f}, "
+                  f"zeta_first = {z['zeta_first']:.6f}, "
+                  f"spread = {z['delta_spread']:.2e}")
 
     # ---- S2: KV vs fractional Zener modulus ----
     print("\nS2  |C*|/C0 : fractional Kelvin-Voigt vs fractional Zener")

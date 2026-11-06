@@ -5,8 +5,8 @@
 | # | claim | manuscript | json | value | status |
 |---|---|---|---|---|---|
 | 1 | abstract, memory coupling | `0.4650` | `memory_variants.json k2` | `0.4650` | ok |
-| 2 | abstract, zeta ratio | `0.449` | `memory_variants.json S1 Kuu/Keff` | `0.449` | ok |
-| 3 | abstract, classical limit | `0.15023` | `memory_variants.json S1 Keff zeta` | `0.15023` | ok |
+| 2 | abstract, zeta ratio | `0.450` | `memory_variants.json S1 Kuu/Keff` | `0.450` | ok |
+| 3 | abstract, classical limit | `0.15003` | `memory_variants.json S1 Keff zeta` | `0.15003` | ok |
 | 4 | abstract, piezo k^2 | `0.5581` | `demo.json flexo_thickness[0].k2_ext` | `0.5581` | ok |
 | 5 | thickness, piezo k^2 series (h=10) | `0.55814` | `demo.json flexo_thickness[0].k2_ext` | `0.55814` | ok |
 | 6 | thickness, piezo k^2 series (h=1) | `0.55861` | `demo.json flexo_thickness[3].k2_ext` | `0.55861` | ok |
@@ -85,7 +85,7 @@
 | 79 | worked, x from the assembled matrices | `1.2631` | `worked_example x_fem` | `1.2631` | ok |
 | 80 | worked, distance to the closed form | `0.47` | `worked_example diff_percent` | `0.47` | ok |
 | 81 | worked, flexoelectric x at h=10 | `3.5704e-4` | `worked_example x_analytic_h10` | `3.5704e-4` | ok |
-| 82 | worked, peak ratio of the ring-down | `2.5700` | `exp(2 pi zeta_eff)` | `2.5700` | ok |
-| 83 | worked, logarithmic decrement | `0.94392` | `ln(peak ratio)` | `0.94392` | ok |
+| 82 | worked, peak ratio of the ring-down | `2.5947` | `exp(delta) from memory_variants.json` | `2.5947` | ok |
+| 83 | worked, logarithmic decrement | `0.95345` | `ln(peak ratio)` | `0.95345` | ok |
 | 84 | worked, L1 weight b1 at alpha=0.5 | `0.414214` | `sqrt(2)-1` | `0.414214` | ok |
 | 85 | worked, L1 weight b2 at alpha=0.7 | `0.159245` | `3^0.3-2^0.3` | `0.159245` | ok |

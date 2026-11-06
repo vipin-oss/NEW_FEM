@@ -105,7 +105,7 @@ Papanicolopulos2009}.
 Analytical and benchmark solutions for verification are
 available~\cite{Yang2021,Lazar2024}, as are nonlocal boundary element and
 operator methods~\cite{Schwartz2012EABE36,ZhangRen2023EWC39}. In the
-nonlocal-strain-gradient literature on plates and shells the isogeometric
+nonlocal-strain-gradient literature on strips and shells the isogeometric
 family has been the vehicle of choice for
 nanostructures~\cite{PhungVan2023EC39,PhungVan2024AMM127,PhungVan2024AMM128,
 PhungVan2024CS335,PhungVan2024TWS198,Thai2023CS316}. What is missing from this
@@ -119,7 +119,7 @@ strain-gradient formulation with ellipsoidal nonlocal characteristic lengths
 established the element technology and the geometric meaning of the length
 tensor~\cite{fem1}. A coupled piezoelectric--flexoelectric continuum in
 Mindlin's Form~II established the constitutive structure~\cite{fem4}, and a
-plate and shell implementation of that continuum established the reduction to
+strip and shell implementation of that continuum established the reduction to
 two dimensions~\cite{fem5}. Those papers treat the static and the modal
 electromechanical coupling of the continuum. They do not contain a memory, they
 do not distinguish the two memory matrices that a condensed electrical problem
@@ -143,19 +143,27 @@ The present paper closes that gap. Its contributions are the following.
   coordinates. This makes the choice of memory matrix -- the condensed
   stiffness or the short-circuit stiffness -- an explicit modeling decision
   and quantifies its effect on the damping ratio.
-\item \textbf{Mode-free coupling factors for two electrode configurations.}
-  The extensional and the bending configuration of one plate are treated as
-  two electrical problems, and the coupling factor of the open- and
-  short-circuit pair is evaluated from a quasi-static expression that involves
-  no eigenvector. This removes the mode-selection step from the headline
-  number, and it separates a material property from a size effect.
-\item \textbf{Calibration protocol and validity window.} The paper states how
-  the four model parameters -- the fractional order, the relaxation time, the
-  flexoelectric coefficient and the window size -- are to be obtained
-  experimentally, over which ranges the two-dimensional reduction and the
-  small-coupling expansions remain valid, and which quantities are known only
-  to within a stated tolerance.
+\item \textbf{Mode-free coupling factors and a calibration protocol for two
+  electrode configurations of one strip.} The extensional and the bending
+  configuration are treated as two electrical problems, and the coupling
+  factor of the open- and short-circuit pair is evaluated from a quasi-static
+  expression that involves no eigenvector, which removes the mode-selection
+  step from the headline number and separates a material property from a size
+  effect. The paper states how the four model parameters -- the fractional
+  order, the relaxation time, the flexoelectric coefficient and the window
+  size -- are to be obtained experimentally, and over which ranges the
+  two-dimensional reduction and the small-coupling expansions remain valid.
 \end{enumerate}
+
+Each parameter is read from a different observable: the flexoelectric
+coefficient from the charge of a bending device at known curvature, the window
+from the decay length of the strain at a clamped edge, and the pair
+$(\alpha,\tau)$ from the dielectric loss spectrum, with the damping ratio
+providing a second, time-domain route to the same pair. That separation is what
+makes the calibration protocol usable, and it also means that the parameters
+are not jointly identified from one measurement: the identifiability of
+$(\mu,a,\alpha,\tau)$ from combined charge, stiffness and loss data is not
+tested in this paper.
 
 Section~\ref{sec:formulation} states the formulation, Sec.~\ref{sec:limits}
 its particular cases, Sec.~\ref{sec:bc} the boundary and electrode
