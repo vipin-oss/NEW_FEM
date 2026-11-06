@@ -1,6 +1,6 @@
 %% ===========================================================================
 \FloatBarrier
-\section{Experimental calibration protocol and limitations}
+\section{Parameter identification and limitations}
 \label{sec:calibration}
 %% ===========================================================================
 
@@ -11,7 +11,7 @@ obtained, over which ranges the results of this paper hold, and which numbers
 in the paper are not verified.
 
 \FloatBarrier
-\subsection{Experimental calibration protocol}
+\subsection{Measurement routes for the four parameters}
 \label{sec:calib_a_mu}
 
 The four parameters are not of the same kind, and they are measured in
@@ -85,7 +85,7 @@ $\mu^{2}$ and should be read as a shape, not as a magnitude, until a measured
 coefficient is substituted.
 
 \FloatBarrier
-\subsection{Calibration of the fractional order and of the relaxation time}
+\subsection{Identification of the fractional order and of the relaxation time}
 \label{sec:calib_alpha_tau}
 
 The pair $(\alpha,\tau)$ is obtained from a dielectric loss measurement. In the
@@ -100,10 +100,16 @@ gives $\alpha$ from one decade of $\tan\delta$ alone once $\tau$ is known. The
 earlier form of this paragraph, which put $\tau$ at a maximum of $\tan\delta$,
 was wrong: $\tan\delta$ increases monotonically to the finite limit
 $\tan(\pi\alpha/2)$ and has no maximum.
-The ring-down of a driven device gives the same information in the time domain:
-the logarithmic decrement of \eqref{eq:zeta} is $\pi(\omega\tau)^{\alpha}
-\sin(\pi\alpha/2)/2$ for small loss, so a measurement at two amplitudes fixes
-the pair.
+The ring-down of a driven device gives the same information in the time domain,
+but not from one number: for small loss the damping ratio implied by the
+fractional element is $\zeta=(\omega\tau)^{\alpha}\sin(\pi\alpha/2)/2$, so the
+logarithmic decrement of \eqref{eq:zeta} is
+$\delta\approx\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2)$ -- at $\alpha=1$,
+$\delta=\pi\omega\tau$, which reproduces \eqref{eq:zeta} to the $1.2\,\%$ of
+the small-loss approximation quoted above. A single decrement therefore fixes
+only the product $(\omega\tau)^{\alpha}\sin(\pi\alpha/2)$, and the pair
+$(\alpha,\tau)$ needs the decrement at two frequencies, or one decrement at a
+known $\omega\tau$.
 
 Two cautions follow from Sec.~\ref{sec:memorystudy}. First, the calibration
 must state which matrix the memory multiplies, because the same measured
@@ -128,11 +134,16 @@ than a numerical tolerance.
   used instead. The uncoupled form is retained only for the comparison with the
   constitutive closed form, where it is stated explicitly.
 \item \emph{Small window.} The second-order truncation \eqref{eq:Mdef} of the
-  averaging operator is valid while the window is small against the length over
-  which the strain gradient varies, which for the strip of
-  Table~\ref{tab:params} means $a/L\le0.2$. The bound is set by
-  Fig.~\ref{fig:window}(a): beyond it the retained second moment no longer
-  represents the average, independently of the mesh.
+  averaging operator is written for a window that is small against the length
+  over which the strain gradient varies, and for the strip of
+  Table~\ref{tab:params} we take $a/L\le0.2$ as the operating range. This is an
+  assumed range, not a validated truncation threshold: no experiment and no
+  exact averaging operator is available to us here, so nothing in this paper
+  fixes where the truncation ceases to represent the average. What
+  Fig.~\ref{fig:window}(a) does show is that inside the range the retained
+  second moment reproduces the exact average of the window to a fraction of a
+  per cent on every mesh we tried, so the range is where the model is
+  \emph{self-consistent}, and it is quoted as such.
 \item \emph{Operating band.} The damping map is claimed for
   $\omega\tau\le1$, the band in which the spring-pot represents a relaxation
   whose spectrum is centered on the device frequency. Beyond that band the map

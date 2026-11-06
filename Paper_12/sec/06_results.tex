@@ -26,8 +26,8 @@ half-widths $a_1\times a_2=3\times1$\,\si{\micro\metre} the cuboid window of
 \eqref{eq:Mshapes} gives $M_{11}=3.0\times10^{-12}$ and
 $M_{22}=3.3\times10^{-13}$\,\si{\square\metre}, that is characteristic lengths
 $\sqrt{M_{11}}=\SI{1.73}{\micro\metre}$ and $\sqrt{M_{22}}=\SI{0.58}{\micro\metre}$
-along and across the strip. The ratio $a_1/L=0.015$ is far inside the bound
-$a/L\le0.2$ that Sec.~\ref{sec:limit_window} adopts, so the second-order
+along and across the strip. The ratio $a_1/L=0.015$ is far inside the operating range
+$a/L\le0.2$ that Sec.~\ref{sec:limit_window} assumes, so the second-order
 truncation of \eqref{eq:Mdef} is not what limits the results; the strip is
 solved with a $48\times4$ BFS mesh, which the convergence study of
 Sec.~\ref{sec:verification} shows to be adequate for every quantity quoted
@@ -68,26 +68,53 @@ $\omega\tau=0.3$ changes the damping ratio extracted from the ring-down by less
 than $0.5\,\%$ for $\alpha\ge0.5$, and the step used in Sec.~\ref{sec:transient}
 is the halved one.
 
-\emph{Closed-form coupling.} The quasi-static coupling factor of the electrode
-pair is available in closed form from the constitutive tensors alone,
+\emph{Closed-form coupling.} Table~\ref{tab:coupling} collects every coupling
+factor quoted in this paper and the measure behind each. The first of them
+comes from the constitutive tensors alone: the quasi-static coupling factor of
+the electrode pair is available in closed form,
 $k^2=(e^{\mathsf T}C^{-1}e/\kappa)/(1+e^{\mathsf T}C^{-1}e/\kappa)$, which for
 the extensional configuration gives $x=e^{\mathsf T}C^{-1}e/\kappa=1.2768$ and
-therefore $k^2=0.5608$; the paper quotes $k^2_{\rm qs}=0.5581$ for the same
-quantity on its working mesh. Three further closed forms bracket
-it: the three-dimensional free bar gives $0.5771$, the three-dimensional
-uniaxial case $0.3748$ and the two-dimensional plane-strain case $0.5132$. The
-strip model returns $0.5581$ through \eqref{eq:kstatic} and $0.5596$ for the
-clamped $48\times4$ mesh listed in Table~\ref{tab:closedform}, both within
-$0.5\,\%$ of the plane-stress closed form, so the residual is the
-discretization and not a modeling difference. The separation between the
-plane-stress and plane-strain closed forms is a modeling choice, and the
-plane-stress one is adopted because the strip is free out of plane. The three
-numbers near $0.56$ are three measures of one set of tensors and are not made
-to agree: $0.5581$ is the mode-free quasi-static value of
-\eqref{eq:kstatic} on the working mesh with the open/short-circuit pair,
-$0.5596$ is the mode-based value of the clamped $48\times4$ model, and
-$0.55814$ is the free-strip value of \ref{app:data}; the abstract quotes the
-first.
+therefore $k^2=0.5608$ (Table~\ref{tab:closedform}). Three further closed
+forms bracket it: the
+three-dimensional free bar gives $0.5771$, the three-dimensional uniaxial case
+$0.3748$ and the two-dimensional plane-strain case $0.5132$
+(Table~\ref{tab:closedform}). The separation
+between the plane-stress and plane-strain closed forms is a modeling choice,
+and the plane-stress one is adopted because the strip is free out of plane.
+
+The assembled route returns several numbers near $0.56$, and they are different
+measures of the same tensors, so Table~\ref{tab:coupling} lists every coupling
+factor quoted in this paper with its boundary condition, mesh, electrode pair,
+matrix and formula. Three of them matter here. With the window switched off and
+no constraint, the assembled route reproduces the closed form to
+$1.2\times10^{-11}$ relative ($0.56079$), which is the validation of the
+assembly. Clamping the left edge lowers it to $0.5596$ ($0.55957$) and
+switching the window on lowers it further to $0.55814$: the first is the
+constraint, the second the gradient stiffness, and together they explain the $0.36\,\%$ between
+the closed form and the working value $0.5581$. No attempt is made to make the
+three agree, and the abstract quotes the working value $0.5581$
+($0.55814$ to five decimals) of the clamped $48\times4$ mesh with the window
+on.
+
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\caption{Every coupling factor quoted in this paper, one row each, with the
+measure that produced it. All rows are plane stress, poled along $x$, with the
+electrode pair on the short faces; the window is
+$a_1\times a_2=3\times1$\,\si{\micro\metre} where it is switched on. The
+mode-free rows are $x/(1+x)$ with $x=d^{\mathsf T}K_{sc}^{-1}d/\beta$ and use no
+eigenvector; the mode-based rows are the extensional mode (mode~4) of the
+$24\times2$ mesh, $(\omega_{oc}^{2}-\omega_{s}^{2})/\omega_{oc}^{2}$ with $s$
+the matrix named in the fifth column. Rows 1 and 8 are the same number by
+construction and are the validation of the assembled route; row 2 isolates the
+clamped edge, row 3 the window, row 4 the mesh, and rows 6 and 7 differ only in
+$\mu$.\ The last column is the entry of
+\texttt{results/coupling\_provenance.json} that reproduces the row; that file
+also records the upstream key each entry was checked against.}
+\label{tab:coupling}
+\input{table_coupling}
+\end{table}
 
 \emph{Independent routes.} Eight headline numbers were recomputed along routes
 that do not use the assembled matrices at all -- the bar frequency from
@@ -104,7 +131,8 @@ finite element values within the tolerances stated in
 degrees of freedom of four meshes. (a) Relative error of the extensional
 coupling factor $k^2$ and of the frequency of the mode that carries it, both
 referred to the finest mesh, with the $N^{-2}$ rate line expected of a bicubic
-Hermite interpolation; (b) the two quantities themselves, with the converged
+Hermite interpolation. Both are the mode-free quasi-static $k^2$ of the clamped
+build with the window on; (b) the two quantities themselves, with the converged
 value as a dotted line. The $48\times4$ mesh used in the paper is the rightmost
 point of both panels and is marked.
 ($L=\SI{200}{\micro\metre}$, $h=\SI{10}{\micro\metre}$, $E$ and $\nu$ from
@@ -119,7 +147,10 @@ $a_1/L=0.015$, $\mu=10^{-6}$\,\si{\coulomb\per\metre}, plane stress.)}
 \caption{The coupling factor obtained from the constitutive tensors alone, for
 the four kinematics, together with the coupling strength
 $e^{\mathsf T}C^{-1}e/\kappa$ from which it follows. The record is that of
-Table~\ref{tab:params}, in plane stress and in plane strain.}
+Table~\ref{tab:params}, in plane stress and in plane strain. The three finite
+element rows below the rule are all mode-free values of \eqref{eq:kstatic},
+plane stress, poling $x$, on the meshes named, with the window switched off;
+Table~\ref{tab:coupling} sets them beside the same measure with the window on.}
 \label{tab:closedform}
 \input{table_closed_form}
 \end{table}
@@ -211,9 +242,12 @@ $d$ the charge vector of that pair. Then
   k^{2}_{\rm FEM}=\frac{x_{\rm FEM}}{1+x_{\rm FEM}}=0.5581,
   \label{eq:xFEM}
 \end{equation}
-$0.47\,\%$ below \eqref{eq:xclosed}. That residual is the discretization of the
-clamped $48\times4$ mesh, not a modeling difference: the free strip reproduces
-\eqref{eq:xclosed} to $10^{-10}$ (Table~\ref{tab:closedform}).
+$0.47\,\%$ below \eqref{eq:xclosed}. That residual is not discretization: it
+is the clamped edge, which costs $0.22\,\%$, and the gradient stiffness of the
+window, which costs a further $0.26\,\%$ (Table~\ref{tab:coupling}), while the
+unconstrained strip without the window reproduces \eqref{eq:xclosed} to
+$1.2\times10^{-11}$ relative and the mesh refinement of the working build moves
+the value by $0.03\,\%$ (Table~\ref{tab:convergence}).
 
 \paragraph{Flexoelectric bending.} With the piezoelectric constants switched
 off, the same reduction gives the smallness parameter of the bending
@@ -399,14 +433,17 @@ $K_{uu}$, and the two give different damping.
 extensional mode (mode 4, \SI{6.727}{MHz}) at
 $\tau=\SI{7.0974}{\nano\second}$, that is $\omega\tau=0.3$, with an initial tip
 displacement that produces \SI{139.07}{\volt} of open-circuit voltage at
-$t=0$. Three coupling numbers for that mode appear in the paper and they are
-three different measures, not three estimates: $k^2_{4}(K_{uu})=0.4650$ is the
-modes-based coupling of the open- and short-circuit eigenproblems with the
-memory matrix $K_{uu}$ (Table~\ref{tab:memory}), $0.4580$ is the same
-eigenvalue measure on the short-circuit stiffness $K_{sc}$
-(Sec.~\ref{sec:application}), and $0.4583$ is the mode-resolved value quoted
-with the ring-down of Sec.~\ref{sec:transient} on that section's
-$24\times2$ mesh. The spread between the three is $1.5\,\%$. The damping ratio is extracted from two successive peaks through the exact
+$t=0$. Three coupling numbers for that mode appear in the paper. They come
+from two quantities, not three: $k^2_{4}(K_{uu})=0.4650$ is the mode-based
+measure on the elastic memory matrix $K_{uu}$ (Table~\ref{tab:memory}) and
+$k^2_{4}(K_{sc})=0.4583$ is the same measure on the short-circuit stiffness
+$K_{sc}$, both on the $24\times2$ mesh of the ring-down; the third, $0.4580$ in
+Sec.~\ref{sec:application}, is $k^2_{4}(K_{sc})$ again, recomputed with
+$\mu=0$ because that section quotes the material without flexoelectricity.
+Table~\ref{tab:coupling} lists all three. The gap of $1.5\,\%$ between
+$0.4650$ and $0.4583$ is therefore the choice of memory matrix and nothing
+else, and the $0.07\,\%$ between $0.4583$ and $0.4580$ is $\mu$; neither pair
+is averaged, and the ring-down below uses $K_{uu}$ and $K_{\rm eff}$. The damping ratio is extracted from two successive peaks through the exact
 relation for an exponentially decaying oscillation,
 \begin{equation}
   \delta = \ln\frac{A_k}{A_{k+1}},\qquad
@@ -581,10 +618,11 @@ $l$ retains $0.922$ of the classical loaded-edge displacement, an ellipsoid of
 semi-axis $l$ retains $0.941$, and the equal-$M$ cuboid sits on the ellipsoid
 curve to the third decimal. At fixed $M$ the shape of the window is therefore
 immaterial to $10^{-3}$, which is the coefficient ratio $5/3$ in the gradient
-stiffness seen from the response side. The bound claimed for the model is
-$a/L\le0.2$, the right-hand edge of this figure; no larger window is run,
-because there the second-moment truncation itself is what fails rather than
-the implementation (Sec.~\ref{sec:calibration}).
+stiffness seen from the response side. The range in which the model is used is
+$a/L\le0.2$, the right-hand edge of this figure. No larger window is run, and
+the reason is that beyond this point we can no longer check the second-moment
+truncation itself, not that we have located where it fails
+(Sec.~\ref{sec:limit_window}).
 
 Panels (b) and (c) are the corresponding static statement. The clamped strip of
 Table~\ref{tab:params} is solved under an end load for three window sizes and
@@ -593,9 +631,10 @@ The gradient terms stiffen the member. The difference against the classical
 solution vanishes at the clamped edge, where both fields satisfy the same
 kinematic conditions, and then accumulates along the member instead of decaying
 over a thin layer: at these window sizes the gradient effect is distributed
-rather than local, and its size grows with the window. That is why the bound
-$a/L\le0.2$ of Sec.~\ref{sec:limit_window} is stated as a modeling limit
-rather than as a mesh requirement.
+rather than local, and its size grows with the window. That is why
+$a/L\le0.2$ is quoted in Sec.~\ref{sec:limit_window} as an assumed operating
+range and not as a validated truncation threshold: it is where the model is
+used, and it is not a mesh requirement.
 
 \begin{figure}[!htbp]
 \centering
@@ -634,7 +673,7 @@ strip. The second-moment tensor of the full window is used at every thickness
 and no truncated-window boundary correction is applied, so $M$ acts there as a
 local effective gradient tensor rather than as the moment of a window small
 compared with the body; the results at $h\le\SI{2}{\micro\metre}$ are read
-under that assumption, which is consistent with the bound $a/L\le0.2$ used
+under that assumption, which is consistent with the operating range $a/L\le0.2$ used
 elsewhere but not verified independently at these thicknesses. The panels are
 two electrical configurations of that strip, not two
 estimates of one number: panel~(a) is poled across the thickness (electrodes on
@@ -796,8 +835,9 @@ $\alpha$ alone.
 \includegraphics[width=\textwidth]{F9_ringdown.pdf}
 \caption{Ring-down of the extensional mode of the
 \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} strip
-($\SI{6.727}{MHz}$; $k^2=0.4583$ is the mode-free quasi-static measure on the
-$24\times2$ mesh of this figure) for eight Caputo orders $\alpha=1$ to $0.4$:
+($\SI{6.727}{MHz}$; $k^2=0.4583$ is the mode-based value
+$(\omega_{oc}^{2}-\omega_{sc}^{2})/\omega_{oc}^{2}$ of that mode on the
+$24\times2$ mesh of this figure, Table~\ref{tab:coupling}) for eight Caputo orders $\alpha=1$ to $0.4$:
 (a) tip displacement, (b) open-circuit voltage. Modal memory applied to
 $K_{\rm eff}$ with eight modes retained, $\tau=\SI{3}{\nano\second}$
 ($\omega\tau=0.13$, against $\tau=\SI{7.0974}{\nano\second}$ and

@@ -1,6 +1,6 @@
 # Verification table as it appears in the manuscript
 
-59/59 checks pass.
+60/60 checks pass.
 
 | quantity | value obtained | requirement | source |
 |---|---|---|---|
@@ -52,6 +52,7 @@
 | the same spread at h = 10 um | 1.49e-05 % | < 1e-3 % | `results/?` |
 | truncating the secular sum to 12 modes is not an alternative | 85 % off | > 50 % (hence the sum runs over all modes) | `results/?` |
 | no quantity replaced in the round-16 audit has come back | 0 hits of 12 forbidden tokens | 0 hits | `results/?` |
+| every coupling factor is reproduced from the archive and quoted in one row of the coupling table | 10/10 | all, no averaging | `results/?` |
 | the list of unverified numbers cites only numbers still in the manuscript | 29 entries, 0 stale | 0 stale | `results/?` |
 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |

@@ -71,6 +71,9 @@ def main():
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")
         scripts.append("make_appendix_tables.py")
+        scripts.append("coupling_provenance.py")
+        scripts.append("make_coupling_table.py")
+        scripts.append("check_coupling_provenance.py")
         scripts.append("worked_example.py")
         scripts.append("check_paper_numbers.py")
         scripts.append("check_paper_structure.py")
@@ -298,6 +301,13 @@ def main():
     chk("N3", "no quantity replaced in the round-16 audit has come back",
         f"{St['n_hits']} hits of {St['n_tokens']} forbidden tokens", "0 hits",
         St["n_hits"] == 0 and St["n_tokens"] >= 10)
+
+    if figs:
+        Cv = load("coupling_provenance_check.json")
+        chk("N4", "every coupling factor is reproduced from the archive and "
+            "quoted in one row of the coupling table",
+            f"{Cv['n_pass']}/{Cv['n_total']}", "all, no averaging",
+            Cv["all_pass"])
 
     chk("N2", "the list of unverified numbers cites only numbers still in the "
         "manuscript", f"{Uv['n']} entries, {len(Uv['stale'])} stale",

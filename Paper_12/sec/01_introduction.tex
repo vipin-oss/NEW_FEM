@@ -114,17 +114,19 @@ gradient, the electromechanical coupling and the memory are carried by one
 discretization, with an explicit statement of which of its numbers are
 converged and which are set by the eigensolver.
 
-The authors' earlier work forms the immediate background. A $C^1$
-strain-gradient formulation with ellipsoidal nonlocal characteristic lengths
-established the element technology and the geometric meaning of the length
-tensor~\cite{fem1}. A coupled piezoelectric--flexoelectric continuum in
-Mindlin's Form~II established the constitutive structure~\cite{fem4}, and a
-strip and shell implementation of that continuum established the reduction to
-two dimensions~\cite{fem5}. Those papers treat the static and the modal
-electromechanical coupling of the continuum. They do not contain a memory, they
-do not distinguish the two memory matrices that a condensed electrical problem
-admits, and they do not treat the averaging window as a tensor in the coupled
-problem.
+Two lines of work meet here. On the elastic side, a $C^1$ strain-gradient
+formulation with ellipsoidal nonlocal characteristic lengths established the
+element technology and the geometric meaning of the length
+tensor~\cite{fem1}, and the reduction of that energy to a scalar length is the
+Aifantis form~\cite{Aifantis1992}. On the coupled side, the
+piezoelectric--flexoelectric structure used below is Mindlin's Form~II of
+polarization-gradient theory~\cite{Mindlin1965,Toupin1962,Mindlin1968} with the
+flexoelectric coupling of Kogan~\cite{Kogan1964} and
+Yudin and Tagantsev~\cite{YudinTagantsev2013}, in the two-dimensional form that the
+plane-stress reduction of Sec.~\ref{sec:formulation} gives. Neither line
+contains a memory, distinguishes the two memory matrices that a condensed
+electrical problem admits, or treats the averaging window as a tensor in the
+coupled problem.
 
 The present paper closes that gap. Its contributions are the following.
 
@@ -151,7 +153,7 @@ The present paper closes that gap. Its contributions are the following.
   step from the headline number and separates a material property from a size
   effect. The paper states how the four model parameters -- the fractional
   order, the relaxation time, the flexoelectric coefficient and the window
-  size -- are to be obtained experimentally, and over which ranges the
+  size -- are to be identified from measurements, and over which ranges the
   two-dimensional reduction and the small-coupling expansions remain valid.
 \end{enumerate}
 

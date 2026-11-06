@@ -86,7 +86,7 @@ Bogner--Fox--Schmit rectangle~\cite{BognerFoxSchmit1966}: a bicubic Hermite
 tensor-product element with 32 mechanical degrees of freedom, $C^1$ across
 element edges and $C^0$ only for the cross derivative. It is the natural
 carrier of $\eta_{ijk}$ in two dimensions and it is the element family used in
-the authors' earlier strain-gradient work~\cite{fem1}; here it is extended by
+the one-scale theory~\cite{fem1}; here it is extended by
 the flexoelectric and fractional-memory terms rather than replaced.
 
 \FloatBarrier
@@ -260,7 +260,12 @@ quantities that appear in \eqref{eq:dofs}. In the time domain the memory of
 \eqref{eq:kv} turns \eqref{eq:gov1} into a Volterra-type equation whose kernel
 is the fractional derivative of \eqref{eq:l1}; the weak form of Sec.~\ref{sec:fem}
 is written directly for the time-discrete problem, which is what the
-implementation solves.
+implementation solves. Three effects enter at this point and are kept apart
+throughout: the memory of \eqref{eq:kv} acts on the \emph{damping} at fixed
+eigenfrequency, the window of \eqref{eq:Mdef} acts on the \emph{stiffness} at
+fixed memory, and the flexoelectric tensor $\mu$ acts on the \emph{coupling} at
+fixed geometry. No result below is attributed to one of them when it was
+computed with another changed.
 
 The two electrode arrangements referred to throughout the paper are fixed in
 Fig.~\ref{fig:geometry}: the bending family is poled across the thickness with

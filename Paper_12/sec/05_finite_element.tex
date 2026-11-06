@@ -77,12 +77,27 @@ The assembled system is indefinite in the saddle-point form
 with $C_\phi$ positive by construction. Eliminating the potential degrees of
 freedom of the electrode set reproduces \eqref{eq:rankone} exactly, and the
 returned pair $(d,\beta)$ is what the modal and the static solvers consume.
-Two conventions are enforced in the implementation because they are easy to get
-wrong: the charge is read as $q=d^{\mathsf T}\bm{u}/\beta$ rather than by
-pointwise integration of the electric displacement, and eigenvectors are
-phase-normalized on a nodal displacement degree of freedom -- normalizing on
-$\max|\phi|$ can select a derivative degree of freedom and return a
-meaningless voltage.
+The electrode equations behind that pair are
+\begin{equation}
+  Q = d^{\mathsf T}\bm{u} - \beta V,
+  \label{eq:electrode}
+\end{equation}
+with $Q$ the charge on the electrode that is held at the potential $V$ above
+ground: short circuit ($V=0$) gives $Q=d^{\mathsf T}\bm{u}$, open circuit
+($Q=0$) gives the sensed voltage
+\begin{equation}
+  V_{\rm oc} = \frac{d^{\mathsf T}\bm{u}}{\beta},
+  \label{eq:voc}
+\end{equation}
+and $\beta=\partial Q/\partial V$ is the condensed capacitance of the electrode
+pair. In units, $d$ is a charge per unit generalized displacement ($\si{\coulomb
+\per\metre}$ for the in-plane degrees of freedom of a strip of unit width),
+$\beta$ is a capacitance per unit width ($\si{\farad\per\metre}$), $Q$ is a
+charge per unit width and $V$ a voltage. The implementation therefore evaluates
+each of the two quantities once, from $(d,\beta)$ and the nodal solution, rather
+than integrating the electric displacement pointwise: \eqref{eq:electrode}
+gives the charge when the electrode is driven and \eqref{eq:voc} the voltage
+when it is left open, and the two are not interchangeable.
 
 \FloatBarrier
 \subsection{Modal L1 time stepping}
@@ -91,7 +106,7 @@ meaningless voltage.
 With the L1 weights of \eqref{eq:l1} the time-discrete problem is
 \begin{equation}
   M\bm{a}^{n+1} + K\bm{u}^{n+1} + \frac{K_{\rm mem}}{\Gamma(2-\alpha)}
-  \sum_{k=0}^{n} b_{n-k}\,\frac{\bm{u}^{n+1-k}-\bm{u}^{n-k}}{\Delta t^{\alpha}}
+  \sum_{k=0}^{n} b_{k}\,\frac{\bm{u}^{n+1-k}-\bm{u}^{n-k}}{\Delta t^{\alpha}}
   = \bm{f}^{n+1},
   \label{eq:step}
 \end{equation}
@@ -111,17 +126,26 @@ matrix,
 \end{equation}
 which is factorized once by Cholesky, the elastic and the memory stiffness both
 appearing on the left; $\bm{r}^{n+1}$ collects the known displacements,
-velocities and the history sum $\sum_{k\ge1}b_{n-k}\Delta\bm{u}^{n+1-k}$ of
+velocities and the history sum $\sum_{k\ge1}b_{k}\Delta\bm{u}^{n+1-k}$ of
 \eqref{eq:l1}. The first step has no history, so the initial acceleration is
 $\bm{a}^{0}=M^{-1}(\bm{f}^{0}-K\bm{u}^{0})$ with $\bm{v}^{0}$ supplied by the
-initial condition. Two limits check the expression: at $\alpha=1$ the weights
-are $b_j=1$, the sum telescopes to $\Delta\bm{u}/\Delta t$ and
-\eqref{eq:step} becomes $M\bm{a}+K\bm{u}+\tau K\bm{v}=\bm{f}$, the classical
-Kelvin--Voigt equation, with \eqref{eq:stepA} reducing to the standard Newmark
-matrix for that model; at $\tau\to0$ the memory matrix vanishes and the elastic
-problem is recovered. The exponent and the gamma factor are both easy to
-misplace: a left-hand matrix written $M+\Delta t^{\alpha}\Gamma(2-\alpha)
-K_{\rm mem}$ would not have the dimensions of $M$, whereas
+initial condition. The weights of \eqref{eq:l1} are indexed so that the newest increment carries
+$b_0$: with $j=n+1-k$ the sum in \eqref{eq:step} runs from $j=0$ (the unknown
+increment $\bm{u}^{n+1}-\bm{u}^{n}$) to $j=n$, and only $j\ge1$ is history. Two
+limits check the expression. At $\alpha=1$ the weights are $b_0=1$ and $b_j=0$
+for every $j\ge1$, not $b_j=1$: the history vanishes identically, the operator
+$\tau K\,\mathrm{D}^{1}$ becomes the backward difference
+$\tau K(\bm{u}^{n+1}-\bm{u}^{n})/\Delta t$, and \eqref{eq:step} reduces to the
+classical Kelvin--Voigt equation $M\bm{a}+K\bm{u}+\tau K\bm{v}=\bm{f}$ only up
+to the $O(\Delta t)$ error of that difference -- which is the accuracy at
+which the ring-down of Sec.~\ref{sec:memorystudy} reproduces the exact
+$\omega\tau/2$; the step refinement of Sec.~\ref{sec:verification} measures that
+difference rather than assuming an order for it. The matrix \eqref{eq:stepA} reduces to the
+standard Newmark matrix for the Kelvin--Voigt model, with the newest weight
+applied implicitly on the left. At $\tau\to0$ the memory matrix vanishes and the
+elastic problem is recovered. The dimensions fix the two exponents: a
+left-hand matrix written $M+\Delta t^{\alpha}\Gamma(2-\alpha)K_{\rm mem}$ would
+not have the dimensions of $M$, whereas
 $\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ does. In the modal variant used for the long ring-downs,
 the same convolution is carried on the mass-normalized coordinates of the
 retained modes, so the cost per step is proportional to the number of retained
@@ -139,8 +163,7 @@ difference in mind.
 \subsection{Implementation remarks}
 \label{sec:implementation}
 
-Two properties of the implementation are worth recording, because they
-govern both cost and accuracy.
+Two properties of the implementation govern both cost and accuracy.
 
 \begin{enumerate}
 \item \emph{Scaling.} The gradient block is $O(M/h^4)$ while the elastic block

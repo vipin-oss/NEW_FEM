@@ -34,7 +34,8 @@ strain-gradient one, and it does so without changing any other term.
 
 With the flexoelectric tensor set to zero the electric displacement
 \eqref{eq:D} loses its strain-gradient contribution and the model reduces to
-the piezoelectric strip of~\cite{fem1}. On the extensional configuration of
+the linear piezoelectric strip of the plane-stress reduction
+\eqref{eq:Cp}, with the strain-gradient stiffness retained. On the extensional configuration of
 Fig.~\ref{fig:geometry} the coupling factor is $k^2=0.5581$ and is unchanged by
 the switch, because that configuration collects the piezoelectric charge only.
 On the bending configuration the piezoelectric charge of the mode integrates
@@ -82,18 +83,16 @@ at $\alpha=1$ (Sec.~\ref{sec:memorystudy}).
 \subsection{Recovery of the one-scale gradient theory}
 \label{sec:limit_fem1}
 
-Finally, the models of the authors' earlier work are recovered as special
-choices of $M$ and of the coupling tensors. For an ellipsoidal window
-$M_{mn}=L_{mn}/5$, so $\tfrac14M_{mn}=\tfrac1{20}L_{mn}$ and the tensorial
-strain-gradient energy of~\cite{fem1} is reproduced exactly, for which the
-cuboid, ellipse
-and ellipsoid windows give the scalar coefficients that
-\ref{app:Mcoeff} lists; setting $M_{mn}=\ell^2\delta_{mn}$ reduces the
-same expression to the isotropic Aifantis form. Keeping both coupling tensors
-and dropping the memory reproduces the coupled continuum of~\cite{fem4}, and a
-plane-stress reduction of that continuum is the strip model of~\cite{fem5}.
-The present work differs from all three in carrying the fractional memory on
-the reduced modal coordinates and in treating the window's second moment,
-rather than a scalar length, as the object that the discretization sees.
+Finally, the one-scale gradient theories are recovered as special choices of
+$M$. For an ellipsoidal window $M_{mn}=L_{mn}/5$, so
+$\tfrac14M_{mn}=\tfrac1{20}L_{mn}$ and the tensorial strain-gradient energy of
+the one-scale theory~\cite{fem1} is reproduced exactly, with the cuboid,
+ellipse and ellipsoid windows giving the scalar coefficients that
+\ref{app:Mcoeff} lists; setting $M_{mn}=\ell^{2}\delta_{mn}$ reduces the same
+expression to the isotropic Aifantis form~\cite{Aifantis1992}. Dropping the
+memory and the flexoelectric tensor leaves the classical piezoelectric strip.
+The present work differs from these in carrying the fractional memory on the
+reduced modal coordinates and in treating the window's second moment, rather
+than a scalar length, as the object that the discretization sees.
 
 \FloatBarrier

@@ -212,14 +212,36 @@ configuration (the short-face pairings collect exactly zero charge).
 **Still open.** Nothing.  This was a notation defect, not a modelling one: no
 number in the paper changed when it was fixed.
 
+## 12. Several coupling factors near the same value
+
+**Risk.** A referee reading §6.2, Table 3, Appendix C.4 and the ring-down
+section meets numbers near 0.56 and near 0.46 and may take them for estimates
+of one quantity that disagree.
+
+**Where it is addressed.** Table `tab:coupling` lists every coupling factor the
+paper quotes, one row each, with the boundary condition, mesh, electrode pair,
+`μ`, matrix and formula, and names the entry of
+`results/coupling_provenance.json` that reproduces it.  The provenance file is
+recomputed from the archived results on every run and graded (N4), and it
+reproduces each archived value exactly, so the distinction is checked, not
+asserted: behind 0.46 there are two quantities (`K_uu` vs `K_sc`, 1.5 %) plus a
+`μ` difference (0.07 %), and behind 0.56 there are four measures of one tensor
+set separated by the clamped edge (0.22 %) and the window (0.26 %).
+
+**Still open.** Nothing numerical.  The new table has never been typeset, so
+its width is unchecked.
+
 ---
 
 ## Status summary
 
 * **Answered in this revision:** 4 (validity band on Fig. 9 and the explicit
-  `ωτ ≤ 1` bound), 5 (explicit `a/L ≤ 0.2` bound), 9 (the two configurations,
-  with `tab:config`), 10 (the modulus/permittivity pairing, with Table `tab:axes` and I9).
-* **Partly answered:** 1 (the self-citation placeholder), 6 (the flattening is
+  `ωτ ≤ 1` bound), 5 (`a/L ≤ 0.2` as an assumed operating range), 9 (the two configurations,
+  with `tab:config`), 10 (the modulus/permittivity pairing, with Table `tab:axes`
+  and I9), 12 (one row per coupling factor, `tab:coupling`, graded N4), and 1
+  (`fem1` carries its published record and the unpublished `fem4`/`fem5` are
+  deleted, so the only self-citation is published).
+* **Partly answered:** 6 (the flattening is
   converged and now separated from the piezoelectric terms, but its physical
   attribution is still an interpretation), 7 (the 2.8 % 2-D gap is documented,
   not removed).

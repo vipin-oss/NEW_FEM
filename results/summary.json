@@ -337,6 +337,13 @@
    "pass": true
   },
   {
+   "id": "N4",
+   "what": "every coupling factor is reproduced from the archive and quoted in one row of the coupling table",
+   "value": "10/10",
+   "criterion": "all, no averaging",
+   "pass": true
+  },
+  {
    "id": "N2",
    "what": "the list of unverified numbers cites only numbers still in the manuscript",
    "value": "29 entries, 0 stale",
@@ -414,8 +421,8 @@
    "pass": true
   }
  ],
- "n_pass": 59,
- "n_total": 59,
+ "n_pass": 60,
+ "n_total": 60,
  "scripts_ok": {
   "run_verification.py": true,
   "run_flexo_check.py": true,
@@ -435,6 +442,9 @@
   "run_demos.py": true,
   "run_paper_figures.py": true,
   "make_appendix_tables.py": true,
+  "coupling_provenance.py": true,
+  "make_coupling_table.py": true,
+  "check_coupling_provenance.py": true,
   "worked_example.py": true,
   "check_paper_numbers.py": true,
   "check_paper_structure.py": true,

@@ -23,12 +23,22 @@ number `14/66-2026 SPD/HSHEC/HSRF-(38)`, dated 13 July 2026. **Confirm both the
 fund name and the sanction number against the sanction letter**;
 `Paper_12/main.tex:131`--`133` are the lines to edit.
 
-## 3. The three self-citations (`Paper_12/references.bib`)
+## 3. The self-citation (`Paper_12/references.bib`)
 
-Entries `fem1`, `fem4` and `fem5` (`Paper_12/references.bib:730`, `:738`, `:746`) are placeholders with `annote = {TODO: journal, volume, pages ...}`; since the field is `annote` it does not print, but the record is incomplete and must be supplied.
-They are cited in `01_introduction.tex`, `03_particular_cases.tex`,
-`02_formulation.tex` and Appendix A. Supply the full record for each; do not
-leave the `{FEM-1}` style titles in the submitted version.
+Only one self-citation remains: entry `fem1` (`Paper_12/references.bib:730`),
+which is the published record
+
+> V. Gupta, S. Kumawat, A. K. Yadav, T. Maruyama, B. Almohsen, *Finite element
+> analysis of second-order strain-gradient elasticity with ellipsoidal nonlocal
+> characteristic lengths*, Finite Elements in Analysis and Design **263** (2027)
+> 104681, doi:10.1016/j.finel.2026.104681.
+
+It is cited four times (introduction, formulation, particular cases, Appendix A)
+and nowhere else. The former `fem4` and `fem5` entries, which had no published
+record, were deleted in round 18 together with every mention of them; the
+bibliography now holds 62 entries, all cited. **Check that the DOI resolves and
+that the volume/page pair is the final one** -- the check runs offline here, so
+resolution is unverified.
 
 ## 4. Bibliography entries that are not verified
 
@@ -39,19 +49,19 @@ that built this repository). Check each against the journal page:
 
 | key | line |
 |---|---|
-| `Mindlin1968` | `Paper_12/references.bib:584` |
-| `Kogan1964` | `Paper_12/references.bib:594` |
-| `YudinTagantsev2013` | `Paper_12/references.bib:606` |
-| `Zubko2013` | `Paper_12/references.bib:617` |
-| `Cross2006` | `Paper_12/references.bib:629` |
-| `Caputo1967` | `Paper_12/references.bib:641` |
-| `BagleyTorvik1983` | `Paper_12/references.bib:653` |
-| `Koeller1984` | `Paper_12/references.bib:665` |
-| `ColeCole1941` | `Paper_12/references.bib:677` |
-| `HavriliakNegami1967` | `Paper_12/references.bib:688` |
-| `EnelundLesieutre1999` | `Paper_12/references.bib:700` |
-| `Roundy2003` | `Paper_12/references.bib:712` |
-| `ErturkInman2011` | `Paper_12/references.bib:722` |
+| `Mindlin1968` | `Paper_12/references.bib:575` |
+| `Kogan1964` | `Paper_12/references.bib:587` |
+| `YudinTagantsev2013` | `Paper_12/references.bib:597` |
+| `Zubko2013` | `Paper_12/references.bib:609` |
+| `Cross2006` | `Paper_12/references.bib:620` |
+| `Caputo1967` | `Paper_12/references.bib:632` |
+| `BagleyTorvik1983` | `Paper_12/references.bib:644` |
+| `Koeller1984` | `Paper_12/references.bib:656` |
+| `ColeCole1941` | `Paper_12/references.bib:668` |
+| `HavriliakNegami1967` | `Paper_12/references.bib:680` |
+| `EnelundLesieutre1999` | `Paper_12/references.bib:691` |
+| `Roundy2003` | `Paper_12/references.bib:703` |
+| `ErturkInman2011` | `Paper_12/references.bib:715` |
 
 `Paper_12/check_refs.py` re-runs the comparison as soon as network access is
 available and rewrites `results/reference_audit.md`.
@@ -87,9 +97,9 @@ and the audit file `results/paper_number_audit.md` names the row.
 
 | item | why it is still open |
 |---|---|
-| `\cite{fem1}`, `\cite{fem4}`, `\cite{fem5}` | the three self-citations are real papers, but the journal, volume, pages and DOI are still `TODO` in `references.bib`; fill them from the published records |
+| ~~`\cite{fem1}`, `\cite{fem4}`, `\cite{fem5}`~~ | closed in round 18: `fem1` carries the published record and `fem4`/`fem5` are deleted, so no self-citation is incomplete; what remains is to confirm that the DOI of `fem1` resolves (see Sec. 3) |
 | `Kogan1964` | the entry carries `TO VERIFY` because its volume and pages were taken from memory; it is now cited in the introduction, so check it before submission |
-| every DOI | the reference audit (`python/Paper_12/check_refs.py`) carries 47 of the 64 entries from the earlier paper with 0 field mismatches, but no DOI could be resolved: the check runs offline, so "resolves" is unverified, not confirmed |
+| every DOI | the reference audit (`python/Paper_12/check_refs.py`) carries 47 of the 62 entries from the earlier paper with 0 field mismatches, but no DOI could be resolved: the check runs offline, so "resolves" is unverified, not confirmed |
 | page count | no TeX distribution is installed in the build environment, so the 28-page limit, the overfull-box list and the page on which each float lands were not measured here. Compile once and check `\listfiles` |
 | verbatim | the abstract is 218 words, the conclusion 250, the five highlights at most 85 characters, but a journal's own counter may differ by a word or two |
 
@@ -152,3 +162,39 @@ to three digits but are not damping ratios, and no claim beyond that is made.
 float placement and overfull boxes are unmeasured, and the new caption text has
 never been typeset. The $64\,\%$ at $\alpha=0.6$ is a first-period measure of
 two curves, not a damping ratio of a fractional element.
+
+## 12. What round 18 corrected (audit first, then only the confirmed items)
+
+Stage 1 was an audit of every claim the round-18 brief named, checked against the
+code, the archived JSON and a fresh recomputation
+(`python/coupling_provenance.py` -> `results/coupling_provenance.json`,
+gated by `python/check_coupling_provenance.py`, check **N4** in `run_all.py`).
+Only the items the audit confirmed were edited; everything else was left as it
+stood.
+
+| # | item | what the audit found | correction |
+|---|---|---|---|
+| A1 | self-citations | `fem1` was a placeholder `@misc` and `fem4`, `fem5` had no published record at all; the introduction, Sec. 3.5 and Appendix A described them as "the authors' earlier work" | `fem1` carries the full published record (Sec. 3 above); every mention of `fem4`/`fem5` -- including the two comments in `main.tex` -- is gone; the passages now read "the one-scale theory~\cite{fem1}", cite Aifantis, Kogan, Yudin--Tagantsev, Mindlin, Toupin and Zubko for the coupled side, and the bibliography drops from 64 to 62 entries |
+| A2 | Sec. 3.1 | "the piezoelectric strip of~\cite{fem1}" attributed a piezoelectric model to an elastic paper | it now says: with the flexoelectric tensor set to zero the model reduces to the linear piezoelectric strip of the plane-stress reduction, with the strain-gradient stiffness retained |
+| A3 | reference [62] | the record was a placeholder with `TODO` fields | replaced by the full Gupta *et al.* record; the entry is the last in the file and its *rendered* number depends on citation order, which cannot be read without TeX |
+| A4 | Sec. 7 title | "Experimental calibration protocol and limitations", although no experiment is reported | "Parameter identification and limitations", with the two subsections renamed to "Measurement routes for the four parameters" and "Identification of the fractional order and of the relaxation time"; the one remaining "obtained experimentally" in the introduction became "identified from measurements" |
+| B1 | Eq. (22) | the L1 quadrature was printed as $\sum_{k=0}^{n}b_{n-k}\Delta u^{n+1-k}$, which pairs the newest increment with the oldest weight; Eq. (12) prints the correct $b_0$-first form | index corrected to $b_k$, the history sum to $\sum_{k\ge1}b_k\Delta u^{n+1-k}$, and the $\alpha=1$ limit restated: $b_0=1$, $b_j=0$ for $j\ge1$, so the operator becomes the backward difference and Kelvin--Voigt is recovered to $O(\Delta t)$, not exactly |
+| B1b | `fem6_core.l1_weights` | the closed form returns $b_0=1-0^0=0$ at $\alpha=1$ because numpy evaluates $0^0=1$; index 0 is never read by the transient, so no number changed | `b[0] = 1.0` is now set explicitly, with the reason in the docstring; `l1_weights(4,1.0)` returns `[1,0,0,0,0]` and `l1_weights(4,0.7)` is unchanged |
+| B2 | Sec. 6.2, Table 3, Fig. 2, Table C.4, ring-down caption | six different measures were quoted with three labels that were wrong: $0.5596$ was called "mode-based" and $0.55814$ "the free-strip value of Appendix C", while the ring-down caption called $0.4583$ "mode-free" | new Table `tab:coupling` (8 rows) lists every coupling factor with its boundary condition, mesh, electrode pair, $\mu$, matrix, formula and the JSON entry that reproduces it; the wrong labels are replaced by the matrix they belong to, and the two near $0.46$ are explained as $K_{uu}$ vs $K_{sc}$ ($1.5\,\%$) and $\mu=10^{-6}$ vs $0$ ($0.07\,\%$). Nothing is averaged |
+| B2b | `results/coupling_provenance.json` | not present | every row recomputed from scratch and compared with the archive: `check_coupling_provenance.py` reports 10/10 with relative differences $0$, including $0.56079$ vs the closed form $0.5607863$ ($1.2\times10^{-11}$ relative), $0.55957$, $0.55814$, $0.55797$, $0.46498$, $0.45830$, $0.45797$ |
+| B3 | Sec. 5.3 | "$q=d^{\mathsf T}u/\beta$" called the ratio a charge; with $Q=d^{\mathsf T}u-\beta V$ that ratio is the open-circuit *voltage* | Eq. (electrode) and Eq. (voc) now state both relations with their units, and the sentence says which is which |
+| B4 | Sec. 2 | the memory, the window and the flexoelectric coefficient were never set apart in one place | one sentence: the memory acts on the damping at fixed eigenfrequency, the window on the stiffness at fixed memory, $\mu$ on the coupling at fixed geometry |
+| B5 | Sec. 7.3, Sec. 6.3 | $a/L\le0.2$ was called "the bound claimed for the model" and "the bound set by" a figure | an "assumed operating range, not a validated truncation threshold", stated twice, with the reason (no experiment and no exact averaging operator available here) |
+| B6 | Sec. 7.2 | the small-loss decrement was printed as $\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2)/2$ and "a measurement at two amplitudes fixes the pair" | that expression is $\zeta$, not $\delta$: the decrement is $\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2)$, checked against $\delta=\pi\omega\tau$ at $\alpha=1$; a single decrement fixes only the product, so the pair needs two frequencies |
+| C1 | run-in headings | all 21 `\paragraph{}` headings end with a period inside the braces | already consistent; left unchanged |
+| C2 | editorial asides | "easy to get wrong", "worth recording", "The exponent and the gamma factor are both easy to misplace" | reworded as statements of fact |
+| C5 | Sec. 6.5 | "eight thicknesses" | checked against Table C.2: the eight are 10, 7, 5, 3.5, 2.7, 2, 1.4 and 1 \si{\micro\metre}, in the table and in the figure; unchanged |
+
+Items the brief listed that the audit could **not** confirm in the current
+files are recorded as such in `ROUND18_REPORT.md` and were not edited.
+
+**Still unverified after round 18.** No TeX distribution is installed here, so
+compilation, the page count (30 pages, 28 for the letter), float placement,
+overfull boxes and the rendered reference numbering are unmeasured; the new
+Table `tab:coupling` has never been typeset and, at seven columns, it may need
+`\small` or a landscape float. DOI resolution for `fem1` is unchecked (offline).

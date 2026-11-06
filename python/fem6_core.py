@@ -694,8 +694,17 @@ def modes(K, M, nmodes=6, dense_limit=2600):
 
 
 def l1_weights(nsteps, alpha):
+    """L1 weights b_j = (j+1)^(1-a) - j^(1-a), j = 0..nsteps.
+
+    Only b_0 is used for the newest increment, and only j >= 1 for the
+    history.  At alpha = 1 the closed form gives b_0 = 1 - 0^0 = 0 because
+    numpy evaluates 0**0 as 1, so b_0 is set explicitly here: the newest
+    weight of the L1 stencil is 1 for every alpha, and the transient already
+    applies it implicitly (it never reads b[0]).
+    """
     k = np.arange(nsteps + 1)
     b = (k + 1.0) ** (1.0 - alpha) - k ** (1.0 - alpha)
+    b[0] = 1.0
     return b
 
 
