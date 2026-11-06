@@ -71,6 +71,13 @@
    "pass": true
   },
   {
+   "id": "V5e",
+   "what": "L1 at alpha = 1, order from the N/2N/4N sequence",
+   "value": "0.97 (zeta 0.150111 -> 0.150029)",
+   "criterion": "0.9 - 1.1",
+   "pass": true
+  },
+  {
    "id": "V5b",
    "what": "harmonic |H|, worst deviation",
    "value": "0.37 %",
@@ -338,9 +345,16 @@
   },
   {
    "id": "N4",
-   "what": "every coupling factor is reproduced from the archive and quoted in one row of the coupling table",
+   "what": "every coupling factor recomputed and quoted in one row of the coupling table",
    "value": "10/10",
    "criterion": "all, no averaging",
+   "pass": true
+  },
+  {
+   "id": "N5",
+   "what": "every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive",
+   "value": "57/57 traced, 0 untraced",
+   "criterion": "0 untraced",
    "pass": true
   },
   {
@@ -416,18 +430,19 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "87/87",
+   "value": "90/90",
    "criterion": "all agree",
    "pass": true
   }
  ],
- "n_pass": 60,
- "n_total": 60,
+ "n_pass": 62,
+ "n_total": 62,
  "scripts_ok": {
   "run_verification.py": true,
   "run_flexo_check.py": true,
   "run_material_check.py": true,
   "run_memory_variants.py": true,
+  "run_dt_study.py": true,
   "run_coupling_check.py": true,
   "run_mode_tracking.py": true,
   "run_application_table.py": true,
@@ -445,6 +460,7 @@
   "coupling_provenance.py": true,
   "make_coupling_table.py": true,
   "check_coupling_provenance.py": true,
+  "check_final_consistency.py": true,
   "worked_example.py": true,
   "check_paper_numbers.py": true,
   "check_paper_structure.py": true,

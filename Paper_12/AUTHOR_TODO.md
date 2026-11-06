@@ -199,8 +199,8 @@ compilation, the page count (30 pages, 28 for the letter), float placement,
 overfull boxes and the rendered reference numbering are unmeasured; the new
 Table `tab:coupling` has never been typeset and, at seven columns, it may need
 `\small` or a landscape float. DOI resolution for `fem1` is unchecked (offline).
-(Round 19 addresses the last point: the table is now six columns at `\small`,
-see Sec. 13.)
+(Rounds 19 and 20 address the table: it is now five columns at `\small` with no
+file names in it, see Secs. 13 and 14.)
 
 ## 13. What round 19 corrected (four leftovers)
 
@@ -217,3 +217,19 @@ addendum). Summary:
 **Still unverified after round 19.** Compilation, page count, float placement,
 overfull boxes; the `\paragraph` output after the edit; the estimated width of
 `tab:coupling`; DOI resolution.
+
+## 14. What round 20 changed (final leftovers), and where the files went
+
+Summary; the full report is `FINAL_CHECKLIST.md` at the top of the repository.
+
+| # | item | correction |
+|---|---|---|
+| 1 | `tab:coupling` | the `archive` column and the sentence naming `results/coupling_provenance.json` are gone: five columns, caption 341 characters, $eta$/$\mu$ units in the caption. No number changed, N4 still 10/10 |
+| 1b | file names in the package | `results/`, `python/`, `.json`, `.py`, `rows[`, `upstream key` no longer appear in the typeset text, captions or tables; they remain in this file and in `README.md` / `REVIEWER_RISKS.md`, which are not part of the manuscript |
+| 2 | time step | "first order for $lpha<1$ and exact for $lpha=1$" was wrong: the L1 scheme is first order at $lpha=1$ too. The text now quotes $\zeta=0.150111$, $0.150057$, $0.150029$ at $N$, $2N$, $4N$ steps against $\omega	au/2=0.150000$ (order $0.97$), computed by `python/run_dt_study.py` and gated as V5e. Tables C.5 and Fig. 10 now state their own step (400 per period) and the $1.6	imes10^{-5}$ it costs |
+| 3 | length | the closed-form table, the ring-down table and the protocol table moved to Appendix C (C.7, C.8, C.9); Sec. 7 went from 1530 to 965 words and Sec. 6.9's second half was cut. Six body tables and ten figures remain. **The page count is unverified** -- the 34 -> 30 target is not established without a compile |
+| 4 | consistency | new check N5 sweeps the abstract, conclusion, Highlights and every caption: 57 numbers, all traced. It caught one stale caption number, the ratio of Fig. 5(c), $4.3\times10^{-4}$ -> $3.1\times10^{-4}$; both endpoints are now archived |
+
+**Still unverified after round 20.** Compilation, page count, the page on which
+each float lands, overfull boxes, DOI resolution, and the typeset output of the
+`\paragraph` fix of round 19.

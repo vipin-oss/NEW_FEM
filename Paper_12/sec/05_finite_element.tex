@@ -137,10 +137,11 @@ for every $j\ge1$, not $b_j=1$: the history vanishes identically, the operator
 $\tau K\,\mathrm{D}^{1}$ becomes the backward difference
 $\tau K(\bm{u}^{n+1}-\bm{u}^{n})/\Delta t$, and \eqref{eq:step} reduces to the
 classical Kelvin--Voigt equation $M\bm{a}+K\bm{u}+\tau K\bm{v}=\bm{f}$ only up
-to the $O(\Delta t)$ error of that difference -- which is the accuracy at
-which the ring-down of Sec.~\ref{sec:memorystudy} reproduces the exact
-$\omega\tau/2$; the step refinement of Sec.~\ref{sec:verification} measures that
-difference rather than assuming an order for it. The matrix \eqref{eq:stepA} reduces to the
+to the $O(\Delta t)$ error of that difference: the scheme is first order at
+$\alpha=1$ as well, not exact there. The ring-down of
+Sec.~\ref{sec:memorystudy} reproduces the exact $\omega\tau/2$ to that accuracy
+($0.150111$, $0.150057$, $0.150029$ against $0.150000$ at $N$, $2N$ and $4N$
+steps, Sec.~\ref{sec:verification}). The matrix \eqref{eq:stepA} reduces to the
 standard Newmark matrix for the Kelvin--Voigt model, with the newest weight
 applied implicitly on the left. At $\tau\to0$ the memory matrix vanishes and the
 elastic problem is recovered. The dimensions fix the two exponents: a

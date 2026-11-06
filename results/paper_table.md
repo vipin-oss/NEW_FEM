@@ -1,6 +1,6 @@
 # Verification table as it appears in the manuscript
 
-60/60 checks pass.
+62/62 checks pass.
 
 | quantity | value obtained | requirement | source |
 |---|---|---|---|
@@ -14,6 +14,7 @@
 | bending mode k_eff^2 (piezo only) | 2.27e-10 | < 1e-6 (no net charge in bending) | `results/verification.json` |
 | length-extensional max k_eff^2 | 0.3991 | > 0.35 | `results/verification.json` |
 | alpha = 1 vs closed-form KV, order | 0.99 | > 0.9 | `results/verification.json` |
+| L1 at alpha = 1, order from the N/2N/4N sequence | 0.97 (zeta 0.150111 -> 0.150029) | 0.9 - 1.1 | `results/verification.json` |
 | harmonic |H|, worst deviation | 0.37 % | < 2 % | `results/verification.json` |
 | tau -> 0 residual | 2.08e-09 | < 1e-6 | `results/verification.json` |
 | delivered L1 stencil vs analytic |H| | 0.52 % | < 1 % | `results/verification.json` |
@@ -52,7 +53,8 @@
 | the same spread at h = 10 um | 1.49e-05 % | < 1e-3 % | `results/?` |
 | truncating the secular sum to 12 modes is not an alternative | 85 % off | > 50 % (hence the sum runs over all modes) | `results/?` |
 | no quantity replaced in the round-16 audit has come back | 0 hits of 12 forbidden tokens | 0 hits | `results/?` |
-| every coupling factor is reproduced from the archive and quoted in one row of the coupling table | 10/10 | all, no averaging | `results/?` |
+| every coupling factor recomputed and quoted in one row of the coupling table | 10/10 | all, no averaging | `results/?` |
+| every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive | 57/57 traced, 0 untraced | 0 untraced | `results/?` |
 | the list of unverified numbers cites only numbers still in the manuscript | 29 entries, 0 stale | 0 stale | `results/?` |
 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |
@@ -63,4 +65,4 @@
 | gradient-energy coefficient: code vs manuscript | 0.5 x int, (1/4)M/((1/20)L)=1.000000000000 | factor 1/2 in the assembly, (1/4)M = (1/20)L, FEM-1 u_R within 2 % | `results/?` |
 | paper figures: vector set written | 11 PDF | = 11 (F1-F9, FB1-FB2) | `results/paper_figures_data.json` |
 | orientation sweep rows / k^2 range | 133 rows, 0.3786-0.4677 | 133 rows (114 cuboid + 19 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
-| manuscript numbers vs the JSON they came from | 87/87 | all agree | `results/?` |
+| manuscript numbers vs the JSON they came from | 90/90 | all agree | `results/?` |

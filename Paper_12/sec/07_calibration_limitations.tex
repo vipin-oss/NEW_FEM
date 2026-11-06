@@ -4,120 +4,74 @@
 \label{sec:calibration}
 %% ===========================================================================
 
-The model contains four parameters that no constitutive table supplies: the
-window size $a$, the fractional order $\alpha$, the relaxation time $\tau$ and
-the flexoelectric coefficient $\mu$. This section states how each is to be
-obtained, over which ranges the results of this paper hold, and which numbers
-in the paper are not verified.
+Four parameters are supplied by no constitutive table: the window size $a$,
+the fractional order $\alpha$, the relaxation time $\tau$ and the flexoelectric
+coefficient $\mu$. This section states how each is obtained, over which ranges
+the results hold, and what is not verified.
 
 \FloatBarrier
 \subsection{Measurement routes for the four parameters}
 \label{sec:calib_a_mu}
 
-The four parameters are not of the same kind, and they are measured in
-different experiments. The two that describe the geometry of the interaction,
-$M_{mn}$ and the orientation $\theta$ of its principal axes, come from
-size-effect and texture measurements; the two that describe the material
-response, $\alpha$ and $\tau$, come from dielectric loss; and $\mu$ comes from
-a bending or a direct charge measurement. The protocol below is ordered so that
-each step fixes one quantity and the later steps check the earlier ones, in the
-manner of the characteristic-length identification of the one-scale theory.
+The four are not of the same kind. The geometry of the interaction, $M_{mn}$
+and the orientation $\theta$ of its principal axes, comes from size-effect and
+texture measurements; the material response, $\alpha$ and $\tau$, from
+dielectric loss; $\mu$ from a bending or a direct charge measurement. The
+protocol is ordered so that each step fixes one quantity and the later steps
+check the earlier ones, as in the characteristic-length identification of the
+one-scale theory.
 
-Table~\ref{tab:protocol} lists the steps in the order in which they fix the
-quantities. Steps 1, 3 and 4 determine $M_{22}$ from three independent
-observables -- a stiffness ratio, a dispersion curve and a boundary-layer
-profile -- so that agreement among them is a check on the second-moment
-description rather than a repetition of one measurement; step~5 is the only one
-that fixes the anisotropy of the window from the geometry of the material
-instead of from its mechanical response, and step~6 turns the calibrated tensor
-into a prediction of the coupling and frequency maps of
-Figs.~\ref{fig:orientation} and~\ref{fig:design}. Step~7 is the interaction-level
-test of the description itself and has not been carried out here.
+Table~\ref{tab:protocol} of \ref{app:data} lists the seven steps in the order
+in which they fix the quantities. Steps 1, 3 and 4 determine $M_{22}$ from three
+independent observables, so that agreement among them checks the second-moment
+description instead of repeating one measurement; step~6 turns the calibrated
+tensor into a prediction of Figs.~\ref{fig:orientation} and~\ref{fig:design};
+step~7 is the test of the description itself and is not attempted here.
 
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Calibration protocol. Each step fixes one quantity, and the steps are
-ordered so that the later ones check the earlier ones. The last row is the test
-of the second-moment description itself, which this paper does not attempt.}
-\label{tab:protocol}
-\begin{tabular}{@{}p{0.03\textwidth}p{0.30\textwidth}p{0.28\textwidth}p{0.26\textwidth}@{}}
-\toprule
-\# & measurement & observable & quantity fixed \\
-\midrule
-1 & bending of strips cut along $x$ and $y$, three or more thicknesses in
-$h/\sqrt{M_{22}}\in[2,20]$ & $D_{\rm app}/D_{\rm cl}$ against $h$ &
-$M_{22}$ through the thickness \\
-2 & the same strips cut at $0^\circ,15^\circ,\dots,90^\circ$ &
-$D_{\rm app}(\theta)$ and $f_{1}(\theta)$ & $M_{11}/M_{22}$ and $\theta$ \\
-3 & ultrasonic dispersion & $c(k)$ over the band where the gradient term is
-visible & $(1/4)M_{mn}$, without a boundary condition \\
-4 & boundary-layer profile by digital image correlation & decay length of the
-strain at a clamped edge & $M_{22}$ from one specimen \\
-5 & image of the microstructure & $M_{mn}=\langle s_{m}s_{n}\rangle_{\mathcal
-W}$ by numerical integration & the anisotropy of the window \\
-6 & specimens spanning the aspect ratio and the window angle & $k^{2}$ and
-$f_{1}$ against ${\rm AR}$ and $\theta$ & a prediction, not a fit \\
-7 & reconstructed microstructure & decay lengths of the two-point correlation
-& adequacy of the second-moment description \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \paragraph{The flexoelectric coefficient} The direct route is a four-point
-bending test on a poled dielectric bar with electrodes on the two faces: for the geometry of Fig.~\ref{fig:geometry}(a) the
-open-circuit voltage under a known curvature $\kappa_{c}$ is
+bending test on a poled bar, electrodes on the two faces: for the geometry of
+Fig.~\ref{fig:geometry}(a) the open-circuit voltage at a known curvature
+$\kappa_{c}$ is
 \begin{equation}
   V = \frac{\mu\,\kappa_{c}\,h}{\kappa_{yy}},
   \label{eq:muV}
 \end{equation}
-which fixes $\mu$ from a voltage, a curvature and the permittivity, with no
-discretization involved. Here $\kappa_{yy}=4.9583\times10^{-10}$\,\si{\farad
-\per\metre} is the absolute permittivity of \eqref{eq:D}, so $\varepsilon_0$
-does not appear again: $\si{\coulomb\per\metre}\times\si{\per\metre}
-\times\si{\metre}/(\si{\farad\per\metre})=\si{\coulomb\per\farad}=\si{\volt}$. The inverse route measures the charge released by a
-device whose curvature is known from its deflection. In both routes the
-measured quantity is linear in $\mu$, so one measurement fixes the magnitude
-and the sign has to be taken from the crystal symmetry. The value used in this
-paper is $\mu=10^{-6}$\,\si{\coulomb\per\metre}, a nominal one; every bending
-coupling in Secs.~\ref{sec:thickness} and~\ref{sec:transient} scales with
-$\mu^{2}$ and should be read as a shape, not as a magnitude, until a measured
-coefficient is substituted.
+with no discretization involved, $\kappa_{yy}=4.9583\times10^{-10}$\,\si{\farad
+\per\metre} the absolute permittivity of \eqref{eq:D}. The inverse route
+measures the charge released by a device whose curvature is known from its
+deflection. Both fix the magnitude, linear in $\mu$; the sign comes from the
+crystal symmetry. The value used here, $\mu=10^{-6}$\,\si{\coulomb\per\metre},
+is nominal: every bending coupling of Secs.~\ref{sec:thickness}
+and~\ref{sec:transient} scales with $\mu^{2}$ and is a shape, not a magnitude,
+until a measured coefficient is substituted.
 
 \FloatBarrier
 \subsection{Identification of the fractional order and of the relaxation time}
 \label{sec:calib_alpha_tau}
 
-The pair $(\alpha,\tau)$ is obtained from a dielectric loss measurement. In the
-frequency domain the fractional Kelvin--Voigt element \eqref{eq:kvfreq} has
-$\tan\delta = (\omega\tau)^{\alpha}\sin(\pi\alpha/2)/
-[1+(\omega\tau)^{\alpha}\cos(\pi\alpha/2)]$, and both $|K^{*}|/K$ and $\tan\delta$ are monotone in $\omega\tau$, so no
-single frequency of $\tan\delta$ carries $\tau$: a plot of the pair
-$(|K^{*}|/K,\tan\delta)$ over two decades or more is fitted with the two free
-parameters $(\alpha,\tau)$, and at the point $\omega\tau=1$ the loss is
-$\tan\delta=\sin(\pi\alpha/2)/[1+\cos(\pi\alpha/2)]=\tan(\pi\alpha/4)$, which
-gives $\alpha$ from one decade of $\tan\delta$ alone once $\tau$ is known. The
-earlier form of this paragraph, which put $\tau$ at a maximum of $\tan\delta$,
-was wrong: $\tan\delta$ increases monotonically to the finite limit
-$\tan(\pi\alpha/2)$ and has no maximum.
-The ring-down of a driven device gives the same information in the time domain,
-but not from one number: for small loss the damping ratio implied by the
-fractional element is $\zeta=(\omega\tau)^{\alpha}\sin(\pi\alpha/2)/2$, so the
-logarithmic decrement of \eqref{eq:zeta} is
+The pair $(\alpha,\tau)$ comes from a dielectric loss measurement. The
+fractional Kelvin--Voigt element \eqref{eq:kvfreq} has
+$\tan\delta=(\omega\tau)^{\alpha}\sin(\pi\alpha/2)/
+[1+(\omega\tau)^{\alpha}\cos(\pi\alpha/2)]$, which increases monotonically to
+$\tan(\pi\alpha/2)$ and has no maximum, and both $|K^{*}|/K$ and $\tan\delta$
+are monotone in $\omega\tau$; so no single frequency carries $\tau$, and the
+pair $(|K^{*}|/K,\tan\delta)$ over two decades is fitted with $(\alpha,\tau)$.
+At $\omega\tau=1$ the loss is $\tan(\pi\alpha/4)$, which gives $\alpha$ from one
+decade once $\tau$ is known.
+The ring-down gives the same information in the time domain, but not from one
+number: for small loss $\zeta=(\omega\tau)^{\alpha}\sin(\pi\alpha/2)/2$, so
 $\delta\approx\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2)$ -- at $\alpha=1$,
 $\delta=\pi\omega\tau$, which reproduces \eqref{eq:zeta} to the $1.2\,\%$ of
-the small-loss approximation quoted above. A single decrement therefore fixes
-only the product $(\omega\tau)^{\alpha}\sin(\pi\alpha/2)$, and the pair
-$(\alpha,\tau)$ needs the decrement at two frequencies, or one decrement at a
-known $\omega\tau$.
+the small-loss approximation. A single decrement fixes only that product, so
+the pair needs two frequencies or one decrement at a known $\omega\tau$.
 
-Two cautions follow from Sec.~\ref{sec:memorystudy}. First, the calibration
-must state which matrix the memory multiplies, because the same measured
-decrement corresponds to two different $(\alpha,\tau)$ pairs under
-$K_{\rm eff}$ and under $K_{uu}$ -- the ratio of the resulting damping ratios
-is $0.450$ at $\alpha=1$. Second, the fit is valid where the measurement is:
-the fractional element describes a broadened, single-power-law loss, and a
-material with two well-separated loss peaks needs two elements rather than one.
+Two cautions follow from Sec.~\ref{sec:memorystudy}: the calibration must say
+which matrix the memory multiplies, since one measured decrement gives two
+different $(\alpha,\tau)$ pairs under $K_{\rm eff}$ and $K_{uu}$ (their damping
+ratios differ by the factor $0.450$ at $\alpha=1$); and the fit is valid only
+where the measurement is -- a broadened single-power-law loss. Two well
+separated loss peaks need two elements.
 
 \FloatBarrier
 \subsection{Validity window}
@@ -127,29 +81,24 @@ Three inequalities bound the results, and each is a modeling assumption rather
 than a numerical tolerance.
 
 \begin{enumerate}
-\item \emph{Small coupling at the operator level.} The mode-free coupling
-  factor \eqref{eq:kstatic} is used with the uncoupled denominator whenever
-  $k^{2}\ll1$; for the extensional configuration of this paper
-  $k^{2}=0.5581$, which is \emph{not} small, and the coupled denominator is
-  used instead. The uncoupled form is retained only for the comparison with the
-  constitutive closed form, where it is stated explicitly.
-\item \emph{Small window.} The second-order truncation \eqref{eq:Mdef} of the
-  averaging operator is written for a window that is small against the length
-  over which the strain gradient varies, and for the strip of
-  Table~\ref{tab:params} we take $a/L\le0.2$ as the operating range. This is an
-  assumed range, not a validated truncation threshold: no experiment and no
-  exact averaging operator is available to us here, so nothing in this paper
-  fixes where the truncation ceases to represent the average. What
-  Fig.~\ref{fig:window}(a) does show is that inside the range the retained
-  second moment reproduces the exact average of the window to a fraction of a
-  per cent on every mesh we tried, so the range is where the model is
-  \emph{self-consistent}, and it is quoted as such.
-\item \emph{Operating band.} The damping map is claimed for
-  $\omega\tau\le1$, the band in which the spring-pot represents a relaxation
-  whose spectrum is centered on the device frequency. Beyond that band the map
-  is an extrapolation of the fitted law, not a prediction, and
-  Table~\ref{tab:modulus} shows how far the integer-order alternative departs
-  from it there.
+\item \emph{Small coupling at the operator level.} \eqref{eq:kstatic} is used
+  with the uncoupled denominator only where $k^{2}\ll1$; here
+  $k^{2}=0.5581$, which is \emph{not} small, so the coupled denominator is
+  used and the uncoupled form appears only in the comparison with the
+  closed form, where it is stated.
+\item \emph{Small window.} The truncation \eqref{eq:Mdef} is written for a
+  window small against the length over which the strain gradient varies, and
+  for the strip of Table~\ref{tab:params} we take $a/L\le0.2$. That is an
+  assumed operating range, not a validated truncation threshold: with no
+  experiment and no exact averaging operator available, nothing here fixes
+  where the truncation fails. What Fig.~\ref{fig:window}(a) shows is that
+  inside the range the retained second moment reproduces the exact average to
+  a fraction of a per cent on every mesh, which makes the model
+  \emph{self-consistent} there and is all that is claimed.
+\item \emph{Operating band.} The damping map is claimed for $\omega\tau\le1$,
+  the band in which the spring-pot relaxes around the device frequency. Beyond
+  it the map extrapolates the fitted law, and Table~\ref{tab:modulus} shows how
+  far the integer-order alternative departs.
 \end{enumerate}
 
 \FloatBarrier
@@ -157,30 +106,25 @@ than a numerical tolerance.
 \label{sec:limitations}
 
 \emph{Two dimensions and unverified inputs.} The formulation is
-two-dimensional, with a plane-stress reduction of the constitutive tensors; the
-reduction is a modeling choice, since plane strain would change the extensional
-coupling and the three-dimensional solution differs from both, so the
-thin-strip results of Sec.~\ref{sec:thickness} are two-dimensional results
-consistent with the plane-stress law of Table~\ref{tab:params}. Two inputs are
-nominal rather than measured. The mass density
-$\rho=\SI{6020}{\kilo\gram\per\cubic\metre}$ scales every frequency by a common
-factor, so the absolute kilohertz numbers of Secs.~\ref{sec:orientation}
-and~\ref{sec:application} would be rescaled by a measured density while the
-ratios and the conclusions stand, and the flexoelectric coefficient
+two-dimensional with a plane-stress reduction, which is a modeling choice: plane
+strain would change the extensional coupling, and the three-dimensional
+solution differs from both, so the thin-strip results of
+Sec.~\ref{sec:thickness} are two-dimensional results consistent with
+Table~\ref{tab:params}. Two inputs are nominal. The density
+$\rho=\SI{6020}{\kilo\gram\per\cubic\metre}$ rescales every frequency by a
+common factor, so the kilohertz numbers of Secs.~\ref{sec:orientation}
+and~\ref{sec:application} would move while the ratios stand; and
 $\mu=10^{-6}$\,\si{\coulomb\per\metre} scales every flexoelectric coupling as
 $\mu^{2}$, so the growth factor, the saturation and the comparison with the
-piezoelectric response are unaffected by its value while the absolute coupling
-is.
+piezoelectric response are unaffected while the absolute coupling is not.
 
-\emph{What the numbers and the verification do not establish.} The
-two-significant-digit statement of Sec.~\ref{sec:thickness} is a limitation as
-much as a result: the third digit of the thin-strip coupling is not a property
-of the model, and the same applies, with smaller amplitude, to any quantity
-obtained as a difference of nearly equal eigenvalues. The verification of
-Sec.~\ref{sec:verification} and \ref{app:verification} shows that the
-implementation solves the stated equations; it does not show that the equations
-describe a particular material, which requires the measurements of
-Secs.~\ref{sec:calib_a_mu} and~\ref{sec:calib_alpha_tau} and is the natural
-continuation of this work.
+\emph{What the verification does not establish.} The two-significant-digit
+statement of Sec.~\ref{sec:thickness} is a limitation as much as a result: the
+third digit there is not a property of the model, and the same holds, less
+visibly, for any difference of nearly equal eigenvalues. The verification of
+Secs.~\ref{sec:verification} and~\ref{app:verification} shows that the
+implementation solves the stated equations; it does not show that they describe
+a particular material, which needs the measurements of
+Secs.~\ref{sec:calib_a_mu} and~\ref{sec:calib_alpha_tau}.
 
 \FloatBarrier

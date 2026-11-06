@@ -60,7 +60,7 @@ def main():
     figs = "--no-figs" not in sys.argv
     print("running the suite")
     scripts = ["run_verification.py", "run_flexo_check.py",
-               "run_material_check.py", "run_memory_variants.py",
+               "run_material_check.py", "run_memory_variants.py", "run_dt_study.py",
                "run_coupling_check.py", "run_mode_tracking.py",
                "run_application_table.py", "derive_k2_closed_form.py",
                "run_independent_checks.py", "audit_abstract_claims.py",
@@ -74,6 +74,7 @@ def main():
         scripts.append("coupling_provenance.py")
         scripts.append("make_coupling_table.py")
         scripts.append("check_coupling_provenance.py")
+        scripts.append("check_final_consistency.py")
         scripts.append("worked_example.py")
         scripts.append("check_paper_numbers.py")
         scripts.append("check_paper_structure.py")
@@ -137,6 +138,12 @@ def main():
         f"{V['memory_alpha1']['order']:.2f}", "> 0.9",
         V["memory_alpha1"]["order"] > 0.9)
     worst_h = max(abs(r["ratio"] - 1) for r in V["memory_harmonic"])
+    Dt = load("dt_study.json")
+    chk("V5e", "L1 at alpha = 1, order from the N/2N/4N sequence",
+        f"{Dt['memory']['order']:.2f} (zeta {Dt['memory']['rows'][0]['zeta']:.6f}"
+        f" -> {Dt['memory']['rows'][-1]['zeta']:.6f})", "0.9 - 1.1",
+        0.9 < Dt["memory"]["order"] < 1.1)
+
     chk("V5b", "harmonic |H|, worst deviation", f"{100*worst_h:.2f} %",
         "< 2 %", worst_h < 0.02)
     chk("V5c", "tau -> 0 residual", f"{V['memory_tau0']:.2e}", "< 1e-6",
@@ -304,10 +311,22 @@ def main():
 
     if figs:
         Cv = load("coupling_provenance_check.json")
-        chk("N4", "every coupling factor is reproduced from the archive and "
-            "quoted in one row of the coupling table",
+        chk("N4", "every coupling factor recomputed and quoted in one row of "
+            "the coupling table",
             f"{Cv['n_pass']}/{Cv['n_total']}", "all, no averaging",
             Cv["all_pass"])
+
+    if figs:
+        import re as _re
+        Fc = open(os.path.join(RESULTS, "final_consistency.md")).read()
+        m_fc = _re.search(r"(\d+) numbers checked, (\d+) traced, (\d+) untraced",
+                          Fc)
+        n_c, n_t, n_u = (int(m_fc.group(1)), int(m_fc.group(2)),
+                         int(m_fc.group(3))) if m_fc else (0, 0, 1)
+        chk("N5", "every number in the abstract, the conclusion, the Highlights "
+            "and the captions is traced to the text or the archive",
+            f"{n_t}/{n_c} traced, {n_u} untraced", "0 untraced",
+            n_u == 0 and n_c > 20)
 
     chk("N2", "the list of unverified numbers cites only numbers still in the "
         "manuscript", f"{Uv['n']} entries, {len(Uv['stale'])} stale",

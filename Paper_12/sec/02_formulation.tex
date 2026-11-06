@@ -231,9 +231,10 @@ has to be stored is one scalar sequence per retained mode and the cost per step
 does not grow with the number of elements; which of the two matrices enters
 \eqref{eq:kv} decides whether the piezoelectric contribution is inside the
 remembered operator or outside it.
-The L1 discretization is first order in time for $\alpha\in(0,1)$ and exact
-for $\alpha=1$; the time step used in the results is reported with the
-convergence study of Sec.~\ref{sec:verification}.
+The L1 discretization is first order in time for every order
+$\alpha\in(0,1]$, at $\alpha=1$ as well, because the newest increment enters
+through a backward difference; the sequence that measures the order, and the
+step the results use, are reported in Sec.~\ref{sec:verification}.
 
 \FloatBarrier
 \subsection{Governing equations}

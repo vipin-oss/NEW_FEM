@@ -307,6 +307,9 @@ def fig_flexo_thickness():
                                    ("left", "right"))
         row["k2_ext_24"] = _static_k2(f6.mesh_rect(24, 2, Lb, h), MUE, Mg,
                                       ("left", "right"))
+        # the quantity of Fig. 5(c), archived so that its range in the caption
+        # can be checked like any other number
+        row["ratio_flexo_over_piezo"] = row["k2_flexo"] / row["k2_ext"]
         rows.append(row)
         wit = (f"  (96x4 {row['k2_flexo_96']:.3e})" if "k2_flexo_96" in row
                else "")

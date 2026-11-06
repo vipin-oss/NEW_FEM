@@ -187,6 +187,12 @@ def main():
                  "demo.json flexo_thickness[3].k2_flexo",
                  g("demo.json.flexo_thickness.7.k2_flexo"), "{:.1e}",
                  rel_tol=5e-3))
+    _dt = J("dt_study.json")["memory"]
+    for _m, _lit in ((1, "0.150111"), (2, "0.150057"), (4, "0.150029")):
+        _r = [r for r in _dt["rows"] if r["mult"] == _m][0]
+        R.append(row("time step, zeta at %dN" % _m, _lit,
+                     "dt_study.json memory rows[mult=%d].zeta" % _m,
+                     _r["zeta"], "{:.6f}"))
     R.append(row("thickness, flexo growth factor", "24",
                  "demo.json flexo ratio",
                  g("demo.json.flexo_thickness.7.k2_flexo")
