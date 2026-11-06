@@ -50,7 +50,7 @@ Crossref reachable from this run: **no** — 0 entries agree, 0 agree after the 
 | `Lazar2024` | 10.1016/j.ijmecsci.2024.109294 | lookup failed: URLError | unchecked |
 | `Gupta2024Impact` | 10.1108/HFF-10-2023-0615 | lookup failed: URLError | unchecked |
 | `Gupta2024Vibrational` | 10.1080/15376494.2023.2291804 | lookup failed: URLError | unchecked |
-| `Gupta2024Rayleigh` | 10.1080/17455030.2024.2379958 | lookup failed: URLError | unchecked |
+| `Gupta2026Rayleigh` | 10.1080/17455030.2024.2379958 | lookup failed: URLError | unchecked |
 | `Gupta2025Piezo` | 10.1108/HFF-04-2025-0254 | lookup failed: URLError | unchecked |
 | `PhungVan2024AMM128` | 10.1016/j.apm.2024.01.025 | lookup failed: URLError | unchecked |
 | `PhungVan2024AMM127` | 10.1016/j.apm.2023.12.003 | lookup failed: URLError | unchecked |
@@ -132,7 +132,7 @@ Entries without a DOI (3): `Love1927`, `BognerFoxSchmit1966`, `Kogan1964`.
 | 42 | M. Lazar, Dislocations in nonlocal simplified strain gradient elasticity: Eringen meets ai | Lazar2024 | agrees |
 | 43 | V. Gupta, M. S. Barak, S. Das, Impact of memory-dependent heat transfer on rayleigh waves  | Gupta2024Impact | agrees |
 | 44 | V. Gupta, M. S. Barak, S. Das, Vibrational analysis of size-dependent thermo-piezo-photo-e | Gupta2024Vibrational | agrees |
-| 45 | V. Gupta, H. Ahmad, M. S. Barak, S. Das, S. Kumar, Rayleigh wave in nonlocal piezo-thermo- | Gupta2024Rayleigh | agrees |
+| 45 | V. Gupta, H. Ahmad, M. S. Barak, S. Das, S. Kumar, Rayleigh wave in nonlocal piezo-thermo- | Gupta2026Rayleigh | year: bib 2026 vs FEM-1 2024 |
 | 46 | V. Gupta, F. A. Awwad, E. A. A. Ismail, H. Ahmad, S. Das, Piezo-semiconductor-void interpl | Gupta2025Piezo | agrees |
 | 47 | E. Amanatidou, N. Aravas, Mixed finite element formulations of strain-gradient elasticity  | AmanatidouAravas2002 | agrees |
 | 48 | H. Askes, I. Morata, E. C. Aifantis, Finite element analysis with staggered gradient elast | AskesMorataAifantis2008 | agrees |
@@ -147,6 +147,6 @@ Entries without a DOI (3): `Love1927`, `BognerFoxSchmit1966`, `Kogan1964`.
 | 57 | M. Schey, S. E. Stapleton, The determination of a 3D length scale using long reconstructed | — | not used here |
 | 58 | N. Rauter, R. Lammering, Correlation structure in the elasticity tensor for short fiber-re | — | not used here |
 
-FEM-1 entries carried here: 47 of 58; 0 with a field mismatch; 11 deliberately not used.
+FEM-1 entries carried here: 47 of 58; 1 with a field mismatch; 11 deliberately not used.
 
 Bibliography entries that do not come from the FEM-1 list: `Zgonik1994`, `Mindlin1968`, `Kogan1964`, `YudinTagantsev2013`, `Zubko2013`, `Cross2006`, `Caputo1967`, `BagleyTorvik1983`, `Koeller1984`, `ColeCole1941`, `HavriliakNegami1967`, `EnelundLesieutre1999`, `Roundy2003`, `ErturkInman2011`, `Lim2015`, `ChenYvonnetYaoPark2021`, `ChenYaoYvonnet2023`, `JoshanSantapuri2024`, `Wang2024PhaseField`, `CodonyAriasSuryanarayana2021`.

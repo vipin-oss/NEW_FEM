@@ -11,11 +11,16 @@ Two independent checks, both written to results/reference_audit.md:
    Two tolerances are deliberate, and neither hides a disagreement:
 
    * **Online-first year.**  Crossref's `issued` date of a journal article is
-     often the date it appeared online, one year before the printed issue.
-     Where the year differs by exactly one *and* the volume is the same, the
-     entry is reported as `online-first` rather than as a mismatch: the
-     bibliography keeps the print/volume year, which is the year a reader will
-     find on the issue.
+     often the date it appeared online, up to two years before the printed
+     issue, and `published-print` carries the date of the issue itself.  The
+     year tolerance is granted only when all three hold: the difference between
+     the bib year and `issued` is at most two years, Crossref's
+     `published-print` year equals the bib year, and the volume is the same.
+     The entry is then reported as `online-first` rather than as a mismatch,
+     because the bibliography keeps the print/volume year -- the year printed on
+     the issue a reader will find.  An entry whose bib year matches neither
+     `issued` nor `published-print`, or whose volume differs, is still a
+     mismatch.
    * **C1 vs c 1.**  Wiley encodes the element order inside the title as
      `C</i>1</sup>`, which strips to "c 1" while the bibliography writes "C1".
      The two spellings are folded together before titles are compared.
@@ -166,20 +171,31 @@ def compare_crossref(ent, msg, notes=None):
             bad.append(f"first author: bib '{first_surname(ent.get('author',''))}' "
                        f"vs Crossref '{cs}'")
     y = msg.get("issued", {}).get("date-parts", [[None]])[0][0]
+    py = (msg.get("published-print") or {}).get("date-parts", [[None]])[0][0]
     v = msg.get("volume")
     vol_same = bool(v) and bool(ent.get("volume")) and str(v) == str(ent["volume"])
-    if y and str(y) != ent.get("year", "").strip():
+    bib_year = ent.get("year", "").strip()
+    if y and str(y) != bib_year:
         try:
-            gap = abs(int(y) - int(ent.get("year", "")))
+            gap = abs(int(y) - int(bib_year))
         except (TypeError, ValueError):
             gap = None
-        if gap == 1 and vol_same:
-            notes.append(f"online-first: bib year {ent.get('year','')} is the "
-                         f"print/volume year, Crossref issued {y} (volume {v} "
-                         f"agrees)")
+        print_year_same = py is not None and str(py) == bib_year
+        if gap is not None and gap <= 2 and print_year_same and vol_same:
+            notes.append(f"online-first: bib year {bib_year} is Crossref's "
+                         f"published-print year, Crossref issued {y} (volume "
+                         f"{v} agrees)")
         else:
-            bad.append(f"year: bib {ent.get('year','')} vs Crossref {y}"
-                       + ("" if vol_same else " (volume differs too)"))
+            why = []
+            if gap is not None and gap > 2:
+                why.append(f"{gap} years from issued")
+            if not print_year_same:
+                why.append("no published-print year" if py is None
+                           else f"published-print {py} is not the bib year")
+            if not vol_same:
+                why.append("volume differs too")
+            bad.append(f"year: bib {bib_year} vs Crossref {y}"
+                       + (f" ({'; '.join(why)})" if why else ""))
     if v and ent.get("volume") and not vol_same:
         bad.append(f"volume: bib {ent['volume']} vs Crossref {v}")
     p = msg.get("page")
