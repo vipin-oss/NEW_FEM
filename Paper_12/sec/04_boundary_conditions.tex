@@ -34,18 +34,18 @@ $-\partial_t[\mu(\bm E\cdot\bm t)n_i]$ through the tangential derivative, and
 $-\mu(\bm E\cdot\bm n)n_i$ to \eqref{eq:doubletraction}. The weak form
 assembles all three as the single coupling term
 $\int\mu\nabla N_\phi^{\mathsf T}\nabla(\varepsilon_{xx}+\varepsilon_{yy})$, so
-no assembled matrix changes when the term is written out. Three
-combinations are used in the results:
-
-\begin{enumerate}
-\item \emph{clamped}: $u_i=0$ and $u_{i,j}n_j=0$ on the edge, so that both the
-  displacement and its normal derivative -- the two quantities carried by the
-  element \eqref{eq:dofs} -- are prescribed;
-\item \emph{simply supported}: $u_i=0$ together with $m_i=0$, which leaves the
-  slope free and removes the double force;
-\item \emph{free}: $t_i=0$ and $m_i=0$, the natural conditions of the weak
-  form, which are satisfied automatically by the discretization.
-\end{enumerate}
+no assembled matrix changes when the term is written out. Three combinations
+are used in the results:
+\begin{equation}
+  \text{clamped: } u_i=0,\ u_{i,j}n_j=0;\qquad
+  \text{simply supported: } u_i=0,\ m_i=0;\qquad
+  \text{free: } t_i=0,\ m_i=0 .
+  \label{eq:bcmech}
+\end{equation}
+The first prescribes both quantities that the element \eqref{eq:dofs} carries,
+the second leaves the slope free and removes the double force, and the third is
+the natural condition of the weak form, which the discretization satisfies
+automatically.
 
 The clamped condition is the one that produces the boundary layer of a
 gradient theory: the gradient energy penalises the curvature that the
@@ -71,31 +71,30 @@ condensation and gives the rank-one update
 with $d$ the condensed coupling vector and $\beta$ the condensed dielectric
 coefficient. Two coupling measures follow from this pair, and the difference
 between them matters for the interpretation of every coupling number in the
-paper:
-\begin{enumerate}
-\item the \emph{mode-based} factor of the $j$-th mode,
-  $k_j^2=(\omega_{oc,j}^2-\omega_{sc,j}^2)/\omega_{oc,j}^2$, which depends on
-  the eigenvector that the solver happened to return;
-\item the \emph{mode-free quasi-static} factor of the electrode pair,
-  \begin{equation}
-    x = \frac{d^{\mathsf T}K_{uu}^{-1}d}{\beta},\qquad
-    k^2 = \frac{x}{1+x},
-    \label{eq:kstatic}
-  \end{equation}
-  which involves no eigenvector at all.
-\end{enumerate}
-Equation~\eqref{eq:kstatic} is the measure used wherever a quantity has to be
-compared across geometries or across thicknesses, because it cannot select a
-different mode in a different configuration. Four symbols carry the distinction
-in what follows and are fixed here once: $k^2_{\rm qs}=x/(1+x)$ is the
-mode-free factor of \eqref{eq:kstatic}; $k^2_{\rm qs,u}=x$ is the same
-quantity without the coupled denominator, the one that can be set against
-$e^{\mathsf T}C^{-1}e/\kappa$; $k^2_{j}$ is the mode-based factor of the
-$j$-th mode; and $k^2_{j}(K_{uu})$ or $k^2_{j}(K_{sc})$ names the matrix whose
-short-circuit eigenvalues enter it. An unsubscripted $k^2$ in the results is
-$k^2_{\rm qs}$. The extensional coupling factor
-of the \SI{200}{\micro\metre} by \SI{10}{\micro\metre} strip obtained from
-\eqref{eq:kstatic} is $k^2=0.5581$, within $0.5\,\%$ of the constitutive
+paper. The \emph{mode-based} factor of the $j$-th mode is
+\begin{equation}
+  k_j^2=\frac{\omega_{oc,j}^2-\omega_{sc,j}^2}{\omega_{oc,j}^2},
+  \label{eq:k2mode}
+\end{equation}
+which depends on the eigenvector that the solver happened to return, while the
+\emph{mode-free quasi-static} factor of the electrode pair is
+\begin{equation}
+  x = \frac{d^{\mathsf T}K_{uu}^{-1}d}{\beta},\qquad
+  k^2 = \frac{x}{1+x},
+  \label{eq:kstatic}
+\end{equation}
+which involves no eigenvector at all. Equation~\eqref{eq:kstatic} is the
+measure used wherever a quantity has to be compared across geometries or
+across thicknesses, because it cannot select a different mode in a different
+configuration. Four symbols carry the distinction in what follows and are
+fixed here once: $k^2_{\rm qs}=x/(1+x)$ is the mode-free factor of
+\eqref{eq:kstatic}; $k^2_{\rm qs,u}=x$ is the same quantity without the coupled
+denominator, the one that can be set against $e^{\mathsf T}C^{-1}e/\kappa$;
+$k^2_{j}$ is the mode-based factor of the $j$-th mode; and $k^2_{j}(K_{uu})$ or
+$k^2_{j}(K_{sc})$ names the matrix whose short-circuit eigenvalues enter it. An
+unsubscripted $k^2$ in the results is $k^2_{\rm qs}$. The extensional coupling
+factor of the \SI{200}{\micro\metre} by \SI{10}{\micro\metre} strip obtained
+from \eqref{eq:kstatic} is $k^2=0.5581$, within $0.5\,\%$ of the constitutive
 prediction $0.5608$ obtained from the constitutive tensors in
 Sec.~\ref{sec:verification}.
 
@@ -103,29 +102,21 @@ Sec.~\ref{sec:verification}.
 \subsection{Poling axes and Voigt indices}
 \label{sec:axes}
 
-The material is tetragonal $\mathrm{BaTiO_3}$ at room temperature, and the
+The material is tetragonal $\mathrm{BaTiO_3}$ at room temperature, with Voigt
+indices $1=x$, $2=y$, $3=z$; the length runs along $x$
+(\SI{200}{\micro\metre}), the thickness along $y$ (\SI{10}{\micro\metre}), and
+$z$ is out of plane, the neutral axis of the bending and a free surface. The
 crystal is anisotropic, so the two configurations of Fig.~\ref{fig:geometry}
 do not share a modulus: poling along $x$ pairs the strain $\varepsilon_{xx}$
-with $C^p_{xx}=9.5500\times10^{10}$\,Pa, while poling along $y$ pairs the same
-strain with $C^p_{xx}=1.6946\times10^{11}$\,Pa, the two being exchanged by the
-rotation that takes one poling axis into the other. Table~\ref{tab:axes} fixes
-the axes, the Voigt indices and the tensors once, so that every later formula
-can be read against it; a modulus may only be paired with the permittivity of
-its own configuration, and the wrong pairing is examined, and excluded, in
-Sec.~\ref{sec:verification}.
-
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Which axis, which Voigt index, which modulus. (a) The axes of the
-model: Voigt indices are $1=x$, $2=y$, $3=z$ throughout, and $z$ is a basal
-direction of the $4mm$ crystal in both orientations. (b) The two
-configurations used in the paper. They share the geometry and the material
-record but not the poling axis, and a modulus may only be paired with the
-permittivity of its own configuration.}
-\label{tab:axes}
-\input{table_axes}
-\end{table}
+with $C^{p}_{xx}=\SI{9.5500e10}{\pascal}$, while poling along $y$ pairs the
+same strain with $C^{p}_{xx}=\SI{1.6946e11}{\pascal}$, the two being exchanged
+by the rotation that takes one poling axis into the other, and the beam moduli
+$E_b=1/(\bm C_p^{-1})_{xx}$ are \SI{7.6327e10}{\pascal} and
+\SI{1.3544e11}{\pascal}. The permittivity across the electrode gap is
+$\kappa_{33}=\SI{4.9583e-10}{\farad\per\metre}$ in both configurations, because
+$z$ is a basal direction of the $4mm$ crystal either way. A modulus may only be
+paired with the permittivity of its own configuration, and the wrong pairing is
+examined, and excluded, in Sec.~\ref{sec:verification}.
 
 The pairing rule has a quantitative consequence that the paper relies on. The
 extensional configuration is poled along $x$ with electrodes on the short

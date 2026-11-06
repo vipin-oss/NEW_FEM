@@ -41,6 +41,9 @@ CLAIMS = [
     ("0.5581", "piezoelectric extensional $k^2$ of the 200x10 plate",
      "hua", "D1/C1: the closed form built from $e$, $C$, $\\kappa$ alone "
      "gives 0.56079, and the free-plate FEM matches it to $10^{-10}$"),
+    ("0.5608", "the closed-form extensional $k^2$ from $e$, $C$, $\\kappa$",
+     "hua", "D1: the plane-stress closed form itself, 0.56079, which is the "
+     "number this one rounds"),
     ("0.5", "distance between 0.5581 and the closed form 0.5608",
      "hua", "D1: the same two numbers, 0.56079 against 0.55814"),
     ("0.09", "spread of the piezo $k^2$ between 10 and 1 micron",

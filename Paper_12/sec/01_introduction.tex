@@ -4,174 +4,163 @@
 \label{sec:intro}
 %% ===========================================================================
 
-Classical elasticity is an efficient continuum description when the structural
-dimension of a member is much larger than the scale of its microstructure: the
-constitutive relation is local, the stress at a point depends on the strain at
-the same point, and no intrinsic length appears in the governing
-equations~\cite{Love1927}. Its range of application in engineering analysis
-remains very wide, from mechanical metamaterials~\cite{Jiao2023} to additively
-manufactured solids~\cite{Sarar2024} and to the vibration-based design of
-small-scale devices~\cite{Roundy2003,ErturkInman2011}. The description becomes
-restrictive, however, as soon as the member is thin enough or the electrodes
-are close enough for the electromechanical response to depend on how the
-deformation varies from point to point rather than on its local value alone.
-Two mechanisms produce that dependence. The first is nonlocality of the
-elastic response, in which the stress at a material point is an average over a
-neighborhood~\cite{EringenEdelen1972,Eringen1972Polar,Eringen1983}. The second
-is the strain-gradient and polarization-gradient coupling of a dielectric, in
-which the electric displacement acquires a term proportional to the gradient
-of the strain~\cite{Mindlin1968,Cross2006,Zubko2013,YudinTagantsev2013}.
+The electromechanical response of a member a few micrometres thick is not the
+response of the same material in bulk. Bending a strip of thickness $h$ to a
+curvature $\kappa_c$ produces a strain gradient of order $\kappa_c/h$, so a
+coupling that is proportional to the gradient grows as $h^{-2}$ while a
+coupling proportional to the strain itself does not; at the micrometre scale
+the two are no longer separated by orders of magnitude, and the design of a
+sensor or a transducer has to decide which of them it uses. The devices that
+pose the question are small and getting smaller: vibration energy
+harvesters and resonant microsensors~\cite{Roundy2003,ErturkInman2011},
+mechanical metamaterials with architected
+microstructure~\cite{Jiao2023}, and additively manufactured parts whose
+mesostructure sets a length of its own~\cite{Sarar2024}. Two further
+properties of the same devices matter at that scale and are absent from
+classical piezoelectricity. The first is that a dielectric driven over decades
+of frequency does not respond with a single time constant: its permittivity
+follows a broadened dispersion, so the constitutive law is non-local in
+time~\cite{ColeCole1941,HavriliakNegami1967}. The second is that the electrodes
+are not a detail: whether a polarization is collected depends on which pair of
+faces carries the charge, and a formulation that does not distinguish the two
+configurations cannot say which effect a measurement is seeing.
 
-A continuum model that carries either mechanism has to contain a length, and
-the size effect it predicts is only as meaningful as that length is. In
-strain-gradient elasticity the length enters through the higher-order elastic
-constants of Toupin and Mindlin~\cite{Toupin1962,MindlinTiersten1962,
-Mindlin1964,Mindlin1965}, and the simplified Aifantis
-form~\cite{Aifantis1992,RuAifantis1993,AltanAifantis1997} reduced the
-higher-order tensor to a single parameter while keeping the qualitative
-predictions -- regularization of localization, removal of singularities, and a
-stiffness that grows as the member shrinks. Overviews of the formulation, of
-the identification procedures and of the finite element
-implementations are available~\cite{AskesAifantis2011,Polizzotto2015}, and
-experiments on micron-scale beams confirmed the size
-dependence~\cite{Lam2003}. Discrete-to-continuum arguments showed that gradient
-terms emerge naturally from lattice or representative-volume
-descriptions~\cite{MetrikineAskes2002,Gitman2005}, while homogenization of
-three-dimensional lattices established that a strain-gradient continuum
-reproduces size effects that classical homogenization misses~\cite{
-Molavitabrizi2023,YangLiuXia2024}.
+Strain-gradient elasticity supplies the length that the first effect needs. In
+the formulation of Toupin and Mindlin the energy depends on the second
+displacement gradient through higher-order elastic
+constants~\cite{Toupin1962,MindlinTiersten1962,Mindlin1964,Mindlin1965}, and
+the simplified form of Aifantis reduces that tensor to one
+parameter~\cite{Aifantis1992,RuAifantis1993} while keeping
+the qualitative predictions: localization is regularized, singularities are
+removed and stiffness grows as the member shrinks. Nonlocal elasticity of
+Eringen type replaces the local stress by an average over a
+neighbourhood~\cite{EringenEdelen1972,Eringen1972Polar,Eringen1983}, and the
+two descriptions are related by the higher-order nonlocal strain-gradient
+model, in which an integral kernel and a gradient expansion act at
+once~\cite{Lim2015}. Reviews of the formulations, the identification
+procedures and the finite element implementations are
+available~\cite{AskesAifantis2011,Polizzotto2015}, discrete-to-continuum
+arguments show how the gradient terms emerge from a lattice or a
+representative volume~\cite{MetrikineAskes2002,Gitman2005}, and homogenization
+of three-dimensional lattices establishes that a strain-gradient continuum
+reproduces size effects that classical homogenization
+misses~\cite{Molavitabrizi2023,YangLiuXia2024}. The internal length in this
+literature is either a scalar or a phenomenological tensor: separable
+anisotropic gradient models, internal-length tensors and symmetry
+classifications of three-dimensional strain-gradient elasticity provide the
+tensor~\cite{LazarPo2015,Polizzotto2018,Auffray2019}, but none of them
+derives it from an averaging domain that a microscopist could measure.
 
-In most of that work the internal length is a scalar, which amounts to
-assuming that the nonlocal interaction has the same range in every direction.
-The assumption is inappropriate for layered media, fiber-reinforced solids,
-anisotropic crystals and architected lattices. Tensorial characteristic
-lengths have therefore been developed through separable anisotropic gradient
-models, internal-length tensors and symmetry classifications of
-three-dimensional strain-gradient elasticity~\cite{LazarPo2015,Polizzotto2018,
-Auffray2019}, and physically based nonlocal strain-gradient models have
-related the intrinsic lengths to polymer-network
-descriptors~\cite{Jiang2023}. In these formulations the length tensor is
-usually introduced phenomenologically or through homogenized coefficients; the
-connection between a geometrically defined averaging domain and the resulting
-tensor remains implicit, although it is exactly that connection which gives
-the length a physical meaning and makes it calibratable.
-
-The electromechanical side of the problem has developed along a separate line.
-Piezoelectricity provides the coupling that microsystems exploit, and its
-material description for a tetragonal crystal such as barium
-titanate is well established~\cite{Zgonik1994}. Flexoelectricity, the
-coupling of polarization to the strain gradient, was identified by Kogan in
-the nineteen-sixties~\cite{Kogan1964} and formulated as a
-polarization-gradient theory by
+Flexoelectricity supplies the electromechanical side. The coupling of
+polarization to the strain gradient was identified by Kogan~\cite{Kogan1964}
+and formulated as a polarization-gradient theory by
 Mindlin~\cite{Mindlin1968}; its magnitude in insulating solids was reviewed by
-Cross~\cite{Cross2006} and its role in thin films and nanostructures by Yudin
-and Tagantsev~\cite{YudinTagantsev2013} and by Zubko and
-co-workers~\cite{Zubko2013}. The distinguishing feature of the
-flexoelectric coupling is that the polarization it produces is proportional to
-the strain gradient, so that in a member of thickness $h$ its contribution to
-the electromechanical coupling grows as the member is thinned, roughly as
-$h^{-2}$ in the bending configuration measured in Sec.~\ref{sec:thickness}:
-the effect is negligible in a millimeter-sized part and dominant in a
-micrometer-sized one. A framework that
-is meant to design such devices therefore has to resolve the strain gradient
-inside the member, and it has to state which electrode pair collects which
-polarization.
+Cross~\cite{Cross2006}, its role in thin films by Yudin and
+Tagantsev~\cite{YudinTagantsev2013} and by
+Zubko and co-workers~\cite{Zubko2013}, and its transverse component has been
+computed from first principles for nanostructures at finite
+deformation~\cite{CodonyAriasSuryanarayana2021}. Micron-scale bending
+experiments confirmed the size dependence that the gradient
+predicts~\cite{Lam2003}. On the computational side the formulations divide by
+how they make the second gradient admissible. Mixed and staggered methods
+carry it as an independent field and keep $C^0$
+interpolation~\cite{AmanatidouAravas2002,AskesMorataAifantis2008,
+PhunpengBaiz2015}; micromorphic and virtual element formulations enlarge the
+kinematics~\cite{Forest2009,WriggersHudobivnik2023}; Hermite elements carry it
+in the interpolation itself~\cite{BognerFoxSchmit1966,PeteraPittman1994,
+Zervos2008,Papanicolopulos2009}. Flexoelectric-specific implementations have
+followed both routes, with isogeometric analysis for the frequency-domain
+response of flexoelectric systems~\cite{ChenYaoYvonnet2023}, computational
+homogenization for their topology
+optimization~\cite{ChenYvonnetYaoPark2021}, gradient electromechanical finite
+elements of arbitrary order~\cite{JoshanSantapuri2024} and a
+strain-gradient phase-field formulation for
+ferroelectrics~\cite{Wang2024PhaseField}. Benchmarks with analytical
+counterparts~\cite{Yang2021,Lazar2024} and isogeometric
+nonlocal-strain-gradient analyses of
+nanostructures~\cite{PhungVan2023EC39,PhungVan2024CS335,PhungVan2024TWS198,
+Thai2023CS316} complete the landscape.
 
-Dielectric loss adds a third ingredient. A real dielectric does not relax with
-a single time constant; its permittivity follows a broadened dispersion of the
-Cole--Cole or Havriliak--Negami type~\cite{ColeCole1941,HavriliakNegami1967},
-and the corresponding time-domain constitutive law is non-local in time.
-Fractional calculus provides the compact description: the spring-pot of
+Dielectric loss is the third ingredient, and its description is older than
+either of the other two. A relaxing dielectric is described by a Cole--Cole or
+a Havriliak--Negami
+dispersion~\cite{ColeCole1941,HavriliakNegami1967}, whose time-domain
+counterpart is a constitutive law with a memory. Fractional calculus gives that
+law one parameter more than elasticity: the spring-pot of
 Caputo~\cite{Caputo1967}, used as a constitutive element by Bagley and
-Torvik~\cite{BagleyTorvik1983} and Koeller~\cite{Koeller1984}, reproduces a
-power-law relaxation with one additional parameter, the order $\alpha$, and it
-has been used in time-domain damping models~\cite{EnelundLesieutre1999} and in
-fractional thermo-piezo-elastic wave
+Torvik~\cite{BagleyTorvik1983} and by Koeller~\cite{Koeller1984}, reproduces a
+power-law relaxation with the order $\alpha$ as the only addition, and it has
+been carried into time-domain damping models~\cite{EnelundLesieutre1999} and
+into fractional thermo-piezo-elastic wave
 problems~\cite{Gupta2024Rayleigh,Gupta2024Impact,Gupta2025Piezo,
-Gupta2024Vibrational}. The numerical treatment of such a law requires a
-convolution over the whole history, which is expensive if it is carried on the
-assembled system and inexpensive if it is carried on a small set of modal
-coordinates.
+Gupta2024Vibrational}. Numerically the law is a convolution over the whole
+history, discretized by the L1 scheme; the cost of that convolution is set by
+where it is carried. On the assembled system it grows with the number of
+degrees of freedom and with every step; on a small set of modal coordinates it
+does not, and the price is a projection that has to be shown to be converged.
+The modelling question underneath is separate and is usually left implicit:
+in a condensed electromechanical problem two stiffness matrices are available,
+the condensed one and the short-circuit one, and a fractional derivative
+multiplying one is not the same model as the same derivative multiplying the
+other.
 
-The finite element side of gradient theories is well developed but not
-uniform. Mixed and staggered formulations avoid the $C^1$
-requirement by treating the gradient as an independent
-field~\cite{AmanatidouAravas2002,AskesMorataAifantis2008,PhunpengBaiz2015},
-micromorphic and virtual element formulations embed the gradient in an
-enlarged kinematics~\cite{Forest2009,WriggersHudobivnik2023}, and $C^1$
-Hermite elements carry it directly in the
-interpolation~\cite{BognerFoxSchmit1966,PeteraPittman1994,Zervos2008,
-Papanicolopulos2009}.
-Analytical and benchmark solutions for verification are
-available~\cite{Yang2021,Lazar2024}, as are nonlocal boundary element and
-operator methods~\cite{Schwartz2012EABE36,ZhangRen2023EWC39}. In the
-nonlocal-strain-gradient literature on strips and shells the isogeometric
-family has been the vehicle of choice for
-nanostructures~\cite{PhungVan2023EC39,PhungVan2024AMM127,PhungVan2024AMM128,
-PhungVan2024CS335,PhungVan2024TWS198,Thai2023CS316}. What is missing from this
-landscape is not another element but a coupled formulation in which the
-gradient, the electromechanical coupling and the memory are carried by one
-discretization, with an explicit statement of which of its numbers are
-converged and which are set by the eigensolver.
+Table~\ref{tab:comparison} places the present work against representative entries
+from these three lines. Its rows are formulations, not implementations, and
+the dashes mark ingredients that the cited paper does not carry; the last two
+rows are the one-scale gradient theory of~\cite{fem1} and the present paper.
 
-Two lines of work meet here. On the elastic side, a $C^1$ strain-gradient
-formulation with ellipsoidal nonlocal characteristic lengths established the
-element technology and the geometric meaning of the length
-tensor~\cite{fem1}, and the reduction of that energy to a scalar length is the
-Aifantis form~\cite{Aifantis1992}. On the coupled side, the
-piezoelectric--flexoelectric structure used below is Mindlin's Form~II of
-polarization-gradient theory~\cite{Mindlin1965,Toupin1962,Mindlin1968} with the
-flexoelectric coupling of Kogan~\cite{Kogan1964} and
-Yudin and Tagantsev~\cite{YudinTagantsev2013}, in the two-dimensional form that the
-plane-stress reduction of Sec.~\ref{sec:formulation} gives. Neither line
-contains a memory, distinguishes the two memory matrices that a condensed
-electrical problem admits, or treats the averaging window as a tensor in the
-coupled problem.
+\input{table_comparison}
 
-The present paper closes that gap. Its contributions are the following.
+Three gaps follow, one for each line. First, the averaging window that gives
+the internal length its geometric meaning has not been placed inside a coupled
+electromechanical element: the existing coupled formulations use a scalar
+length or an assumed tensor, so the relation between the microstructure and
+the length that the element sees is not stated. Second, a fractional dielectric
+memory has not been formulated in a strain-gradient piezoelectric element with
+an explicit statement of which matrix carries the derivative, so the effect of
+that choice on a damping ratio is unknown. Third, the coupling factor of a
+strain-gradient electromechanical strip has been reported for one electrode
+arrangement at a time, without a measure that can be compared across
+thicknesses and without separating a material property from a size effect.
+
+This paper closes the three gaps with one discretization. Its contributions
+are the following.
 
 \begin{enumerate}
 \item \textbf{A rectangular nonlocal window inside a coupled
   electromechanical element.} The strain-gradient energy is generated by the
   in-plane second-moment tensor $M$ of the averaging window, for which cuboid,
   ellipse and ellipsoid windows give $M_{ii}=a_i^{2}/3$, $a_i^{2}/4$ and
-  $a_i^{2}/5$ in closed form. The consequence is a modeling statement rather
-  than a numerical one: two windows with the same $M$ produce identical
-  solutions, so the shape of the window is not a parameter once its second
-  moment is fixed, whereas its anisotropy and orientation are.
+  $a_i^{2}/5$ in closed form. Because the energy is linear in $M$, two windows
+  with the same second moment produce identical solutions: the shape of the
+  window is not a parameter once $M$ is fixed, whereas its anisotropy and its
+  orientation are, and they move the extensional coupling by
+  $15$--$19\,\%$.
 \item \textbf{Fractional dielectric memory carried on modal coordinates.} The
   dielectric relaxation is a fractional Kelvin--Voigt law of Caputo order
   $\alpha$, discretized by the L1 scheme and convoluted on the reduced modal
-  coordinates. This makes the choice of memory matrix -- the condensed
-  stiffness or the short-circuit stiffness -- an explicit modeling decision
-  and quantifies its effect on the damping ratio.
-\item \textbf{Mode-free coupling factors and a calibration protocol for two
-  electrode configurations of one strip.} The extensional and the bending
-  configuration are treated as two electrical problems, and the coupling
-  factor of the open- and short-circuit pair is evaluated from a quasi-static
-  expression that involves no eigenvector, which removes the mode-selection
-  step from the headline number and separates a material property from a size
-  effect. The paper states how the four model parameters -- the fractional
-  order, the relaxation time, the flexoelectric coefficient and the window
-  size -- are to be identified from measurements, and over which ranges the
-  two-dimensional reduction and the small-coupling expansions remain valid.
+  coordinates, which makes the choice of memory matrix an explicit modelling
+  decision; at $\alpha=1$ the short-circuit memory damps $0.450$ times as much
+  as the condensed one.
+\item \textbf{Mode-free coupling factors for two electrode configurations of
+  one strip, and the calibration that goes with them.} The coupling factor is
+  evaluated from a quasi-static expression that involves no eigenvector, so the
+  same measure can be compared across geometries and thicknesses; with it the
+  extensional coupling is a material property ($k^{2}=0.5581$, constant to
+  $0.09\,\%$ between $10$ and $1\,\mu$m) and the flexoelectric bending coupling
+  is a size effect that grows by a factor $24$ over the same range. Each of the
+  four model parameters is read from a different observable, and the ranges
+  over which the two-dimensional reduction and the small-coupling expansions
+  hold are stated.
 \end{enumerate}
 
-Each parameter is read from a different observable: the flexoelectric
-coefficient from the charge of a bending device at known curvature, the window
-from the decay length of the strain at a clamped edge, and the pair
-$(\alpha,\tau)$ from the dielectric loss spectrum, with the damping ratio
-providing a second, time-domain route to the same pair. That separation is what
-makes the calibration protocol usable, and it also means that the parameters
-are not jointly identified from one measurement: the identifiability of
-$(\mu,a,\alpha,\tau)$ from combined charge, stiffness and loss data is not
-tested in this paper.
-
-Section~\ref{sec:formulation} states the formulation, Sec.~\ref{sec:limits}
-its particular cases, Sec.~\ref{sec:bc} the boundary and electrode
-conditions, and Sec.~\ref{sec:fem} the finite element discretization.
-Section~\ref{sec:verification} collects the verification and convergence
-evidence, Secs.~\ref{sec:orientation}--\ref{sec:application} the results, and
-Sec.~\ref{sec:calibration} the calibration protocol and the limitations.
+Section~\ref{sec:formulation} states the formulation and derives the
+constitutive relations and the governing equations,
+Sec.~\ref{sec:limits} its particular cases, Sec.~\ref{sec:bc} the boundary and
+the electrode conditions, and Sec.~\ref{sec:fem} the element, the condensation
+and the time stepping. Section~\ref{sec:results} reports the verification, the
+worked calculation and the results, Sec.~\ref{sec:calibration} the parameter
+identification, the positioning and the limitations, and
+Sec.~\ref{sec:conclusions} the conclusions.
 
 \FloatBarrier

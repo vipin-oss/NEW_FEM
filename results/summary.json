@@ -283,7 +283,7 @@
   {
    "id": "A2",
    "what": "every number in the abstract has an independent-check verdict",
-   "value": "3 hua / 5 nahi hua / 3 inputs, 11 tokens",
+   "value": "4 hua / 5 nahi hua / 3 inputs, 12 tokens",
    "criterion": "0 uncovered, 0 stale",
    "pass": true
   },
@@ -353,7 +353,7 @@
   {
    "id": "N5",
    "what": "every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive",
-   "value": "57/57 traced, 0 untraced",
+   "value": "37/37 traced, 0 untraced",
    "criterion": "0 untraced",
    "pass": true
   },
@@ -416,8 +416,8 @@
   {
    "id": "P1",
    "what": "paper figures: vector set written",
-   "value": "11 PDF",
-   "criterion": "= 11 (F1-F9, FB1-FB2)",
+   "value": "12 PDF",
+   "criterion": "= 12 (F1-F9, FB1-FB2, F11_designmap)",
    "pass": true
   },
   {
@@ -430,7 +430,7 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "90/90",
+   "value": "96/96",
    "criterion": "all agree",
    "pass": true
   }

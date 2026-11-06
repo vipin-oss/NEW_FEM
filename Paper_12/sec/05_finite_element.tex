@@ -15,9 +15,9 @@ twice, the strain-gradient term produces both the double traction
 \begin{multline}
   \int_\Omega \delta\varepsilon_{ij}\,C_{ijkl}\,\varepsilon_{kl}\,\mathrm{d}A
   + \tfrac12\int_\Omega \delta\varepsilon_{ij,m}\,M_{mn}\,C_{ijkl}\,
-     \varepsilon_{kl,n}\,\mathrm{d}A \\
-  - \int_\Omega \delta\varepsilon_{ij}\,e_{kij}\,E_k\,\mathrm{d}A
-  - \int_\Omega \delta\varepsilon_{ij,m}\,\mu_{kijm}\,E_k\,\mathrm{d}A \\
+     \varepsilon_{kl,n}\,\mathrm{d}A
+  - \int_\Omega \delta\varepsilon_{ij}\,e_{kij}\,E_k\,\mathrm{d}A \\
+  - \int_\Omega \delta\varepsilon_{ij,m}\,\mu_{kijm}\,E_k\,\mathrm{d}A
   - \int_\Omega \delta E_k\left(e_{kij}\varepsilon_{ij}
      + \kappa_{kl}E_l + \mu_{kijl}\eta_{ijl}\right)\mathrm{d}A
   = \delta W_{\rm ext}
@@ -32,7 +32,7 @@ condensed before assembly, so that the mechanical problem never sees the
 potential degrees of freedom.
 
 \FloatBarrier
-\subsection{The BFS element and its degrees of freedom}
+\subsection{The BFS element and its contributions}
 \label{sec:bfs}
 
 The domain is covered by Bogner--Fox--Schmit rectangles. Each element has four
@@ -50,18 +50,33 @@ both integrated by $4\times4$ Gauss quadrature in the element frame, which is
 the rule the implementation uses for every element; $3\times3$, $4\times4$ and
 $5\times5$ rules change $k^2$ by at most $5.8\times10^{-6}$ and the fundamental
 frequency by at most $7.1\times10^{-6}$ relative on the $48\times4$ mesh, so
-the rule is converged and the value quoted in the results is the
-$4\times4$ one. The gradient matrix $B_{,k}$ contains the third derivatives of
-the shape functions and is the reason the element has to be $C^1$. The element contributions are
-the elastic $K_e=\int B^{\mathsf T}CB$, the gradient
-$K_{g,e}=\tfrac12\int M_{mn}B_{,m}^{\mathsf T}CB_{,n}$, the piezoelectric coupling
-$B_e=\int B^{\mathsf T}e^{\mathsf T}\nabla N_\phi$, the dielectric
-$C_{\phi,e}=-\int\kappa\,\nabla N_\phi\cdot\nabla N_\phi$ and a consistent mass
-matrix from the same interpolation. The flexoelectric contribution is
-assembled into $B_e$ as the additional potential--displacement coupling that
-the $\mu_{kijl}\eta_{ijl}$ term of \eqref{eq:energy} produces; because it
-involves $B_{,k}$, it is the term for which the $C^1$ character of the element
-is indispensable.
+the rule is converged. The gradient matrix $B_{,k}$ contains the third
+derivatives of the shape functions and is the reason the element has to be
+$C^1$. The four element contributions are the elastic stiffness
+\begin{equation}
+  K_e=\int_{\Omega_e} B^{\mathsf T}C\,B\,\mathrm{d}A ,
+  \label{eq:Ke}
+\end{equation}
+the gradient stiffness, in which the second moment replaces the scalar length,
+\begin{equation}
+  K_{g,e}=\tfrac12\int_{\Omega_e} M_{mn}B_{,m}^{\mathsf T}C\,B_{,n}\,\mathrm{d}A ,
+  \label{eq:Kg}
+\end{equation}
+the electromechanical coupling, which carries the piezoelectric and the
+flexoelectric terms in one matrix,
+\begin{equation}
+  B_e=\int_{\Omega_e} B^{\mathsf T}e^{\mathsf T}\nabla N_\phi\,\mathrm{d}A
+     +\int_{\Omega_e} B_{,k}^{\mathsf T}\mu\,\nabla N_\phi\,\mathrm{d}A ,
+  \label{eq:Be}
+\end{equation}
+and the dielectric matrix
+\begin{equation}
+  C_{\phi,e}=\int_{\Omega_e}\kappa\,\nabla N_\phi\cdot\nabla N_\phi\,\mathrm{d}A ,
+  \label{eq:Cphi}
+\end{equation}
+with a consistent mass matrix from the same interpolation. Because the
+flexoelectric contribution involves $B_{,k}$, it is the term for which the
+$C^1$ character of the element is indispensable.
 
 \FloatBarrier
 \subsection{Condensation of the potential}
@@ -74,10 +89,23 @@ The assembled system is indefinite in the saddle-point form
   = \begin{bmatrix} \bm{f} \\ \bm{q}\end{bmatrix},
   \label{eq:saddle}
 \end{equation}
-with $C_\phi$ positive by construction. Eliminating the potential degrees of
-freedom of the electrode set reproduces \eqref{eq:rankone} exactly, and the
-returned pair $(d,\beta)$ is what the modal and the static solvers consume.
-The electrode equations behind that pair are
+with $C_\phi$ positive by construction. Eliminating the internal potential
+degrees of freedom of the electrode set leaves the Schur complement
+\begin{equation}
+  K_{\rm cond} = K + B\,C_\phi^{-1}B^{\mathsf T},
+  \qquad
+  \bm{q}_{\rm cond} = \bm{q} + B\,C_\phi^{-1}\bm{q}_\phi ,
+  \label{eq:schur}
+\end{equation}
+and eliminating the two electrode potentials as well reproduces
+\eqref{eq:rankone} exactly, with
+\begin{equation}
+  d = B\,C_\phi^{-1}\bm{q}_\phi ,\qquad
+  \beta = \bm{q}_\phi^{\mathsf T}C_\phi^{-1}\bm{q}_\phi ,
+  \label{eq:dbeta}
+\end{equation}
+the pair that the modal and the static solvers consume. The electrode
+equations behind that pair are
 \begin{equation}
   Q = d^{\mathsf T}\bm{u} - \beta V,
   \label{eq:electrode}
@@ -90,14 +118,12 @@ ground: short circuit ($V=0$) gives $Q=d^{\mathsf T}\bm{u}$, open circuit
   \label{eq:voc}
 \end{equation}
 and $\beta=\partial Q/\partial V$ is the condensed capacitance of the electrode
-pair. In units, $d$ is a charge per unit generalized displacement ($\si{\coulomb
-\per\metre}$ for the in-plane degrees of freedom of a strip of unit width),
-$\beta$ is a capacitance per unit width ($\si{\farad\per\metre}$), $Q$ is a
-charge per unit width and $V$ a voltage. The implementation therefore evaluates
-each of the two quantities once, from $(d,\beta)$ and the nodal solution, rather
-than integrating the electric displacement pointwise: \eqref{eq:electrode}
-gives the charge when the electrode is driven and \eqref{eq:voc} the voltage
-when it is left open, and the two are not interchangeable.
+pair. In units, $d$ is a charge per unit generalized displacement
+(\si{\coulomb\per\metre} for the in-plane degrees of freedom of a strip of unit
+width), $\beta$ is a capacitance per unit width (\si{\farad\per\metre}), $Q$ is
+a charge per unit width and $V$ a voltage. The implementation evaluates each of
+the two quantities once, from $(d,\beta)$ and the nodal solution, rather than
+integrating the electric displacement pointwise.
 
 \FloatBarrier
 \subsection{Modal L1 time stepping}
@@ -112,12 +138,32 @@ With the L1 weights of \eqref{eq:l1} the time-discrete problem is
 \end{equation}
 with $K_{\rm mem}\equiv\tau^{\alpha}K$ the remembered operator -- the stiffness
 times the relaxation time to the power $\alpha$, so that $K_{\rm mem}$ carries
-mass over time to the power $\alpha-2$ and $\tau^{\alpha}K\,\mathrm{D}^{\alpha}
-\bm{u}$ has the units of a force -- and $K\in\{K_{\rm eff},K_{uu}\}$ the model
-choice quantified in Sec.~\ref{sec:memorystudy}. Inserting the Newmark
-expressions for $\bm{u}^{n+1}$ and $\bm{a}^{n+1}$ ($\beta=\tfrac14$,
-$\gamma=\tfrac12$) moves every unknown of step $n+1$ into one constant
-matrix,
+mass over time to the power $\alpha-2$ and
+$\tau^{\alpha}K\,\mathrm{D}^{\alpha}\bm{u}$ has the units of a force -- and
+$K\in\{K_{\rm eff},K_{uu}\}$ the model choice quantified in
+Sec.~\ref{sec:memorystudy}. In the modal variant used for the long ring-downs
+the displacement is projected on the mass-normalized modes of the
+short-circuit pencil,
+\begin{equation}
+  \bm{u}(t) \simeq \Phi\,\bm{q}(t),\qquad
+  \Phi^{\mathsf T}M\Phi = I,\qquad
+  \Phi^{\mathsf T}K_{sc}\Phi = \mathrm{diag}(\omega_i^2),
+  \label{eq:modal}
+\end{equation}
+and the convolution is carried on $\bm{q}$ instead of on the nodal vector, so
+the cost per step is proportional to the number of retained modes rather than
+to the number of degrees of freedom. Inserting the Newmark expressions for
+$\bm{u}^{n+1}$ and $\bm{a}^{n+1}$ ($\beta=\tfrac14$, $\gamma=\tfrac12$),
+\begin{equation}
+  \bm{u}^{n+1} = \bm{u}^{n} + \Delta t\,\bm{v}^{n}
+     + \Delta t^{2}\left[\left(\tfrac12-\beta\right)\bm{a}^{n}
+       + \beta\,\bm{a}^{n+1}\right],
+  \qquad
+  \bm{v}^{n+1} = \bm{v}^{n} + \Delta t\left[(1-\gamma)\bm{a}^{n}
+       + \gamma\,\bm{a}^{n+1}\right],
+  \label{eq:newmark}
+\end{equation}
+moves every unknown of step $n+1$ into one constant matrix,
 \begin{equation}
   \left[M + \beta\Delta t^{2}K +
     \frac{\beta\,\Delta t^{2-\alpha}}{\Gamma(2-\alpha)}K_{\rm mem}\right]
@@ -129,59 +175,90 @@ appearing on the left; $\bm{r}^{n+1}$ collects the known displacements,
 velocities and the history sum $\sum_{k\ge1}b_{k}\Delta\bm{u}^{n+1-k}$ of
 \eqref{eq:l1}. The first step has no history, so the initial acceleration is
 $\bm{a}^{0}=M^{-1}(\bm{f}^{0}-K\bm{u}^{0})$ with $\bm{v}^{0}$ supplied by the
-initial condition. The weights of \eqref{eq:l1} are indexed so that the newest increment carries
-$b_0$: with $j=n+1-k$ the sum in \eqref{eq:step} runs from $j=0$ (the unknown
-increment $\bm{u}^{n+1}-\bm{u}^{n}$) to $j=n$, and only $j\ge1$ is history. Two
-limits check the expression. At $\alpha=1$ the weights are $b_0=1$ and $b_j=0$
-for every $j\ge1$, not $b_j=1$: the history vanishes identically, the operator
-$\tau K\,\mathrm{D}^{1}$ becomes the backward difference
+initial condition.
+
+Two limits check the expression. At $\alpha=1$ the weights are $b_0=1$ and
+$b_j=0$ for every $j\ge1$, not $b_j=1$: the history vanishes identically, the
+operator $\tau K\,\mathrm{D}^{1}$ becomes the backward difference
 $\tau K(\bm{u}^{n+1}-\bm{u}^{n})/\Delta t$, and \eqref{eq:step} reduces to the
 classical Kelvin--Voigt equation $M\bm{a}+K\bm{u}+\tau K\bm{v}=\bm{f}$ only up
-to the $O(\Delta t)$ error of that difference: the scheme is first order at
-$\alpha=1$ as well, not exact there. The ring-down of
+to the $O(\Delta t)$ error of that difference, so the scheme is first order at
+$\alpha=1$ as well and not exact there. The ring-down of
 Sec.~\ref{sec:memorystudy} reproduces the exact $\omega\tau/2$ to that accuracy
 ($0.150111$, $0.150057$, $0.150029$ against $0.150000$ at $N$, $2N$ and $4N$
-steps, Sec.~\ref{sec:verification}). The matrix \eqref{eq:stepA} reduces to the
-standard Newmark matrix for the Kelvin--Voigt model, with the newest weight
-applied implicitly on the left. At $\tau\to0$ the memory matrix vanishes and the
-elastic problem is recovered. The dimensions fix the two exponents: a
+steps, Sec.~\ref{sec:verification}). At $\tau\to0$ the memory matrix vanishes
+and the elastic problem is recovered. The dimensions fix the two exponents: a
 left-hand matrix written $M+\Delta t^{\alpha}\Gamma(2-\alpha)K_{\rm mem}$ would
 not have the dimensions of $M$, whereas
-$\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ does. In the modal variant used for the long ring-downs,
-the same convolution is carried on the mass-normalized coordinates of the
-retained modes, so the cost per step is proportional to the number of retained
-modes rather than to the number of degrees of freedom. The truncation of that
-projection was measured on the ring-down of Sec.~\ref{sec:memorystudy}: with
-the memory on $K_{\rm eff}$ the motion is a single mode and eight modes
-reproduce a forty-mode projection to $2.3\times10^{-14}$ of the initial
-voltage, whereas with the memory on $K_{uu}$ the projected memory couples the
-modes and eight modes differ from forty by $3.6\times10^{-4}$ (twenty modes:
-$5.9\times10^{-5}$). Eight modes are therefore converged for the
-$\alpha=1$ decay quoted below, and the $\alpha<1$ decays are read with that
-difference in mind.
+$\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ does.
+
+The truncation of the modal projection was measured on the ring-down of
+Sec.~\ref{sec:memorystudy}: with the memory on $K_{\rm eff}$ the motion is a
+single mode and eight modes reproduce a forty-mode projection to
+$2.3\times10^{-14}$ of the initial voltage, whereas with the memory on $K_{uu}$
+the projected memory couples the modes and eight modes differ from forty by
+$3.6\times10^{-4}$ (twenty modes: $5.9\times10^{-5}$). Eight modes are therefore
+converged for the $\alpha=1$ decay quoted below, and the $\alpha<1$ decays are
+read with that difference in mind.
+
+\FloatBarrier
+\subsection{Solution procedure}
+\label{sec:algorithm}
+
+The steps that produce every number in this paper are the following.
+
+\begin{center}
+\fbox{\begin{minipage}{0.95\textwidth}
+\small
+\textbf{Algorithm 1.} Assembly, condensation and solution for one geometry.
+\begin{enumerate}
+\item Build the material record of Table~\ref{tab:params} for the poling axis
+  of the configuration and reduce it to plane stress with
+  \eqref{eq:Cp}--\eqref{eq:ep}.
+\item Evaluate the second-moment tensor $M$ of the window from
+  \eqref{eq:Mshapes}, rotated by \eqref{eq:Mrot2} if the window is not aligned.
+\item Mesh the strip with $n_x\times n_y$ BFS rectangles and assemble
+  $K_e$, $K_{g,e}$, $B_e$, $C_{\phi,e}$ and $M_e$ by $4\times4$ quadrature,
+  equations \eqref{eq:Ke}--\eqref{eq:Cphi}.
+\item Mark the electrode nodes of the chosen pair and split the potential
+  degrees of freedom into free, earthed and floating.
+\item Condense the potential, first to the electrode pair by \eqref{eq:schur}
+  and then to the single floating electrode by \eqref{eq:dbeta}; store
+  $(d,\beta)$.
+\item \emph{Frequency domain:} solve the short-circuit pencil
+  $K_{sc}\bm{\phi}=\omega^{2}M\bm{\phi}$ for the required number of modes
+  (Lanczos above $4200$ unknowns, dense LAPACK below), with the two blocks
+  scaled separately.
+\item Evaluate the coupling factor: the mode-based \eqref{eq:k2mode} when a
+  mode is needed, the mode-free \eqref{eq:kstatic} when thicknesses or
+  geometries are compared.
+\item Post-process the open-circuit field: solve the internal potential from
+  the condensed system at the prescribed electrode voltage, then the voltage
+  from \eqref{eq:voc}.
+\item \emph{Time domain:} project on the retained modes \eqref{eq:modal},
+  factorize \eqref{eq:stepA} once, and march the L1 convolution with the
+  weights \eqref{eq:bdef}; record the peaks of the modal coordinate.
+\item Extract the damping ratio from two successive peaks with
+  \eqref{eq:zeta}; for $\alpha<1$ report the first-period decrement instead.
+\end{enumerate}
+\end{minipage}}
+\end{center}
 
 \FloatBarrier
 \subsection{Implementation remarks}
 \label{sec:implementation}
 
-Two properties of the implementation govern both cost and accuracy.
-
-\begin{enumerate}
-\item \emph{Scaling.} The gradient block is $O(M/h^4)$ while the elastic block
-  is $O(C/h)$, so the assembled pencil becomes badly scaled as the thickness
-  falls. The implementation scales the two blocks separately before the
-  eigensolve and returns the eigenpairs unscaled; the thinnest case of
-  Sec.~\ref{sec:thickness} is at a condition number of about $10^{12}$, and the
-  sensitivity of the resulting small differences is measured rather than
-  assumed (\ref{app:verification}).
-\item \emph{Cost.} A mesh of $48\times4$ BFS elements has $49\times5=245$
-  nodes and $8\times245=1960$ mechanical degrees of freedom and is the
-  workhorse of the results; the mesh-refinement study of
-  Sec.~\ref{sec:verification} shows that on that mesh the frequency of the
-  extensional mode is within $0.05\,\%$ and its quasi-static coupling factor
-  within $0.03\,\%$ of a $96\times4$ refinement, and the thinnest strips are
-  solved on it because the conditioning, not the number of elements, is the
-  binding constraint.
-\end{enumerate}
+Two properties of the implementation govern both cost and accuracy. The
+gradient block scales as $O(M/h^4)$ while the elastic block scales as
+$O(C/h)$, so the assembled pencil becomes badly scaled as the thickness falls;
+the implementation scales the two blocks separately before the eigensolve and
+returns the eigenpairs unscaled, and the thinnest case of
+Sec.~\ref{sec:thickness} is at a condition number of about $10^{12}$, whose
+effect is measured rather than assumed (Sec.~\ref{sec:verification}). A mesh of
+$48\times4$ elements has $245$ nodes and $1960$ mechanical degrees of freedom
+and is the workhorse of the results; refining it to $96\times4$ changes the
+frequency by $0.05\,\%$ and the coupling factor by $0.03\,\%$, and the thinnest
+strips are solved on it because the conditioning, not the number of elements,
+is the binding constraint.
 
 \FloatBarrier

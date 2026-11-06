@@ -44,7 +44,7 @@
 | zeta at alpha = 1 vs omega*tau/2 (both omega*tau) | 0.0e+00 | < 1e-9 | `results/?` |
 | flexo x, uniform curvature: FEM energy triple vs 3 mu^2/(C11 h^2 kappa33) | 3.570415e-04 vs 3.570415e-04 | rel. diff < 1e-8 (worst 1.8e-10) | `results/?` |
 | flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33 | 1.7e-13 | < 1e-10 | `results/?` |
-| every number in the abstract has an independent-check verdict | 3 hua / 5 nahi hua / 3 inputs, 11 tokens | 0 uncovered, 0 stale | `results/?` |
+| every number in the abstract has an independent-check verdict | 4 hua / 5 nahi hua / 3 inputs, 12 tokens | 0 uncovered, 0 stale | `results/?` |
 | piezoelectric share of the bending device (poling y, long faces) at every thickness | 5.7e-07 | < 1e-5 (electrically silent bending mode) | `results/?` |
 | flexo growth with and without the piezoelectric terms | 23.9 vs 31.1 | reported 24 (2 s.f.) uses the real crystal; 31 with e = 0, both graded at 1 % | `results/?` |
 | the same bending field, four poling/electrode pairings: only the long faces collect it, and each pairing with its own permittivity | poled y 3.570e-04 vs 3.570e-04; poled x 1.613e-05 vs 1.613e-05; short-face pairs 7.5e-14 V | rel. diff < 1e-6, short-face charge < 1e-12 | `results/?` |
@@ -54,7 +54,7 @@
 | truncating the secular sum to 12 modes is not an alternative | 85 % off | > 50 % (hence the sum runs over all modes) | `results/?` |
 | no quantity replaced in the round-16 audit has come back | 0 hits of 12 forbidden tokens | 0 hits | `results/?` |
 | every coupling factor recomputed and quoted in one row of the coupling table | 10/10 | all, no averaging | `results/?` |
-| every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive | 57/57 traced, 0 untraced | 0 untraced | `results/?` |
+| every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive | 37/37 traced, 0 untraced | 0 untraced | `results/?` |
 | the list of unverified numbers cites only numbers still in the manuscript | 29 entries, 0 stale | 0 stale | `results/?` |
 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |
@@ -63,6 +63,6 @@
 | flexo k^2, 48x4 vs 96x4 witness | 3.5e-03 | < 0.02 | `results/demo.json` |
 | flexo k^2 at mu = 0 / value (residual) | 6e-07 | < 1e-5 | `results/demo.json` |
 | gradient-energy coefficient: code vs manuscript | 0.5 x int, (1/4)M/((1/20)L)=1.000000000000 | factor 1/2 in the assembly, (1/4)M = (1/20)L, FEM-1 u_R within 2 % | `results/?` |
-| paper figures: vector set written | 11 PDF | = 11 (F1-F9, FB1-FB2) | `results/paper_figures_data.json` |
+| paper figures: vector set written | 12 PDF | = 12 (F1-F9, FB1-FB2, F11_designmap) | `results/paper_figures_data.json` |
 | orientation sweep rows / k^2 range | 133 rows, 0.3786-0.4677 | 133 rows (114 cuboid + 19 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
-| manuscript numbers vs the JSON they came from | 90/90 | all agree | `results/?` |
+| manuscript numbers vs the JSON they came from | 96/96 | all agree | `results/?` |

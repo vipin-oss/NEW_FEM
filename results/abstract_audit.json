@@ -25,6 +25,12 @@
    "route": "D1/C1: the closed form built from $e$, $C$, $\\kappa$ alone gives 0.56079, and the free-plate FEM matches it to $10^{-10}$"
   },
   {
+   "literal": "0.5608",
+   "what": "the closed-form extensional $k^2$ from $e$, $C$, $\\kappa$",
+   "verdict": "hua",
+   "route": "D1: the plane-stress closed form itself, 0.56079, which is the number this one rounds"
+  },
+  {
    "literal": "0.5",
    "what": "distance between 0.5581 and the closed form 0.5608",
    "verdict": "hua",
@@ -67,7 +73,7 @@
    "route": "I5: at $\\alpha=1$ the pole equation is quadratic and gives $\\omega\\tau/2=0.15000$ exactly, so the $0.02\\,\\%$ is a comparison with an exact value"
   }
  ],
- "n_hua": 3,
+ "n_hua": 4,
  "n_nahi_hua": 5,
  "n_input": 3,
  "tokens": [
@@ -76,6 +82,7 @@
   "10",
   "0.5581",
   "0.5",
+  "0.5608",
   "0.09",
   "24",
   "15",

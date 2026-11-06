@@ -1,133 +1,28 @@
-\section{Numerical values behind the figures}
+%% ===========================================================================
+\section{Values that cannot be read from the figures}
 \label{app:data}
 \setcounter{table}{0}
 \setcounter{figure}{0}
+%% ===========================================================================
 
-The values plotted in Secs.~\ref{sec:orientation}--\ref{sec:transient} are
-collected here so that the figures can be read without the underlying files.
-They are printed from the same computation that draws each figure, with the
-same model and the same mesh, and they are quoted to two significant digits in
-the text. Where a table and a figure disagree in the last digit, the figure is
-drawn from the finer grid.
-
-Table~\ref{tab:orientation} is the window-orientation sweep of
-Figs.~\ref{fig:orientation} and~\ref{fig:design} at every fifth degree in the
-quadrant; the two remaining quadrants follow from the symmetries verified in
-Sec.~\ref{sec:orientation}. Table~\ref{tab:thickness} is the thickness sweep of
-Fig.~\ref{fig:thickness}, together with the two mesh witnesses that establish
-that the reported size effect is a property of the model and not of the
-mesh.
-Table~\ref{tab:damping} is the damping ratio of the fractional element on the
-grid of Fig.~\ref{fig:damping}(b), Table~\ref{tab:convergence} the convergence
-study of Fig.~\ref{fig:convergence}, and Table~\ref{tab:ringdown} the decrement
-of the traces of Fig.~\ref{fig:ringdown}. Three further tables are collected
-here rather than in the body: the closed-form coupling factors of
-Sec.~\ref{sec:verification}, the ring-down of the memory study of
-Sec.~\ref{sec:memorystudy}, and the calibration protocol of
-Sec.~\ref{sec:calib_a_mu}.
-
-\input{table_C1_orientation}
-\input{table_C2_thickness}
-\input{table_C3_damping}
-\input{table_C4_convergence}
-\input{table_C5_ringdown}
-
-\FloatBarrier
+Two tables are collected here because their content is not recoverable from a
+figure. Table~\ref{tab:closedform} gives the closed-form coupling factors of
+Sec.~\ref{sec:verification} for the four kinematics, which no figure plots;
+Table~\ref{tab:ringdown} gives the first-period decrement of each of the eight
+traces of Fig.~\ref{fig:ringdown}, which a reader can see but not measure to
+four digits.
 
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Normalized modulus magnitude $|K^{*}|/K$ at matched $\tau$ for the
-integer-order Kelvin--Voigt element and for the fractional Zener element whose
-relaxation-strength ratio, $r=1.1$, is fitted to the spring-pot at
-$\omega\tau=0.3$ and then held fixed, at two Caputo orders.}
-\label{tab:modulus}
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-$\omega\tau$ & \multicolumn{2}{c}{$\alpha=1$} & \multicolumn{2}{c}{$\alpha=0.7$} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}
- & KV & Zener ($r=1.1$) & KV & Zener ($r=1.1$) \\
-\midrule
-0.3  & $1.0440$ & $1.0086$ & $1.2555$ & $1.0244$ \\
-1    & $1.4142$ & $1.0512$ & $1.7053$ & $1.0504$ \\
-10   & $10.050$ & $1.0991$ & $5.5380$ & $1.0894$ \\
-100  & $100.005$ & $1.1000$ & $25.588$ & $1.0981$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-%% ---- tables moved out of the text in the final revision ----
-
-\begin{table}[!htbp]
-\centering
-\small
-\caption{The coupling factor obtained from the constitutive tensors alone, for
-the four kinematics, together with the coupling strength
-$e^{\mathsf T}C^{-1}e/\kappa$ from which it follows. The record is that of
-Table~\ref{tab:params}, in plane stress and in plane strain. The three finite
-element rows below the rule are all mode-free values of \eqref{eq:kstatic},
-plane stress, poling $x$, on the meshes named, with the window switched off;
-Table~\ref{tab:coupling} sets them beside the same measure with the window on.}
+\caption{Coupling factor from the constitutive tensors alone for the four
+kinematics, with the coupling strength $e^{\mathsf T}C^{-1}e/\kappa$ they
+share. The three finite element rows below the rule are mode-free values of
+\eqref{eq:kstatic}, plane stress, poling $x$, window off.}
 \label{tab:closedform}
 \input{table_closed_form}
 \end{table}
 
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Ring-down of the extensional mode (mode 4, \SI{6.727}{MHz},
-$k^2_{4}(K_{uu})=0.4650$, $\omega\tau=0.3$,
-$\tau=\SI{7.0974}{\nano\second}$), for memory carried on the condensed
-stiffness $K_{\rm eff}$ and on the short-circuit stiffness $K_{uu}$. At
-$\alpha=1$ the entry is the damping ratio \eqref{eq:zeta} of the exponential
-decay. At $\alpha=0.7$ the free decay of a fractional element is not
-exponential, so no single damping ratio exists: the entry there is the
-first-period local ratio of the first two peaks, and the successive decrements
-are listed in the text. The last row is the ratio of the two entries.}
-\label{tab:memory}
-\begin{tabular}{@{}lcc@{}}
-\toprule
-memory matrix & $\alpha=1$: $\zeta_{\rm eff}$ &
-  $\alpha=0.7$: first-period $\zeta$ \\
-\midrule
-$K_{\rm eff}$ & $0.15003$ & $0.1942$ \\
-$K_{uu}$      & $0.06746$ & $0.0831$ \\
-\midrule
-ratio $K_{uu}/K_{\rm eff}$ & $0.450$ & $0.428$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Calibration protocol. Each step fixes one quantity, and the steps are
-ordered so that the later ones check the earlier ones. The last row is the test
-of the second-moment description itself, which this paper does not attempt.}
-\label{tab:protocol}
-\begin{tabular}{@{}p{0.03\textwidth}p{0.30\textwidth}p{0.28\textwidth}p{0.26\textwidth}@{}}
-\toprule
-\# & measurement & observable & quantity fixed \\
-\midrule
-1 & bending of strips cut along $x$ and $y$, three or more thicknesses in
-$h/\sqrt{M_{22}}\in[2,20]$ & $D_{\rm app}/D_{\rm cl}$ against $h$ &
-$M_{22}$ through the thickness \\
-2 & the same strips cut at $0^\circ,15^\circ,\dots,90^\circ$ &
-$D_{\rm app}(\theta)$ and $f_{1}(\theta)$ & $M_{11}/M_{22}$ and $\theta$ \\
-3 & ultrasonic dispersion & $c(k)$ over the band where the gradient term is
-visible & $(1/4)M_{mn}$, without a boundary condition \\
-4 & boundary-layer profile by digital image correlation & decay length of the
-strain at a clamped edge & $M_{22}$ from one specimen \\
-5 & image of the microstructure & $M_{mn}=\langle s_{m}s_{n}\rangle_{\mathcal
-W}$ by numerical integration & the anisotropy of the window \\
-6 & specimens spanning the aspect ratio and the window angle & $k^{2}$ and
-$f_{1}$ against ${\rm AR}$ and $\theta$ & a prediction, not a fit \\
-7 & reconstructed microstructure & decay lengths of the two-point correlation
-& adequacy of the second-moment description \\
-\bottomrule
-\end{tabular}
-\end{table}
+\input{table_ringdown}
 
 \FloatBarrier

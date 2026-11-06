@@ -1,0 +1,31 @@
+%% Summary of the worked calculation: inputs -> intermediate -> output.
+\begin{table}[!htbp]
+\centering
+\small
+\caption{The headline numbers of the abstract, from their inputs. Each value
+is the one carried into the figures and tables of this section; the last column
+is the number the abstract quotes.}
+\label{tab:worked}
+\begin{tabular}{@{}p{0.20\textwidth}p{0.22\textwidth}p{0.24\textwidth}p{0.24\textwidth}@{}}
+\toprule
+quantity & inputs & intermediate & value \\
+\midrule
+extensional coupling & $C_p$, $e$, $\kappa_{33}$ &
+$x=1.2768$; $x_{\rm FEM}=1.2631$ & $0.5581$ ($0.5608$ closed form) \\
+thickness independence & $k^2$ at $10$ and \SI{1}{\micro\metre} &
+$0.55814\to0.55861$ & $0.09\,\%$ \\
+flexoelectric growth & $\mu$, $C^{p}_{xx}$, $h$, $\kappa_{yy}$ &
+$1.7437\times10^{-4}\to4.1736\times10^{-3}$ & factor $24$ \\
+flexoelectric slope & the eight thicknesses & local log--log slopes &
+$-1.96$ to $-0.43$ \\
+window anisotropy & $M_{11}$, $M_{22}$, $\theta$ & $M$ rotates, the mesh does
+not & $15$--$19\,\%$ \\
+two configurations & \eqref{eq:xclosed} in both & $0.4580$ against $0.1141$;
+\SI{138.99}{\volt} against \SI{2.41}{\volt} & factor $58$ \\
+memory ratio & $K_{\rm eff}$, $K_{uu}$ & $\zeta=0.15003$ against $0.06746$ &
+$0.450$ \\
+integer-order limit & $\omega\tau=0.3$ & $\zeta_{\rm eff}$ against
+$\omega\tau/2$ & $0.02\,\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}

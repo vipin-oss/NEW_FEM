@@ -233,3 +233,38 @@ Summary; the full report is `FINAL_CHECKLIST.md` at the top of the repository.
 **Still unverified after round 20.** Compilation, page count, the page on which
 each float lands, overfull boxes, DOI resolution, and the typeset output of the
 `\paragraph` fix of round 19.
+
+## 15. What the presentation pass changed, and what is still UNVERIFIED
+
+Presentation only: no physics, no result and no verified number changed. The
+numbers gate is `python/check_paper_numbers.py` (96/96), the consistency sweep
+`python/check_final_consistency.py`, the abstract audit
+`python/audit_abstract_claims.py` and the full suite `python/run_all.py`
+(62/62).
+
+| # | item | state |
+|---|---|---|
+| 1 | `tab:coupling` | deleted from the paper; its five values are three sentences in Sec. 6.2 |
+| 2 | tables | six in the body (comparison, parameters, worked, memory, thickness, application) and four in the appendices (B: benchmark, convergence; C: closed form, ring-down). Nineteen generated tables that repeated a figure, a sentence or an audit step are deleted from `Paper_12/` |
+| 3 | figures | twelve vector figures; `FB1_tracking` is now a dot/line plot, and `F11_designmap` is new (design map, `results/design_map.json`) |
+| 4 | equations | 60 numbered in the body |
+| 5 | front matter | title, abstract (216 words), Highlights (5 bullets, each under 85 characters), CRediT placeholders, competing-interest heading, data availability, HSRF acknowledgement, references |
+| 6 | Sec. 7.3 | new "Positioning", 172 words, published references only |
+| 7 | audit language | no file name, script name, round number or audit word survives in `main.tex`, `sec/`, or the tables |
+
+**Still UNVERIFIED after this pass.**
+1. **Compilation.** No TeX distribution in this environment: page count
+   (estimated 30.2 pages by `python/length_budget.py`), float placement,
+   overfull boxes, and the appearance of the seven-column comparison table are
+   all unconfirmed.
+2. **DOIs of the seven references added for the introduction** (`Lim2015`,
+   `ChenYvonnetYaoPark2021`, `ChenYaoYvonnet2023`, `JoshanSantapuri2024`,
+   `Wang2024PhaseField`, `CodonyAriasSuryanarayana2021`,
+   `ChenYaoYvonnet2024`): resolved through CrossRef once, not re-checked.
+3. **Three entries still carry no DOI** (`Love1927`, `Polizzotto2015`,
+   `BognerFoxSchmit1966`, `Kogan1964`, `fem1`): pre-DOI or unpublished.
+4. **The 24x2 witness column** left the body table (it is a convergence
+   witness); the values remain in `table_convergence.tex` and the sweep text.
+5. **Author names, affiliations, corresponding e-mail, CRediT roles and the
+   HSRF sanction number** are placeholders or to be confirmed against the
+   sanction letter.

@@ -56,8 +56,8 @@
 
 \begin{frontmatter}
 
-\title{Finite Element Analysis of Fractional-Memory Piezoelectric-Flexoelectric
-Strain-Gradient Solids with a Rectangular Nonlocal Averaging Window}
+\title{Fractional-Memory Piezoelectric--Flexoelectric Strain-Gradient Solids
+with a Rectangular Nonlocal Window: a $C^1$ Finite Element Framework}
 
 %% TODO  author, affiliation and corresponding e-mail are not supplied in the
 %% delivered material; enter them here before submission.
@@ -71,28 +71,26 @@ ${}^{*}$Corresponding author
 }
 
 \begin{abstract}
-A broad relaxation spectrum, a flexoelectric coupling that grows as a member
-is thinned and a nonlocal average that is not isotropic are three properties
-that a single-relaxation, single-length-scale element cannot represent.
-A $C^1$-continuous formulation is presented in which all three are carried by
-the same discretization. Bogner--Fox--Schmit rectangles make second displacement
-gradients admissible nodal quantities, the strain-gradient energy is generated
-by the in-plane second-moment tensor $M$ of a rectangular averaging window, the
-dielectric response is a fractional Kelvin--Voigt law of Caputo order $\alpha$
-discretized by the L1 scheme on reduced modal coordinates, and the electric
+A broad relaxation spectrum, a thickness-dependent flexoelectric coupling and
+an anisotropic nonlocal average cannot be represented by a single-relaxation,
+single-length-scale element. A $C^1$-continuous formulation is presented in
+which all three are carried by the same discretization. Bogner--Fox--Schmit rectangles make second displacement
+gradients admissible nodal quantities; the strain-gradient energy is generated
+by the in-plane second-moment tensor $M$ of a rectangular averaging window; the
+dielectric response is a fractional Kelvin--Voigt law of Caputo order $\alpha$,
+discretized by the L1 scheme on reduced modal coordinates; and the electric
 enthalpy carries the piezoelectric and the flexoelectric couplings on the same
 footing. For a \SI{200}{\micro\metre} by \SI{10}{\micro\metre}
 $\mathrm{BaTiO_3}$ strip the extensional coupling factor is $k^2=0.5581$,
-within $0.5\,\%$ of the constitutive value and thickness independent to
-$0.09\,\%$ between \SI{10}{\micro\metre} and \SI{1}{\micro\metre}, while the
-flexoelectric bending coupling rises by a factor $24$ over that range. Within the
-adopted second-moment model the window enters only through $M$, so windows of
-equal $M$ give identical solutions, whereas window anisotropy and orientation change the
-coupling by $15$--$19\,\%$. At $\alpha=1$, memory on the short-circuit matrix damps $0.450$
-times as much as memory on the condensed one, and the damping ratio reproduces
-the exact Kelvin--Voigt limit to $0.02\,\%$ at $\alpha=1$. The two coupling configurations are
-not additive, and the flexoelectric coefficient and the mass density are assumed
-rather than measured.
+within $0.5\,\%$ of the constitutive value $0.5608$ and thickness independent
+to $0.09\,\%$ between \SI{10}{\micro\metre} and \SI{1}{\micro\metre}, while the
+flexoelectric bending coupling rises by a factor $24$ over that range, and a
+design map over thickness and window size shows that the two couplings are
+governed by the ratio of window thickness to strip thickness. Windows of equal
+second moment give identical solutions, whereas window anisotropy changes the
+coupling by $15$--$19\,\%$. At $\alpha=1$, memory on the short-circuit matrix
+damps $0.450$ times as much as memory on the condensed one, and the damping
+ratio reproduces the exact Kelvin--Voigt limit to $0.02\,\%$.
 \end{abstract}
 
 \begin{keyword}
@@ -111,17 +109,26 @@ averaging window; fractional viscoelasticity; piezoelectric open-circuit sensing
 \input{sec/07_calibration_limitations}
 \input{sec/08_conclusion}
 
-\section*{Data availability}
-The data supporting the findings of this study are available within the
-article. The numerical values behind the quantitative figures are listed in the
-tables of \ref{app:data}, and the material constants, the geometry and
-the discretization used to obtain them are stated in Sec.~\ref{sec:material},
-Table~\ref{tab:params} and \ref{app:verification}.
+\section*{CRediT authorship contribution statement}
+\textbf{Author one (name to be supplied):} Conceptualization, Methodology,
+Software, Validation, Formal analysis, Investigation, Writing -- original
+draft. \textbf{Author two (name to be supplied):} Conceptualization, Software,
+Writing -- review and editing, Supervision. \textbf{Author three (name to be
+supplied):} Formal analysis, Validation, Writing -- review and editing.
+\textbf{Author four (name to be supplied):} Methodology, Resources, Funding
+acquisition. All authors have read and approved the final manuscript.
 
-\section*{Conflict of Interest Disclosure Statement}
+\section*{Declaration of competing interest}
 The authors declare that they have no known competing financial interests or
 personal relationships that could have appeared to influence the work reported
 in this paper.
+
+\section*{Data availability}
+The data supporting the findings of this study are available within the
+article. The numerical values behind the quantitative figures are listed in the
+tables of Appendix~\ref{app:data}, and the material constants, the geometry and
+the discretization used to obtain them are stated in
+Table~\ref{tab:params} and Appendix~\ref{app:verification}.
 
 %% TODO  sanction number to be confirmed against the sanction letter before
 %% submission.

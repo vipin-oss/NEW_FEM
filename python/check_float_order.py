@@ -27,16 +27,33 @@ OUT = os.path.join(ROOT, "results", "float_order.md")
 
 
 def files():
-    order = ["main.tex"]
+    """Section files in reading order, then main.tex.
+
+    main.tex is last because its own text after the \\input lines is the back
+    matter (data availability, acknowledgements); scanning it first would put
+    those references ahead of the whole body.
+    """
     sec = os.path.join(PAPER, "sec")
-    order += ["sec/" + f for f in sorted(os.listdir(sec)) if f.endswith(".tex")]
+    order = ["sec/" + f for f in sorted(os.listdir(sec)) if f.endswith(".tex")]
+    order.append("main.tex")
     return [os.path.join(PAPER, f) for f in order]
 
 
 def scan():
+    """Every label and reference, in reading order.
+
+    Section files are scanned with their \\input{table_x} and
+    \\input{fig_x} inlined, so that a label defined in a table file takes the
+    position of the table environment that includes it, which is the position
+    LaTeX will number it at.  Line numbers inside an inlined file are those of
+    the expanded text and are only a pointer.
+    """
     text = []
     for path in files():
-        for n, line in enumerate(open(path).read().split("\n"), 1):
+        raw = open(path).read()
+        if not path.endswith("main.tex"):
+            raw = expand(path)
+        for n, line in enumerate(raw.split("\n"), 1):
             text.append((os.path.relpath(path, PAPER), n, line))
     floats, refs, secs = [], [], []
     for i, (f, n, line) in enumerate(text):

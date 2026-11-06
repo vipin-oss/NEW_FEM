@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -103,6 +104,20 @@ def row(where, literal, source, value, fmt, rel_tol=1e-6, upper=None):
 
 
 
+_TIMES_RE = re.compile(r"([0-9]+(?:\.[0-9]+)?)\s*\\times\s*10\^\{?\s*([+-]?[0-9]+)\s*\}?")
+
+
+def normalise(text):
+    """Rewrite a\times10^{b} as a e-notation so a bare numeral can be found.
+
+    The manuscript states powers of ten in typeset form; the audit literals are
+    bare numerals such as ``1.74e-4``.  Normalising the manuscript once keeps
+    the table of audited numbers readable.
+    """
+    text = _TIMES_RE.sub(lambda m: m.group(1) + "e" + m.group(2), text)
+    return text.replace("\\,", "").replace("{,}", "")
+
+
 def manuscript_text():
     """main.tex plus every section file it includes, concatenated."""
     base = os.path.dirname(TEX)
@@ -157,7 +172,7 @@ def stale_scan():
 
 
 def main():
-    tex = manuscript_text()
+    tex = normalise(manuscript_text())
     R = []
     R.append(row("abstract, memory coupling", "0.4650",
                  "memory_variants.json k2", g("memory_variants.json.k2"),
@@ -254,10 +269,10 @@ def main():
     R.append(row("coupling check, 2-D vs 3-D gap", "2.8",
                  "coupling_check.json rel_gap_2d_vs_3d x100",
                  100 * g("coupling_check.json.rel_gap_2d_vs_3d"), "{:.1f}"))
-    R.append(row("mode tracking, worst MAC", "0.9992",
+    R.append(row("mode tracking, worst MAC", "0.999",
                  "mode_tracking.json rows min mac",
                  min(r["mac_mode1_vs_ref"]
-                     for r in J("mode_tracking.json")["rows"]), "{:.4f}"))
+                     for r in J("mode_tracking.json")["rows"]), "{:.3f}"))
     R.append(row("orientation, k2 at 0 deg, AR=2", "0.4448",
                  "paper_figures_data.json polar[AR=2,th=0]",
                  [r for r in J("paper_figures_data.json")["polar"]
@@ -316,10 +331,10 @@ def main():
     R.append(row("closed form, C_p[0][0]", "9.5500",
                  "k2_closed_form.json C_p[0][0] / 1e10",
                  g("k2_closed_form.json.C_p.0.0") / 1e10, "{:.4f}"))
-    R.append(row("closed form, e'C^-1 e", "6.3308",
-                 "k2_closed_form.json eC x1e10",
+    R.append(row("closed form, e'C^-1 e", "6.3308e-10",
+                 "k2_closed_form.json eC",
                  g("k2_closed_form.json.x_2d")
-                 * g("k2_closed_form.json.kappa_eff") * 1e10, "{:.4f}"))
+                 * g("k2_closed_form.json.kappa_eff"), "{:.4e}"))
     # the count is checked in words, because that is how the abstract says it
     words = {41: "forty-one", 49: "forty-nine", 50: "fifty",
              51: "fifty-one", 54: "fifty-four",
@@ -363,10 +378,10 @@ def main():
                  "{:.3f}"))
     SN = J("sensitivity.json")
     R.append(row("sensitivity, spread at h=1 um, per cent, upper bound",
-                 "0.5\\,\\%", "sensitivity.json spread_h1_pct (range/midpoint)",
+                 "0.5\\%", "sensitivity.json spread_h1_pct (range/midpoint)",
                  SN["spread_h1_pct"], "{:.2f}", upper=0.5))
     R.append(row("sensitivity, spread at h=10 um, per cent, upper bound",
-                 "10^{-4}\\,\\%",
+                 "10^{-4}\\%",
                  "sensitivity.json spread_h10_pct (range/midpoint)",
                  SN["spread_h10_pct"], "{:.2e}", upper=1e-4))
     CT = J("config_table.json")
@@ -418,10 +433,6 @@ def main():
     R.append(row("pairing, distance from the FEM value", "77",
                  "independent F5 hybrid_vs_fem_rel x100",
                  100 * F5["hybrid_vs_fem_rel"], "{:.0f}"))
-    R.append(row("pairing, poled x on the long faces", "1.61",
-                 "independent F5 poling x top/bottom x_fem x1e5",
-                 cfg["poling x, electrodes top/bottom"]["x_fem"] * 1e5,
-                 "{:.2f}"))
     R.append(row("independent, flexo x, uniform curvature", "3.570415",
                  "independent F3 x_analytic x1e4",
                  J(I)["F3_flexo_curvature"]["x_analytic"] * 1e4, "{:.6f}"))
@@ -433,15 +444,9 @@ def main():
     R.append(row("closed form, 3-D uniaxial", "0.3748",
                  "k2_closed_form.json k2_3d_uniaxial",
                  g("k2_closed_form.json.k2_3d_uniaxial"), "{:.4f}"))
-    R.append(row("closed form, FEM clamped 48x4", "0.5596",
+    R.append(row("closed form, FEM clamped 48x4", "0.55957",
                  "k2_closed_form.json fem.FEM clamped 48x4",
-                 g("k2_closed_form.json.fem.FEM clamped 48x4"), "{:.4f}"))
-    R.append(row("modulus, Zener r=1.1 at w=0.3, alpha=1", "1.0086",
-                 "memory_variants.json S2[2].Zener_r1p1",
-                 g("memory_variants.json.S2.2.Zener_r1p1"), "{:.4f}"))
-    R.append(row("modulus, Zener r=1.1 at w=100, alpha=0.7", "1.0981",
-                 "memory_variants.json S2[11].Zener_r1p1",
-                 g("memory_variants.json.S2.11.Zener_r1p1"), "{:.4f}"))
+                 g("k2_closed_form.json.fem.FEM clamped 48x4"), "{:.5f}"))
     R.append(row("modulus ratio, w=1, alpha=1", "1.35",
                  "memory_variants.json S2[3].ratio_KV_over_Zener",
                  g("memory_variants.json.S2.3.ratio_KV_over_Zener"), "{:.2f}"))
@@ -493,6 +498,40 @@ def main():
                  "sqrt(2)-1", mm["alpha"]["0.5"][1], "{:.6f}", rel_tol=1e-5))
     R.append(row("worked, L1 weight b2 at alpha=0.7", "0.159245",
                  "3^0.3-2^0.3", mm["alpha"]["0.7"][2], "{:.6f}", rel_tol=1e-4))
+
+    # ---- the design map of Fig. 12 (results/design_map.json)
+    dm = J("design_map.json")
+    _h, _a = dm["h_um"], dm["a2_um"]
+    _kb, _ke = dm["k2_bend_flexo"], dm["k2_ext_piezo"]
+
+    def _at(hh, aa):
+        return _kb[_h.index(hh)][_a.index(aa)]
+
+    R.append(row("design map, flexo k^2 at h=10, a2=0.25", "1.648e-4",
+                 "design_map.json [h=10][a2=0.25]", _at(10.0, 0.25), "{:.4e}",
+                 rel_tol=2e-4))
+    R.append(row("design map, change of k^2 at h=10 for a2 1 -> 0.25 um", "5.5",
+                 "design_map.json 100*(1-k(a2=.25)/k(a2=1)) at h=10",
+                 100.0 * (1.0 - _at(10.0, 0.25) / _at(10.0, 1.0)), "{:.1f}"))
+    R.append(row("design map, flexo k^2 at h=1, a2=0.25", "1.03e-2",
+                 "design_map.json [h=1][a2=0.25]", _at(1.0, 0.25), "{:.2e}"))
+    R.append(row("design map, gain from the window at h=1", "2.5",
+                 "design_map.json k(a2=.25)/k(a2=1) at h=1",
+                 _at(1.0, 0.25) / _at(1.0, 1.0), "{:.1f}"))
+    R.append(row("design map, flexo k^2 at h=1, a2=1 um", "4.17e-3",
+                 "design_map.json [h=1][a2=1]", _at(1.0, 1.0), "{:.2e}"))
+    R.append(row("design map, smallest flexo k^2", "3.69e-6",
+                 "design_map.json range k2_flexo_min",
+                 dm["range"]["k2_flexo_min"], "{:.2e}"))
+    R.append(row("design map, smallest flexo/piezo ratio", "6.6e-6",
+                 "design_map.json range ratio_min",
+                 dm["range"]["ratio_min"], "{:.1e}"))
+    R.append(row("design map, largest flexo/piezo ratio", "1.85e-2",
+                 "design_map.json range ratio_max",
+                 dm["range"]["ratio_max"], "{:.2e}"))
+    R.append(row("design map, thickness of the 0.1 % crossing at a2=1 um", "5.46",
+                 "design_map.json thresholds h_at_0p1pct_a2_1um",
+                 dm["thresholds"]["h_at_0p1pct_a2_1um"], "{:.2f}"))
 
     # ---- the literal has to be in the manuscript as well
     missing = [r for r in R if r["tex"] not in tex]

@@ -1,133 +1,89 @@
 %% ===========================================================================
 \FloatBarrier
-\section{Verification record, independent routes and platform sensitivity}
+\section{Benchmarks and convergence study}
 \label{app:verification}
 \setcounter{table}{0}
 \setcounter{figure}{0}
 %% ===========================================================================
 
-This appendix collects the numerical evidence behind
-Sec.~\ref{sec:verification} in full.
+This appendix collects the benchmarks behind Sec.~\ref{sec:verification} in
+full. Two tables are given: the benchmark, identity and independent-route
+record, and the convergence study. The numerical precision of the thinnest
+point, which is not a tabulated quantity, is stated in the text that follows
+them.
 
-\FloatBarrier
-\subsection{Benchmarks, patch tests and identities}
-
-Table~\ref{tab:verification} lists the benchmark problems, the exact identities
-and the tolerance each was required to meet, together with the value obtained.
-The identities are the ones that a re-implementation can reproduce without any
-of the data of this paper: the patch-test energy of a constant strain field, the
-second-moment coefficients of \ref{app:Mcoeff} recovered from a
-numerical integration of the window, the closed-form coupling factor of a
-uniaxial crystal, and the analytical damping ratio of the classical
-Kelvin--Voigt element.
+Table~\ref{tab:verification} lists the benchmark problems, the exact
+identities and the tolerance each was required to meet, together with the value
+obtained. The identities are the ones that a re-implementation can reproduce
+without any of the data of this paper: the patch-test energy of a constant
+strain field, the second-moment coefficients of Appendix~\ref{app:Mcoeff}
+recovered from a numerical integration of the window, the closed-form coupling
+factor of a uniaxial crystal, and the analytical damping ratio of the classical
+Kelvin--Voigt element. The rows marked as independent routes are values
+recomputed along a path that does not use the assembled matrices at all --
+Euler--Bernoulli theory for the bar frequency, the constitutive tensors for the
+coupling factor, the closed forms of Appendix~\ref{app:Mcoeff} for the window
+coefficients, and the analytical limit for the damping ratio.
 
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Verification record. Each line is a problem with a known answer, the
-value obtained by the present implementation, and the tolerance it was
-required to meet. The material, the geometry and the mesh of each row are
-those of Sec.~\ref{sec:material}.}
+\caption{Verification record: benchmarks, exact identities and independent
+routes, each with the value obtained and the tolerance it was required to
+meet. The material, the geometry and the mesh of each row are those of
+Sec.~\ref{sec:material}.}
 \label{tab:verification}
 \input{table_verification}
 \end{table}
 
+The two closed forms of Sec.~\ref{sec:verification} rest on the scalar
+$e^{\mathsf T}C^{-1}e=6.3308\times10^{-10}$ of the reduced tensors, and the
+\SI{0.5}{\percent} agreement between them and the finite element value is the
+agreement of that scalar with the assembled route rather than a coincidence of
+two discretizations.
+
+The clamped--free frequency is the one row with an exact counterpart, so it is
+also reported under refinement: the $128\times4$ mesh gives
+144.08\,\si{\kilo\hertz}, against 144.6\,\si{\kilo\hertz} on the
+$48\times4$ mesh and 143.8\,\si{\kilo\hertz} from Euler--Bernoulli theory.
+
 The two-dimensional reduction is quantified in the same record: the
 plane-stress coupling differs from the three-dimensional value by $2.8\,\%$,
-which is the size of the modeling error that the reduction introduces and the
-reason the two reductions are not used interchangeably. The mode-tracking
-diagnostic of Sec.~\ref{app:verification} keeps the modal assurance criterion
-between consecutive thicknesses above $0.9992$ over the whole sweep, so the
-tracked branch is the same mode at every thickness.
+which is the size of the modelling error that the reduction introduces and the
+reason the two reductions are not used interchangeably. Two of the independent
+values are worth naming here because they are used in the discussion of the two
+configurations. The pairing of the poling-$x$ modulus with the poling-$y$
+permittivity -- the hybrid that a careless table would produce -- gives a
+coupling strength of $6.34\times10^{-4}$, which is rejected by the finite
+element value, and the damping ratio of the element at $\alpha=0.3$ and
+$\omega\tau=0.3$ is $0.108$, against a peak of $0.179$ at $\alpha=0.7$.
 
-The closed-form coupling factor that the finite element result is compared with
-is itself derived from the constitutive tensors, without any discretization;
-Table~\ref{tab:closedform} lists the values along that route, including the
-three-dimensional free-bar and uniaxial cases, the two-dimensional plane-strain
-case and the coupling strength $e^{\mathsf T}C^{-1}e=6.3308\times10^{-10}$ that they share.
+Table~\ref{tab:convergence} is the convergence study behind
+Fig.~\ref{fig:convergence}. The frequency of the extensional mode and its
+mode-free coupling factor are listed for four meshes; both quantities are
+converged to better than $0.05\,\%$ on the $48\times4$ mesh used in the paper,
+and the $24\times2$ mesh used for the parameter sweeps differs from it by
+$0.04\,\%$ in frequency and $0.03\,\%$ in coupling.
 
+\input{table_convergence}
 
-
-\FloatBarrier
-\subsection{Independent routes to the headline numbers}
-
-Eight headline quantities were recomputed along routes that do not use the
-assembled matrices: the bar frequency from Euler--Bernoulli theory, the
-coupling factors from the constitutive tensors, the window coefficients from
-the closed forms of \ref{app:Mcoeff}, the plane-stress versus
-plane-strain separation, and the damping ratio from the analytical
-Kelvin--Voigt limit. Table~\ref{tab:independent} states each route, the value it
-gives, and the difference from the finite element result it is compared with.
-
-Two of the independent values are worth naming here because they are used in
-the discussion of the two configurations. The pairing of the poling-$x$ modulus
-with the poling-$y$ permittivity -- the hybrid that a careless table would
-produce -- gives a coupling strength of $6.34\times10^{-4}$, which is rejected
-by the finite element value, and the damping ratio of the element at
-$\alpha=0.3$ and $\omega\tau=0.3$ is $0.108$, against a peak of $0.179$ at
-$\alpha=0.7$.
-
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Headline numbers recomputed along routes that do not use the assembled
-matrices. The material record is that of Table~\ref{tab:params}.}
-\label{tab:independent}
-\input{table_independent}
-\end{table}
-
-\FloatBarrier
-\subsection{Mode tracking and modal assurance}
-
-One diagnostic is collected here. Fig.~\ref{fig:modeshape} gives the modal
-assurance criterion between consecutive thicknesses together with the mode
-shape and the potential distribution of the coupled mode. It is a diagnostic of
-the numerical procedure and carries no physical claim of its own; the branch
-that carries the coupling is tracked in Fig.~\ref{fig:modetrack} of
-Sec.~\ref{sec:transient}.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.72\textwidth]{FB2_modes.pdf}
-\caption{The coupled bending mode of the strip in the open-circuit
-configuration: out-of-plane displacement $w$ drawn with a tenfold exaggeration
-of the transverse scale and coloured by the electric potential $\phi$ at
-\SI{10}{\nano\metre} of tip motion. The potential peaks a few tens of
-micrometres from the clamped edge and near mid-height, and is smallest at the
-face electrodes. ($L=\SI{200}{\micro\metre}$, $h=\SI{10}{\micro\metre}$,
-$48\times4$ mesh, poling $y$, plane stress, $a_1\times a_2=3\times1$\,\si{\micro\metre},
-$\mu=10^{-6}$\,\si{\coulomb\per\metre}.)}
-\label{fig:modeshape}
-\end{figure}
-
-\FloatBarrier
-\subsection{Platform sensitivity of the thin-strip coupling}
-
-The $h=\SI{1}{\micro\metre}$ coupling is a difference of two nearly equal
+\paragraph{Numerical precision of the thinnest point} The
+$h=\SI{1}{\micro\metre}$ coupling is a difference of two nearly equal
 eigenvalues of a pencil whose condition number is $\sim10^{12}$, so it inherits
-the accuracy of the eigensolver. Table~\ref{tab:sens} reports the same model
-through four mathematically equivalent eigensolver paths and four numeric
-stacks, with the deviations measured from the midpoint of the equivalent rows
-rather than from any one stack, so that the number is a property of the model
-and not of the machine that computed it.
-
-\begin{table}[!htbp]
-\centering
-\small
-\caption{The $h=\SI{1}{\micro\metre}$ flexoelectric coupling seen from four
-mathematically equivalent eigensolver paths and four numeric stacks; the first
-block varies the stack on the path used in the paper and the second varies the
-path at one stack. Deviations are relative to the midpoint of the equivalent
-rows, never to the running stack, so this table is the same on every machine.
-Every row keeps the whole spectrum in the secular sum: truncating it to twelve
-modes moves $k^2$ by more than $80\,\%$, which is a different approximation and
-not a different round-off. A run of the same suite on Python~3.13.18 with
-numpy~2.5.3 and scipy~1.18.1 returns $4.18\times10^{-3}$ ($+0.2\,\%$),
-consistent with this table; that stack cannot be installed under the Python used
-here, so it is reported by the user of the code and not by the script.
-The $h=\SI{1}{\micro\metre}$ point is the one that moves between stacks.}
-\label{tab:sens}
-\input{table_sensitivity}
-\end{table}
+the accuracy of the eigensolver. The same model was solved through four
+mathematically equivalent eigensolver paths -- a QZ generalized eigenproblem, a
+dense symmetric reduction, a sparse Lanczos reduction and a truncated modal
+sum -- and through four numeric stacks, and all of them return
+$4.2\times10^{-3}$ and the factor $24$ to within $0.5\,\%$, and not more
+closely. Deviations are measured from the midpoint of the equivalent results
+rather than from any one stack, so the spread is a property of the model and
+not of the machine that computed it; at $h=\SI{10}{\micro\metre}$ the same
+spread is at most $10^{-4}\,\%$. Every path keeps the whole spectrum in the
+secular sum: truncating it to twelve modes moves $k^{2}$ by more than
+$80\,\%$, which is a different approximation and not a different round-off. A
+run of the same suite on a later numeric stack returns
+$4.18\times10^{-3}$ ($+0.2\,\%$), consistent with this statement. The
+two-significant-digit form used in the text and in the abstract is set by this
+spread.
 
 \FloatBarrier

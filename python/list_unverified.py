@@ -81,7 +81,7 @@ def main():
 
     # ---- 3. mode tracking
     mt = J("mode_tracking.json")
-    rows.append((f"{mt['mac_min']:.4f}", "lowest MAC of mode 1 against the "
+    rows.append((f"{mt['mac_min']:.3f}", "lowest MAC of mode 1 against the "
                  "$h=\\SI{10}{\\micro\\metre}$ shape", "mode_tracking.json",
                  "an FEM eigenvector overlap; the reference is another FEM "
                  "eigenvector"))

@@ -104,7 +104,7 @@
    "why": "FEM eigen-solve plus the rank-one electrode update"
   },
   {
-   "literal": "0.9992",
+   "literal": "0.999",
    "what": "lowest MAC of mode 1 against the $h=\\SI{10}{\\micro\\metre}$ shape",
    "source": "mode_tracking.json",
    "why": "an FEM eigenvector overlap; the reference is another FEM eigenvector"

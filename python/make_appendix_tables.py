@@ -78,36 +78,30 @@ def table_thickness():
     rows = load("demo.json")["flexo_thickness"]
     body = []
     for r in rows:
-        k96 = ("%.4e" % r["k2_flexo_96"]) if "k2_flexo_96" in r else "--"
+        # the main-text table carries the production mesh only; the 24x2 and
+        # 96x4 witnesses belong to the convergence study of Appendix B
         body.append(" & ".join(["%g" % r["h_um"], "%.1f" % r["f1_kHz"],
                                 "%.3e" % r["k2_flexo"],
-                                "%.2e" % r["k2_flexo_24"], k96,
-                                "%.5f" % r["k2_ext"],
-                                "%.5f" % r["k2_ext_24"]]) + r" \\")
-    text = r"""\begin{table}[!htbp]
+                                "%.5f" % r["k2_ext"]]) + r" \\")
+    text = (r"""\begin{table}[!htbp]
 \centering
-\caption{Thickness sweep behind Fig.~\ref{fig:thickness}:
-$L=\SI{200}{\micro\metre}$, window half-widths
-$3\times1$\,\si{\micro\metre}, $\mu=10^{-6}$\,\si{\coulomb\per\metre} for the
-bending columns and $\mu=0$ for the extensional ones, $\alpha=1$. The
-$24\times2$ and $96\times4$ columns are the two mesh witnesses; the
-$96\times4$ values were computed at the two ends of the range only. The
-fundamental frequency is that of the same $48\times4$ model.}
+\small
+\caption{Thickness sweep behind Fig.~\ref{fig:thickness}. First frequency,
+flexoelectric bending coupling and extensional coupling of the poled strip. The
+bending column carries $\mu=10^{-6}$\,\si{\coulomb\per\metre}, the extensional
+column $\mu=0$, and both are converged to the tolerance of
+Appendix~\ref{app:verification}.}
 \label{tab:thickness}
-\begin{tabular}{@{}r r r r r r r@{}}
+\begin{tabular}{@{}r r r r@{}}
 \toprule
-& & \multicolumn{3}{c}{bending, $k^2_{\rm flexo}$}
-& \multicolumn{2}{c}{extensional, $k^2_{\rm piezo}$} \\
-\cmidrule(lr){3-5}\cmidrule(lr){6-7}
-$h$ (\si{\micro\metre}) & $f_1$ (kHz) & $48\times4$ & $24\times2$ & $96\times4$
-& $48\times4$ & $24\times2$ \\
+$h$ (\si{\micro\metre}) & $f_1$ (kHz) & $k^2_{\rm flexo}$ & $k^2_{\rm piezo}$ \\
 \midrule
 """ + "\n".join(body) + r"""
 \bottomrule
 \end{tabular}
 \end{table}
-"""
-    write("table_C2_thickness.tex", text, "%d rows" % len(body))
+""")
+    write("table_thickness.tex", text, "%d rows" % len(body))
 
 
 # ------------------------------------------------------------------ C.3 damping
@@ -194,7 +188,7 @@ mesh & dof & $f$ (kHz) & $k^2$ & err $f$ & err $k^2$ \\
 \end{tabular}
 \end{table}
 """
-    write("table_C4_convergence.tex", text, "%d rows" % len(body))
+    write("table_convergence.tex", text, "%d rows" % len(body))
 
 
 def shift_txt(x):
@@ -215,20 +209,11 @@ def table_ringdown():
         body.append(" & ".join([a, "%.5f" % notes[key]]) + r" \\")
     text = r"""\begin{table}[!htbp]
 \centering
-\caption{Ring-down behind Fig.~\ref{fig:ringdown}: the decrement $\delta$ of
-the tip displacement over the first two peaks, converted with the exact
-relation $\zeta=\delta/\sqrt{4\pi^{2}+\delta^{2}}$ of \eqref{eq:zeta}, for
-each Caputo order. The entry is a damping ratio only at $\alpha=1$; for
-$\alpha<1$ it is the first-period decrement, because the free decay of a
-fractional element is not exponential. The mode is the extensional one at \SI{%.1f}{kHz}
-($k^2=0.4583$), with $\tau=\SI{3}{\nano\second}$ and
-$\omega\tau=%.2f$; the open-circuit voltage at the initial instant is
-\SI{%.2f}{\volt} for a \SI{10}{\nano\metre} tip displacement. The entries are
-the values at the %d steps ($400$ per period) of Fig.~\ref{fig:ringdown};
-quartering that step moves the last decimal by %s, so they are quoted to four
-significant digits. The decrement is not monotonic in $\alpha$: it peaks near
-$\alpha=0.6$ and falls again as the response becomes slower and more heavily
-damped.}
+\caption{First-period decrement of the ring-down of Fig.~\ref{fig:ringdown},
+converted with \eqref{eq:zeta}, for each Caputo order. The entry is a damping
+ratio only at $\alpha=1$. Mode at \SI{%.1f}{kHz}, $\tau=\SI{3}{\nano\second}$
+($\omega\tau=%.2f$), initial voltage \SI{%.2f}{\volt}, %d steps. Quartering the
+step moves the last decimal by %s.}
 \label{tab:ringdown}
 \begin{tabular}{@{}l r@{}}
 \toprule
@@ -241,14 +226,12 @@ $\alpha$ & $\zeta$ of the first period \\
 \end{tabular}
 \end{table}
 """
-    write("table_C5_ringdown.tex", text, "%d rows" % len(body))
+    write("table_ringdown.tex", text, "%d rows" % len(body))
 
 
 def main():
     print("Appendix C tables ->", OUT)
-    table_orientation()
     table_thickness()
-    table_damping()
     table_convergence()
     table_ringdown()
     return 0

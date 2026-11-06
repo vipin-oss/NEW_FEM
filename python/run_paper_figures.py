@@ -621,25 +621,28 @@ def fig_p8_mac(mt_data):
     f1 = np.array([r["f_kHz"][0] for r in rows])
     fig, ax = plt.subplots(1, 2, figsize=(6.4, 2.4),
                            gridspec_kw={"width_ratios": [1.2, 1]})
-    ax[0].bar(np.arange(len(hs)), 1.0 - macs, color=OI[0], width=0.55)
-    ax[0].set_xticks(np.arange(len(hs)))
-    ax[0].set_xticklabels([f"{x:.0f}" for x in hs])
+    # the reference thickness itself has 1-MAC = 0 and cannot be drawn on a
+    # logarithmic axis; it is the point the others are referred to
+    keep = np.maximum(1.0 - macs, 0.0) > 0
+    ax[0].semilogy(hs[keep], 1.0 - macs[keep], "o-", color=OI[0], ms=4.5, lw=1.1)
+    ax[0].invert_xaxis()
     ax[0].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[0].set_ylabel(r"$1-$MAC  (defect from the $h$=10 $\mu$m shape)")
-    ax[0].set_yscale("log")
-    ax[0].set_ylim(1e-7, 3e-3)
-    for i, m in enumerate(macs):
-        ax[0].text(i, max(1.0 - m, 1.3e-7) * 1.35, f"{m:.5f}", ha="center",
-                   fontsize=6)
+    ax[0].set_ylim(3e-5, 3e-3)
+    for x, m in zip(hs[keep], macs[keep]):
+        ax[0].annotate(f"{m:.5f}", (x, 1.0 - m), textcoords="offset points",
+                       xytext=(4, 5), fontsize=5.8)
     ax[0].set_title("(a) one shape at every thickness", fontsize=7.5)
     f2 = np.array([r["f_kHz"][1] for r in rows])
     rat = np.array([r["f_ratio_2_over_1"] for r in rows])
     ax[1].loglog(hs, f1, "o-", color=OI[1], ms=4, lw=1.1, label=r"$f_1$")
+    ax[1].set_ylim(float(f1.min()) * 0.8, float(f2.max()) * 1.4)
     ax[1].loglog(hs, f2, "s-", color=OI[0], ms=3.6, lw=1.1, label=r"$f_2$")
     ax[1].invert_xaxis()
     for i in range(hs.size):
+        dx = -16.0 if i == hs.size - 1 else 3.5
         ax[1].annotate(rf"{rat[i]:.2f}", (hs[i], f1[i]),
-                       textcoords="offset points", xytext=(3.5, -9),
+                       textcoords="offset points", xytext=(dx, -9),
                        fontsize=5.8, color=OI[1])
     ax[1].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[1].set_ylabel("frequency (kHz)")
@@ -807,11 +810,22 @@ def fig_p12_fields():
     Y = (mesh.nodes[:, 1] * 1e6).reshape(5, 49)
     uxn = ux.reshape(5, 49) / np.abs(ux).max()
     wn = w.reshape(5, 49) / np.abs(w).max()
+    # (e) the strain gradient that drives the flexoelectric term: the
+    # through-thickness derivative of eps_xx, by central differences of the
+    # nodal solution on the regular 5 x 49 mesh (a plot, not a quoted number).
+    dx_um = float(X[0, 1] - X[0, 0])
+    dy_um = float(Y[1, 0] - Y[0, 0])
+    eps_xx = np.gradient(ux.reshape(5, 49) * 1e6, dx_um, axis=1)
+    eta_y = np.abs(np.gradient(eps_xx, dy_um, axis=0))
+    eta_y = eta_y / eta_y.max()              # plotted normalized: no number quoted
+
     fields = [(uxn, "(a)", r"$u_x/|u_x|_{\max}$"),
               (wn, "(b)", r"$w/|w|_{\max}$"),
               (ph, "(c)", r"$\phi$ (mV)"),
-              (Emag, "(d)", r"$|\nabla\phi|$ (mV/$\mu$m)")]
-    fig, axs = plt.subplots(2, 2, figsize=(6.4, 3.2), layout="constrained")
+              (Emag, "(d)", r"$|\nabla\phi|$ (mV/$\mu$m)"),
+              (eta_y, "(e)", r"$|\partial\varepsilon_{xx}/\partial y|\,/\,\max$")]
+    fig, axs = plt.subplots(2, 3, figsize=(7.0, 3.4), layout="constrained")
+    axs.ravel()[-1].axis("off")
     for ax, (Z, tag, lab) in zip(axs.ravel(), fields):
         m = ax.pcolormesh(X, Y, Z, shading="gouraud", cmap="viridis")
         cb = fig.colorbar(m, ax=ax, pad=0.02, fraction=0.046)
