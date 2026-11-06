@@ -62,8 +62,8 @@ CLAIMS = [
     ("0.5581", "piezoelectric extensional $k^2$ of the 200x10 plate",
      "hua", "D1/C1: the closed form built from $e$, $C$, $\\kappa$ alone "
      "gives 0.56079, and the free-plate FEM matches it to $10^{-10}$"),
-    ("0.2", "distance between 0.5581 and the closed form",
-     "hua", "D1, the same two numbers"),
+    ("0.5", "distance between 0.5581 and the closed form 0.5608",
+     "hua", "D1: the same two numbers, 0.56079 against 0.55814"),
     ("0.5608", "$e^{\\mathsf T}C^{-1}e/\\kappa$, 2-D plane stress",
      "hua", "derive\\_k2\\_closed\\_form.py from the constitutive tensors "
      "only; agreements 0.56079 vs 0.56079 (D1)"),

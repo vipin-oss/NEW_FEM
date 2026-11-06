@@ -231,11 +231,11 @@ def fig_p2_petals(pol, ARS=(2.0, 5.0, 10.0)):
         v = series(AR, "f1_kHz") - off
         ax.plot(tt, v, color=OI[i], lw=1.3, label=f"AR = {AR:g}")
     ax.set_theta_zero_location("E")
-    ax.set_rlabel_position(62)
+    ax.set_rlabel_position(100)
     ax.set_rticks([5, 10])
-    ax.set_yticklabels(["150", "155"], fontsize=5.5)
-    ax.set_title(r"$f_1$ (kHz) $-\,145$", fontsize=7.5, pad=7)
-    ax.tick_params(labelsize=5.5)
+    ax.set_yticklabels(["150", "155"], fontsize=6.5)
+    ax.set_title(r"(a) $f_1$ (kHz) $-\,145$", fontsize=8, pad=8)
+    ax.tick_params(labelsize=6.5)
     ax.grid(alpha=0.3, lw=0.4)
     # (b) k2
     ax2 = fig.add_subplot(132, projection="polar")
@@ -244,11 +244,11 @@ def fig_p2_petals(pol, ARS=(2.0, 5.0, 10.0)):
         v = series(AR, "k2_axial") - off2
         ax2.plot(tt, v, color=OI[i], lw=1.3)
     ax2.set_theta_zero_location("E")
-    ax2.set_rlabel_position(62)
-    ax2.set_rticks([0.02, 0.06, 0.10])
-    ax2.set_yticklabels(["0.375", "0.415", "0.455"], fontsize=5.5)
-    ax2.set_title(r"$k^2$ $-\,0.355$", fontsize=7.5, pad=7)
-    ax2.tick_params(labelsize=5.5)
+    ax2.set_rlabel_position(100)
+    ax2.set_rticks([0.05, 0.10])
+    ax2.set_yticklabels(["0.405", "0.455"], fontsize=6.5)
+    ax2.set_title(r"(b) $k^2$ $-\,0.355$", fontsize=8, pad=8)
+    ax2.tick_params(labelsize=6.5)
     ax2.grid(alpha=0.3, lw=0.4)
     # (c) cuboid vs ellipse at equal M
     ax3 = fig.add_subplot(133, projection="polar")
@@ -256,14 +256,16 @@ def fig_p2_petals(pol, ARS=(2.0, 5.0, 10.0)):
                                           ("ellipse", r"ellipse, equal $M$",
                                            "--"))):
         v = series(2.0, "k2_axial", shape) - off2
-        ax3.plot(tt, v, ls, color=OI[0] if i == 0 else OI[2], lw=1.4,
-                 label=lab)
+        ax3.plot(tt, v, ls, color="0.25", lw=1.4, label=lab)
     ax3.set_theta_zero_location("E")
-    ax3.set_rlabel_position(62)
-    ax3.set_rticks([0.02, 0.06, 0.10])
-    ax3.set_yticklabels(["0.375", "0.415", "0.455"], fontsize=5.5)
-    ax3.set_title(r"$k^2$: same $M$, two shapes", fontsize=7.5, pad=7)
-    ax3.tick_params(labelsize=5.5)
+    ax3.set_rlabel_position(100)
+    ax3.set_rticks([0.05, 0.10])
+    ax3.set_yticklabels(["0.405", "0.455"], fontsize=6.5)
+    ax3.set_title(r"(c) $k^2$: same $M$, two shapes", fontsize=8, pad=8)
+    ax3.tick_params(labelsize=6.5)
+    for _a in (ax, ax2, ax3):
+        for _l in _a.get_yticklabels():
+            _l.set_bbox(dict(fc="white", ec="none", alpha=0.85, pad=0.6))
     ax3.grid(alpha=0.3, lw=0.4)
     h, l = ax.get_legend_handles_labels()
     h2, l2 = ax3.get_legend_handles_labels()
@@ -312,8 +314,9 @@ def fig_p3_map(pol):
         tf, Af, Zg = fine(Z)
         T, A = np.meshgrid(tf, Af, indexing="ij")
         cf = ax.contourf(T, A, Zg, levels=18, cmap=cm)
-        cs = ax.contour(T, A, Zg, levels=7, colors="k", linewidths=0.4)
-        ax.clabel(cs, fontsize=5, fmt="%.3g" if Z is Zk else "%.0f")
+        cs = ax.contour(T, A, Zg, levels=5, colors="k", linewidths=0.4)
+        ax.clabel(cs, fontsize=5.5, inline=True, inline_spacing=3,
+                  fmt="%.2f" if Z is Zk else "%.0f")
         ax.scatter(TT.ravel(), AA.ravel(), s=1.5, c="w", alpha=0.65,
                    linewidths=0)
         ax.set_yticks(lA)
@@ -322,8 +325,12 @@ def fig_p3_map(pol):
         fig.colorbar(cf, ax=ax, pad=0.02, label=lab)
         ax.grid(False)
     axs[1].set_xlabel(r"window angle $\theta$ (deg)")
-    axs[0].set_title(r"window anisotropy: 144 runs, periodic spline",
-                     fontsize=7.5)
+    axs[0].text(0.02, 0.94, "(a)", transform=axs[0].transAxes, fontsize=8,
+                va="top", ha="left",
+                bbox=dict(fc="w", ec="none", alpha=0.75, pad=1.0))
+    axs[1].text(0.02, 0.94, "(b)", transform=axs[1].transAxes, fontsize=8,
+                va="top", ha="left",
+                bbox=dict(fc="w", ec="none", alpha=0.75, pad=1.0))
     save(fig, "P3_map_k2_AR_theta")
 
 
@@ -424,8 +431,10 @@ def fig_p5_rootlocus():
         lc.set_linewidth(1.5)
         ax.add_collection(lc)
         ax.plot(x[ok][-1], y[ok][-1], "o", ms=3.2, mfc="w", mec="0.2", mew=0.5)
-        ax.annotate(rf"{tau*1e9:g} ns", (x[ok][-1], y[ok][-1]),
-                    textcoords="offset points", xytext=(4, 2), fontsize=5.5)
+        if i in (0, len(taus) - 1):           # label the ends of the family only
+            off = (4, -8) if i == 0 else (-2, 6)
+            ax.annotate(rf"$\tau={tau*1e9:g}$ ns", (x[ok][-1], y[ok][-1]),
+                        textcoords="offset points", xytext=off, fontsize=6)
     ax.set_xscale("log")
     ax.set_xlim(3e-3, 1.2)
     ax.set_ylim(0.85, 2.25)
@@ -435,7 +444,7 @@ def fig_p5_rootlocus():
     sm = matplotlib.cm.ScalarMappable(
         cmap=cmap, norm=matplotlib.colors.Normalize(0.2, 1.0))
     fig.colorbar(sm, ax=ax, shrink=0.85, pad=0.03, label=r"$\alpha$")
-    ax.set_title(r"open marker: $\alpha=1$; colour: $\alpha$", fontsize=6.8)
+    ax.set_title(r"$\tau=0.5$--$32$ ns; open marker at $\alpha=1$", fontsize=7)
     save(fig, "P5_root_locus")
 
 
@@ -608,9 +617,9 @@ def fig_p9_damping_surface():
                     linewidth=0, shade=False)
     ax.plot([0.2, 1.0], [0.0, 0.0], [-0.061, -0.061], ls="--", lw=1.1,
             color="k")
-    ax.text2D(0.012, 0.995, "shaded floor: " r"$\omega\tau\leq1$, the band "
-              "used here\n" r"unshaded: $\omega\tau>1$, not claimed",
-              transform=ax.transAxes, fontsize=5.8, va="top", color="0.15",
+    ax.text2D(0.012, 0.995, "shaded floor: " r"$\omega\tau\leq1$,"
+              "\nthe operating band of the model",
+              transform=ax.transAxes, fontsize=6.2, va="top", color="0.15",
               linespacing=1.35)
     fig.colorbar(surf, ax=ax, shrink=0.55, pad=0.06, label=r"$\zeta$")
     save(fig, "P9_damping_surface")
@@ -880,7 +889,7 @@ def fig_p13_boundary_layer():
         idxs = np.where(d[i0:] < target)[0]
         lens.append(float(grid[idxs[0]]) if len(idxs) else np.nan)
     ax.set_xlabel(r"$x/L$"); ax.set_ylabel(r"$|w-w_{\rm class}|/w_{\rm class}(L)$")
-    ax.set_xlim(0, 0.3); ax.legend(frameon=False, fontsize=6.5)
+    ax.set_xlim(0, 1.0); ax.legend(frameon=False, fontsize=6.5)
     ax.set_title("(b)", loc="left")
     save(fig, "P13_boundary_layer")
     return {"ratios": [r[0] for r in recs],

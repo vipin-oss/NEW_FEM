@@ -9,36 +9,87 @@ the flexoelectric coefficient $\mu$. This section states how each is to be
 obtained, over which ranges the results of this paper hold, and which numbers
 in the paper are not verified.
 
-\subsection{Calibration of the window size and of the flexoelectric
-coefficient}
+\subsection{Experimental calibration protocol}
 \label{sec:calib_a_mu}
 
-The window is not a fitting parameter of the discretisation: it is the second
-moment of the averaging domain, and the domain is a physical object -- a
-representative volume of the microstructure, or the range over which the
-polarization is taken to be a continuum field. Two routes are available. The
-geometric one takes $a$ from the micrograph: for a grain or fibre texture the
-half-widths are the second moments of the grain-size distribution, which is
-exactly the interpretation that a fabric tensor carries in
-Sec.~\ref{sec:window}. The mechanical one takes $a$ from a size-effect
-measurement on the same material: the frequency ratio of two otherwise
-identical specimens of thickness $h_1$ and $h_2$ fixes the combination
-$M_{22}/h^{2}$ through the boundary-layer solution of
-Sec.~\ref{sec:bc_mech}, and the plate geometry then fixes $M_{22}$ itself.
+The four parameters are not of the same kind, and they are measured in
+different experiments. The two that describe the geometry of the interaction,
+$M_{mn}$ and the orientation $\theta$ of its principal axes, come from
+size-effect and texture measurements; the two that describe the material
+response, $\alpha$ and $\tau$, come from dielectric loss; and $\mu$ comes from
+a bending or a direct charge measurement. The protocol below is ordered so that
+each step fixes one quantity and the later steps check the earlier ones, in the
+manner of the characteristic-length identification of the one-scale theory.
 
-The flexoelectric coefficient is measured, not assumed. The direct route is a
-four-point bending test on a dielectric bar with electrodes on the two faces,
-in which the open-circuit voltage under a known curvature $\kappa$ gives
-$\mu$ through $V=\mu\kappa h^{2}/(\kappa_{yy}\varepsilon_0)$ for the geometry of
-Fig.~\ref{fig:geometry}(a); the inverse route uses the same expression with the
-measured voltage of a device whose curvature is known from its deflection. In
-both routes the measured quantity is $\mu^{2}$ scaled data, so a single
-measurement fixes the magnitude but not the sign, and the sign has to be taken
-from the crystal symmetry. The value used in this paper is
-$\mu=10^{-6}$\,\si{\coulomb\per\metre}, a nominal one; every bending coupling
-in Secs.~\ref{sec:thickness} and~\ref{sec:transient} scales with $\mu^{2}$ and
-should be read as a shape, not as a magnitude, until a measured coefficient is
-substituted.
+\begin{enumerate}
+\item \emph{Size-effect bending tests.} Apparent bending stiffness $D_{\rm app}$
+  is measured on cantilever strips cut along $x$ and along $y$ for at least
+  three thicknesses spanning the boundary layer, $h/\sqrt{M_{22}}\in[2,20]$.
+  The measured ratio $D_{\rm app}/D_{\rm cl}$ is fitted to the clamped-edge
+  solution of Sec.~\ref{sec:bc_mech}, which depends on the window only through
+  $M_{22}/h^{2}$; the fit returns $M_{22}$ for the thickness direction.
+\item \emph{Orientation sweep.} The same strips are cut at $\theta=0^\circ$,
+  $15^\circ$, \dots, $90^\circ$ to the material axes, and both $D_{\rm app}
+  (\theta)$ and $f_{1}(\theta)$ are recorded. Fitting them to the rotated
+  tensor \eqref{eq:Mrot} returns $M_{11}/M_{22}$ and $\theta$; the sweep of
+  Sec.~\ref{sec:orientation} shows the size of the effect to be resolved, a
+  change of $15$--$19\,\%$ in $k^{2}$ and of $6$--$8\,\%$ in $f_{1}$ between
+  the aligned and the transverse windows.
+\item \emph{Ultrasonic dispersion.} Wave speed $c(k)$ is measured against
+  wavenumber over the range in which the gradient term is visible, and fitted
+  to the plane-wave dispersion of \eqref{eq:gov1}, which carries the same
+  combination $(1/4)M_{mn}$ as the energy. This step gives an estimate that
+  involves no boundary condition at all and is therefore independent of
+  step~1.
+\item \emph{Boundary-layer profile.} Digital image correlation or a strain
+  gauge resolves the decay of the strain near a clamped edge; the decay length
+  is $\sqrt{M_{22}/2}$ for a window with $M=\ell^{2}\delta$, which fixes
+  $M_{22}$ a third time, on one specimen and without a stiffness measurement.
+\item \emph{Second moments of the microstructure.} An image of the
+  microstructure -- grain map, fibre paths or the unit cell of a lattice --
+  gives the fabric-like tensor \eqref{eq:Mdef} directly by numerical
+  integration over the window,
+  $M_{mn}=\langle s_{m}s_{n}\rangle_{\mathcal W}$. This is the only step that
+  fixes the \emph{anisotropy} of the window independently of the mechanical
+  response, and it is the one that makes the model a geometric statement
+  rather than a fit.
+\item \emph{Cross-check against the design map.} With $M$ calibrated, the
+  coupling-and-frequency map of Figs.~\ref{fig:petals}--\ref{fig:designspace}
+  is a prediction: the coupling and $f_{1}$ of specimens spanning the aspect
+  ratio and the window angle are measured and compared with it. Agreement
+  checks the tensor and its rotation; disagreement at fixed $M$ checks the
+  window-shape statement of Sec.~\ref{sec:windowshape}.
+\item \emph{Interaction-level check.} Steps 1--5 all infer $M$ from a
+  macroscopic response or from a window chosen by the analyst, so they cannot
+  by themselves distinguish an anisotropic interaction domain from an
+  anisotropic elasticity. The microstructure is then reconstructed
+  (micro-computed tomography, or resolved representative volume elements), a
+  local field is extracted from it, and the two-point correlation of that
+  field is computed as a function of the separation vector, resolved along and
+  across the principal directions. The decay lengths of these correlations are
+  estimates of the window that involve no stiffness and no boundary condition,
+  and comparing them with steps 1--5 is the test that the second-moment
+  description itself is adequate. That comparison has not been carried out
+  here.
+\end{enumerate}
+
+\paragraph{The flexoelectric coefficient.} $\mu$ is measured, not assumed. The
+direct route is a four-point bending test on a poled dielectric bar with
+electrodes on the two faces: for the geometry of Fig.~\ref{fig:geometry}(a) the
+open-circuit voltage under a known curvature $\kappa_{c}$ is
+\begin{equation}
+  V = \frac{\mu\,\kappa_{c}\,h}{\kappa_{yy}\,\varepsilon_{0}},
+  \label{eq:muV}
+\end{equation}
+which fixes $\mu$ from a voltage, a curvature and the permittivity, with no
+discretisation involved. The inverse route measures the charge released by a
+device whose curvature is known from its deflection. In both routes the
+measured quantity is linear in $\mu$, so one measurement fixes the magnitude
+and the sign has to be taken from the crystal symmetry. The value used in this
+paper is $\mu=10^{-6}$\,\si{\coulomb\per\metre}, a nominal one; every bending
+coupling in Secs.~\ref{sec:thickness} and~\ref{sec:transient} scales with
+$\mu^{2}$ and should be read as a shape, not as a magnitude, until a measured
+coefficient is substituted.
 
 \subsection{Calibration of the fractional order and of the relaxation time}
 \label{sec:calib_alpha_tau}

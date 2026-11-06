@@ -324,6 +324,32 @@ def main():
                  "independent F3 x_analytic x1e4",
                  J(I)["F3_flexo_curvature"]["x_analytic"] * 1e4, "{:.6f}"))
 
+    # ---- round 11: the closed forms of Sec. 6.2 and the modulus table
+    R.append(row("closed form, 3-D free bar", "0.5771",
+                 "k2_closed_form.json k2_3d_free",
+                 g("k2_closed_form.json.k2_3d_free"), "{:.4f}"))
+    R.append(row("closed form, 3-D uniaxial", "0.3748",
+                 "k2_closed_form.json k2_3d_uniaxial",
+                 g("k2_closed_form.json.k2_3d_uniaxial"), "{:.4f}"))
+    R.append(row("closed form, FEM clamped 48x4", "0.5596",
+                 "k2_closed_form.json fem.FEM clamped 48x4",
+                 g("k2_closed_form.json.fem.FEM clamped 48x4"), "{:.4f}"))
+    R.append(row("modulus, Zener r=1.1 at w=0.3, alpha=1", "1.0086",
+                 "memory_variants.json S2[2].Zener_r1p1",
+                 g("memory_variants.json.S2.2.Zener_r1p1"), "{:.4f}"))
+    R.append(row("modulus, Zener r=1.1 at w=100, alpha=0.7", "1.0981",
+                 "memory_variants.json S2[11].Zener_r1p1",
+                 g("memory_variants.json.S2.11.Zener_r1p1"), "{:.4f}"))
+    R.append(row("modulus ratio, w=1, alpha=1", "1.35",
+                 "memory_variants.json S2[3].ratio_KV_over_Zener",
+                 g("memory_variants.json.S2.3.ratio_KV_over_Zener"), "{:.2f}"))
+    R.append(row("modulus ratio, w=1, alpha=0.7", "1.62",
+                 "memory_variants.json S2[9].ratio_KV_over_Zener",
+                 g("memory_variants.json.S2.9.ratio_KV_over_Zener"), "{:.2f}"))
+    R.append(row("modulus ratio, w=100, alpha=1", "91",
+                 "memory_variants.json S2[5].ratio_KV_over_Zener",
+                 g("memory_variants.json.S2.5.ratio_KV_over_Zener"), "{:.0f}"))
+
     # ---- the literal has to be in the manuscript as well
     missing = [r for r in R if r["tex"] not in tex]
     bad = [r for r in R if not r["ok"]]

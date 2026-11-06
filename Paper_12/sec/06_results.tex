@@ -109,11 +109,15 @@ is the halved one.
 \emph{Closed-form coupling.} The quasi-static coupling factor of the electrode
 pair is available in closed form from the constitutive tensors alone,
 $k^2=(e^{\mathsf T}C^{-1}e/\kappa)/(1+e^{\mathsf T}C^{-1}e/\kappa)$, which for
-the extensional configuration gives $e^{\mathsf T}C^{-1}e/\kappa=0.5608$ and
-$k^2=0.3593$ in the uncoupled normalisation and $k^2=0.5581$ in the coupled
-one used in this paper. The three-dimensional uniaxial value is $0.5132$ and
-the plane-strain value $0.5132$; the plate model returns $0.5581$, within
-$0.2\,\%$ of its own two-dimensional closed form. The separation between the
+the extensional configuration gives $x=e^{\mathsf T}C^{-1}e/\kappa=1.2768$ and
+therefore $k^2=0.5608$; the paper quotes $k^2_{\rm qs}=0.5581$ for the same
+quantity on its working mesh. Three further closed forms bracket
+it: the three-dimensional free bar gives $0.5771$, the three-dimensional
+uniaxial case $0.3748$ and the two-dimensional plane-strain case $0.5132$. The
+plate model returns $0.5581$ through \eqref{eq:kstatic} and $0.5596$ for the
+clamped $48\times4$ mesh listed in Table~\ref{tab:closedform}, both within
+$0.5\,\%$ of the plane-stress closed form, so the residual is the
+discretisation and not a modelling difference. The separation between the
 plane-stress and plane-strain closed forms is a modelling choice, and the
 plane-stress one is adopted because the plate is free out of plane.
 
@@ -140,6 +144,16 @@ $a_1/L=0.015$, $\mu=10^{-6}$\,\si{\coulomb\per\metre}, plane stress.)}
 \label{fig:convergence}
 \end{figure}
 
+Figure~\ref{fig:fields} records the four fields of the coupled bending mode in
+the open-circuit configuration. The in-plane and the transverse displacement
+are those of a first bending mode. The potential, by contrast, is not: it
+reaches tens of millivolts a few tens of micrometres from the clamped edge
+and near mid-height, and it falls towards both the edge and the free end, so
+the two face electrodes sit where the potential is smallest. That is the
+spatial form of the cancellation that makes this configuration insensitive to
+the piezoelectric charge and responsive to the strain gradient
+(Sec.~\ref{sec:thickness}).
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{P12_fields.pdf}
@@ -147,9 +161,9 @@ $a_1/L=0.015$, $\mu=10^{-6}$\,\si{\coulomb\per\metre}, plane stress.)}
 configuration, on the $48\times4$ mesh: (a) in-plane displacement $u_x$
 normalised by its maximum, (b) transverse displacement $w$, (c) potential
 $\phi$ at \SI{10}{\nano\metre} of tip motion, (d) magnitude of the electric
-field. The potential is antisymmetric about the mid-plane and reaches its peak
-at the clamped edge, which is the reason the electrode pair of this geometry
-collects the gradient rather than the strain. ($L=\SI{200}{\micro\metre}$,
+field. The potential peaks a few tens of micrometres from the clamped edge and
+near mid-height, and is smallest at the face electrodes, which is why this
+electrode pair collects the gradient rather than the strain. ($L=\SI{200}{\micro\metre}$,
 $h=\SI{10}{\micro\metre}$, poling $y$, plane stress,
 $a_1\times a_2=3\times1$\,\si{\micro\metre}, $\mu=10^{-6}$\,\si{\coulomb\per\metre}.)}
 \label{fig:fields}
@@ -245,11 +259,8 @@ fully condensed stiffness $K_{\rm eff}$ or only the short-circuit matrix
 $K_{uu}$, and the two give different damping.
 
 \paragraph{Memory matrix.} Table~\ref{tab:memory} reports the ring-down of the
-extensional mode (mode 4, \SI{6.727}{MHz}, $k^2_{\rm eff}=0.4650$ with the
-fully uncoupled $K_{uu}$ denominator of \eqref{eq:kstatic}; the
-short-circuit denominator gives $0.4580$ for the same mode, and the
-$1.5\,\%$ difference is the contribution of the internal potential degrees of
-freedom that grounding the electrodes does not remove) at
+extensional mode (mode 4, \SI{6.727}{MHz}, mode-based coupling
+$k^2_{4}(K_{uu})=0.4650$ of \eqref{eq:kstatic}) at
 $\tau=\SI{7.0974}{\nano\second}$, that is $\omega\tau=0.3$, with an initial tip
 displacement that produces \SI{139.07}{\volt} of open-circuit voltage at
 $t=0$. The damping ratio extracted from the logarithmic decrement
@@ -263,7 +274,7 @@ $0.15\,\%$. Replacing $K_{\rm eff}$ by $K_{uu}$ removes the piezoelectric
 contribution from the memory and takes the ratio
 $\zeta(K_{uu})/\zeta(K_{\rm eff})$ at $\alpha=1$ down to $0.449$, so the
 short-circuit memory dissipates $55\,\%$ less. The difference is of the order
-of the coupling ($k^2_{\rm eff}=0.4650$) but does \emph{not} reduce to the
+of the coupling ($k^2_{4}=0.4650$) but does \emph{not} reduce to the
 naive factor $1-k^2=0.535$: the two memories differ by the piezoelectric
 stiffness that the condensation puts into $K_{\rm eff}$, and its effect on the
 ring-down has to be computed rather than estimated. For a strongly
@@ -274,7 +285,7 @@ not in the implementation.
 \centering
 \small
 \caption{Ring-down of the extensional mode (mode 4, \SI{6.727}{MHz},
-$k^2_{\rm eff}=0.4650$, $\omega\tau=0.3$,
+$k^2_{4}(K_{uu})=0.4650$, $\omega\tau=0.3$,
 $\tau=\SI{7.0974}{\nano\second}$). Damping ratio from the logarithmic
 decrement \eqref{eq:zeta}, for memory carried on the condensed stiffness
 $K_{\rm eff}$ and on the short-circuit stiffness $K_{uu}$. The last row is the
@@ -294,11 +305,12 @@ ratio $K_{uu}/K_{\rm eff}$ & $0.449$ & $1.93$ \\
 
 \paragraph{Fractional against integer-order element.} Table~\ref{tab:modulus}
 compares the complex modulus of the fractional element \eqref{eq:kvfreq} with
-the integer-order Kelvin--Voigt and Zener fits at the same relaxation time. At
-the device point $\omega\tau=0.3$ the Kelvin--Voigt model over-predicts the
-modulus by $3.5\,\%$ at $\alpha=1$ and by $22.6\,\%$ at $\alpha=0.7$; at
-$\omega\tau=1$ the ratio of the two is $1.345$ and $1.623$, and at
-$\omega\tau=100$ the integer-order model is wrong by a factor $90.9$. A
+the integer-order Kelvin--Voigt element and a Zener element fitted to it at the
+device point $\omega\tau=0.3$ and held fixed afterwards. At that point the
+Kelvin--Voigt model over-predicts the modulus by $3.5\,\%$ at $\alpha=1$ and by
+$22.6\,\%$ at $\alpha=0.7$; at $\omega\tau=1$ the ratio of the two is $1.35$
+and $1.62$, and at $\omega\tau=100$ the integer-order model is wrong by a
+factor $91$. A
 single-relaxation fit is unusable outside the narrow band where it was fitted,
 which is the band a design map is meant to cover.
 
@@ -306,19 +318,21 @@ which is the band a design map is meant to cover.
 \centering
 \small
 \caption{Normalised modulus magnitude $|K^{*}|/K$ at matched $\tau$ for the
-integer-order Kelvin--Voigt element and the fractional Zener element with
-relaxation-strength ratio $r=2$, at two Caputo orders.}
+integer-order Kelvin--Voigt element and for the fractional Zener element whose
+relaxation-strength ratio, $r=1.1$, is fitted to the spring-pot at
+$\omega\tau=0.3$ and then held fixed, at two Caputo orders. Values in
+Table~\ref{tab:modulus} are $|K^{*}|/K$.}
 \label{tab:modulus}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
 $\omega\tau$ & \multicolumn{2}{c}{$\alpha=1$} & \multicolumn{2}{c}{$\alpha=0.7$} \\
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}
- & KV & Zener ($r=2$) & KV & Zener ($r=2$) \\
+ & KV & Zener ($r=1.1$) & KV & Zener ($r=1.1$) \\
 \midrule
-0.3  & $1.0440$ & $1.1170$ & $1.2555$ & $1.2652$ \\
-1    & $1.4142$ & $1.5811$ & $1.7053$ & $1.5310$ \\
-10   & $10.050$ & $1.9926$ & $5.5380$ & $1.8988$ \\
-100  & $100.005$ & $1.9999$ & $25.588$ & $1.9814$ \\
+0.3  & $1.0440$ & $1.0086$ & $1.2555$ & $1.0244$ \\
+1    & $1.4142$ & $1.0512$ & $1.7053$ & $1.0504$ \\
+10   & $10.050$ & $1.0991$ & $5.5380$ & $1.0894$ \\
+100  & $100.005$ & $1.1000$ & $25.588$ & $1.0981$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -357,8 +371,8 @@ the fractional description is used for dielectric loss in the first place.
 \includegraphics[width=0.62\textwidth]{P5_root_locus.pdf}
 \caption{Complex poles of the fractional Kelvin--Voigt element, $s/\omega_0$ in
 the plane $(-\mathrm{Re},\mathrm{Im})$, traced over $\omega\tau=0.01\ldots31.6$
-for seven relaxation times (labelled at the last point of each curve) and
-coloured by the Caputo order. Open markers are $\alpha=1$; the dotted line is
+for seven relaxation times, ordered by $\tau$ and coloured by the Caputo
+order. Open markers are $\alpha=1$; the dotted line is
 $\mathrm{Im}\,s=\omega_0$. Every pole has a negative real part, and the
 fractional curves fan upward because the spring-pot modulus grows
 sub-linearly in frequency. The shaded band marks the range
@@ -420,12 +434,13 @@ Table~\ref{tab:params}, $a/L_x\le0.2$.)}
 The corresponding static statement is Fig.~\ref{fig:layer}, which solves the
 clamped plate of Table~\ref{tab:params} under an end load for three window
 sizes and compares each solution with the classical one of the same geometry
-and load. The gradient terms stiffen the member, and the difference against the
-classical solution grows from the clamped edge, where the curvature is largest,
-and is spread over the member rather than confined to a thin layer for
-$a/L\ge0.05$; the relative size of the effect grows with the window, which is
-why the bound $a/L\le0.2$ of Sec.~\ref{sec:limit_window} is stated as a
-modelling limit rather than as a mesh requirement.
+and load. The gradient terms stiffen the member. The difference against the
+classical solution vanishes at the clamped edge, where both fields satisfy the
+same kinematic conditions, and then accumulates along the member instead of
+decaying over a thin layer: at these window sizes the gradient effect is
+distributed rather than local, and its size grows with the window. That is why
+the bound $a/L\le0.2$ of Sec.~\ref{sec:limit_window} is stated as a modelling
+limit rather than as a mesh requirement.
 
 \begin{figure}[t]
 \centering
@@ -433,9 +448,9 @@ modelling limit rather than as a mesh requirement.
 \caption{The clamped edge under an end load, for three window sizes:
 (a) the deflected shape normalised by its tip value, with the classical
 solution of the same problem for comparison; (b) the difference from the
-classical profile, normalised by the tip deflection, on a logarithmic scale.
-The gradient stiffening is largest at the clamped edge and distributed over the
-member at these window sizes. ($L=\SI{200}{\micro\metre}$,
+classical profile, normalised by the tip deflection, on a logarithmic scale:
+it vanishes at the clamped edge and accumulates along the member rather than
+decaying over a boundary layer, at all three window sizes. ($L=\SI{200}{\micro\metre}$,
 $h=\SI{10}{\micro\metre}$, $48\times4$ mesh, poling $y$, plane stress,
 $\mu=10^{-6}$\,\si{\coulomb\per\metre}, $a_2=\SI{1}{\micro\metre}$.)}
 \label{fig:layer}
@@ -464,7 +479,7 @@ measure \eqref{eq:kstatic}.
 factor $24$ from \num{1.74e-4} at \SI{10}{\micro\metre} to \num{4.2e-3} at
 \SI{1}{\micro\metre}. The local log--log slope is $-1.92$ at the thick end,
 that is the expected $h^{-2}$ scaling, and steepens to $-1.52$ and then
-$-0.66$ as the plate is thinned. The saturation is not a mesh artefact: a
+$-0.66$ as the plate is thinned. The saturation is not a mesh effect: a
 $96\times4$ witness reproduces the $48\times4$ values to $0.04\,\%$ and
 $0.35\,\%$ at the two ends of the range, and the residual at $\mu=0$ is
 $1.0\times10^{-10}$, seven orders of magnitude below the signal. Its physical
@@ -502,8 +517,7 @@ $3\times\SI{1}{\micro\metre}$, $\mu=10^{-6}$\,\si{\coulomb\per\metre}. The
 second column switches the piezoelectric constants off ($e=0$), the third
 switches $\mu$ off, and the last pair reports the material of the paper. The
 values of the fourth column are those plotted in
-Fig.~\ref{fig:thickness}(a). Generated by
-\texttt{run\_config\_table.py} from \texttt{results/config\_table.json}.}
+Fig.~\ref{fig:thickness}(a).}
 \label{tab:config}
 \input{table_config}
 \end{table}
@@ -526,7 +540,7 @@ Table~\ref{tab:sens} of Appendix~\ref{app:verification}.
 Fig.~\ref{fig:thickness} is the counterpart of panel~(a). The quasi-static
 extensional coupling takes the values $0.55814$, $0.55843$, $0.55858$ and
 $0.55861$ at the four thicknesses, that is it changes by $0.09\,\%$ between
-\SI{10}{\micro\metre} and \SI{1}{\micro\metre}, against the mode-free closed-form value $0.5608$ for the
+\SI{10}{\micro\metre} and \SI{1}{\micro\metre}, against the constitutive closed form $0.5608$ for the
 same material and the same plane-stress kinematics. This is the statement that
 makes the pair useful: the piezoelectric effect is a bulk effect, so a thinner
 plate is electromechanically neither better nor worse, whereas the
@@ -547,7 +561,7 @@ witness at the two thickest and thinnest points (open squares,
 indistinguishable from $48\times4$), and the $h^{-2}$ guide line. (b)
 Piezoelectric length-extensional coupling of the same plate with $\mu=0$,
 mode-free: constant to $0.09\,\%$ over $10\to1$\,\si{\micro\metre} and
-$0.4\,\%$ below the closed form $e^{\mathsf T}C^{-1}e/\kappa=0.5608$ (dotted),
+$0.4\,\%$ below the constitutive closed form $0.5608$ (dotted),
 which is the discretisation error of the $48\times4$ mesh rather than a
 modelling difference. ($\alpha=1$, $a_1/L=0.015$.)}
 \label{fig:thickness}
@@ -612,8 +626,7 @@ mode-free coupling factor, the coupling of the strongest mode, the open-circuit
 voltage at \SI{10}{\nano\metre} of tip motion, and the relative change in
 coupling over $10\to1$\,\si{\micro\metre} of thickness. The last two rows are
 the two electrical configurations of Fig.~\ref{fig:geometry}; they are not
-additive. Generated by \texttt{run\_application\_table.py} from
-\texttt{results/application\_table.json}.}
+additive.}
 \label{tab:application}
 \input{table_application}
 \end{table}

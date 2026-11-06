@@ -65,7 +65,8 @@ def main():
                "run_application_table.py", "derive_k2_closed_form.py",
                "run_independent_checks.py", "audit_abstract_claims.py",
                "run_config_table.py", "list_unverified.py",
-               "run_sensitivity.py", "check_gradient_energy.py"]
+               "run_sensitivity.py", "check_gradient_energy.py",
+               os.path.join("..", "Paper_12", "check_refs.py")]
     if figs:
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")

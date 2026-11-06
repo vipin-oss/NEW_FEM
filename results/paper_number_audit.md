@@ -1,6 +1,6 @@
 # Every number in the manuscript against the JSON it came from
 
-52/52 claims agree; 0 disagree with the JSON, 0 are not found in the text.
+60/60 claims agree; 0 disagree with the JSON, 0 are not found in the text.
 
 | # | claim | manuscript | json | value | status |
 |---|---|---|---|---|---|
@@ -56,3 +56,11 @@
 | 50 | pairing, distance from the FEM value | `77` | `independent F5 hybrid_vs_fem_rel x100` | `77` | ok |
 | 51 | pairing, poled x on the long faces | `1.61` | `independent F5 poling x top/bottom x_fem x1e5` | `1.61` | ok |
 | 52 | independent, flexo x, uniform curvature | `3.570415` | `independent F3 x_analytic x1e4` | `3.570415` | ok |
+| 53 | closed form, 3-D free bar | `0.5771` | `k2_closed_form.json k2_3d_free` | `0.5771` | ok |
+| 54 | closed form, 3-D uniaxial | `0.3748` | `k2_closed_form.json k2_3d_uniaxial` | `0.3748` | ok |
+| 55 | closed form, FEM clamped 48x4 | `0.5596` | `k2_closed_form.json fem.FEM clamped 48x4` | `0.5596` | ok |
+| 56 | modulus, Zener r=1.1 at w=0.3, alpha=1 | `1.0086` | `memory_variants.json S2[2].Zener_r1p1` | `1.0086` | ok |
+| 57 | modulus, Zener r=1.1 at w=100, alpha=0.7 | `1.0981` | `memory_variants.json S2[11].Zener_r1p1` | `1.0981` | ok |
+| 58 | modulus ratio, w=1, alpha=1 | `1.35` | `memory_variants.json S2[3].ratio_KV_over_Zener` | `1.35` | ok |
+| 59 | modulus ratio, w=1, alpha=0.7 | `1.62` | `memory_variants.json S2[9].ratio_KV_over_Zener` | `1.62` | ok |
+| 60 | modulus ratio, w=100, alpha=1 | `91` | `memory_variants.json S2[5].ratio_KV_over_Zener` | `91` | ok |

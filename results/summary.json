@@ -402,7 +402,7 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "52/52",
+   "value": "60/60",
    "criterion": "all agree",
    "pass": true
   }
@@ -424,6 +424,7 @@
   "list_unverified.py": true,
   "run_sensitivity.py": true,
   "check_gradient_energy.py": true,
+  "../Paper_12/check_refs.py": true,
   "run_demos.py": true,
   "run_paper_figures.py": true,
   "make_paper_table.py": true,

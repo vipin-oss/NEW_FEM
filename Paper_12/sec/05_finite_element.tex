@@ -98,7 +98,7 @@ assumed small (Sec.~\ref{sec:verification}).
 \subsection{Implementation remarks}
 \label{sec:implementation}
 
-Three properties of the implementation are worth recording, because they
+Two properties of the implementation are worth recording, because they
 govern both cost and accuracy.
 
 \begin{enumerate}
@@ -109,15 +109,11 @@ govern both cost and accuracy.
   Sec.~\ref{sec:thickness} is at a condition number of about $10^{12}$, and the
   sensitivity of the resulting small differences is measured rather than
   assumed (Appendix~\ref{app:verification}).
-\item \emph{Cost.} A mesh of $48\times4$ BFS elements has $32\times49=1568$
-  mechanical degrees of freedom per displacement component pair and is the
+\item \emph{Cost.} A mesh of $48\times4$ BFS elements has $49\times5=245$
+  nodes and $8\times245=1960$ mechanical degrees of freedom and is the
   workhorse of the results; the mesh-refinement study of
   Sec.~\ref{sec:verification} shows that the fundamental frequency is converged
   to better than $10^{-3}$ on that mesh, and the thinnest plates are solved on
   it because the conditioning, not the number of elements, is the binding
   constraint.
-\item \emph{Determinism.} Every number in the paper is regenerated from a
-  single command applied to the repository, including the sensitivity of the
-  thin-plate values to the eigensolver; nothing is read off a plot or copied
-  between runs.
 \end{enumerate}

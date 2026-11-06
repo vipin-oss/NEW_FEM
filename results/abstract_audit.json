@@ -67,10 +67,10 @@
    "route": "D1/C1: the closed form built from $e$, $C$, $\\kappa$ alone gives 0.56079, and the free-plate FEM matches it to $10^{-10}$"
   },
   {
-   "literal": "0.2",
-   "what": "distance between 0.5581 and the closed form",
+   "literal": "0.5",
+   "what": "distance between 0.5581 and the closed form 0.5608",
    "verdict": "hua",
-   "route": "D1, the same two numbers"
+   "route": "D1: the same two numbers, 0.56079 against 0.55814"
   },
   {
    "literal": "0.5608",
@@ -118,7 +118,7 @@
   "10",
   "3",
   "0.5581",
-  "0.2",
+  "0.5",
   "0.5608",
   "0.09",
   "1.7",

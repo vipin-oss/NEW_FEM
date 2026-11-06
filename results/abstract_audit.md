@@ -17,7 +17,7 @@ Every numeric token of the abstract of `Paper_12/main.tex`, with the verdict `hu
 | `5` | $M_{ii}=a_i^2/5$ for an ellipsoid | **hua** | I8: quadrature over the ellipsoid, 0.2000000000 |
 | `19` | effect of window anisotropy and orientation on the coupling | *nahi hua* | FEM rotation study (criterion T5 for the mesh/rotation trend); no independent route |
 | `0.5581` | piezoelectric extensional $k^2$ of the 200x10 plate | **hua** | D1/C1: the closed form built from $e$, $C$, $\kappa$ alone gives 0.56079, and the free-plate FEM matches it to $10^{-10}$ |
-| `0.2` | distance between 0.5581 and the closed form | **hua** | D1, the same two numbers |
+| `0.5` | distance between 0.5581 and the closed form 0.5608 | **hua** | D1: the same two numbers, 0.56079 against 0.55814 |
 | `0.5608` | $e^{\mathsf T}C^{-1}e/\kappa$, 2-D plane stress | **hua** | derive\_k2\_closed\_form.py from the constitutive tensors only; agreements 0.56079 vs 0.56079 (D1) |
 | `0.09` | spread of the piezo $k^2$ between 10 and 1 micron | *nahi hua* | FEM thickness sweep (T3, T2 for mesh independence); the spread is small but no closed form predicts it |
 | `31` | the same growth with the piezoelectric terms switched off | *nahi hua* | config_table: an FEM run with $e=0$ in the same solver; the two runs differ by the piezoelectric stiffness of the mode, and neither has a closed form |
@@ -27,6 +27,6 @@ Every numeric token of the abstract of `Paper_12/main.tex`, with the verdict `hu
 
 ## Coverage
 
-Numeric tokens found in the abstract: 15 (`1`, `200`, `10`, `3`, `0.5581`, `0.2`, `0.5608`, `0.09`, `1.7`, `4.2`, `24`, `31`, `19`, `0.15`, `0.449`).
+Numeric tokens found in the abstract: 15 (`1`, `200`, `10`, `3`, `0.5581`, `0.5`, `0.5608`, `0.09`, `1.7`, `4.2`, `24`, `31`, `19`, `0.15`, `0.449`).
 
 Every token has a verdict.
