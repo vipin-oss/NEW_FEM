@@ -46,7 +46,9 @@ be measured here.
 | main-text tables | 9 | 6 |
 
 The prose cut is real; the moved table text reappears in Appendix C, so the
-total word count of the package falls by only 400.
+total word count of the package falls by only 400. Measured in area
+(`results/length_budget.md`): body 16346 → 15602 pt, package 22475 → 22272 pt,
+i.e. **−0.3 page**; the move buys tidy body pages, not a shorter appendix.
 
 ## 4. Verified by execution
 
@@ -62,14 +64,27 @@ total word count of the package falls by only 400.
 | `python/list_unverified.py` | 29 entries, 0 stale |
 | `python/audit_abstract_claims.py` | 0 uncovered tokens |
 | `Paper_12/check_refs.py` | 62 entries, 0 field mismatches, Crossref offline |
+| `python/length_budget.py` (new) | 33.7 estimated pages, see §5 |
 
 ## 5. UNVERIFIED — no TeX distribution and no network in this environment
 
 | item | status |
 |---|---|
 | **Compilation** | not run. `pdflatex → bibtex → pdflatex ×2` has never been executed on this tree |
-| **Page count** | **not measured.** The last PDF the author reports is 34 pages and the target is ≤ 30. The sanctioned changes remove ~889 words of prose and three floats from the body; that is of the order of one to two pages, so **≤ 30 is not established** by anything here. If the compile is still above 30, the next candidates, in order, are: the 54-row verification table (Appendix B, ~1 page), Secs. 3–4, which have never been shortened, and the eleven figures, which are all still `width=\textwidth` |
+| **Page count** | **not measured.** Estimated at **33.7 pages** (34 before) by `python/length_budget.py` → `results/length_budget.md`: every figure height from its PDF box and `width=`, every table from its row count, the reference list from 62 entries, and the gap factor (1.08 printed pages per page of area) calibrated on the last counted PDF. Body content fell by **744 pt = 1.04 page of area**, but the three tables moved into Appendix C reappear there, so the package total falls only 203 pt. **≤ 30 is not reached**: about 2440 pt = 3.4 pages of area still has to go, and the model carries ~1 page of error |
 | **On which page each float lands** | not measured; `check_float_order.py` verifies citation *order*, not page placement |
 | **Overfull/underfull boxes** | not measured; the height of the new five-column `tab:coupling` and of the three tables moved to Appendix C is untested |
 | **DOI resolution** | not checked: Crossref unreachable. `fem1` (10.1016/j.finel.2026.104681) and the 13 `TO VERIFY` entries are unchecked, not confirmed |
 | **Typeset heading of `\paragraph`** | the 21 trailing periods were removed in round 19 on the evidence of the author's compiled PDF; the result has not been compiled here |
+
+## 6. What would get to 30 pages, measured and not done
+
+Ranked by area, from `results/length_budget.md`. None of these is in round 20:
+the brief named the levers and forbade others.
+
+| lever | saves | cost |
+|---|---|---|
+| Appendix B to a supplementary file (verification 666 pt, independent 420 pt, sensitivity, mode shapes) | **2.3 pages** | the verification table is the evidence of Sec. 6.1 |
+| Secs. 2 and 5 tightened by a quarter (1936 + 1322 words, never shortened) | 1.0 page | prose only, no result touched |
+| all ten body figures at `0.85\textwidth` instead of the present 0.72–1.0 | 0.7 page | smaller axes; no figure removed |
+| `tab:verification` at `\footnotesize` | 0.2 page | 54 rows at 9 pt |

@@ -64,7 +64,7 @@ def main():
                "run_coupling_check.py", "run_mode_tracking.py",
                "run_application_table.py", "derive_k2_closed_form.py",
                "run_independent_checks.py", "audit_abstract_claims.py",
-               "run_config_table.py", "list_unverified.py",
+               "run_config_table.py", "list_unverified.py", "length_budget.py",
                "run_sensitivity.py", "check_gradient_energy.py",
                os.path.join("..", "Paper_12", "check_refs.py")]
     if figs:
