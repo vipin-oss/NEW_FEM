@@ -83,6 +83,12 @@ CLAIMS = [
      "nahi hua", "FEM value (criterion T3); the two-significant-digit form is "
      "forced by the platform spread measured in Tab.~\\ref{tab:sens}, not by "
      "an independent calculation"),
+    ("7", "exponent of the factor \\num{4e7} between the flexoelectric "
+     "bending coupling and the residual piezoelectric coupling of the same "
+     "configuration at \\SI{1}{\\micro\\metre}",
+     "nahi hua", "two FEM numbers of the same run divided (tab:config, h = 1); "
+     "the piezoelectric-only coupling is a symmetry cancellation, not an "
+     "independent measurement"),
     ("24", "growth of the flexoelectric $k^2$ over the same range, to the two "
      "significant digits the platform supports",
      "nahi hua", "the same FEM sweep (T3); the flexoelectric operator itself "

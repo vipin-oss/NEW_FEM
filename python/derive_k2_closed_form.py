@@ -217,7 +217,10 @@ def main():
     lines += ["| $h$ (µm) | correct $k^2$ | $k^2/(1+k^2)$ | recorded as |",
               "|---|---|---|---|"]
     wrong_table = []
-    for r_, rec in zip(th, (0.35821, 0.35833, 0.35839, 0.35840)):
+    by_h = {r_["h_um"]: r_ for r_ in th}
+    for h_rec, rec in zip((10.0, 5.0, 2.0, 1.0),
+                          (0.35821, 0.35833, 0.35839, 0.35840)):
+        r_ = by_h[h_rec]
         kk = r_["k2_ext"]
         lines.append(f"| {r_['h_um']:.0f} | {kk:.5f} | {kk / (1 + kk):.5f} | "
                      f"{rec:.5f} |")

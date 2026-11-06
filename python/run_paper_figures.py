@@ -122,42 +122,65 @@ def modal_k2(mats, Mg, pair, nmodes=6, L=LPLATE, h=HPLATE, nx=24, ny=2):
     return (r - w2[:nmodes]) / r, np.sqrt(w2[:nmodes]) / 2e3 / np.pi, Phi, M, w2
 
 
+def _mode_free(MAT, Mg, pair=("left", "right")):
+    """Coupling of the extensional mode and the frequencies of that mode and of
+    the fundamental one."""
+    k2, fk, _, _, _ = modal_k2(MAT, Mg, pair, nmodes=6)
+    j = int(np.argmax(k2))
+    return float(k2[j]), float(fk[j]), float(fk[0])
+
+
 def polar_sweep():
-    """f1 and k^2 of the extensional mode versus window angle, for three
-    window aspect ratios, and the same for an ellipse of equal M."""
-    thetas = np.deg2rad(np.arange(0, 360, 15))
+    """f1 and k2 versus window angle on 0-90 deg in 5 deg steps.
+
+    Only the first quadrant is computed.  The plate is invariant under
+    theta -> theta + 180 (the second-moment tensor of a rectangle is
+    unchanged, because R(theta + 180) = -R(theta)) and under theta -> -theta
+    (the reflection y -> -y maps the plate onto itself and flips the sign of
+    M12, which enters the energy quadratically).  Neither statement is
+    assumed: both are checked below against the computed points at the two
+    extreme aspect ratios, and the sizes of the deviations are stored with the
+    data.
+    """
+    thetas = np.arange(0, 91, 5)
+    ARS = (2.0, 3.0, 4.0, 5.0, 7.0, 10.0)
     MAT = mt.Material(**{**mt.batio3("x", "plane_stress").__dict__, "mu": 0.0})
     rows = []
-    for AR in (2.0, 3.0, 4.0, 5.0, 7.0, 10.0):
+    for AR in ARS:
         ax_, ay_ = 3e-6, 3e-6 / AR
         for shape in ("cuboid", "ellipse"):
+            if shape == "ellipse" and AR != 2.0:
+                continue
             if shape == "ellipse":
-                if AR != 2.0:            # one ellipse family is enough
-                    continue
-                a_e = ax_ * np.sqrt(4.0 / 3.0)      # equal M to the cuboid
-                b_e = ay_ * np.sqrt(4.0 / 3.0)
-            for th in thetas:
+                a_e, b_e = ax_ * np.sqrt(4.0 / 3.0), ay_ * np.sqrt(4.0 / 3.0)
+            for td in thetas:
+                th = np.deg2rad(td)
                 if shape == "cuboid":
                     Mg = f6.second_moment("cuboid", ax_, ay_, th)
                 else:
                     Mg = f6.second_moment("ellipse", a_e, b_e, th)
-                k2, fk, _, _, _ = modal_k2(MAT, Mg, ("left", "right"),
-                                           nmodes=6)
-                j = int(np.argmax(k2))
-                rows.append({"AR": AR, "shape": shape,
-                             "theta_deg": float(np.rad2deg(th)),
-                             "f1_kHz": float(fk[0]),
-                             "k2_axial": float(k2[j]),
-                             "f_axial_kHz": float(fk[j]),
+                k2, fe, f1 = _mode_free(MAT, Mg)
+                rows.append({"AR": AR, "shape": shape, "theta_deg": float(td),
+                             "f1_kHz": f1, "k2_axial": k2, "f_ext_kHz": fe,
                              "Mg_xx": float(Mg[0, 0]), "Mg_yy": float(Mg[1, 1])})
-    return rows
+    lookup = {(r["AR"], r["shape"], r["theta_deg"]): r for r in rows}
+    sym = []
+    for AR in (2.0, 10.0):
+        ax_, ay_ = 3e-6, 3e-6 / AR
+        for td in (15, 30, 45, 60, 75, 85):
+            ref = lookup[(AR, "cuboid", float(td))]
+            for ang, label in ((td + 180.0, "theta+180"), (-td, "-theta")):
+                Mg = f6.second_moment("cuboid", ax_, ay_, np.deg2rad(ang))
+                k2, fe, f1 = _mode_free(MAT, Mg)
+                sym.append({"AR": AR, "theta_deg": float(td), "map": label,
+                            "rel_k2": abs(k2 - ref["k2_axial"]) / ref["k2_axial"],
+                            "rel_f": abs(fe - ref["f_ext_kHz"])
+                            / ref["f_ext_kHz"]})
+    worst = max(max(s["rel_k2"], s["rel_f"]) for s in sym)
+    print(f"  symmetry: {len(sym)} mirrored solves, worst relative "
+          f"deviation {worst:.2e}")
+    return rows, sym
 
-
-
-
-# ---------------------------------------------------------------------------
-# P1  the two electrode configurations and the window
-# ---------------------------------------------------------------------------
 def fig_p1_geometry():
     fig, axs = plt.subplots(2, 1, figsize=(5.2, 2.7))
     L_, H_ = 1.0, 0.30
@@ -206,137 +229,128 @@ def fig_p1_geometry():
     fig.text(0.5, -0.02, r"$L=200\ \mu$m, thickness $h$; window half-widths "
              r"$a_1\times a_2$, $M_{ii}=a_i^2/3$ (cuboid), $a_i^2/4$ (ellipse)",
              ha="center", fontsize=6.5)
-    save(fig, "P1_geometry")
+    save(fig, "F1_geometry")
 
 
 # ---------------------------------------------------------------------------
 # P2  petals
 # ---------------------------------------------------------------------------
-def fig_p2_petals(pol, ARS=(2.0, 5.0, 10.0)):
-    th = np.deg2rad(np.arange(0, 360, 15))
-    tt = np.r_[th, th[0]]
+def _fold(rows, AR, key, shape="cuboid"):
+    """Full circle from the first quadrant, using the two verified symmetries.
 
-    def series(AR, key, shape="cuboid"):
-        r = sorted([x for x in pol if x["AR"] == AR and x["shape"] == shape],
-                   key=lambda z: z["theta_deg"])
-        return np.r_[[z[key] for z in r], r[0][key]]
-
-    fig = plt.figure(figsize=(6.8, 2.35))
-    fig.subplots_adjust(wspace=0.42, left=0.02, right=0.90, bottom=0.14,
-                        top=0.84)
-    # (a) f1
-    ax = fig.add_subplot(131, projection="polar")
-    off = 145.0
-    for i, AR in enumerate(ARS):
-        v = series(AR, "f1_kHz") - off
-        ax.plot(tt, v, color=OI[i], lw=1.3, label=f"AR = {AR:g}")
-    ax.set_theta_zero_location("E")
-    ax.set_rlabel_position(100)
-    ax.set_rticks([5, 10])
-    ax.set_yticklabels(["150", "155"], fontsize=6.5)
-    ax.set_title(r"(a) $f_1$ (kHz) $-\,145$", fontsize=8, pad=8)
-    ax.tick_params(labelsize=6.5)
-    ax.grid(alpha=0.3, lw=0.4)
-    # (b) k2
-    ax2 = fig.add_subplot(132, projection="polar")
-    off2 = 0.355
-    for i, AR in enumerate(ARS):
-        v = series(AR, "k2_axial") - off2
-        ax2.plot(tt, v, color=OI[i], lw=1.3)
-    ax2.set_theta_zero_location("E")
-    ax2.set_rlabel_position(100)
-    ax2.set_rticks([0.05, 0.10])
-    ax2.set_yticklabels(["0.405", "0.455"], fontsize=6.5)
-    ax2.set_title(r"(b) $k^2$ $-\,0.355$", fontsize=8, pad=8)
-    ax2.tick_params(labelsize=6.5)
-    ax2.grid(alpha=0.3, lw=0.4)
-    # (c) cuboid vs ellipse at equal M
-    ax3 = fig.add_subplot(133, projection="polar")
-    for i, (shape, lab, ls) in enumerate((("cuboid", r"cuboid, $a_i^2/3$", "-"),
-                                          ("ellipse", r"ellipse, equal $M$",
-                                           "--"))):
-        v = series(2.0, "k2_axial", shape) - off2
-        ax3.plot(tt, v, ls, color="0.25", lw=1.4, label=lab)
-    ax3.set_theta_zero_location("E")
-    ax3.set_rlabel_position(100)
-    ax3.set_rticks([0.05, 0.10])
-    ax3.set_yticklabels(["0.405", "0.455"], fontsize=6.5)
-    ax3.set_title(r"(c) $k^2$: same $M$, two shapes", fontsize=8, pad=8)
-    ax3.tick_params(labelsize=6.5)
-    for _a in (ax, ax2, ax3):
-        for _l in _a.get_yticklabels():
-            _l.set_bbox(dict(fc="white", ec="none", alpha=0.85, pad=0.6))
-    ax3.grid(alpha=0.3, lw=0.4)
-    h, l = ax.get_legend_handles_labels()
-    h2, l2 = ax3.get_legend_handles_labels()
-    fig.legend(h + h2, l + l2, loc="center left", bbox_to_anchor=(0.905, 0.45),
-               frameon=False, fontsize=6.5)
-    save(fig, "P2_petals")
-
-
-# ---------------------------------------------------------------------------
-# P3  surface k^2(AR, theta)
-# ---------------------------------------------------------------------------
-def fig_p3_map(pol):
-    """k^2 and f1 over the (window angle, aspect ratio) plane.
-
-    Drawn as a filled contour map rather than a perspective surface: the
-    quantity is a function of two variables, and a surface of a strongly
-    one-dimensional function (it varies three times more with theta than with
-    AR) reads as cliffs in perspective and hides the structure.  The dots are
-    the 144 actual solver runs; the contours are a periodic spline through
-    them.
+    Returns the computed angles and values on 0-90 deg, a dense 0-360 deg grid,
+    the smoothed curve on that grid, and the mirror images of the computed
+    points (which is where the markers go).
     """
-    from scipy.interpolate import RectBivariateSpline
-    ARs = np.array([2.0, 3.0, 4.0, 5.0, 7.0, 10.0])
-    ths = np.arange(0, 360, 15)
-    Zk = np.zeros((len(ths), len(ARs)))
-    Zf = np.zeros((len(ths), len(ARs)))
-    for j, AR in enumerate(ARs):
-        r = sorted([x for x in pol if x["AR"] == AR and x["shape"] == "cuboid"],
-                   key=lambda z: z["theta_deg"])
-        Zk[:, j] = [z["k2_axial"] for z in r]
-        Zf[:, j] = [z["f1_kHz"] for z in r]
-    lA = np.log10(ARs)
-    the = np.r_[-45, -30, -15, ths, 360, 375, 390]
+    from scipy.interpolate import CubicSpline
+    half = sorted([r for r in rows if r["AR"] == AR and r["shape"] == shape],
+                  key=lambda z: z["theta_deg"])
+    th = np.array([r["theta_deg"] for r in half], float)
+    v = np.array([r[key] for r in half], float)
+    th180 = np.r_[th, 180.0 - th[-2:0:-1]]
+    v180 = np.r_[v, v[-2:0:-1]]
+    cs = CubicSpline(np.r_[th180, 180.0], np.r_[v180, v[0]], bc_type="periodic")
+    dense = np.linspace(0.0, 360.0, 1441)
+    smooth = cs(np.mod(dense, 180.0))
+    mk_t = np.r_[th, 180.0 - th, 180.0 + th, 360.0 - th]
+    mk_v = np.r_[v, v, v, v]
+    return th, v, dense, smooth, mk_t, mk_v
 
-    def fine(Z):
-        ext = np.vstack([Z[-3:], Z, Z[:3]])
-        spl = RectBivariateSpline(the, lA, ext, kx=3, ky=3, s=0)
-        tf = np.linspace(0, 360, 241)
-        Af = np.linspace(lA[0], lA[-1], 81)
-        return tf, Af, spl(tf, Af)
 
-    fig, axs = plt.subplots(2, 1, figsize=(4.6, 3.6), sharex=True)
-    TT, AA = np.meshgrid(ths, lA, indexing="ij")
-    for ax, Z, lab, cm in ((axs[0], Zk, r"$k^2$", "viridis"),
-                           (axs[1], Zf, r"$f_1$ (kHz)", "cividis")):
-        tf, Af, Zg = fine(Z)
-        T, A = np.meshgrid(tf, Af, indexing="ij")
-        cf = ax.contourf(T, A, Zg, levels=18, cmap=cm)
-        cs = ax.contour(T, A, Zg, levels=5, colors="k", linewidths=0.4)
-        ax.clabel(cs, fontsize=5.5, inline=True, inline_spacing=3,
-                  fmt="%.2f" if Z is Zk else "%.0f")
-        ax.scatter(TT.ravel(), AA.ravel(), s=1.5, c="w", alpha=0.65,
-                   linewidths=0)
-        ax.set_yticks(lA)
-        ax.set_yticklabels(["2", "3", "4", "5", "7", "10"])
-        ax.set_ylabel("aspect ratio")
-        fig.colorbar(cf, ax=ax, pad=0.02, label=lab)
+def _polarmap(rows, key, nar=61, nth=361):
+    """Smooth map of key(theta, AR) on the full circle, from the quadrant."""
+    from scipy.interpolate import CubicSpline
+    ars = sorted({r["AR"] for r in rows})
+    thf = np.linspace(0.0, 360.0, nth)
+    Z = np.zeros((len(ars), nth))
+    for i, AR in enumerate(ars):
+        _, _, dense, smooth, _, _ = _fold(rows, AR, key)
+        Z[i] = CubicSpline(dense, smooth)(thf)
+    ar_f = np.geomspace(min(ars), max(ars), nar)
+    Zf = np.zeros((nar, nth))
+    for j in range(nth):
+        Zf[:, j] = np.interp(np.log10(ar_f), np.log10(ars), Z[:, j])
+    return thf, ar_f, Zf
+
+
+def fig_orientation(pol):
+    """Window orientation: normalised polar sections of f1 and k2, and their
+    maps over the aspect ratio."""
+    ARS = (2.0, 5.0, 10.0)
+    fig = plt.figure(figsize=(6.9, 6.1))
+    gs = fig.add_gridspec(2, 2, hspace=0.30, wspace=0.46,
+                          left=0.075, right=0.955, top=0.95, bottom=0.075)
+    cfg = (("f_ext_kHz", (0.945, 1.090), [0.95, 1.05], r"$f_{\rm ext}/f_{\rm ext}(0)$"),
+           ("k2_axial", (0.74, 1.025), [0.8, 0.9], r"$k^2/k^2(0)$"))
+    for k, (key, rlim, rticks, rlab) in enumerate(cfg):
+        ax = fig.add_subplot(gs[0, k], projection="polar")
+        ref = None
+        for i, AR in enumerate(ARS):
+            _, _, dense, smooth, mt_, mv = _fold(pol, AR, key)
+            if AR == 2.0:
+                ref = np.interp(0.0, dense, smooth)
+            ax.plot(np.deg2rad(dense), smooth / ref, "-", color=OI[i], lw=1.2,
+                    label=f"AR = {AR:g}", zorder=2)
+            ax.plot(np.deg2rad(mt_), mv / ref, "o", ms=1.6, color=OI[i],
+                    mfc="none", mew=0.45, zorder=3)
+        if key == "k2_axial":
+            _, _, dense, smooth, mt_e, mv_e = _fold(pol, 2.0, key, "ellipse")
+            ax.plot(np.deg2rad(dense), smooth / ref, "--", color="0.15", lw=1.1,
+                    label="ellipse, equal $M$", zorder=2)
+            ax.plot(np.deg2rad(mt_e), mv_e / ref, "s", ms=1.5, color="0.15",
+                    mfc="none", mew=0.45, zorder=3)
+        ax.set_rlim(*rlim)
+        ax.plot(np.linspace(0, 2 * np.pi, 361), np.ones(361), ":",
+                color="0.55", lw=0.7, zorder=1)
+        ax.set_rticks(rticks)
+        ax.set_yticklabels([f"{v:g}" for v in rticks], fontsize=6.2)
+        ax.set_theta_zero_location("E")
+        ax.set_rlabel_position(118)
+        ax.set_thetagrids(np.arange(0, 360, 45),
+                          labels=["0", "45", "90", "135", "180", "225",
+                                  "270", "315"], fontsize=6.2)
+        ax.tick_params(pad=1)
+        ax.grid(alpha=0.35, lw=0.4)
+        ax.set_title(rlab, fontsize=8, pad=13)
+        ax.text(0.02, 1.10, "(%s)" % "ab"[k], transform=ax.transAxes,
+                fontsize=8.5, fontweight="bold")
+        for lb in ax.get_yticklabels():
+            lb.set_bbox(dict(fc="white", ec="none", alpha=0.9, pad=0.5))
+        if k == 0:
+            ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.10),
+                      frameon=False, fontsize=6.3, ncol=2, handlelength=1.3,
+                      columnspacing=0.8)
+    for k, (key, lab, cm, fmt) in enumerate((
+            ("k2_axial", r"$k^2$", "viridis", "%.2f"),
+            ("f_ext_kHz", r"$f_{\rm ext}$ (kHz)", "cividis", "%.0f"))):
+        ax = fig.add_subplot(gs[1, k])
+        thf, arf, Z = _polarmap(pol, key)
+        m = thf <= 180.0
+        T, A = np.meshgrid(thf[m], arf)
+        cf = ax.contourf(T, A, Z[:, m], levels=16, cmap=cm)
+        cs = ax.contour(T, A, Z[:, m], levels=4, colors="k", linewidths=0.4)
+        ax.clabel(cs, fontsize=5.4, inline=True, inline_spacing=2, fmt=fmt)
+        for AR in sorted({round(r["AR"], 3) for r in pol}):
+            ax.plot([0, 180], [AR, AR], "o", ms=1.1, color="w", alpha=0.85)
+        ax.set_xlim(0, 180)
+        ax.set_xticks([0, 45, 90, 135, 180])
+        ax.set_yscale("log")
+        ax.set_yticks([2, 3, 5, 7, 10])
+        ax.set_yticklabels(["2", "3", "5", "7", "10"])
+        ax.yaxis.set_minor_locator(matplotlib.ticker.NullLocator())
+        ax.set_xlabel(r"window angle $\theta$ (deg)", fontsize=7.5)
+        ax.set_ylabel("aspect ratio", fontsize=7.5)
+        ax.tick_params(labelsize=6.5)
         ax.grid(False)
-    axs[1].set_xlabel(r"window angle $\theta$ (deg)")
-    axs[0].text(0.02, 0.94, "(a)", transform=axs[0].transAxes, fontsize=8,
-                va="top", ha="left",
-                bbox=dict(fc="w", ec="none", alpha=0.75, pad=1.0))
-    axs[1].text(0.02, 0.94, "(b)", transform=axs[1].transAxes, fontsize=8,
-                va="top", ha="left",
-                bbox=dict(fc="w", ec="none", alpha=0.75, pad=1.0))
-    save(fig, "P3_map_k2_AR_theta")
+        ax.text(0.03, 0.93, "(%s)" % "cd"[k], transform=ax.transAxes,
+                fontsize=8.5, fontweight="bold", va="top",
+                bbox=dict(fc="w", ec="none", alpha=0.8, pad=1.0))
+        cb = fig.colorbar(cf, ax=ax, pad=0.015, fraction=0.05)
+        cb.set_label(lab, fontsize=7.5)
+        cb.ax.tick_params(labelsize=6.5)
+    save(fig, "F4_orientation")
 
 
-# ---------------------------------------------------------------------------
-# P4  deformed mode, coloured by the open-circuit potential
-# ---------------------------------------------------------------------------
 def fig_p4_modeshape():
     Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)
     mesh = f6.mesh_rect(48, 4, LPLATE, HPLATE)
@@ -398,7 +412,7 @@ def fig_p4_modeshape():
                       pad=0.015, aspect=34)
     cb.set_label(r"$\phi$ (mV), open circuit", fontsize=7)
     cb.ax.tick_params(labelsize=5.5, pad=1)
-    save(fig, "P4_mode_shape_potential")
+    save(fig, "FB2_modes")
     return {"V_open_V": V, "magnification": float(magn * 1e3),
             "u_peak_nm": 10.0}
 
@@ -406,57 +420,80 @@ def fig_p4_modeshape():
 # ---------------------------------------------------------------------------
 # P5  root locus
 # ---------------------------------------------------------------------------
-def fig_p5_rootlocus():
-    from matplotlib.collections import LineCollection
+def fig_damping():
+    """The fractional element: where its poles go, and what it means for the
+    damping ratio."""
+    fig, axs = plt.subplots(1, 2, figsize=(6.9, 2.75),
+                            gridspec_kw={"wspace": 0.30, "left": 0.085,
+                                         "right": 0.975, "bottom": 0.19,
+                                         "top": 0.90})
+    ax = axs[0]
     alphas = np.linspace(0.2, 1.0, 25)
     w0 = 2 * np.pi * 6.7273e6
     taus = [0.5e-9, 1e-9, 2e-9, 4e-9, 8e-9, 16e-9, 32e-9]
-    fig, ax = plt.subplots(figsize=(3.6, 2.8))
-    cmap = plt.get_cmap("viridis")
+    cmap = plt.get_cmap("cividis")
     for i, tau in enumerate(taus):
-        s = []
         s0 = None
-        for a in alphas:                      # continuation: keep the branch
+        xs, ys = [], []
+        for a in alphas:
             z = complex(f6.complex_frequency(w0, tau, a, s0=s0))
             s0 = z
-            s.append(z)
-        s = np.array(s)
-        x = -s.real / w0
-        y = np.abs(s.imag) / w0
-        ok = x > 0
-        pts = np.array([x[ok], y[ok]]).T.reshape(-1, 1, 2)
-        segs = np.concatenate([pts[:-1], pts[1:]], axis=1)
-        lc = LineCollection(segs, cmap=cmap,
-                            array=np.linspace(0.2, 1.0, len(segs)))
-        lc.set_linewidth(1.5)
-        ax.add_collection(lc)
-        ax.plot(x[ok][-1], y[ok][-1], "o", ms=3.2, mfc="w", mec="0.2", mew=0.5)
-        if i in (0, len(taus) - 1):           # label the ends of the family only
-            off = (4, -8) if i == 0 else (-2, 6)
-            ax.annotate(rf"$\tau={tau*1e9:g}$ ns", (x[ok][-1], y[ok][-1]),
-                        textcoords="offset points", xytext=off, fontsize=6)
+            xs.append(-z.real / w0)
+            ys.append(abs(z.imag) / w0)
+        xs, ys = np.array(xs), np.array(ys)
+        col = cmap(0.12 + 0.76 * i / (len(taus) - 1))
+        ax.plot(xs, ys, "-", color=col, lw=1.15, zorder=2)
+        mk = [0, 6, 12, 18, 24]
+        ax.plot(xs[mk], ys[mk], "o", ms=2.7, color=col, mfc="w", mew=0.55,
+                zorder=3)
+        if i in (0, len(taus) - 1):
+            first = i == 0
+            ax.annotate(rf"$\tau={tau*1e9:g}$ ns", (xs[0], ys[0]),
+                        textcoords="offset points",
+                        xytext=(-42, 0) if first else (5, 5),
+                        ha="right" if first else "left", va="center",
+                        fontsize=6.0, color="0.25")
     ax.set_xscale("log")
-    ax.set_xlim(3e-3, 1.2)
-    ax.set_ylim(0.85, 2.25)
-    ax.axhline(1.0, color="0.6", lw=0.6, ls=":")
-    ax.set_xlabel(r"$-\mathrm{Re}\,s/\omega_0$  (damping)")
+    ax.set_xlim(5e-3, 1.5)
+    ax.set_ylim(0.955, 1.52)
+    ax.axhline(1.0, color="0.55", lw=0.6, ls=":", zorder=1)
+    ax.text(0.03, 0.94, r"markers: $\alpha=0.2,0.4,0.6,0.8,1$",
+            transform=ax.transAxes, ha="left", va="top", fontsize=5.8)
+    ax.set_xlabel(r"$-\mathrm{Re}\,s/\omega_0$")
     ax.set_ylabel(r"$|\mathrm{Im}\,s|/\omega_0$")
-    sm = matplotlib.cm.ScalarMappable(
-        cmap=cmap, norm=matplotlib.colors.Normalize(0.2, 1.0))
-    fig.colorbar(sm, ax=ax, shrink=0.85, pad=0.03, label=r"$\alpha$")
-    ax.set_title(r"$\tau=0.5$--$32$ ns; open marker at $\alpha=1$", fontsize=7)
-    save(fig, "P5_root_locus")
+    ax.tick_params(labelsize=6.5)
+    ax.set_title(r"(a) poles of the fractional mode", fontsize=7.8, loc="left")
+    axb = axs[1]
+    al = np.linspace(0.2, 1.0, 41)
+    wt = np.logspace(-1.5, 1.5, 61)
+    Z = np.zeros((al.size, wt.size))
+    for j, a in enumerate(al):
+        s0 = None
+        for i, x in enumerate(wt):
+            s = complex(f6.complex_frequency(1.0, x, a, s0=s0))
+            s0 = s
+            Z[j, i] = -s.real / abs(s)
+    A, W = np.meshgrid(al, np.log10(wt), indexing="ij")
+    cf = axb.contourf(A, W, Z, levels=16, cmap="cividis")
+    cs = axb.contour(A, W, Z, levels=[0.05, 0.1, 0.2, 0.4, 0.7],
+                     colors="k", linewidths=0.45)
+    axb.clabel(cs, fontsize=5.6, inline=True, inline_spacing=2, fmt="%.2f")
+    axb.set_xlabel(r"$\alpha$")
+    axb.set_ylabel(r"$\log_{10}\omega\tau$")
+    axb.tick_params(labelsize=6.5)
+    axb.set_title(r"(b) damping ratio $\zeta(\alpha,\omega\tau)$",
+                  fontsize=7.8, loc="left")
+    cb = fig.colorbar(cf, ax=axb, pad=0.02, fraction=0.055)
+    cb.set_label(r"$\zeta$", fontsize=7.5)
+    cb.ax.tick_params(labelsize=6.5)
+    save(fig, "F6_damping")
 
-
-# ---------------------------------------------------------------------------
-# P6  waterfall
-# ---------------------------------------------------------------------------
 def fig_p6_waterfall():
-    """Ring-down for four Caputo orders.
+    """Ring-down for eight Caputo orders.
 
-    Drawn as coloured time traces rather than a 3-D waterfall: with four
-    orders the perspective view is dominated by the overlapping of the traces
-    and the alpha axis carries no more information than the colour does.
+    Drawn as coloured time traces rather than a 3-D waterfall: the
+    perspective view is dominated by the overlapping of the traces and the
+    alpha axis carries no more information than the colour does.
     """
     Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)
     mesh = f6.mesh_rect(24, 2, LPLATE, HPLATE)
@@ -470,7 +507,7 @@ def fig_p6_waterfall():
     row = int(np.searchsorted(idx, mdl.mech_dof[tip][0]))
     x0 = Phi[:, j] * (10e-9 / abs(Phi[row, j]))
     tau = 3e-9
-    alphas = [1.0, 0.9, 0.7, 0.5]
+    alphas = [1.0, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4]
     T = 10 * 2 * np.pi / ws[j]
     N = 4000
     fig, ax = plt.subplots(1, 2, figsize=(6.6, 2.5))
@@ -484,7 +521,7 @@ def fig_p6_waterfall():
                                        v0=np.zeros(idx.size))
         u = (Phi[row, :] @ y) * 1e9
         V = (d @ Phi) @ y / beta
-        c = cmap(i / (len(alphas) - 1))
+        c = (OI + ["#8250A0"])[i % 9]
         ax[0].plot(t * 1e6, u, color=c, lw=1.1, label=rf"$\alpha={a:g}$")
         ax[1].plot(t * 1e6, V, color=c, lw=1.1)
         # log-decrement estimate on the first two positive peaks
@@ -499,54 +536,79 @@ def fig_p6_waterfall():
     ax[0].legend(frameon=False, fontsize=6.5, ncol=2)
     ax[0].set_title("(a) tip displacement", fontsize=7.5)
     ax[1].set_title("(b) open-circuit voltage", fontsize=7.5)
-    save(fig, "P6_ringdown")
+    save(fig, "F9_ringdown")
     return out
 
 
 # ---------------------------------------------------------------------------
 # P7  thickness
 # ---------------------------------------------------------------------------
+
+
 def fig_p7_thickness(thick, closed_form):
+    """The two couplings against the plate thickness, and their ratio."""
     h = np.array([r["h_um"] for r in thick])
     kf = np.array([r["k2_flexo"] for r in thick])
     ke = np.array([r["k2_ext"] for r in thick])
-    fig, ax = plt.subplots(1, 2, figsize=(6.6, 2.6),
-                           gridspec_kw={"width_ratios": [1.15, 1]})
-    ax[0].loglog(h, kf, "o-", color=OI[0], label=r"flexo $k^2$ (48$\times$4)")
-    ax[0].loglog([r["h_um"] for r in thick if "k2_flexo_96" in r],
-                 [r["k2_flexo_96"] for r in thick if "k2_flexo_96" in r],
-                 "s", mfc="none", ms=5.5, color=OI[1], label=r"96$\times$4")
-    ax[0].loglog(h, kf[-1] * (h[-1] / h) ** 2, "k:", lw=0.8, alpha=0.6,
-                 label=r"$h^{-2}$")
+    fig, ax = plt.subplots(1, 3, figsize=(6.9, 2.65),
+                           gridspec_kw={"width_ratios": [1.1, 1.0, 0.95],
+                                        "wspace": 0.42, "left": 0.075,
+                                        "right": 0.985, "bottom": 0.18,
+                                        "top": 0.90})
+    ax[0].loglog(h, kf, "-", color=OI[0], lw=1.3,
+                 label=r"FEM, 48$\times$4")
+    ax[0].loglog(h, kf, "o", ms=3.4, color=OI[0], mfc="none", mew=0.6)
+    h96 = [r["h_um"] for r in thick if "k2_flexo_96" in r]
+    k96 = [r["k2_flexo_96"] for r in thick if "k2_flexo_96" in r]
+    ax[0].loglog(h96, k96, "s", mfc="none", ms=5.0, mew=0.9, color=OI[1],
+                 label=r"FEM, 96$\times$4")
+    ax[0].loglog(h, kf[-1] * (h[-1] / h) ** 2, ":", lw=0.9, color="0.45",
+                 label=r"$h^{-2}$ guide")
+    slopes = []
     for i in range(len(h) - 1):
-        sl = ((np.log10(kf[i + 1]) - np.log10(kf[i])) /
-              (np.log10(h[i + 1]) - np.log10(h[i])))
+        slopes.append((np.log10(kf[i + 1]) - np.log10(kf[i])) /
+                      (np.log10(h[i + 1]) - np.log10(h[i])))
+    print("  flexo slopes:", ", ".join(f"{v:.2f}" for v in slopes))
+    for i, dy in ((0, -13), (len(slopes) // 2, -12), (len(slopes) - 1, 8)):
         xm = np.sqrt(h[i] * h[i + 1])
         ym = np.sqrt(kf[i] * kf[i + 1])
-        ax[0].annotate(f"{sl:.2f}", (xm, ym), textcoords="offset points",
-                       xytext=(4, -12), fontsize=6.5, color=OI[0])
+        ax[0].annotate(f"{slopes[i]:.2f}", (xm, ym),
+                       textcoords="offset points", xytext=(3, dy),
+                       fontsize=6.2, color=OI[0])
     ax[0].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[0].set_ylabel(r"$k^2$ (bending)")
     ax[0].invert_xaxis()
-    ax[0].legend(frameon=False, fontsize=6.5, loc="upper left")
-    ax[0].set_title("(a) flexoelectric, local slope", fontsize=7.5)
-    ax[1].semilogx(h, ke, "s-", color=OI[2], label=r"FEM, 48$\times$4")
-    ax[1].semilogx(h, [r["k2_ext_24"] for r in thick], "s--", ms=4, lw=0.9,
-                   alpha=0.7, color=OI[3], label=r"FEM, 24$\times$2")
+    ax[0].set_ylim(1.2e-4, 1.1e-2)
+    ax[0].tick_params(labelsize=6.5)
+    ax[0].legend(frameon=False, fontsize=6.2, loc="upper left")
+    ax[0].set_title("(a) flexoelectric", fontsize=7.8, loc="left")
+    ax[1].semilogx(h, ke, "-", color=OI[2], lw=1.3, label=r"FEM, 48$\times$4")
+    ax[1].semilogx(h, ke, "s", ms=3.4, color=OI[2], mfc="none", mew=0.6)
+    ax[1].semilogx(h, [r["k2_ext_24"] for r in thick], "--", ms=4, lw=0.9,
+                   alpha=0.8, color=OI[3], label=r"FEM, 24$\times$2")
     ax[1].axhline(closed_form, color="k", lw=0.9, ls=":",
                   label=r"$e^{\mathrm{T}}C^{-1}e/\kappa$")
     ax[1].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[1].set_ylabel(r"$k^2$ (quasi-static)")
     ax[1].invert_xaxis()
-    ax[1].set_ylim(0.545, 0.575)
-    ax[1].legend(frameon=False, fontsize=6.2, loc="lower left")
-    ax[1].set_title("(b) piezoelectric, independent of $h$", fontsize=7.5)
-    save(fig, "P7_thickness")
+    ax[1].set_ylim(0.548, 0.570)
+    ax[1].tick_params(labelsize=6.5)
+    ax[1].legend(frameon=False, fontsize=6.0, loc="lower left")
+    ax[1].set_title("(b) piezoelectric", fontsize=7.8, loc="left")
+    ax[2].loglog(h, kf / ke, "-", color=OI[4], lw=1.3)
+    ax[2].loglog(h, kf / ke, "o", ms=3.4, color=OI[4], mfc="none", mew=0.6)
+    ax[2].axhline(1.0, color="0.45", lw=0.9, ls="--")
+    ax[2].set_xlabel(r"thickness $h$ ($\mu$m)")
+    ax[2].set_ylabel(r"ratio $k^2_{\rm flexo}/k^2_{\rm piezo}$")
+    ax[2].invert_xaxis()
+    ax[2].set_ylim(2.0e-4, 3.0)
+    ax[2].tick_params(labelsize=6.5)
+    ax[2].set_title("(c) the two together", fontsize=7.8, loc="left")
+    save(fig, "F8_thickness")
+    return {"n": int(h.size), "slope_thick": float(slopes[0]),
+            "slope_thin": float(slopes[-1])}
 
 
-# ---------------------------------------------------------------------------
-# P8  mode tracking
-# ---------------------------------------------------------------------------
 def fig_p8_mac(mt_data):
     rows = mt_data["rows"]
     hs = np.array([r["h_um"] for r in rows])
@@ -579,123 +641,50 @@ def fig_p8_mac(mt_data):
     ax[1].legend(frameon=False, fontsize=6.2, loc="lower left")
     ax[1].set_title(r"(b) $f_2/f_1$ (labels) never approaches 1",
                     fontsize=7.5)
-    save(fig, "P8_mode_tracking")
+    save(fig, "FB1_tracking")
 
 
 # ---------------------------------------------------------------------------
 # P9  damping surface
 # ---------------------------------------------------------------------------
-def fig_p9_damping_surface():
-    al = np.linspace(0.2, 1.0, 17)
-    wt = np.logspace(-1.5, 1.5, 25)
-    Z = np.zeros((len(al), len(wt)))
-    for j, a in enumerate(al):
-        s0 = None
-        for i, x in enumerate(wt):
-            s = complex(f6.complex_frequency(1.0, x, a, s0=s0))
-            s0 = s
-            Z[j, i] = -s.real / abs(s)
-    A, W = np.meshgrid(al, wt, indexing="ij")
-    fig = plt.figure(figsize=(4.4, 3.1))
-    ax = fig.add_subplot(111, projection="3d")
-    surf = ax.plot_surface(A, np.log10(W), Z, cmap="cividis", rstride=1,
-                           cstride=1, linewidth=0.2, edgecolor="0.3",
-                           alpha=0.96)
-    ax.contour(A, np.log10(W), Z, zdir="z", offset=-0.06, levels=12,
-               cmap="cividis", linewidths=0.7)
-    ax.set_xlabel(r"$\alpha$", labelpad=1)
-    ax.set_ylabel(r"$\log_{10}\omega\tau$", labelpad=1)
-    ax.set_zlabel(r"$\zeta$", labelpad=1)
-    ax.set_zlim(0.0, 1.02)
-    ax.view_init(elev=32, azim=-118)
-    ax.tick_params(labelsize=6, pad=-1)
-    ax.set_zlim(-0.06, 1.02)
-    # the validity window of the element: omega*tau <= 1 (Sec. limits)
-    al_band = np.array([[0.2, 1.0], [0.2, 1.0]])
-    ax.plot_surface(al_band, np.array([[-1.5, -1.5], [0.0, 0.0]]),
-                    np.full((2, 2), -0.062), color="0.30", alpha=0.30,
-                    linewidth=0, shade=False)
-    ax.plot([0.2, 1.0], [0.0, 0.0], [-0.061, -0.061], ls="--", lw=1.1,
-            color="k")
-    ax.text2D(0.012, 0.995, "shaded floor: " r"$\omega\tau\leq1$,"
-              "\nthe operating band of the model",
-              transform=ax.transAxes, fontsize=6.2, va="top", color="0.15",
-              linespacing=1.35)
-    fig.colorbar(surf, ax=ax, shrink=0.55, pad=0.06, label=r"$\zeta$")
-    save(fig, "P9_damping_surface")
-
-
-# ---------------------------------------------------------------------------
-# P10 window size
-# ---------------------------------------------------------------------------
-def fig_p10_window():
-    mesh = f6.mesh_rect(20, 4, 1.0, 0.2)
-    mat = f6.isotropic_plane_strain(2e11, 0.3, 7850)
-
-    def ur(Mg, grad):
-        m = f6.assemble(mesh, mat, Mg, gradient=grad)
-        K, Ms, idx, _ = f6.reduce(m, "short")
-        f = m.edge_traction(tx=1e6)
-        U = np.zeros(m.ndof_mech)
-        U[idx] = np.linalg.solve(K, f[idx])
-        right = [n for n, xy in enumerate(mesh.nodes) if abs(xy[0] - 1) < 1e-12]
-        return float(np.mean([U[m.mech_dof[n][0]] for n in right]))
-
-    u0 = ur(np.zeros((2, 2)), False)
-    ls = np.linspace(0.01, 0.20, 12)
-    y1 = np.array([ur(f6.second_moment("ellipsoid", l, l), True) / u0 for l in ls])
-    y2 = np.array([ur(f6.second_moment("cuboid", l, l), True) / u0 for l in ls])
-    y3 = np.array([ur(f6.second_moment("cuboid", l * np.sqrt(3 / 5),
-                                       l * np.sqrt(3 / 5)), True) / u0
-                   for l in ls])
-    fig, ax = plt.subplots(figsize=(3.5, 2.6))
-    ax.plot(ls, y1, "-", color=OI[0], lw=1.6, label="ellipsoid, semi-axis $l$")
-    ax.plot(ls, y2, "-", color=OI[1], lw=1.6, label="cuboid, half-width $l$")
-    ax.plot(ls, y3, "--", color=OI[2], lw=1.5,
-            label=r"cuboid, equal $M$ ($a=l\sqrt{3/5}$)")
-    ax.annotate(f"{y1[-1]:.3f}", (ls[-1], y1[-1]), xytext=(-24, 4),
-                textcoords="offset points", fontsize=6.5, color=OI[0])
-    ax.annotate(f"{y2[-1]:.3f}", (ls[-1], y2[-1]), xytext=(-24, -10),
-                textcoords="offset points", fontsize=6.5, color=OI[1])
-    ax.annotate(f"{y3[-1]:.3f}", (ls[-1], y3[-1]), xytext=(-24, -2),
-                textcoords="offset points", fontsize=6.5, color=OI[2])
-    ax.set_xlabel(r"$l/L_x$")
-    ax.set_ylabel(r"$u_R/u_{R,\rm classical}$")
-    ax.legend(frameon=False, fontsize=6.5)
-    save(fig, "P10_window_shape")
 
 
 def main():
     import time
     t0 = time.time()
-    only = [a for a in sys.argv[1:] if a.startswith("P")]
+    only = [a for a in sys.argv[1:] if a.startswith("F")]
     if only:
         # redraw a subset from the stored sweep -- handy while polishing
         with open(os.path.join(ROOT, "results", "paper_figures_data.json")) as fh:
             pol = json.load(fh)["polar"]
-        figs = {"P1": lambda p: fig_p1_geometry(), "P2": fig_p2_petals,
-                "P3": fig_p3_map, "P4": lambda p: fig_p4_modeshape(),
-                "P5": lambda p: fig_p5_rootlocus(),
-                "P6": lambda p: fig_p6_waterfall(),
-                "P9": lambda p: fig_p9_damping_surface(),
-                "P10": lambda p: fig_p10_window(),
-                "P11": lambda p: fig_p11_convergence(),
-                "P12": lambda p: fig_p12_fields(),
-                "P13": lambda p: fig_p13_boundary_layer(),
-                "P14": lambda p: fig_p14_design_space(p)}
+        demo = json.load(open(os.path.join(ROOT, "results", "demo.json")))
+        cc = json.load(open(os.path.join(ROOT, "results",
+                                         "coupling_check.json")))
+        figs = {"F1": lambda: fig_p1_geometry(),
+                "F2": lambda: fig_p11_convergence(),
+                "F3": lambda: fig_p12_fields(),
+                "F4": lambda: fig_orientation(pol),
+                "F5": lambda: fig_p14_design_space(pol),
+                "F6": lambda: fig_damping(),
+                "F7": lambda: fig_window(),
+                "F8": lambda: fig_p7_thickness(demo["flexo_thickness"],
+                                               cc["closed_form"]["k2_2d_closed"]),
+                "F9": lambda: fig_p6_waterfall(),
+                "FB1": lambda: fig_p8_mac(json.load(open(os.path.join(
+                    ROOT, "results", "mode_tracking.json")))),
+                "FB2": lambda: fig_p4_modeshape()}
         for k in only:
             if k in figs:
-                figs[k](pol)
+                print(figs[k]())
                 print(f"    {k} redrawn")
         return 0
     print("  polar sweep")
-    pol = polar_sweep()
+    pol, sym = polar_sweep()
     print("  figures")
     fig_p1_geometry()
-    fig_p2_petals(pol)
-    fig_p3_map(pol)
-    info = {"P4": fig_p4_modeshape()}
-    fig_p5_rootlocus()
+    fig_orientation(pol)
+    info = {"P2_symmetry": sym, "P4": fig_p4_modeshape()}
+    fig_damping()
     info["P6"] = fig_p6_waterfall()
     with open(os.path.join(ROOT, "results", "demo.json")) as fh:
         demo = json.load(fh)
@@ -705,12 +694,10 @@ def main():
     with open(os.path.join(ROOT, "results", "mode_tracking.json")) as fh:
         mtdata = json.load(fh)
     fig_p8_mac(mtdata)
-    fig_p9_damping_surface()
-    fig_p10_window()
     print("  new panels")
     info.update(main_new_figures(pol))
     with open(os.path.join(ROOT, "results", "paper_figures_data.json"), "w") as fh:
-        json.dump({"polar": pol, "notes": info}, fh, indent=1)
+        json.dump({"polar": pol, "symmetry": sym, "notes": info}, fh, indent=1)
     print(f"  done in {time.time() - t0:.0f} s -> results/figures/paper/")
     return 0
 
@@ -768,7 +755,7 @@ def fig_p11_convergence():
     ax2.tick_params(axis="y", colors="#D55E00")
     ax2.grid(False); ax2.spines["right"].set_visible(True)
     ax.set_title("(b)", loc="left")
-    save(fig, "P11_convergence")
+    save(fig, "F2_convergence")
     return {"convergence": rec}
 
 
@@ -829,7 +816,7 @@ def fig_p12_fields():
         ax.set_title(tag, loc="left")
         ax.set_aspect("auto")
         ax.grid(False)
-    save(fig, "P12_fields")
+    save(fig, "F3_fields")
     return {"V_open_V": V, "u_peak_nm": 10.0}
 
 
@@ -858,90 +845,140 @@ def _static_w(Mg, nx=48, ny=4, L=LPLATE, h=HPLATE):
     return x, w
 
 
-def fig_p13_boundary_layer():
-    """The clamped-edge boundary layer: the gradient solution against the
-    classical one of the same geometry and load."""
-    x0, w_el = _static_w(np.zeros((2, 2)))          # Mg = 0: classical
+def fig_window():
+    """What the window size does: the equal-M collapse and the profiles."""
+    fig, axs = plt.subplots(1, 3, figsize=(6.9, 2.55),
+                            gridspec_kw={"width_ratios": [1.1, 1.0, 1.0],
+                                         "wspace": 0.34, "left": 0.075,
+                                         "right": 0.985, "bottom": 0.19,
+                                         "top": 0.90})
+    mesh = f6.mesh_rect(20, 4, 1.0, 0.2)
+    mat = f6.isotropic_plane_strain(2e11, 0.3, 7850)
+
+    def ur(Mg, grad):
+        m = f6.assemble(mesh, mat, Mg, gradient=grad)
+        K, Ms, idx, _ = f6.reduce(m, "short")
+        f = m.edge_traction(tx=1e6)
+        U = np.zeros(m.ndof_mech)
+        U[idx] = np.linalg.solve(K, f[idx])
+        right = [n for n, xy in enumerate(mesh.nodes) if abs(xy[0] - 1) < 1e-12]
+        return float(np.mean([U[m.mech_dof[n][0]] for n in right]))
+
+    u0 = ur(np.zeros((2, 2)), False)
+    ls = np.linspace(0.01, 0.20, 12)
+    y1 = np.array([ur(f6.second_moment("ellipsoid", l, l), True) / u0
+                   for l in ls])
+    y2 = np.array([ur(f6.second_moment("cuboid", l, l), True) / u0 for l in ls])
+    y3 = np.array([ur(f6.second_moment("cuboid", l * np.sqrt(3 / 5),
+                                       l * np.sqrt(3 / 5)), True) / u0
+                   for l in ls])
+    ax = axs[0]
+    for y, lab, col, lsm, dy in (
+            (y1, "ellipsoid, semi-axis $l$", OI[0], "-", 8),
+            (y2, "cuboid, half-width $l$", OI[1], "-", -12),
+            (y3, r"cuboid, equal $M$", OI[2], "--", None)):
+        ax.plot(ls, y, lsm, color=col, lw=1.3, label=lab)
+        ax.plot(ls, y, "o", ms=2.3, color=col, mfc="none", mew=0.5)
+        if dy is not None:
+            ax.annotate(f"{y[-1]:.3f}", (ls[-1], y[-1]), xytext=(2, dy),
+                        textcoords="offset points", fontsize=6.0, color=col,
+                        annotation_clip=False)
+    ax.set_xlim(0.0, 0.215)
+    ax.set_ylim(0.912, 1.004)
+    ax.set_xlabel(r"$l/L_x$")
+    ax.set_ylabel(r"$u_R/u_{R}^{\rm classical}$")
+    ax.tick_params(labelsize=6.5)
+    ax.set_title("(a) loaded edge", fontsize=7.8, loc="left")
+    ax.legend(frameon=False, fontsize=6.0, loc="lower left")
+    x0, w_el = _static_w(np.zeros((2, 2)))
     grid = x0.reshape(5, 49)[2]
     w_el = w_el.reshape(5, 49)[2]
     recs = []
     for ratio in (0.05, 0.1, 0.2):
-        a1 = ratio * LPLATE
-        x, w = _static_w(f6.second_moment("cuboid", a1, 1e-6, 0.0))
-        pw = w.reshape(5, 49)[2]
-        recs.append((ratio, pw))
-        # decay length: where the difference falls to 1/e of its edge value
-    fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.5))
-    ax = axs[0]
+        x, w = _static_w(f6.second_moment("cuboid", ratio * LPLATE, 1e-6, 0.0))
+        recs.append((ratio, w.reshape(5, 49)[2]))
+    axb = axs[1]
+    axc = axs[2]
     for k, (ratio, pw) in enumerate(recs):
-        ax.plot(grid / LPLATE, pw / pw[-1], "-",
-                color=["#0072B2", "#D55E00", "#009E73"][k],
-                label=rf"$a/L={ratio}$")
-    ax.set_xlabel(r"$x/L$"); ax.set_ylabel(r"$w(x)/w(L)$")
-    ax.legend(frameon=False, fontsize=6.5); ax.set_title("(a)", loc="left")
-    ax = axs[1]
-    lens = []
-    for k, (ratio, pw) in enumerate(recs):
+        axb.plot(grid / LPLATE, pw / pw[-1], "-", color=OI[k], lw=1.3,
+                 label=rf"$a/L={ratio}$")
+        axb.plot(grid[::8] / LPLATE, (pw / pw[-1])[::8], "o", ms=2.3,
+                 color=OI[k], mfc="none", mew=0.5)
         d = np.abs(pw - w_el) / abs(w_el[-1])
-        ax.semilogy(grid / LPLATE, np.maximum(d, 1e-12), "-",
-                    color=["#0072B2", "#D55E00", "#009E73"][k],
-                    label=rf"$a/L={ratio}$")
-        i0 = int(np.argmax(d))
-        target = d[i0] / np.e
-        idxs = np.where(d[i0:] < target)[0]
-        lens.append(float(grid[idxs[0]]) if len(idxs) else np.nan)
-    ax.set_xlabel(r"$x/L$"); ax.set_ylabel(r"$|w-w_{\rm class}|/w_{\rm class}(L)$")
-    ax.set_xlim(0, 1.0); ax.legend(frameon=False, fontsize=6.5)
-    ax.set_title("(b)", loc="left")
-    save(fig, "P13_boundary_layer")
-    return {"ratios": [r[0] for r in recs],
-            "decay_length_um": [l * 1e6 for l in lens]}
+        nz = d > 0
+        axc.semilogy((grid / LPLATE)[nz], d[nz], "-", color=OI[k], lw=1.3)
+        axc.semilogy((grid[::8] / LPLATE)[nz[::8]], d[::8][nz[::8]], "o",
+                     ms=2.3, color=OI[k], mfc="none", mew=0.5)
+    axb.set_xlabel(r"$x/L$")
+    axb.set_ylabel(r"$w(x)/w(L)$")
+    axb.tick_params(labelsize=6.5)
+    axb.set_title("(b) clamped plate", fontsize=7.8, loc="left")
+    axb.legend(frameon=False, fontsize=6.2, loc="upper left")
+    axc.set_xlabel(r"$x/L$")
+    axc.set_ylabel(r"$|w-w_{\rm cl}|/w_{\rm cl}(L)$")
+    axc.tick_params(labelsize=6.5)
+    axc.set_xlim(0, 1.0)
+    axc.set_title("(c) departure from the classical", fontsize=7.8, loc="left")
+    save(fig, "F7_window")
 
 
-# ---------------------------------------------------------------------------
-# P14  design-space map over window angle and window aspect ratio
-# ---------------------------------------------------------------------------
 def fig_p14_design_space(pol):
-    import numpy as np
-    th = np.array([r["theta_deg"] for r in pol], float)
-    ar = np.array([r["AR"] for r in pol], float)
-    k2 = np.array([r["k2_axial"] for r in pol], float)
-    f1 = np.array([r["f_axial_kHz"] for r in pol], float)
-    cub = np.array([r["shape"] == "cuboid" for r in pol])
-    TH, AR = np.meshgrid(np.unique(th), np.unique(ar))
-    def grid(v):
-        out = np.full(TH.shape, np.nan)
-        for i, a in enumerate(np.unique(ar)):
-            sel = cub & (ar == a)
-            o = np.argsort(th[sel])
-            out[i, :] = v[sel][o]
-        return out
-    K2, F1 = grid(k2), grid(f1)
-    rel = K2 / K2[:, :1] - 1.0
-    M11 = np.array([r["Mg_xx"] for r in pol])
-    M22 = np.array([r["Mg_yy"] for r in pol])
-    aniso = grid((M11 - M22) / (M11 + M22))
-    fig, axs = plt.subplots(2, 2, figsize=(6.6, 4.2), layout="constrained")
-    for ax, (Z, tag, lab, cm) in zip(axs.ravel(), [
-            (F1, "(a)", r"$f_1$ (kHz)", "viridis"),
-            (K2, "(b)", r"$k^2$", "viridis"),
-            (100 * rel, "(c)", r"$\Delta k^2/k^2(\theta{=}0)$ (%)", "cividis"),
-            (aniso, "(d)", r"$(M_{11}-M_{22})/(M_{11}+M_{22})$", "cividis")]):
-        m = ax.pcolormesh(TH, AR, Z, shading="gouraud", cmap=cm)
-        cb = fig.colorbar(m, ax=ax, pad=0.02, fraction=0.046)
-        cb.set_label(lab, fontsize=7); cb.ax.tick_params(labelsize=6)
-        ax.set_xlabel(r"window angle $\theta$ (deg)")
-        ax.set_ylabel("aspect ratio")
-        ax.set_title(tag, loc="left"); ax.grid(False)
-    save(fig, "P14_design_space")
-    return {"n": int(len(pol))}
+    """The two quantities that are not already in the polar sections: the
+    change of the coupling relative to the aligned window, and the anisotropy
+    of the second-moment tensor that causes it."""
+    fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.9),
+                            gridspec_kw={"wspace": 0.26, "left": 0.10,
+                                         "right": 0.975, "bottom": 0.19,
+                                         "top": 0.90})
+    ars = sorted({r["AR"] for r in pol})
+    half = sorted([r for r in pol if r["AR"] == ars[0]
+                   and r["shape"] == "cuboid"], key=lambda z: z["theta_deg"])
+    th = np.array([r["theta_deg"] for r in half], float)
+    M11 = np.array([r["Mg_xx"] for r in half])
+    M22 = np.array([r["Mg_yy"] for r in half])
+    an = (M11 - M22) / (M11 + M22)
+    ax = axs[0]
+    for i, AR in enumerate(ars):
+        h = sorted([r for r in pol if r["AR"] == AR and r["shape"] == "cuboid"],
+                   key=lambda z: z["theta_deg"])
+        k2 = np.array([r["k2_axial"] for r in h])
+        rel = 100.0 * (k2 / k2[0] - 1.0)
+        ax.plot(th, rel, "-", color=OI[i], lw=1.15, label=f"AR = {AR:g}")
+        ax.plot(th[::2], rel[::2], "o", ms=2.2, color=OI[i], mfc="none",
+                mew=0.5)
+        if i == 0:
+            worst = (rel.min(), AR, th[np.argmin(rel)])
+        if rel.min() < worst[0]:
+            worst = (rel.min(), AR, th[np.argmin(rel)])
+    ax.set_xlim(0, 90)
+    ax.set_xticks([0, 15, 30, 45, 60, 75, 90])
+    ax.set_xlabel(r"window angle $\theta$ (deg)")
+    ax.set_ylabel(r"$\Delta k^2/k^2(\theta{=}0)$ (%)")
+    ax.tick_params(labelsize=6.5)
+    ax.set_title("(a) coupling against alignment", fontsize=7.8, loc="left")
+    ax.legend(frameon=False, fontsize=6.2, ncol=2, loc="lower left")
+    axb = axs[1]
+    axb.plot(th, an, "-", color=OI[3], lw=1.3)
+    axb.plot(th, an, "o", ms=2.4, color=OI[3], mfc="none", mew=0.5)
+    axb.axhline(0.0, color="0.55", lw=0.6, ls=":")
+    axb.set_xlim(0, 90)
+    axb.set_xticks([0, 15, 30, 45, 60, 75, 90])
+    axb.set_xlabel(r"window angle $\theta$ (deg)")
+    axb.set_ylabel(r"$(M_{11}-M_{22})/(M_{11}+M_{22})$")
+    axb.tick_params(labelsize=6.5)
+    axb.set_title(r"(b) anisotropy of $M$ (any aspect ratio)",
+                  fontsize=7.8, loc="left")
+    save(fig, "F5_design")
+    print(f"  design: worst change {worst[0]:.1f} % (AR = {worst[1]:g}, "
+          f"theta = {worst[2]:g} deg)")
+    return {"n": int(len(pol)), "min_rel_pct": float(worst[0])}
 
 
 def main_new_figures(pol):
     out = {}
     out["P11"] = fig_p11_convergence()
     out["P12"] = fig_p12_fields()
-    out["P13"] = fig_p13_boundary_layer()
+    out["P13"] = fig_window()
     out["P14"] = fig_p14_design_space(pol)
     return out
 

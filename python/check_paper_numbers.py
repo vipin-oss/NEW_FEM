@@ -140,19 +140,55 @@ def main():
                  g("demo.json.flexo_thickness.0.k2_ext"), "{:.5f}"))
     R.append(row("thickness, piezo k^2 series (h=1)", "0.55861",
                  "demo.json flexo_thickness[3].k2_ext",
-                 g("demo.json.flexo_thickness.3.k2_ext"), "{:.5f}"))
+                 g("demo.json.flexo_thickness.7.k2_ext"), "{:.5f}"))
     R.append(row("thickness, flexo k^2 at h=10", "1.74e-4",
                  "demo.json flexo_thickness[0].k2_flexo",
                  g("demo.json.flexo_thickness.0.k2_flexo"), "{:.2e}"))
     R.append(row("thickness, flexo k^2 at h=1", "4.2e-3",
                  "demo.json flexo_thickness[3].k2_flexo",
-                 g("demo.json.flexo_thickness.3.k2_flexo"), "{:.1e}",
+                 g("demo.json.flexo_thickness.7.k2_flexo"), "{:.1e}",
                  rel_tol=5e-3))
     R.append(row("thickness, flexo growth factor", "24",
                  "demo.json flexo ratio",
-                 g("demo.json.flexo_thickness.3.k2_flexo")
+                 g("demo.json.flexo_thickness.7.k2_flexo")
                  / g("demo.json.flexo_thickness.0.k2_flexo"), "{:.0f}",
                  rel_tol=5e-3))
+    R.append(row("orientation, extensional f at 0 deg, AR=2", "5012",
+                 "paper_figures_data.json polar[AR=2,th=0].f_ext_kHz",
+                 [r for r in J("paper_figures_data.json")["polar"]
+                  if r["AR"] == 2.0 and r["shape"] == "cuboid"
+                  and r["theta_deg"] == 0.0][0]["f_ext_kHz"], "{:.0f}"))
+    R.append(row("orientation, extensional f at 90 deg, AR=2", "5296",
+                 "paper_figures_data.json polar[AR=2,th=90].f_ext_kHz",
+                 [r for r in J("paper_figures_data.json")["polar"]
+                  if r["AR"] == 2.0 and r["shape"] == "cuboid"
+                  and r["theta_deg"] == 90.0][0]["f_ext_kHz"], "{:.0f}"))
+    R.append(row("orientation, extensional f at 0 deg, AR=10", "4907",
+                 "paper_figures_data.json polar[AR=10,th=0].f_ext_kHz",
+                 [r for r in J("paper_figures_data.json")["polar"]
+                  if r["AR"] == 10.0 and r["shape"] == "cuboid"
+                  and r["theta_deg"] == 0.0][0]["f_ext_kHz"], "{:.0f}"))
+    R.append(row("orientation, extensional f at 90 deg, AR=10", "5288",
+                 "paper_figures_data.json polar[AR=10,th=90].f_ext_kHz",
+                 [r for r in J("paper_figures_data.json")["polar"]
+                  if r["AR"] == 10.0 and r["shape"] == "cuboid"
+                  and r["theta_deg"] == 90.0][0]["f_ext_kHz"], "{:.0f}"))
+    R.append(row("orientation, worst coupling change (AR=10)", "-18.7",
+                 "paper_figures_data.json polar, min of k2/k2(0)-1",
+                 100.0 * min([r["k2_axial"] for r in J("paper_figures_data.json")["polar"]
+                              if r["AR"] == 10.0 and r["shape"] == "cuboid"]
+                             and [r["k2_axial"] / [q for q in
+                                  J("paper_figures_data.json")["polar"]
+                                  if q["AR"] == 10.0 and q["shape"] == "cuboid"
+                                  and q["theta_deg"] == 0.0][0]["k2_axial"] - 1.0
+                                  for r in J("paper_figures_data.json")["polar"]
+                                  if r["AR"] == 10.0
+                                  and r["shape"] == "cuboid"]), "{:.1f}"))
+    R.append(row("orientation, symmetry deviation", "3e-11",
+                 "paper_figures_data.json symmetry max",
+                 max(max(x["rel_k2"], x["rel_f"])
+                     for x in J("paper_figures_data.json")["symmetry"]),
+                 "{:.0e}", rel_tol=0.6))
     R.append(row("coupling check, closed form", "0.5608",
                  "coupling_check.json closed_form.k2_2d_closed",
                  g("coupling_check.json.closed_form.k2_2d_closed"), "{:.5f}",
@@ -188,11 +224,6 @@ def main():
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 10.0 and r["shape"] == "cuboid"
                   and r["theta_deg"] == 90.0][0]["k2_axial"], "{:.4f}"))
-    R.append(row("orientation, f1 at 0 deg, AR=2", "149.5",
-                 "paper_figures_data.json polar[AR=2,th=0].f1_kHz",
-                 [r for r in J("paper_figures_data.json")["polar"]
-                  if r["AR"] == 2.0 and r["shape"] == "cuboid"
-                  and r["theta_deg"] == 0.0][0]["f1_kHz"], "{:.1f}"))
     R.append(row("orientation, f1 at 90 deg, AR=10", "158.1",
                  "paper_figures_data.json polar[AR=10,th=90].f1_kHz",
                  [r for r in J("paper_figures_data.json")["polar"]
@@ -285,6 +316,10 @@ def main():
                  "sensitivity.json spread_h10_pct (range/midpoint)",
                  SN["spread_h10_pct"], "{:.2e}", upper=1e-4))
     CT = J("config_table.json")
+    R.append(row("abstract, flexo over residual piezo, h=1", "4e7",
+                 "config_table rows[3] k2_both / k2_piezo",
+                 CT["rows"][3]["k2_both"] / CT["rows"][3]["k2_piezo"],
+                 "{:.0e}", rel_tol=0.05))
     R.append(row("config table, flexo only at h=10", "1.76e-4",
                  "config_table rows[0] k2_flexo",
                  CT["rows"][0]["k2_flexo"], "{:.2e}"))

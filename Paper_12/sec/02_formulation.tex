@@ -90,27 +90,31 @@ constitutive relations}
 
 The electromechanical enthalpy of the plate is
 \begin{equation}
-  \Pi = \underbrace{\tfrac12\int_\Omega \varepsilon_{ij} C_{ijkl}
-        \varepsilon_{kl}\,\mathrm{d}A}_{\text{elastic}}
-      + \underbrace{\tfrac14\int_\Omega M_{mn}\,
-        \varepsilon_{ij,m}\,C_{ijkl}\,\varepsilon_{kl,n}\,\mathrm{d}A}
-        _{\text{strain gradient}}
-      - \underbrace{\int_\Omega e_{kij} E_k \varepsilon_{ij}\,\mathrm{d}A
-        - \tfrac12\int_\Omega \kappa_{ij} E_i E_j\,\mathrm{d}A}
-        _{\text{piezoelectric and dielectric}}
-      - \underbrace{\int_\Omega \mu_{kijl} E_k \eta_{ijl}\,\mathrm{d}A}
-        _{\text{flexoelectric}}
+  \begin{split}
+  \Pi ={}& \tfrac12\int_\Omega \varepsilon_{ij} C_{ijkl}
+        \varepsilon_{kl}\,\mathrm{d}A
+      + \tfrac14\int_\Omega M_{mn}\,
+        \varepsilon_{ij,m}\,C_{ijkl}\,\varepsilon_{kl,n}\,\mathrm{d}A \\
+      & - \int_\Omega e_{kij} E_k \varepsilon_{ij}\,\mathrm{d}A
+      + \tfrac12\int_\Omega \kappa_{ij} E_i E_j\,\mathrm{d}A
+      - \int_\Omega \mu_{kijl} E_k \eta_{ijl}\,\mathrm{d}A
       - W_{\rm ext},
+  \end{split}
   \label{eq:energy}
 \end{equation}
-with $E_k=-\phi_{,k}$ and $\phi$ the electric potential. The first two terms
-are the second-order strain-gradient energy, in which the isotropic length
-$\ell^2\delta_{mn}$ of a scalar theory is replaced by the second moment
-$M_{mn}$ of the window; the flexoelectric term is the polarization-gradient
-coupling of Mindlin's Form~II~\cite{Mindlin1965,Toupin1962,Mindlin1968}
-restricted to the polarization that the plate kinematics admit. The
-constitutive relations are the derivatives of $\Pi$ with respect to the three
-kinematic variables,
+where $E_k=-\phi_{,k}$ is the electric field, $\phi$ the electric potential,
+$C_{ijkl}$ the elastic stiffness, $e_{kij}$ the piezoelectric tensor,
+$\kappa_{ij}$ the permittivity, $\mu_{kijl}$ the flexoelectric tensor,
+$\eta_{ijl}=\varepsilon_{ij,l}$ the strain gradient of \eqref{eq:strain},
+$M_{mn}$ the second moment of the averaging window and $W_{\rm ext}$ the work
+of the external loads. The first term is the elastic energy, the second the
+strain-gradient energy, in which the isotropic length $\ell^2\delta_{mn}$ of a
+scalar theory is replaced by $M_{mn}$; the third and fourth terms are the
+piezoelectric and dielectric energies; and the fifth is the flexoelectric
+coupling, which is the polarization-gradient term of Mindlin's
+Form~II~\cite{Mindlin1965,Toupin1962,Mindlin1968} restricted to the
+polarization that the plate kinematics admit. The constitutive relations are
+the derivatives of $\Pi$ with respect to the three kinematic variables,
 \begin{align}
   \sigma_{ij} &= \frac{\partial \Pi}{\partial \varepsilon_{ij}}
               = C_{ijkl}\,\varepsilon_{kl} - e_{kij} E_k,
@@ -215,7 +219,7 @@ therefore not additive.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.72\textwidth]{P1_geometry.pdf}
+\includegraphics[width=0.72\textwidth]{F1_geometry.pdf}
 \caption{The two electrode configurations and the averaging window.
 (a) Bending family, poling $y$: electrodes cover the two large faces, the
 lower earthed and the upper floating at $q=0$. (b) Extensional family, poling

@@ -95,12 +95,12 @@ def main():
                  " [kHz]", "demo.json flexo_thickness[0]",
                  "FEM eigen-solve; the Euler--Bernoulli value is the one "
                  "quoted as the comparison, not as this number"))
-    for h, s in ((10, -1.92), (5, -1.52), (2, -0.66)):
+    for h, s in ((10, -1.96), (5, -1.52), (2, -0.43)):
         rows.append((f"{s:.2f}", f"local log-log slope of the flexoelectric "
                      f"$k^2$ at $h=\\SI{{{h}}}{{\\micro\\metre}}$",
                      "demo.json flexo_thickness (finite differences)",
-                     "a finite difference of five FEM runs; no closed form "
-                     "predicts the slope once the window is fixed in size"))
+                     "a finite difference of the eight FEM runs; no closed "
+                     "form predicts the slope once the window is fixed in size"))
 
     # ---- 5. the memory study
     mv = J("memory_variants.json")

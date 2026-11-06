@@ -276,7 +276,7 @@
   {
    "id": "A2",
    "what": "every number in the abstract has an independent-check verdict",
-   "value": "8 hua / 7 nahi hua / 3 inputs, 15 tokens",
+   "value": "8 hua / 8 nahi hua / 3 inputs, 17 tokens",
    "criterion": "0 uncovered, 0 stale",
    "pass": true
   },
@@ -332,7 +332,7 @@
   {
    "id": "N2",
    "what": "the list of unverified numbers cites only numbers still in the manuscript",
-   "value": "31 entries, 0 stale",
+   "value": "32 entries, 0 stale",
    "criterion": "0 stale",
    "pass": true
   },
@@ -388,21 +388,21 @@
   {
    "id": "P1",
    "what": "paper figures: vector set written",
-   "value": "14 PDF",
-   "criterion": "= 14 (P1-P14)",
+   "value": "11 PDF",
+   "criterion": "= 11 (F1-F9, FB1-FB2)",
    "pass": true
   },
   {
    "id": "P2",
    "what": "orientation sweep rows / k^2 range",
-   "value": "168 rows, 0.3786-0.4677",
-   "criterion": "168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50)",
+   "value": "133 rows, 0.3786-0.4677",
+   "criterion": "133 rows (114 cuboid + 19 ellipse), k^2 in (0.35, 0.50)",
    "pass": true
   },
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "60/60",
+   "value": "66/66",
    "criterion": "all agree",
    "pass": true
   }
@@ -428,6 +428,7 @@
   "run_demos.py": true,
   "run_paper_figures.py": true,
   "make_paper_table.py": true,
+  "make_appendix_tables.py": true,
   "check_paper_numbers.py": true,
   "check_paper_structure.py": true
  },

@@ -1,5 +1,5 @@
 {
- "n": 31,
+ "n": 32,
  "rows": [
   {
    "literal": "0.449",
@@ -36,6 +36,12 @@
    "what": "the flexoelectric coupling at $h=\\SI{1}{\\micro\\metre}$, to two significant digits",
    "source": "abstract_audit.json",
    "why": "FEM value (criterion T3); the two-significant-digit form is forced by the platform spread measured in Tab.~\\ref{tab:sens}, not by an independent calculation"
+  },
+  {
+   "literal": "7",
+   "what": "exponent of the factor \\num{4e7} between the flexoelectric bending coupling and the residual piezoelectric coupling of the same configuration at \\SI{1}{\\micro\\metre}",
+   "source": "abstract_audit.json",
+   "why": "two FEM numbers of the same run divided (tab:config, h = 1); the piezoelectric-only coupling is a symmetry cancellation, not an independent measurement"
   },
   {
    "literal": "24",
@@ -134,22 +140,22 @@
    "why": "FEM eigen-solve; the Euler--Bernoulli value is the one quoted as the comparison, not as this number"
   },
   {
-   "literal": "-1.92",
+   "literal": "-1.96",
    "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{10}{\\micro\\metre}$",
    "source": "demo.json flexo_thickness (finite differences)",
-   "why": "a finite difference of five FEM runs; no closed form predicts the slope once the window is fixed in size"
+   "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
   {
    "literal": "-1.52",
    "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{5}{\\micro\\metre}$",
    "source": "demo.json flexo_thickness (finite differences)",
-   "why": "a finite difference of five FEM runs; no closed form predicts the slope once the window is fixed in size"
+   "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
   {
-   "literal": "-0.66",
+   "literal": "-0.43",
    "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{2}{\\micro\\metre}$",
    "source": "demo.json flexo_thickness (finite differences)",
-   "why": "a finite difference of five FEM runs; no closed form predicts the slope once the window is fixed in size"
+   "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
   {
    "literal": "0.15023",

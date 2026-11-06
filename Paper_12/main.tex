@@ -92,9 +92,14 @@ once its second moment is fixed, whereas window anisotropy and orientation
 change the coupling by up to $19\,\%$. The damping ratio reproduces the exact
 Kelvin--Voigt limit to $0.15\,\%$, and memory carried on the short-circuit
 matrix gives $0.449$ times the damping of memory carried on the condensed one.
-The resulting coupling-and-damping maps identify the thickness, window
-orientation and operating band in which a flexoelectric harvester outperforms
-its piezoelectric counterpart.
+The resulting coupling-and-damping maps locate the thickness, the window
+orientation and the operating band at which the flexoelectric term dominates
+the piezoelectric one in a bending device, where the piezoelectric charge
+cancels: at \SI{1}{\micro\metre} it exceeds the residual piezoelectric coupling
+of that configuration by a factor \num{4e7}, although it remains two orders of
+magnitude below the extensional piezoelectric coupling of the same plate. The two configurations are therefore not interchangeable and their
+couplings are not additive. The flexoelectric coefficient and the mass density
+are assumed rather than measured.
 \end{abstract}
 
 \begin{keyword}
@@ -114,11 +119,11 @@ averaging window; fractional viscoelasticity; piezoelectric energy harvesting
 \input{sec/08_conclusion}
 
 \section*{Data availability}
-The implementation, the input files and every number quoted in this article are
-contained in the repository accompanying the paper
-(\url{https://github.com/vipin-oss/NEW_FEM}, tag \texttt{fem6-verified}). A
-single documented command regenerates the figures, the tables and the numerical
-values from which they are drawn.
+The data supporting the findings of this study are available within the
+article. The numerical values behind the quantitative figures are listed in the
+tables of Appendix~\ref{app:data}, and the material constants, the geometry and
+the discretisation used to obtain them are stated in Sec.~\ref{sec:material},
+Table~\ref{tab:params} and Appendix~\ref{app:verification}.
 
 \section*{Conflict of Interest Disclosure Statement}
 The authors declare that they have no known competing financial interests or
@@ -132,9 +137,12 @@ This research was supported by the Haryana State Research Fund (HSRF) under
 sanction 14/66-2026 SPD/HSHEC/HSRF-(38), dated 13 July 2026.
 
 \appendix
+\renewcommand{\thetable}{\Alph{section}.\arabic{table}}
+\renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
 
 \input{sec/91_appendixA}
 \input{sec/92_appendixB}
+\input{sec/93_appendixC}
 
 \bibliographystyle{elsarticle-num}
 \bibliography{references}

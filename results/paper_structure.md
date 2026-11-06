@@ -6,9 +6,9 @@
 - environments: ok
 - unresolved \\ref: none
 - undefined \\cite: none
-- missing graphics: none (14 included)
+- missing graphics: none (11 included)
 - missing \\input: none
-- numbers audit:   60/60 agree -> results/paper_number_audit.md
+- numbers audit:   66/66 agree -> results/paper_number_audit.md
 
 ## Detail
 - nothing to report

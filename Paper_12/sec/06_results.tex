@@ -131,7 +131,7 @@ Appendix~\ref{app:verification}.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{P11_convergence.pdf}
+\includegraphics[width=\textwidth]{F2_convergence.pdf}
 \caption{Convergence of the discretisation, against the number of mechanical
 degrees of freedom of four meshes. (a) Relative error of the extensional
 coupling factor $k^2$ and of the frequency of the mode that carries it, both
@@ -157,7 +157,7 @@ the piezoelectric charge and responsive to the strain gradient
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{P12_fields.pdf}
+\includegraphics[width=\textwidth]{F3_fields.pdf}
 \caption{Fields of the coupled bending mode of the plate in the open-circuit
 configuration, on the $48\times4$ mesh: (a) in-plane displacement $u_x$
 normalised by its maximum, (b) transverse displacement $w$, (c) potential
@@ -173,27 +173,40 @@ $a_1\times a_2=3\times1$\,\si{\micro\metre}, $\mu=10^{-6}$\,\si{\coulomb\per\met
 \subsection{Window orientation and plate aspect ratio}
 \label{sec:orientation}
 
-Figures~\ref{fig:petals} and~\ref{fig:map} vary the orientation $\theta$ of the
-rectangular averaging window and the plate aspect ratio, for the poling-$x$
+Figure~\ref{fig:orientation} varies the orientation $\theta$ of the rectangular
+averaging window and the plate aspect ratio, for the poling-$x$
 (length-extensional) configuration that dominates the response. The window is
 held at a half-width of \SI{3}{\micro\metre} along its long axis; the plate is
-\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}; the extensional mode is
-identified as the one carrying the largest coupling, an identification that is
-stable over the sweep, with its short-circuit frequency varying smoothly from
-$4907$ to \SI{5296}{kHz} over all $6\times24$ cases.
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}. The extensional mode is
+the one carrying the largest coupling, and over the $6\times19$ cuboid cases
+that identification never changes, its short-circuit frequency varying smoothly
+from $4907$ to \SI{5296}{kHz}.
+
+Only the first quadrant is computed. The plate maps onto itself under
+$\theta\to\theta+180^\circ$; the reflection $y\to-y$ also maps it onto itself,
+and it flips the sign of $M_{12}$, which enters the energy quadratically, so
+that $\theta\to-\theta$ leaves the response unchanged as well. Neither
+statement is assumed: both are evaluated at \SI{15}{\degree} intervals for the
+extreme aspect ratios, where they reproduce the computed points to
+\num{3e-11} relative. The full circles in
+Figs.~\ref{fig:orientation}(a) and~(b) are therefore the computed quadrant
+mirrored twice and joined by a periodic cubic spline, the markers are the
+computed points, and the maps in (c) and (d) are drawn over
+$0$--$180^\circ$ for the same reason.
 
 Both quantities move monotonically with $\theta$ and both saturate by
-$\theta=90^\circ$. The extensional frequency rises from \SI{149.5}{kHz} to
-\SI{158.3}{kHz} at ${\rm AR}=2$ and from \SI{146.4}{kHz} to \SI{158.1}{kHz} at
-${\rm AR}=10$, that is by 6--8\,\%, while the axial-mode coupling falls from
-$0.4448$ to $0.3786$ and from $0.4677$ to $0.3801$ over the same interval, a
-change of 15--19\,\%. At $\theta=0^\circ$ the window aspect ratio is worth
-$0.4448\to0.4677$ between ${\rm AR}=2$ and ${\rm AR}=10$, about 5\,\%, and the
-aspect ratios collapse onto $0.3786$--$0.3801$ at $\theta=90^\circ$: once the
-long axis of the window is transverse to the strain gradient, its aspect ratio
-no longer matters. The polar plot reads the angular dependence directly, with
-maxima of $k^2$ at $\theta=0^\circ$ and $180^\circ$ and minima there in $f_1$;
-the map reads the aspect ratio.
+$\theta=90^\circ$. The extensional frequency rises from $5012$ to
+\SI{5296}{kHz} at ${\rm AR}=2$ and from $4907$ to \SI{5288}{kHz} at
+${\rm AR}=10$, that is by 6--8\,\%, while the coupling falls from $0.4448$ to
+$0.3786$ and from $0.4677$ to $0.3801$ between the same two orientations, a
+change of 15--19\,\%. The fundamental mode of the same plate, which carries a
+coupling three orders of magnitude smaller, moves from \SI{146.4}{kHz} to
+\SI{158.1}{kHz} at ${\rm AR}=10$; the two modes are not interchangeable, and
+they are named explicitly wherever both appear. At $\theta=0^\circ$ the window
+aspect ratio is worth $0.4448\to0.4677$ between ${\rm AR}=2$ and ${\rm AR}=10$,
+about 5\,\%, and the aspect ratios collapse onto $0.3786$--$0.3801$ at
+$\theta=90^\circ$: once the long axis of the window is transverse to the strain
+gradient, its aspect ratio no longer matters.
 
 Two remarks keep this in proportion. First, the coupling plotted here is the
 \emph{total} coupling of the extensional mode and it is piezoelectric in the
@@ -204,48 +217,44 @@ a flexoelectric term directly. Second, in the language of
 Sec.~\ref{sec:window} the window enters only through $M$: rotating the window
 rotates $M$, and the 15--19\,\% spread is a property of the second-moment
 tensor of a rectangular window, not of the rectangle as such.
+Figure~\ref{fig:design} separates the two. Panel (a) is the change of the
+coupling against the aligned window: largest for the most elongated window,
+$-18.7$\,\% at ${\rm AR}=10$ and $\theta=90^\circ$, and weakest for the
+squarest, $-14.9$\,\% at ${\rm AR}=2$. Panel (b) is
+$(M_{11}-M_{22})/(M_{11}+M_{22})$, a function of the orientation alone, which
+passes through zero at $45^\circ$ and changes fastest there: the coupling
+follows the anisotropy of the tensor and not the shape of the window.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{P2_petals.pdf}
-\caption{Window orientation as a polar plot. Radius is the quantity itself,
-offset so that its variation is visible, and the radial tick labels give the
-true values. (a) Fundamental frequency $f_1$ minus \SI{145}{kHz}; (b) coupling
-$k^2$ of the extensional mode minus $0.355$; (c) the same $k^2$ for a cuboid
-window of half-widths $3\times1.5$\,\si{\micro\metre} (solid) and for an
-elliptical window carrying the same second-moment tensor (dashed), which are
-indistinguishable. Plate \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre},
-poling $x$, plane stress, $24\times2$ mesh, $\mu=0$, $\alpha=1$.}
-\label{fig:petals}
+\includegraphics[width=\textwidth]{F4_orientation.pdf}
+\caption{Window orientation at fixed window size, on
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} plates with
+$h=\SI{10}{\micro\metre}$, poling $x$, plane stress, $24\times2$ mesh, $\mu=0$
+and $\alpha=1$. (a) Frequency of the extensional mode and (b) its coupling
+factor, both normalised to the aligned window, over the full circle; the
+radial axis is truncated and the dotted circle marks unity. Markers are the
+computed points, $5^\circ$ apart in the quadrant and mirrored; the lines are a
+periodic cubic spline through them. (c), (d) The same two quantities as maps
+over the window angle and the aspect ratio, on $0$--$180^\circ$ because the
+response repeats under $\theta\to\theta+180^\circ$; white dots mark the six
+computed aspect ratios. The polar sections and the maps are built from the
+same $19\times6$ cuboid sweep, plus one elliptical window of equal $M$ in (b).}
+\label{fig:orientation}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.62\textwidth]{P3_map_k2_AR_theta.pdf}
-\caption{The same sweep as Fig.~\ref{fig:petals}, as a filled contour map over
-the window angle and the aspect ratio: (a) extensional $k^2$, (b) $f_1$.
-Contours are a periodic spline through the $144$ computed points (white dots)
-and no data are extrapolated. The coupling is maximal when the long axis of the
-window is aligned with the strain ($\theta=0^\circ$, $180^\circ$) and is flat in
-the aspect ratio at $\theta=90^\circ$, where the window's anisotropy no longer
-enters the second-moment tensor. The two panels are anticorrelated: the
-orientation that maximises the coupling minimises the frequency.}
-\label{fig:map}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.92\textwidth]{P14_design_space.pdf}
-\caption{The same sweep as Figs.~\ref{fig:petals} and~\ref{fig:map}, read as a
-design space over the window angle and the window aspect ratio, with the three
-variables that are genuinely present: (a) frequency of the coupled mode,
-(b) coupling factor, (c) relative change of the coupling against the aligned
-window, and (d) the anisotropy of the second-moment tensor itself. Panel (d)
-makes the mechanism explicit: the response follows
-$(M_{11}-M_{22})/(M_{11}+M_{22})$, not the rectangle, and it is that tensor
-which the orientation rotates. Plate \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre},
-poling $x$, plane stress, $24\times2$ mesh, $\mu=0$, $\alpha=1$.}
-\label{fig:designspace}
+\includegraphics[width=0.86\textwidth]{F5_design.pdf}
+\caption{The same sweep as Fig.~\ref{fig:orientation}, read as a design space.
+(a) Change of the extensional coupling relative to the aligned window, one
+curve per aspect ratio, with markers at every second computed orientation; the
+curves span $4$ percentage points at $90^\circ$ and the deepest is
+$-18.7$\,\%. (b) Anisotropy of the second-moment tensor,
+$(M_{11}-M_{22})/(M_{11}+M_{22})$, which is independent of the aspect ratio and
+of the plate, and whose zero at $45^\circ$ is where the coupling in (a)
+changes fastest. Same plate and mesh as Fig.~\ref{fig:orientation}.}
+\label{fig:design}
 \end{figure}
 
 \subsection{Fractional memory and the damping map}
@@ -321,8 +330,7 @@ which is the band a design map is meant to cover.
 \caption{Normalised modulus magnitude $|K^{*}|/K$ at matched $\tau$ for the
 integer-order Kelvin--Voigt element and for the fractional Zener element whose
 relaxation-strength ratio, $r=1.1$, is fitted to the spring-pot at
-$\omega\tau=0.3$ and then held fixed, at two Caputo orders. Values in
-Table~\ref{tab:modulus} are $|K^{*}|/K$.}
+$\omega\tau=0.3$ and then held fixed, at two Caputo orders.}
 \label{tab:modulus}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
@@ -338,67 +346,62 @@ $\omega\tau$ & \multicolumn{2}{c}{$\alpha=1$} & \multicolumn{2}{c}{$\alpha=0.7$}
 \end{tabular}
 \end{table}
 
-\paragraph{The damping map.} Figure~\ref{fig:locus} is the pole of
+\paragraph{The damping map.} Figure~\ref{fig:damping}(a) is the pole of
 \eqref{eq:kvfreq} in the complex plane, traced over $\omega\tau$ for seven
-relaxation times and coloured by the Caputo order, and Fig.~\ref{fig:zetasurf}
-is the damping ratio $\zeta=-\mathrm{Re}\,s/(\omega_0|s|)$ over the
-$(\alpha,\omega\tau)$ plane. Both are computed with branch continuation: the
-root is followed from one $\omega\tau$ to the next by warm-starting the Newton
-iteration at the previous pole, without which the iteration jumps to a
-spurious root of the negative-real-part branch.
+relaxation times and coloured by $\tau$, with markers at five Caputo orders;
+Fig.~\ref{fig:damping}(b) is the damping ratio
+$\zeta=-\mathrm{Re}\,s/(\omega_0|s|)$ over the $(\alpha,\omega\tau)$ plane.
+Both are computed with branch continuation: the root is followed from one
+$\omega\tau$ to the next by warm-starting the Newton iteration at the previous
+pole, without which the iteration jumps to a spurious root of the
+negative-real-part branch.
 
 All poles lie in the left half-plane for every $(\alpha,\tau)$ examined, so the
 fractional Kelvin--Voigt element is dissipative by construction. The
 integer-order case ($\alpha=1$) sits at $|\mathrm{Im}\,s|/\omega_0\simeq1$ for
 $\omega\tau\lesssim0.1$ and moves down and to the right as $\omega\tau$ grows,
-so the dashpot lowers the frequency and eventually over-damps the mode. The
-fractional cases ($\alpha<1$) start from the same neighbourhood and fan
-\emph{upward}: a spring-pot with $\alpha<1$ raises the damped frequency as
-$\tau$ grows, because the fractional modulus grows sub-linearly rather than
-linearly in $\omega$. At $\alpha=0.5$ and $\omega\tau=10$ the damped frequency
-is $2.13\,\omega_0$ ($2.45\,\omega_0$ at $\alpha=0.7$), against
-$\mathrm{Im}\,s=0$ -- complete over-damping -- for $\alpha=1$ at the same
-$\omega\tau$. A single-fit Kelvin--Voigt parameterisation cannot reproduce
-that, and the pole rather than the modulus is what a design should be read
-from. The surface of Fig.~\ref{fig:zetasurf} increases with both $\alpha$ and
-$\omega\tau$ and saturates at $\zeta=1$ for $\alpha\to1$ and large $\omega\tau$,
-where the element is critically damped; for small $\alpha$ it is flat, because
-a spring-pot with a broad relaxation spectrum produces a damping that depends
-only weakly on the device frequency. That flatness is the qualitative reason
-the fractional description is used for dielectric loss in the first place.
+so the dashpot lowers the frequency and eventually over-damps the mode: at
+$\omega\tau=10$ the imaginary part has vanished and $\zeta=1$. The fractional
+cases ($\alpha<1$) start from the same neighbourhood and fan \emph{upward}: a
+spring-pot with $\alpha<1$ raises the damped frequency as $\tau$ grows, because
+the fractional modulus grows sub-linearly rather than linearly in $\omega$. At
+$\omega\tau=10$ and $\alpha=0.5$ the damped frequency is $2.13\,\omega_0$
+($2.45\,\omega_0$ at $\alpha=0.7$), against $\mathrm{Im}\,s=0$ for $\alpha=1$
+at the same $\omega\tau$. A single-fit Kelvin--Voigt parameterisation cannot
+reproduce that, and the pole rather than the modulus is what a design should be
+read from. The ratio in Fig.~\ref{fig:damping}(b) increases with both $\alpha$
+and $\omega\tau$ and reaches $\zeta\to1$ for $\alpha\to1$ and large
+$\omega\tau$, where the element is critically damped; for small $\alpha$ it is
+flat, because a spring-pot with a broad relaxation spectrum produces a damping
+that depends only weakly on the device frequency. That flatness is the
+qualitative reason the fractional description is used for dielectric loss in
+the first place. The band $\omega\tau\le1$, which contains the plate mode at
+\SI{6.73}{MHz} for every $\tau\le\SI{32}{nano\second}$ used here, is the one in
+which the element is calibrated and claimed; the wider range in panel (b) is
+drawn for continuity rather than as a prediction.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.62\textwidth]{P5_root_locus.pdf}
-\caption{Complex poles of the fractional Kelvin--Voigt element, $s/\omega_0$ in
-the plane $(-\mathrm{Re},\mathrm{Im})$, traced over $\omega\tau=0.01\ldots31.6$
-for seven relaxation times, ordered by $\tau$ and coloured by the Caputo
-order. Open markers are $\alpha=1$; the dotted line is
+\includegraphics[width=\textwidth]{F6_damping.pdf}
+\caption{The fractional Kelvin--Voigt element in the complex plane and as a
+damping map, from the pole of \eqref{eq:kvfreq} with branch continuation.
+(a) The pole of a mode with undamped frequency $\omega_0=\SI{6.73}{MHz}$,
+traced over $\omega\tau=0.02\ldots1.35$ for seven relaxation times
+$\tau=0.5\ldots\SI{32}{nano\second}$ and coloured by $\tau$; markers are
+$\alpha=0.2,\,0.4,\,0.6,\,0.8,\,1$, and the dotted line is
 $\mathrm{Im}\,s=\omega_0$. Every pole has a negative real part, and the
 fractional curves fan upward because the spring-pot modulus grows
-sub-linearly in frequency. The shaded band marks the range
-$\omega\tau\le1$ in which the element is used and in which the damping surface
-of Fig.~\ref{fig:zetasurf} is claimed.}
-\label{fig:locus}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.62\textwidth]{P9_damping_surface.pdf}
-\caption{Damping ratio of the same element over the $(\alpha,\omega\tau)$ plane,
-from the complex pole with branch continuation. The projection at the base
-repeats the same data as contours. Saturation at $\zeta=1$ for $\alpha\to1$ is
-the critical damping of the integer-order dashpot; the floor is shaded for
-$\omega\tau\le1$, the band in which the element is used and the only one in
-which it is claimed, and the surface beyond it is drawn for continuity rather
-than as a prediction.}
-\label{fig:zetasurf}
+sub-linearly in frequency. (b) Damping ratio
+$\zeta=-\mathrm{Re}\,s/(\omega_0|s|)$ over the wider plane
+$\omega\tau=10^{-1.5}\ldots10^{1.5}$ and $\alpha=0.2\ldots1$, with the same
+branch continuation; contours every $0.1$.}
+\label{fig:damping}
 \end{figure}
 
 \subsection{Window shape versus second moment}
 \label{sec:windowshape}
 
-Figure~\ref{fig:domain} is the numerical statement of
+Figure~\ref{fig:window}(a) is the numerical statement of
 Sec.~\ref{sec:window} on an isotropic plane-strain test problem (rectangle
 $1\times0.2$, $20\times4$ mesh, uniaxial edge traction, displacement $u_R$
 averaged over the loaded edge), plotted against the normalised window size for
@@ -409,7 +412,7 @@ shape of the window is irrelevant at fixed $M$, and only $M$ enters the model.
 The second curve shows the error made by ignoring the distinction: equal
 half-widths instead of equal $M$ over-stiffen the response, and the
 discrepancy grows with the window size. At $l/L_x=0.2$ a cuboid of half-width
-$l$ retains $0.921$ of the classical loaded-edge displacement, an ellipsoid of
+$l$ retains $0.922$ of the classical loaded-edge displacement, an ellipsoid of
 semi-axis $l$ retains $0.941$, and the equal-$M$ cuboid sits on the ellipsoid
 curve to the third decimal. At fixed $M$ the shape of the window is therefore
 immaterial to $10^{-3}$, which is the coefficient ratio $5/3$ in the gradient
@@ -418,43 +421,36 @@ $a/L\le0.2$, the right-hand edge of this figure; no larger window is run,
 because there the second-moment truncation itself is what fails rather than
 the implementation (Sec.~\ref{sec:calibration}).
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.62\textwidth]{P10_window_shape.pdf}
-\caption{Loaded-edge displacement versus window size for an ellipsoidal window
-of semi-axis $l$, a cuboidal window of half-width $l$, and a cuboidal window
-scaled to the same second moment, $a=l\sqrt{3/5}$. Isotropic plane-strain test
-problem (rectangle $1\times0.2$, $20\times4$ mesh, uniaxial edge traction),
-response normalised by its classical value with no gradient term. The two
-curves that share $M$ coincide and the curve that shares a half-width does not;
-the values at $l/L_x=0.2$ are printed on the curves. ($E$ and $\nu$ of
-Table~\ref{tab:params}, $a/L_x\le0.2$.)}
-\label{fig:domain}
-\end{figure}
-
-The corresponding static statement is Fig.~\ref{fig:layer}, which solves the
-clamped plate of Table~\ref{tab:params} under an end load for three window
-sizes and compares each solution with the classical one of the same geometry
-and load. The gradient terms stiffen the member. The difference against the
-classical solution vanishes at the clamped edge, where both fields satisfy the
-same kinematic conditions, and then accumulates along the member instead of
-decaying over a thin layer: at these window sizes the gradient effect is
-distributed rather than local, and its size grows with the window. That is why
-the bound $a/L\le0.2$ of Sec.~\ref{sec:limit_window} is stated as a modelling
-limit rather than as a mesh requirement.
+Panels (b) and (c) are the corresponding static statement. The clamped plate of
+Table~\ref{tab:params} is solved under an end load for three window sizes and
+each solution is compared with the classical one of the same geometry and load.
+The gradient terms stiffen the member. The difference against the classical
+solution vanishes at the clamped edge, where both fields satisfy the same
+kinematic conditions, and then accumulates along the member instead of decaying
+over a thin layer: at these window sizes the gradient effect is distributed
+rather than local, and its size grows with the window. That is why the bound
+$a/L\le0.2$ of Sec.~\ref{sec:limit_window} is stated as a modelling limit
+rather than as a mesh requirement.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{P13_boundary_layer.pdf}
-\caption{The clamped edge under an end load, for three window sizes:
-(a) the deflected shape normalised by its tip value, with the classical
-solution of the same problem for comparison; (b) the difference from the
-classical profile, normalised by the tip deflection, on a logarithmic scale:
-it vanishes at the clamped edge and accumulates along the member rather than
-decaying over a boundary layer, at all three window sizes. ($L=\SI{200}{\micro\metre}$,
-$h=\SI{10}{\micro\metre}$, $48\times4$ mesh, poling $y$, plane stress,
-$\mu=10^{-6}$\,\si{\coulomb\per\metre}, $a_2=\SI{1}{\micro\metre}$.)}
-\label{fig:layer}
+\includegraphics[width=\textwidth]{F7_window.pdf}
+\caption{What the window size and shape do, on problems with an exact
+classical counterpart. (a) Loaded-edge displacement of an isotropic
+plane-strain rectangle ($E$ and $\nu$ of Table~\ref{tab:params}, $a/L_x\le0.2$,
+$20\times4$ mesh, uniaxial edge traction) against the normalised window size,
+for an ellipsoidal window of semi-axis $l$, a cuboidal window of half-width
+$l$, and a cuboidal window scaled to the same second moment, $a=l\sqrt{3/5}$;
+the response is normalised by its classical value, and the values at
+$l/L_x=0.2$ are printed. (b) Deflected shape of the clamped plate under an end
+load, normalised by the tip value, for three window sizes
+($L=\SI{200}{\micro\metre}$, $h=\SI{10}{\micro\metre}$, $48\times4$ mesh,
+poling $y$, plane stress, $\mu=10^{-6}$\,\si{\coulomb\per\metre},
+$a_2=\SI{1}{\micro\metre}$). (c) Difference from the classical profile of the
+same problem, normalised by the tip deflection: it vanishes at the clamped edge
+and accumulates along the member rather than decaying over a boundary layer, at
+all three window sizes. Markers are computed points, lines are interpolations.}
+\label{fig:window}
 \end{figure}
 
 \subsection{Thickness: a flexoelectric size effect against a
@@ -478,9 +474,9 @@ measure \eqref{eq:kstatic}.
 
 \paragraph{Flexoelectric size effect.} The flexoelectric coupling rises by a
 factor $24$ from \num{1.74e-4} at \SI{10}{\micro\metre} to \num{4.2e-3} at
-\SI{1}{\micro\metre}. The local log--log slope is $-1.92$ at the thick end,
+\SI{1}{\micro\metre}. The local log--log slope is $-1.96$ at the thick end,
 that is the expected $h^{-2}$ scaling, and steepens to $-1.52$ and then
-$-0.66$ as the plate is thinned. The saturation is not a mesh effect: a
+$-0.43$ as the plate is thinned. The saturation is not a mesh effect: a
 $96\times4$ witness reproduces the $48\times4$ values to $0.04\,\%$ and
 $0.35\,\%$ at the two ends of the range, and the residual at $\mu=0$ is
 $1.0\times10^{-10}$, seven orders of magnitude below the signal. Its physical
@@ -490,6 +486,29 @@ is an interpretation rather than a measurement of this study; the same
 stiffening appears in the fundamental frequency, which follows
 $210.4,108.0,50.2,34.7$\,kHz where pure Euler--Bernoulli scaling from the
 thickest plate would give $210,105,42,21$\,kHz.
+
+Figure~\ref{fig:modetrack} records the identification itself. The mode shape
+computed at each thickness is compared with the one at $h=\SI{10}{\micro\metre}$
+through the modal assurance criterion, which stays above $0.999$ across the
+whole sweep, and the ratio $f_2/f_1$ stays between $6.21$ and $6.27$: the branch
+that carries the coupling is separated from its neighbours by the same margin at
+every thickness, so continuity of the shape and not an eigenvalue threshold is
+what selects it in every result of this paper.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.72\textwidth]{FB1_tracking.pdf}
+\caption{Mode tracking across the thickness sweep, $L=\SI{200}{\micro\metre}$,
+poling $y$, $48\times4$ mesh, $a_1\times a_2=3\times1$\,\si{\micro\metre},
+$\mu=10^{-6}$\,\si{\coulomb\per\metre}. (a) Defect $1-\mathrm{MAC}$ between the
+mode shape at each thickness and the shape at $h=\SI{10}{\micro\metre}$, on a
+logarithmic scale, with the MAC itself printed above each bar; (b) frequencies
+of the first two modes against thickness and their ratio, printed at each
+point. The branch is separated from its neighbours over the whole range, which
+is what makes the tracking unambiguous.}
+\label{fig:modetrack}
+\end{figure}
+
 
 \paragraph{What the piezoelectric terms do on the bending device.} The bending
 configuration is poled along $y$ with electrodes on the long faces, and the
@@ -553,18 +572,22 @@ piezoelectric constants.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{P7_thickness.pdf}
+\includegraphics[width=\textwidth]{F8_thickness.pdf}
 \caption{(a) Flexoelectric bending coupling versus plate thickness
 ($L=\SI{200}{\micro\metre}$, window half-widths
 $3\times1$\,\si{\micro\metre}, $\mu=10^{-6}$\,\si{\coulomb\per\metre}, poling
-$y$, plane stress), with the local log--log slopes annotated, a $96\times4$
-witness at the two thickest and thinnest points (open squares,
-indistinguishable from $48\times4$), and the $h^{-2}$ guide line. (b)
+$y$, plane stress) at eight thicknesses, with three of the local log--log
+slopes annotated, a $96\times4$ witness at the thickest and the thinnest point
+(open squares, indistinguishable from $48\times4$), and the $h^{-2}$ guide line
+through the thinnest point. (b)
 Piezoelectric length-extensional coupling of the same plate with $\mu=0$,
 mode-free: constant to $0.09\,\%$ over $10\to1$\,\si{\micro\metre} and
 $0.4\,\%$ below the constitutive closed form $0.5608$ (dotted),
 which is the discretisation error of the $48\times4$ mesh rather than a
-modelling difference. ($\alpha=1$, $a_1/L=0.015$.)}
+modelling difference. (c) Ratio of the two couplings on a logarithmic scale:
+it spans $4.3\times10^{-4}$ to $7.5\times10^{-3}$ over the range, so the
+flexoelectric term is never competitive at these parameters and the two effects
+are not additive. ($\alpha=1$, $a_1/L=0.015$, $L=\SI{200}{\micro\metre}$.)}
 \label{fig:thickness}
 \end{figure}
 
@@ -580,7 +603,7 @@ $\alpha$, as it must be, since the memory term vanishes at $t=0^{+}$; the decay
 rate, by contrast, depends strongly on $\alpha$. The $\alpha=1$ curve is the
 exponential decay of the classical Kelvin--Voigt element, while the fractional
 curves are not exponential, and it is that difference which the damping map of
-Figs.~\ref{fig:locus} and~\ref{fig:zetasurf} quantifies. The voltage is a
+Fig.~\ref{fig:damping}(b) quantifies. The voltage is a
 linear functional of the same modal coordinate and therefore inherits the
 ring-down shape; what the figure makes visible is that a design calibrated on
 the integer-order decay is wrong by a factor of order two, depending on the
@@ -589,15 +612,15 @@ loss.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{P6_ringdown.pdf}
+\includegraphics[width=\textwidth]{F9_ringdown.pdf}
 \caption{Ring-down of the extensional mode of the
-\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} plate at its first strongly
-coupled mode for $\alpha=1,0.9,0.7,0.5$: (a) tip displacement, (b) open-circuit
-voltage. Modal memory on $K_{\rm eff}$, eight modes,
-$\tau=\SI{3}{\nano\second}$, initial tip displacement \SI{10}{\nano\metre},
-$k^2=0.4650$, $\omega\tau=0.3$ at the fundamental. Each curve is an independent
-L1 time march; the four share the initial condition and differ only in
-$\alpha$.}
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} plate
+($\SI{6.727}{MHz}$, $k^2=0.4583$) for eight Caputo orders
+$\alpha=1$ to $0.4$: (a) tip displacement, (b) open-circuit voltage. Modal
+memory applied to $K_{\rm eff}$ with eight modes retained,
+$\tau=\SI{3}{\nano\second}$ ($\omega\tau=0.13$), initial tip displacement
+\SI{10}{\nano\metre}. Each curve is an independent L1 time march of $4000$
+steps; all eight share the initial condition and differ only in $\alpha$.}
 \label{fig:ringdown}
 \end{figure}
 

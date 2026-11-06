@@ -1,6 +1,6 @@
 # Verification table as it appears in the manuscript
 
-58/58 checks pass.
+53/58 checks pass.
 
 | quantity | value obtained | requirement | source |
 |---|---|---|---|
@@ -35,7 +35,7 @@
 | lowest MAC of mode 1 vs the h = 10 um shape (4 thicknesses) | 0.99919 | > 0.999 | `results/mode_tracking.json` |
 | worst f2/f1 over the thickness sweep (mode off-diagonal) | 2.3e-06, f2/f1 >= 6.21 | off-diag < 1e-5, ratio > 6 | `results/mode_tracking.json` |
 | closed form e'C^-1 e/kappa vs FEM coupling (free plate) | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/?` |
-| the superseded series is exactly k^2/(1+k^2) of the new one | 3.5e-06 | < 1e-5 (same formula applied twice) | `results/?` |
+| the superseded series is exactly k^2/(1+k^2) of the new one | 6.1e-05 | < 1e-5 (same formula applied twice) | `results/?` |
 | clamped-free f1, FEM 48x4 vs Euler-Bernoulli closed form | 144.6 vs 143.8 kHz | |err| < 1 % (+0.54 %) | `results/?` |
 | clamped-clamped f1, FEM 48x4 vs Euler-Bernoulli closed form | 919.2 vs 915.0 kHz | |err| < 1 % (+0.46 %) | `results/?` |
 | clamped-free f1 at 128x4 vs Euler-Bernoulli (mesh refinement) | 144.08 kHz | |err| < 0.5 % (+0.20 %) | `results/?` |
@@ -43,7 +43,7 @@
 | zeta at alpha = 1 vs omega*tau/2 (both omega*tau) | 0.0e+00 | < 1e-9 | `results/?` |
 | flexo x, uniform curvature: FEM energy triple vs 3 mu^2/(C11 h^2 kappa33) | 3.570415e-04 vs 3.570415e-04 | rel. diff < 1e-8 (worst 1.8e-10) | `results/?` |
 | flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33 | 1.7e-13 | < 1e-10 | `results/?` |
-| every number in the abstract has an independent-check verdict | 8 hua / 7 nahi hua / 3 inputs, 15 tokens | 0 uncovered, 0 stale | `results/?` |
+| every number in the abstract has an independent-check verdict | 8 hua / 7 nahi hua / 3 inputs, 17 tokens | 0 uncovered, 0 stale | `results/?` |
 | piezoelectric share of the bending device (poling y, long faces) at every thickness | 5.7e-07 | < 1e-5 (electrically silent bending mode) | `results/?` |
 | flexo growth with and without the piezoelectric terms | 23.9 vs 31.1 | reported 24 (2 s.f.) uses the real crystal; 31 with e = 0, both graded at 1 % | `results/?` |
 | the same bending field, four poling/electrode pairings: only the long faces collect it, and each pairing with its own permittivity | poled y 3.570e-04 vs 3.570e-04; poled x 1.613e-05 vs 1.613e-05; short-face pairs 7.5e-14 V | rel. diff < 1e-6, short-face charge < 1e-12 | `results/?` |
@@ -51,7 +51,7 @@
 | h = 1 um flexo k^2 over four equivalent solver paths and 4 numeric stacks | spread 0.182 %, k^2 4.1705e-03..4.1781e-03 | < 0.5 % (quoted to 2 s.f.) | `results/?` |
 | the same spread at h = 10 um | 1.49e-05 % | < 1e-3 % | `results/?` |
 | truncating the secular sum to 12 modes is not an alternative | 85 % off | > 50 % (hence the sum runs over all modes) | `results/?` |
-| the list of unverified numbers cites only numbers still in the manuscript | 31 entries, 0 stale | 0 stale | `results/?` |
+| the list of unverified numbers cites only numbers still in the manuscript | 29 entries, 2 stale | 0 stale | `results/?` |
 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |
 | piezo k^2, 24x2 vs 48x4, max rel. diff | 5.7e-04 | < 1e-3 | `results/demo.json` |
@@ -59,6 +59,6 @@
 | flexo k^2, 48x4 vs 96x4 witness | 3.5e-03 | < 0.02 | `results/demo.json` |
 | flexo k^2 at mu = 0 / value (residual) | 6e-07 | < 1e-5 | `results/demo.json` |
 | gradient-energy coefficient: code vs manuscript | 0.5 x int, (1/4)M/((1/20)L)=1.000000000000 | factor 1/2 in the assembly, (1/4)M = (1/20)L, FEM-1 u_R within 2 % | `results/?` |
-| paper figures: vector set written | 14 PDF | = 14 (P1-P14) | `results/paper_figures_data.json` |
-| orientation sweep rows / k^2 range | 168 rows, 0.3786-0.4677 | 168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
-| manuscript numbers vs the JSON they came from | 60/60 | all agree | `results/?` |
+| paper figures: vector set written | 11 PDF | = 14 (P1-P14) | `results/paper_figures_data.json` |
+| orientation sweep rows / k^2 range | 133 rows, 0.3786-0.4677 | 168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
+| manuscript numbers vs the JSON they came from | 66/66 | all agree | `results/?` |

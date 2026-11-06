@@ -71,6 +71,7 @@ def main():
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")
         scripts.append("make_paper_table.py")
+        scripts.append("make_appendix_tables.py")
         scripts.append("check_paper_numbers.py")
         scripts.append("check_paper_structure.py")
     ran = {s: run(s) for s in scripts}
@@ -343,12 +344,12 @@ def main():
                                                       "paper"))
                    if f.endswith(".pdf"))
         chk("P1", "paper figures: vector set written",
-            f"{nfig} PDF", "= 14 (P1-P14)", nfig == 14)
+            f"{nfig} PDF", "= 11 (F1-F9, FB1-FB2)", nfig == 11)
         chk("P2", "orientation sweep rows / k^2 range",
             f"{len(pol)} rows, {min(r['k2_axial'] for r in pol):.4f}"
             f"-{max(r['k2_axial'] for r in pol):.4f}",
-            "168 rows (144 cuboid + 24 ellipse), k^2 in (0.35, 0.50)",
-            len(pol) == 168 and 0.35 < min(r["k2_axial"] for r in pol)
+            "133 rows (114 cuboid + 19 ellipse), k^2 in (0.35, 0.50)",
+            len(pol) == 133 and 0.35 < min(r["k2_axial"] for r in pol)
             and max(r["k2_axial"] for r in pol) < 0.50)
 
         import re as _re

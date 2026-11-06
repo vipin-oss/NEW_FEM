@@ -282,7 +282,7 @@ def fig_flexo_thickness():
       with a 96x4 witness at the two ends of the range.
     """
     rows = []
-    hs = [10e-6, 5e-6, 2e-6, 1e-6]
+    hs = [10e-6, 7e-6, 5e-6, 3.5e-6, 2.7e-6, 2e-6, 1.4e-6, 1e-6]
     Lb = 200e-6                                        # fixed plate length
     Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)   # half-widths 3 x 1 um
     # NB: materials.batio3() already carries mu = 1e-6, so the piezo-only
