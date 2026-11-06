@@ -1,4 +1,5 @@
 %% ===========================================================================
+\FloatBarrier
 \section{Experimental calibration protocol and limitations}
 \label{sec:calibration}
 %% ===========================================================================
@@ -9,6 +10,7 @@ the flexoelectric coefficient $\mu$. This section states how each is to be
 obtained, over which ranges the results of this paper hold, and which numbers
 in the paper are not verified.
 
+\FloatBarrier
 \subsection{Experimental calibration protocol}
 \label{sec:calib_a_mu}
 
@@ -21,68 +23,56 @@ a bending or a direct charge measurement. The protocol below is ordered so that
 each step fixes one quantity and the later steps check the earlier ones, in the
 manner of the characteristic-length identification of the one-scale theory.
 
-\begin{enumerate}
-\item \emph{Size-effect bending tests.} Apparent bending stiffness $D_{\rm app}$
-  is measured on cantilever strips cut along $x$ and along $y$ for at least
-  three thicknesses spanning the boundary layer, $h/\sqrt{M_{22}}\in[2,20]$.
-  The measured ratio $D_{\rm app}/D_{\rm cl}$ is fitted to the clamped-edge
-  solution of Sec.~\ref{sec:bc_mech}, which depends on the window only through
-  $M_{22}/h^{2}$; the fit returns $M_{22}$ for the thickness direction.
-\item \emph{Orientation sweep.} The same strips are cut at $\theta=0^\circ$,
-  $15^\circ$, \dots, $90^\circ$ to the material axes, and both $D_{\rm app}
-  (\theta)$ and $f_{1}(\theta)$ are recorded. Fitting them to the rotated
-  tensor \eqref{eq:Mrot} returns $M_{11}/M_{22}$ and $\theta$; the sweep of
-  Sec.~\ref{sec:orientation} shows the size of the effect to be resolved, a
-  change of $15$--$19\,\%$ in $k^{2}$ and of $6$--$8\,\%$ in $f_{1}$ between
-  the aligned and the transverse windows.
-\item \emph{Ultrasonic dispersion.} Wave speed $c(k)$ is measured against
-  wavenumber over the range in which the gradient term is visible, and fitted
-  to the plane-wave dispersion of \eqref{eq:gov1}, which carries the same
-  combination $(1/4)M_{mn}$ as the energy. This step gives an estimate that
-  involves no boundary condition at all and is therefore independent of
-  step~1.
-\item \emph{Boundary-layer profile.} Digital image correlation or a strain
-  gauge resolves the decay of the strain near a clamped edge; the decay length
-  is $\sqrt{M_{22}/2}$ for a window with $M=\ell^{2}\delta$, which fixes
-  $M_{22}$ a third time, on one specimen and without a stiffness measurement.
-\item \emph{Second moments of the microstructure.} An image of the
-  microstructure -- grain map, fibre paths or the unit cell of a lattice --
-  gives the fabric-like tensor \eqref{eq:Mdef} directly by numerical
-  integration over the window,
-  $M_{mn}=\langle s_{m}s_{n}\rangle_{\mathcal W}$. This is the only step that
-  fixes the \emph{anisotropy} of the window independently of the mechanical
-  response, and it is the one that makes the model a geometric statement
-  rather than a fit.
-\item \emph{Cross-check against the design map.} With $M$ calibrated, the
-  coupling-and-frequency maps of Figs.~\ref{fig:orientation} and~\ref{fig:design}
-  is a prediction: the coupling and $f_{1}$ of specimens spanning the aspect
-  ratio and the window angle are measured and compared with it. Agreement
-  checks the tensor and its rotation; disagreement at fixed $M$ checks the
-  window-shape statement of Sec.~\ref{sec:windowshape}.
-\item \emph{Interaction-level check.} Steps 1--5 all infer $M$ from a
-  macroscopic response or from a window chosen by the analyst, so they cannot
-  by themselves distinguish an anisotropic interaction domain from an
-  anisotropic elasticity. The microstructure is then reconstructed
-  (micro-computed tomography, or resolved representative volume elements), a
-  local field is extracted from it, and the two-point correlation of that
-  field is computed as a function of the separation vector, resolved along and
-  across the principal directions. The decay lengths of these correlations are
-  estimates of the window that involve no stiffness and no boundary condition,
-  and comparing them with steps 1--5 is the test that the second-moment
-  description itself is adequate. That comparison has not been carried out
-  here.
-\end{enumerate}
+Table~\ref{tab:protocol} lists the steps in the order in which they fix the
+quantities. Steps 1, 3 and 4 determine $M_{22}$ from three independent
+observables -- a stiffness ratio, a dispersion curve and a boundary-layer
+profile -- so that agreement among them is a check on the second-moment
+description rather than a repetition of one measurement; step~5 is the only one
+that fixes the anisotropy of the window from the geometry of the material
+instead of from its mechanical response, and step~6 turns the calibrated tensor
+into a prediction of the coupling and frequency maps of
+Figs.~\ref{fig:orientation} and~\ref{fig:design}. Step~7 is the interaction-level
+test of the description itself and has not been carried out here.
 
-\paragraph{The flexoelectric coefficient.} $\mu$ is measured, not assumed. The
-direct route is a four-point bending test on a poled dielectric bar with
-electrodes on the two faces: for the geometry of Fig.~\ref{fig:geometry}(a) the
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Calibration protocol. Each step fixes one quantity, and the steps are
+ordered so that the later ones check the earlier ones. The last row is the test
+of the second-moment description itself, which this paper does not attempt.}
+\label{tab:protocol}
+\begin{tabular}{@{}p{0.03\textwidth}p{0.30\textwidth}p{0.28\textwidth}p{0.26\textwidth}@{}}
+\toprule
+\# & measurement & observable & quantity fixed \\
+\midrule
+1 & bending of strips cut along $x$ and $y$, three or more thicknesses in
+$h/\sqrt{M_{22}}\in[2,20]$ & $D_{\rm app}/D_{\rm cl}$ against $h$ &
+$M_{22}$ through the thickness \\
+2 & the same strips cut at $0^\circ,15^\circ,\dots,90^\circ$ &
+$D_{\rm app}(\theta)$ and $f_{1}(\theta)$ & $M_{11}/M_{22}$ and $\theta$ \\
+3 & ultrasonic dispersion & $c(k)$ over the band where the gradient term is
+visible & $(1/4)M_{mn}$, without a boundary condition \\
+4 & boundary-layer profile by digital image correlation & decay length of the
+strain at a clamped edge & $M_{22}$ from one specimen \\
+5 & image of the microstructure & $M_{mn}=\langle s_{m}s_{n}\rangle_{\mathcal
+W}$ by numerical integration & the anisotropy of the window \\
+6 & specimens spanning the aspect ratio and the window angle & $k^{2}$ and
+$f_{1}$ against ${\rm AR}$ and $\theta$ & a prediction, not a fit \\
+7 & reconstructed microstructure & decay lengths of the two-point correlation
+& adequacy of the second-moment description \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The flexoelectric coefficient.} The direct route is a four-point
+bending test on a poled dielectric bar with electrodes on the two faces: for the geometry of Fig.~\ref{fig:geometry}(a) the
 open-circuit voltage under a known curvature $\kappa_{c}$ is
 \begin{equation}
   V = \frac{\mu\,\kappa_{c}\,h}{\kappa_{yy}\,\varepsilon_{0}},
   \label{eq:muV}
 \end{equation}
 which fixes $\mu$ from a voltage, a curvature and the permittivity, with no
-discretisation involved. The inverse route measures the charge released by a
+discretization involved. The inverse route measures the charge released by a
 device whose curvature is known from its deflection. In both routes the
 measured quantity is linear in $\mu$, so one measurement fixes the magnitude
 and the sign has to be taken from the crystal symmetry. The value used in this
@@ -91,6 +81,7 @@ coupling in Secs.~\ref{sec:thickness} and~\ref{sec:transient} scales with
 $\mu^{2}$ and should be read as a shape, not as a magnitude, until a measured
 coefficient is substituted.
 
+\FloatBarrier
 \subsection{Calibration of the fractional order and of the relaxation time}
 \label{sec:calib_alpha_tau}
 
@@ -113,10 +104,11 @@ is $0.449$ at $\alpha=1$. Second, the fit is valid where the measurement is:
 the fractional element describes a broadened, single-power-law loss, and a
 material with two well-separated loss peaks needs two elements rather than one.
 
+\FloatBarrier
 \subsection{Validity window}
 \label{sec:limit_window}
 
-Three inequalities bound the results, and each is a modelling assumption rather
+Three inequalities bound the results, and each is a modeling assumption rather
 than a numerical tolerance.
 
 \begin{enumerate}
@@ -134,41 +126,41 @@ than a numerical tolerance.
   represents the average, independently of the mesh.
 \item \emph{Operating band.} The damping map is claimed for
   $\omega\tau\le1$, the band in which the spring-pot represents a relaxation
-  whose spectrum is centred on the device frequency. Beyond that band the map
+  whose spectrum is centered on the device frequency. Beyond that band the map
   is an extrapolation of the fitted law, not a prediction, and
   Table~\ref{tab:modulus} shows how far the integer-order alternative departs
   from it there.
 \end{enumerate}
 
+\FloatBarrier
 \subsection{Limitations}
 \label{sec:limitations}
 
-\emph{Two dimensions.} The formulation is two-dimensional, with a plane-stress
-reduction of the constitutive tensors. The reduction is a modelling choice:
-plane strain would change the extensional coupling, and the three-dimensional
-solution differs from both. The thin-plate results of
-Sec.~\ref{sec:thickness} are therefore two-dimensional results, consistent with
-the plane-stress constitutive law that the table states.
+\emph{Two dimensions and unverified inputs.} The formulation is
+two-dimensional, with a plane-stress reduction of the constitutive tensors; the
+reduction is a modeling choice, since plane strain would change the extensional
+coupling and the three-dimensional solution differs from both, so the
+thin-plate results of Sec.~\ref{sec:thickness} are two-dimensional results
+consistent with the plane-stress law of Table~\ref{tab:params}. Two inputs are
+nominal rather than measured. The mass density
+$\rho=\SI{6020}{\kilo\gram\per\cubic\metre}$ scales every frequency by a common
+factor, so the absolute kilohertz numbers of Secs.~\ref{sec:orientation}
+and~\ref{sec:application} would be rescaled by a measured density while the
+ratios and the conclusions stand, and the flexoelectric coefficient
+$\mu=10^{-6}$\,\si{\coulomb\per\metre} scales every flexoelectric coupling as
+$\mu^{2}$, so the growth factor, the saturation and the comparison with the
+piezoelectric response are unaffected by its value while the absolute coupling
+is.
 
-\emph{Unverified parameters.} Two inputs are nominal rather than measured. The
-mass density $\rho=\SI{6020}{\kilo\gram\per\cubic\metre}$ scales every
-frequency in the paper by a common factor; no conclusion depends on its value,
-but the absolute kilohertz numbers in Secs.~\ref{sec:orientation}
-and~\ref{sec:application} should be rescaled if a measured density is
-substituted. The flexoelectric coefficient $\mu=10^{-6}$\,\si{\coulomb\per\metre}
-scales every flexoelectric coupling as $\mu^{2}$; the growth factor, the
-saturation and the comparison with the piezoelectric response are unaffected by
-its value, but the absolute coupling is not.
+\emph{What the numbers and the verification do not establish.} The
+two-significant-digit statement of Sec.~\ref{sec:thickness} is a limitation as
+much as a result: the third digit of the thin-plate coupling is not a property
+of the model, and the same applies, with smaller amplitude, to any quantity
+obtained as a difference of nearly equal eigenvalues. The verification of
+Sec.~\ref{sec:verification} and Appendix~\ref{app:verification} shows that the
+implementation solves the stated equations; it does not show that the equations
+describe a particular material, which requires the measurements of
+Secs.~\ref{sec:calib_a_mu} and~\ref{sec:calib_alpha_tau} and is the natural
+continuation of this work.
 
-\emph{Numbers set by the solver.} The two-significant-digit statement of
-Sec.~\ref{sec:thickness} is a limitation as much as a result: the third digit
-of the thin-plate coupling is not a property of the model. The same applies,
-with smaller amplitude, to any quantity in the paper obtained as a difference
-of nearly equal eigenvalues.
-
-\emph{Scope of the validation.} The verification of
-Sec.~\ref{sec:verification} and Appendix~\ref{app:verification} establishes
-that the implementation solves the stated equations; it does not establish that
-the equations describe a particular material. That step requires the
-measurements of Secs.~\ref{sec:calib_a_mu} and~\ref{sec:calib_alpha_tau}, and
-it is the natural continuation of this work.
+\FloatBarrier

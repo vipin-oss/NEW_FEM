@@ -719,12 +719,12 @@ def fig_p11_convergence():
         mdl = f6.assemble(mesh, mt.to_core(MAT), Mg)
         Ksc, M, idx, _ = f6.reduce(mdl, "short", pair=("left", "right"))
         _, _, _, (d, beta) = f6.reduce(mdl, "open", pair=("left", "right"))
-        w2, Phi = f6.modes(Ksc, M, 8)
-        s = (Phi.T @ d) ** 2 / beta
-        x = s / w2
+        w, Phi = f6.modes(Ksc, M, 8)          # w is omega, in rad/s
+        s = (Phi.T @ d) ** 2 / beta           # units of omega^2
+        x = s / w ** 2
         k2m = x / (1.0 + x)
         j = int(np.argmax(k2m))
-        f1 = float(np.sqrt(w2[j]) / 2e3 / np.pi)
+        f1 = float(w[j] / 2e3 / np.pi)        # omega -> kHz
         k2 = float(static_k2(MAT, Mg, ("left", "right"), nx=nx, ny=ny))
         rec.append({"nx": nx, "ny": ny, "ndof": int(mdl.ndof_mech),
                     "f_coupled_kHz": f1, "k2_static": k2,

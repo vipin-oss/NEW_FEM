@@ -316,10 +316,23 @@ def main():
                  "sensitivity.json spread_h10_pct (range/midpoint)",
                  SN["spread_h10_pct"], "{:.2e}", upper=1e-4))
     CT = J("config_table.json")
-    R.append(row("abstract, flexo over residual piezo, h=1", "4e7",
-                 "config_table rows[3] k2_both / k2_piezo",
-                 CT["rows"][3]["k2_both"] / CT["rows"][3]["k2_piezo"],
-                 "{:.0e}", rel_tol=0.05))
+    # Round 13: the 4e7 ratio left the abstract with the rewrite; the same gap is
+    # now stated as "two orders of magnitude" in the conclusion, so this slot
+    # carries the ring-down decrements that the rewritten Sec. 6.7 quotes.
+    P6 = J("paper_figures_data.json")["notes"]["P6"]
+    R.append(row("ring-down, decrement at alpha=1", "0.064",
+                 "paper_figures_data.json notes.P6 zeta_1.0",
+                 P6["zeta_1.0"], "{:.3f}", rel_tol=1e-2))
+    R.append(row("ring-down, peak decrement at alpha=0.6", "0.105",
+                 "paper_figures_data.json notes.P6 zeta_0.6",
+                 P6["zeta_0.6"], "{:.3f}", rel_tol=1e-2))
+    R.append(row("ring-down, decrement at alpha=0.4", "0.085",
+                 "paper_figures_data.json notes.P6 zeta_0.4",
+                 P6["zeta_0.4"], "{:.3f}", rel_tol=1e-2))
+    R.append(row("ring-down, error at alpha=0.6 against alpha=1", "65",
+                 "paper_figures_data.json notes.P6 zeta_0.6/zeta_1.0 - 1, in percent",
+                 100.0 * (P6["zeta_0.6"] / P6["zeta_1.0"] - 1.0), "{:.0f}",
+                 rel_tol=1e-2))
     R.append(row("config table, flexo only at h=10", "1.76e-4",
                  "config_table rows[0] k2_flexo",
                  CT["rows"][0]["k2_flexo"], "{:.2e}"))

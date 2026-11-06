@@ -112,3 +112,32 @@ would have flagged.
   journal line and the acknowledgements. Cloning and committing work here; the
   push is refused (403) because this sandbox has no write access to that
   repository.
+
+## Round 13 — final publication polish
+
+- Floats: `float` and `[section]placeins` are loaded, every main-text float is
+  `[!htbp]`, stands directly after the paragraph that cites it, and is followed
+  by a `\FloatBarrier`; the 22 floats are now defined in exactly the order in
+  which the text first cites them (checked by a script over `sec/*.tex`).
+  Appendix counters are reset per appendix, so the tables run A.1, B.1-B.3,
+  C.1-C.5 with no gap.
+- `table_closed_form` moved from Appendix B into Sec. 6.2 and the parameter
+  table from Sec. 6.1 into Sec. 2, both to their first citation.
+- Abstract rewritten: 218 words, one paragraph, no cross-references; the
+  `4e7` comparison was dropped and the `1/h^2` sentence in the introduction
+  now states the coupling trend instead of the charge.
+- Sec. 6.6 was reordered (thickness figure -> size effect -> mode tracking) and
+  now states the saturation as a hypothesis with the `a2/h` group; Sec. 6.7
+  reports the measured `65 %` error instead of "a factor of order two" and lists
+  all eight Caputo orders; the three coupling measures of the extensional mode
+  (0.4650, 0.4580, 0.4583) are named where they meet.
+- Sec. 6.8 is now "open-circuit sensing" and every "energy harvester" phrase is
+  gone from title, abstract, keywords, highlights and conclusion.
+- The numbered calibration protocol of Sec. 7 became a paragraph plus a compact
+  table (`tab:protocol`), and the four limitation paragraphs became two.
+- Conclusion: 250 words, one findings paragraph and one limitations paragraph.
+- Fig. 2 was recomputed: the frequency axis and the modes-based coupling of the
+  convergence figure had been plotted through a square root of an angular
+  frequency and were wrong; `table_C4` was rebuilt from the same run.
+- US spelling throughout the source (the bibliography keeps the titles as
+  published). `Kogan1964` gained the citation that was missing.

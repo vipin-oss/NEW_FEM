@@ -1,4 +1,5 @@
 %% ===========================================================================
+\FloatBarrier
 \section{Verification record, independent routes and platform sensitivity}
 \label{app:verification}
 \setcounter{table}{0}
@@ -8,6 +9,7 @@
 This appendix collects the numerical evidence behind
 Sec.~\ref{sec:verification} in full.
 
+\FloatBarrier
 \subsection{Benchmarks, patch tests and identities}
 
 Table~\ref{tab:verification} lists the benchmark problems, the exact identities
@@ -19,7 +21,7 @@ numerical integration of the window, the closed-form coupling factor of a
 uniaxial crystal, and the analytical damping ratio of the classical
 Kelvin--Voigt element.
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \small
 \caption{Verification record. Each line is a problem with a known answer, the
@@ -32,29 +34,21 @@ those of Sec.~\ref{sec:material}.}
 
 The two-dimensional reduction is quantified in the same record: the
 plane-stress coupling differs from the three-dimensional value by $2.8\,\%$,
-which is the size of the modelling error that the reduction introduces and the
+which is the size of the modeling error that the reduction introduces and the
 reason the two reductions are not used interchangeably. The mode-tracking
 diagnostic of Sec.~\ref{app:verification} keeps the modal assurance criterion
 between consecutive thicknesses above $0.9992$ over the whole sweep, so the
 tracked branch is the same mode at every thickness.
 
 The closed-form coupling factor that the finite element result is compared with
-is itself derived from the constitutive tensors, without any discretisation;
+is itself derived from the constitutive tensors, without any discretization;
 Table~\ref{tab:closedform} lists the values along that route, including the
 three-dimensional free-bar and uniaxial cases, the two-dimensional plane-strain
 case and the coupling strength $e^{\mathsf T}C^{-1}e=6.3308\times10^{-10}$ that they share.
 
-\begin{table}[h]
-\centering
-\small
-\caption{The coupling factor obtained from the constitutive tensors alone, for
-the four kinematics, together with the coupling strength
-$e^{\mathsf T}C^{-1}e/\kappa$ from which it follows. The record is that of
-Table~\ref{tab:params}, in plane stress and in plane strain.}
-\label{tab:closedform}
-\input{table_closed_form}
-\end{table}
 
+
+\FloatBarrier
 \subsection{Independent routes to the headline numbers}
 
 Eight headline quantities were recomputed along routes that do not use the
@@ -73,7 +67,7 @@ by the finite element value, and the damping ratio of the element at
 $\alpha=0.3$ and $\omega\tau=0.3$ is $0.108$, against a peak of $0.179$ at
 $\alpha=0.7$.
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \small
 \caption{Headline numbers recomputed along routes that do not use the assembled
@@ -82,6 +76,7 @@ matrices. The material record is that of Table~\ref{tab:params}.}
 \input{table_independent}
 \end{table}
 
+\FloatBarrier
 \subsection{Mode tracking and modal assurance}
 
 One diagnostic is collected here. Fig.~\ref{fig:modeshape} gives the modal
@@ -91,7 +86,7 @@ the numerical procedure and carries no physical claim of its own; the branch
 that carries the coupling is tracked in Fig.~\ref{fig:modetrack} of
 Sec.~\ref{sec:transient}.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.72\textwidth]{FB2_modes.pdf}
 \caption{The coupled bending mode of the plate in the open-circuit
@@ -105,6 +100,7 @@ $\mu=10^{-6}$\,\si{\coulomb\per\metre}.)}
 \label{fig:modeshape}
 \end{figure}
 
+\FloatBarrier
 \subsection{Platform sensitivity of the thin-plate coupling}
 
 The $h=\SI{1}{\micro\metre}$ coupling is a difference of two nearly equal
@@ -115,7 +111,7 @@ stacks, with the deviations measured from the midpoint of the equivalent rows
 rather than from any one stack, so that the number is a property of the model
 and not of the machine that computed it.
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \small
 \caption{The $h=\SI{1}{\micro\metre}$ flexoelectric coupling seen from four
@@ -133,3 +129,5 @@ The $h=\SI{1}{\micro\metre}$ point is the one that moves between stacks.}
 \label{tab:sens}
 \input{table_sensitivity}
 \end{table}
+
+\FloatBarrier

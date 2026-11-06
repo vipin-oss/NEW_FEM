@@ -82,3 +82,13 @@ and the audit file `results/paper_number_audit.md` names the row.
 | figures | renamed `F1`--`F9` (main text) and `FB1`--`FB2` (Appendix B); the old `P*` files are gone, so a stale `\includegraphics` will fail loudly |
 | Appendix C | new; the Data availability statement points at it, so it must stay in the package |
 | Overleaf | the repository is linked to Overleaf; after the push, press **Pull GitHub changes** in Overleaf, then resolve any conflict in the author block yourself (the sync script never touches it) |
+
+## 8. What round 13 left for the author
+
+| item | why it is still open |
+|---|---|
+| `\cite{fem1}`, `\cite{fem4}`, `\cite{fem5}` | the three self-citations are real papers, but the journal, volume, pages and DOI are still `TODO` in `references.bib`; fill them from the published records |
+| `Kogan1964` | the entry carries `TO VERIFY` because its volume and pages were taken from memory; it is now cited in the introduction, so check it before submission |
+| every DOI | the reference audit (`python/Paper_12/check_refs.py`) carries 47 of the 64 entries from the earlier paper with 0 field mismatches, but no DOI could be resolved: the check runs offline, so "resolves" is unverified, not confirmed |
+| page count | no TeX distribution is installed in the build environment, so the 28-page limit, the overfull-box list and the page on which each float lands were not measured here. Compile once and check `\listfiles` |
+| verbatim | the abstract is 218 words, the conclusion 250, the five highlights at most 85 characters, but a journal's own counter may differ by a word or two |

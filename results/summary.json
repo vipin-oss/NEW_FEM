@@ -276,7 +276,7 @@
   {
    "id": "A2",
    "what": "every number in the abstract has an independent-check verdict",
-   "value": "8 hua / 8 nahi hua / 3 inputs, 17 tokens",
+   "value": "3 hua / 5 nahi hua / 3 inputs, 11 tokens",
    "criterion": "0 uncovered, 0 stale",
    "pass": true
   },
@@ -332,7 +332,7 @@
   {
    "id": "N2",
    "what": "the list of unverified numbers cites only numbers still in the manuscript",
-   "value": "32 entries, 0 stale",
+   "value": "29 entries, 0 stale",
    "criterion": "0 stale",
    "pass": true
   },
@@ -402,7 +402,7 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "66/66",
+   "value": "69/69",
    "criterion": "all agree",
    "pass": true
   }

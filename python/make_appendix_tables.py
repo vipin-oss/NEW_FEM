@@ -46,7 +46,7 @@ def table_orientation():
                  and q["theta_deg"] == float(t)][0]
             row += ["%.0f" % r["f_ext_kHz"], "%.4f" % r["k2_axial"]]
         body.append(" & ".join(row) + r" \\")
-    text = r"""\begin{table}[t]
+    text = r"""\begin{table}[!htbp]
 \centering
 \caption{Window orientation: frequency of the extensional mode and its coupling
 factor, for the three aspect ratios of Fig.~\ref{fig:orientation}, on the
@@ -84,7 +84,7 @@ def table_thickness():
                                 "%.2e" % r["k2_flexo_24"], k96,
                                 "%.5f" % r["k2_ext"],
                                 "%.5f" % r["k2_ext_24"]]) + r" \\")
-    text = r"""\begin{table}[t]
+    text = r"""\begin{table}[!htbp]
 \centering
 \caption{Thickness sweep behind Fig.~\ref{fig:thickness}:
 $L=\SI{200}{\micro\metre}$, window half-widths
@@ -123,7 +123,7 @@ def table_damping():
             s0 = s
             cells.append("%.3f" % (-s.real / abs(s)))
         body.append(" & ".join(cells) + r" \\")
-    text = r"""\begin{table}[t]
+    text = r"""\begin{table}[!htbp]
 \centering
 \caption{Damping ratio $\zeta=-\mathrm{Re}\,s/(\omega_0|s|)$ of the fractional
 Kelvin--Voigt element of \eqref{eq:kvfreq}, on the grid behind
@@ -158,26 +158,32 @@ def table_convergence():
         mdl = f6.assemble(mesh, mt.to_core(MAT), Mg)
         Ksc, M, idx, _ = f6.reduce(mdl, "short", pair=("left", "right"))
         _, _, _, (d, beta) = f6.reduce(mdl, "open", pair=("left", "right"))
-        w2, Phi = f6.modes(Ksc, M, 8)
-        x = ((Phi.T @ d) ** 2 / beta) / w2
+        w, Phi = f6.modes(Ksc, M, 8)           # w is omega in rad/s
+        x = ((Phi.T @ d) ** 2 / beta) / w ** 2
         k2m = x / (1.0 + x)
         j = int(np.argmax(k2m))
-        rows.append((nx, ny, int(mdl.ndof_mech),
-                     float(np.sqrt(w2[j]) / 2e3 / np.pi), float(k2m[j])))
-    ref_f, ref_k = rows[-1][3], rows[-1][4]
+        sd = np.sqrt(np.abs(np.diag(Ksc)))
+        S = 1.0 / sd
+        xq = float((S * d) @ np.linalg.solve(Ksc * S[:, None] * S[None, :], S * d))
+        kqs = (xq / beta) / (1.0 + xq / beta)
+        rows.append((nx, ny, int(mdl.ndof_mech), float(w[j] / 2e3 / np.pi),
+                     float(k2m[j]), float(kqs)))
+    ref_f, ref_k = rows[-1][3], rows[-1][5]
     body = []
-    for nx, ny, nd, f, k in rows:
+    for nx, ny, nd, f, _k, kq in rows:
         body.append(" & ".join(["$%d\\times%d$" % (nx, ny), "%d" % nd,
-                                "%.2f" % f, "%.4f" % k,
-                                "%.2e" % abs(f / ref_f - 1.0),
-                                "%.1e" % abs(k / ref_k - 1.0)]) + r" \\")
-    text = r"""\begin{table}[t]
+                                "%.1f" % f, "%.5f" % kq,
+                                "%.1e" % abs(f / ref_f - 1.0),
+                                "%.1e" % abs(kq / ref_k - 1.0)]) + r" \\")
+    text = r"""\begin{table}[!htbp]
 \centering
 \caption{Convergence of the extensional mode behind
 Fig.~\ref{fig:convergence}: plate \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre},
 poling $x$, plane stress, $\mu=0$, $a_1\times a_2=3\times1$\,\si{\micro\metre}.
-The coupled frequency and the mode-based coupling are those of the
-eigenvalue problem; the errors are referred to the $48\times4$ mesh.}
+The frequency is that of the extensional mode of the short-circuit eigenvalue
+problem and the coupling is the mode-free quasi-static value of
+\eqref{eq:kstatic}, the number quoted in the text; the errors are referred to
+the $48\times4$ mesh.}
 \label{tab:convergence}
 \begin{tabular}{@{}l r r r r r@{}}
 \toprule
@@ -200,7 +206,7 @@ def table_ringdown():
             continue
         a = key.split("_")[1]
         body.append(" & ".join([a, "%.5f" % notes[key]]) + r" \\")
-    text = r"""\begin{table}[t]
+    text = r"""\begin{table}[!htbp]
 \centering
 \caption{Ring-down behind Fig.~\ref{fig:ringdown}: the logarithmic decrement
 of the tip displacement over the first two peaks divided by $2\pi$,

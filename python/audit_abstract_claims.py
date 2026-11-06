@@ -32,68 +32,40 @@ TEX = os.path.join(ROOT, "Paper_12", "main.tex")
 
 # (literal in the abstract, what it is, verdict, route / where it is checked)
 CLAIMS = [
-    ("200", "plate length and width, \\SI{200}{\\micro\\metre}",
+    ("200", "plate length, \\SI{200}{\\micro\\metre}",
      "n/a", "an input of the model, not a measured quantity"),
     ("10", "plate thickness, \\SI{10}{\\micro\\metre}",
      "n/a", "an input of the model"),
-    ("0.449", "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
-     "nahi hua", "a property of the two condensation choices, read off the "
-     "FEM matrices (S1b); the pole solver that converts the pole into "
-     "$\\zeta$ is itself checked (I4)"),
-    ("1", "$\\alpha=1$", "n/a", "the classical limit, chosen for the comparison"),
-    ("0.15", "distance of $\\zeta_{\\rm eff}$ from the classical limit",
-     "hua", "I5: at $\\alpha=1$ the pole equation is quadratic and gives "
-     "$\\omega\\tau/2=0.15000$ exactly, so the $0.15\\,\\%$ is a comparison "
-     "with an exact value"),
-    ("2", "the factor $1/2$ in $\\omega\\tau/2$",
-     "hua", "at $\\alpha=1$ the pole equation is a quadratic whose root is "
-     "$s=\\omega_0(-\\zeta+i\\sqrt{1-\\zeta^2})$ with "
-     "$\\zeta=\\omega\\tau/2$; the polynomial route returns the same "
-     "root (I4, I5)"),
-    ("3", "$M_{ii}=a_i^2/3$ for a cuboid",
-     "hua", "I8: quadrature over the box, 0.3333333333"),
-    ("4", "$M_{ii}=a_i^2/4$ for an ellipse",
-     "hua", "I8: quadrature over the ellipse, 0.2499991667"),
-    ("5", "$M_{ii}=a_i^2/5$ for an ellipsoid",
-     "hua", "I8: quadrature over the ellipsoid, 0.2000000000"),
-    ("19", "effect of window anisotropy and orientation on the coupling",
-     "nahi hua", "FEM rotation study (criterion T5 for the mesh/rotation "
-     "trend); no independent route"),
+    ("1", "$\\alpha=1$ and the one L1 history",
+     "n/a", "the classical limit, chosen for the comparison"),
     ("0.5581", "piezoelectric extensional $k^2$ of the 200x10 plate",
      "hua", "D1/C1: the closed form built from $e$, $C$, $\\kappa$ alone "
      "gives 0.56079, and the free-plate FEM matches it to $10^{-10}$"),
     ("0.5", "distance between 0.5581 and the closed form 0.5608",
      "hua", "D1: the same two numbers, 0.56079 against 0.55814"),
-    ("0.5608", "$e^{\\mathsf T}C^{-1}e/\\kappa$, 2-D plane stress",
-     "hua", "derive\\_k2\\_closed\\_form.py from the constitutive tensors "
-     "only; agreements 0.56079 vs 0.56079 (D1)"),
     ("0.09", "spread of the piezo $k^2$ between 10 and 1 micron",
      "nahi hua", "FEM thickness sweep (T3, T2 for mesh independence); the "
      "spread is small but no closed form predicts it"),
-    ("31", "the same growth with the piezoelectric terms switched off",
-     "nahi hua", "config_table: an FEM run with $e=0$ in the same solver; the "
-     "two runs differ by the piezoelectric stiffness of the mode, and neither "
-     "has a closed form"),
-    ("1.7", "the flexoelectric coupling at $h=\\SI{10}{\\micro\\metre}$",
-     "nahi hua", "FEM value of the thickness sweep (criterion T3); the h = 10 um "
-     "point is reproducible to 1e-5 per cent (Tab.~\\ref{tab:sens}), but it is "
-     "still a finite element value"),
-    ("4.2", "the flexoelectric coupling at $h=\\SI{1}{\\micro\\metre}$, "
-     "to two significant digits",
-     "nahi hua", "FEM value (criterion T3); the two-significant-digit form is "
-     "forced by the platform spread measured in Tab.~\\ref{tab:sens}, not by "
-     "an independent calculation"),
-    ("7", "exponent of the factor \\num{4e7} between the flexoelectric "
-     "bending coupling and the residual piezoelectric coupling of the same "
-     "configuration at \\SI{1}{\\micro\\metre}",
-     "nahi hua", "two FEM numbers of the same run divided (tab:config, h = 1); "
-     "the piezoelectric-only coupling is a symmetry cancellation, not an "
-     "independent measurement"),
     ("24", "growth of the flexoelectric $k^2$ over the same range, to the two "
      "significant digits the platform supports",
      "nahi hua", "the same FEM sweep (T3); the flexoelectric operator itself "
      "is verified against the uniform-curvature limit (I6, I7), the growth "
      "factor is not"),
+    ("15", "lower end of the effect of window anisotropy and orientation on "
+     "the coupling",
+     "nahi hua", "FEM rotation study (criterion T5 for the mesh/rotation "
+     "trend); no independent route"),
+    ("19", "upper end of the same range",
+     "nahi hua", "the same rotation study (T5); the spread is a property of "
+     "the second-moment tensor, which is verified (I8), the spread is not"),
+    ("0.449", "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
+     "nahi hua", "a property of the two condensation choices, read off the "
+     "FEM matrices (S1b); the pole solver that converts the pole into "
+     "$\\zeta$ is itself checked (I4)"),
+    ("0.15", "distance of $\\zeta_{\\rm eff}$ from the classical limit",
+     "hua", "I5: at $\\alpha=1$ the pole equation is quadratic and gives "
+     "$\\omega\\tau/2=0.15000$ exactly, so the $0.15\\,\\%$ is a comparison "
+     "with an exact value"),
 ]
 
 
@@ -102,6 +74,7 @@ def abstract_text():
     m = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", tex, re.S)
     body = m.group(1) if m else ""
     # superscripts are exponents, not quantities
+    body = re.sub(r"\\mathrm\{[^}]*\}", "", body)   # BaTiO_3 is a formula
     body = re.sub(r"\^\{-?\d+\}", "", body)
     body = re.sub(r"\^\d+", "", body)
     return body

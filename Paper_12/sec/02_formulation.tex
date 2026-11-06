@@ -1,4 +1,5 @@
 %% ===========================================================================
+\FloatBarrier
 \section{Formulation}
 \label{sec:formulation}
 %% ===========================================================================
@@ -11,11 +12,12 @@ response is a fractional Kelvin--Voigt law. The section states each ingredient
 in the order in which the finite element needs it, and the derivation of the
 window coefficients is collected in Appendix~\ref{app:Mcoeff}.
 
+\FloatBarrier
 \subsection{Nonlocal averaging window and the second-moment tensor}
 \label{sec:window}
 
 Let the strain gradient at a material point $\bm{x}$ be replaced by its average
-over a window $\mathcal{W}$ of area $A_{\mathcal W}$ centred at that point,
+over a window $\mathcal{W}$ of area $A_{\mathcal W}$ centered at that point,
 \begin{equation}
   \bar\eta_{ijk}(\bm{x}) = \frac{1}{A_{\mathcal W}}
      \int_{\mathcal W} \eta_{ijk}(\bm{x}+\bm{s})\,\mathrm{d}\bm{s},
@@ -57,13 +59,15 @@ free parameter of the model, whereas the anisotropy of the window -- its aspect
 ratio and its orientation -- is a genuine material-geometry parameter, since it
 changes $M$ and with it the ratio between the directional gradient penalties.
 
+\FloatBarrier
 \subsection{Kinematics}
 \label{sec:kinematics}
 
 Let $\Omega\subset\mathbb{R}^2$ be the mid-plane of a plate of thickness $h$,
-with in-plane coordinates $x_1,x_2$ and out-of-plane component $w\equiv u_3$.
-The mechanical state is the pair $(u_1,u_2,w)$, and the model retains the full
-second gradient of all three components,
+with coordinates $x_1$ along the member and $x_2$ through its thickness. The
+mechanical state is the pair $(u_1,u_2)$, where $u_1$ is the in-plane
+displacement and $u_2\equiv w$ is the transverse deflection, and the model
+retains the full second gradient of both components,
 \begin{equation}
   \varepsilon_{ij} = \tfrac12\left(u_{i,j}+u_{j,i}\right),\qquad
   \eta_{ijk} = \partial_k \varepsilon_{ij},
@@ -71,12 +75,13 @@ second gradient of all three components,
 \end{equation}
 so that the mechanical degrees of freedom at a node are the eight quantities
 \begin{equation}
-  \left\{u,\; u_{,1},\; u_{,2},\; u_{,12},\;
-         v,\; v_{,1},\; v_{,2},\; v_{,12}\right\},
+  \left\{u_1,\; \partial_1u_1,\; \partial_2u_1,\; \partial_{12}u_1,\;
+         u_2,\; \partial_1u_2,\; \partial_2u_2,\; \partial_{12}u_2\right\},
   \label{eq:dofs}
 \end{equation}
-that is, the value, two first derivatives and the cross derivative of each
-in-plane displacement component. These are the degrees of freedom of the
+that is, the value, the two first derivatives and the cross derivative of each
+component -- eight mechanical degrees of freedom per node and not a
+three-component continuum. These are the degrees of freedom of the
 Bogner--Fox--Schmit rectangle~\cite{BognerFoxSchmit1966}: a bicubic Hermite
 tensor-product element with 32 mechanical degrees of freedom, $C^1$ across
 element edges and $C^0$ only for the cross derivative. It is the natural
@@ -84,6 +89,7 @@ carrier of $\eta_{ijk}$ in two dimensions and it is the element family used in
 the authors' earlier strain-gradient work~\cite{fem1}; here it is extended by
 the flexoelectric and fractional-memory terms rather than replaced.
 
+\FloatBarrier
 \subsection{Electric enthalpy and the piezoelectric--flexoelectric
 constitutive relations}
 \label{sec:energy}
@@ -107,7 +113,11 @@ $C_{ijkl}$ the elastic stiffness, $e_{kij}$ the piezoelectric tensor,
 $\kappa_{ij}$ the permittivity, $\mu_{kijl}$ the flexoelectric tensor,
 $\eta_{ijl}=\varepsilon_{ij,l}$ the strain gradient of \eqref{eq:strain},
 $M_{mn}$ the second moment of the averaging window and $W_{\rm ext}$ the work
-of the external loads. The first term is the elastic energy, the second the
+of the external loads. The flexoelectric tensor is taken isotropic and is
+represented by the single coefficient $\mu=10^{-6}$\,\si{\coulomb\per\metre},
+a charge per unit length, so every flexoelectric energy in this paper scales as
+$\mu$ and every flexoelectric coupling as $\mu^{2}$. The first term is the
+elastic energy, the second the
 strain-gradient energy, in which the isotropic length $\ell^2\delta_{mn}$ of a
 scalar theory is replaced by $M_{mn}$; the third and fourth terms are the
 piezoelectric and dielectric energies; and the fifth is the flexoelectric
@@ -145,6 +155,7 @@ Third, because the plate is treated as a two-dimensional continuum, the
 plane-stress or plane-strain reduction of $C$, $e$ and $\kappa$ is part of the
 model rather than a detail of the implementation.
 
+\FloatBarrier
 \subsection{Fractional Kelvin--Voigt memory}
 \label{sec:fracmem}
 
@@ -184,10 +195,16 @@ $\Delta t$ gives
   \label{eq:l1}
 \end{equation}
 with the weights computed once for the whole history and reused at every step.
-The L1 discretisation is first order in time for $\alpha\in(0,1)$ and exact
+The convolution is applied to the reduced modal coordinates, so the history that
+has to be stored is one scalar sequence per retained mode and the cost per step
+does not grow with the number of elements; which of the two matrices enters
+\eqref{eq:kv} decides whether the piezoelectric contribution is inside the
+remembered operator or outside it.
+The L1 discretization is first order in time for $\alpha\in(0,1)$ and exact
 for $\alpha=1$; the time step used in the results is reported with the
 convergence study of Sec.~\ref{sec:verification}.
 
+\FloatBarrier
 \subsection{Governing equations}
 \label{sec:governing}
 
@@ -217,7 +234,42 @@ length with electrodes on the end faces. They are two electrical
 configurations of one plate, and the coupling factors obtained from them are
 therefore not additive.
 
-\begin{figure}[t]
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Parameters of the model and the values used in the results. The
+status column distinguishes measured constants from nominal values that are
+carried through the analysis and flagged wherever they act. $\kappa_0$ is the
+permittivity of free space, $h$ the thickness, $L$ the length, $a$ the window
+half-width, and $\alpha$ and $\tau$ the fractional order and relaxation time of
+\eqref{eq:kv}.}
+\label{tab:params}
+\begin{tabular}{@{}llll@{}}
+\toprule
+quantity & symbol & value used & status \\
+\midrule
+elastic constants & $C_{11},C_{12},C_{13},C_{33},C_{44}$ &
+$2.22,1.08,1.11,1.51,0.61\times10^{11}$\,Pa & measured~\cite{Zgonik1994} \\
+piezoelectric constants & $e_{15},e_{31},e_{33}$ &
+$34.2,\,-0.7,\,6.7$\,\si{\coulomb\per\square\metre} & measured~\cite{Zgonik1994} \\
+relative permittivities & $\kappa_{11}/\kappa_0,\,\kappa_{33}/\kappa_0$ &
+$2200,\,56$ & measured~\cite{Zgonik1994} \\
+mass density & $\rho$ & \SI{6020}{\kilo\gram\per\cubic\metre} &
+nominal, unverified \\
+flexoelectric coefficient & $\mu$ & $10^{-6}$\,\si{\coulomb\per\metre} &
+nominal, unverified \\
+geometry & $L\times h$ & \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} &
+fixed except in Sec.~\ref{sec:thickness} \\
+window half-widths & $a_1\times a_2$ &
+$3\times1$\,\si{\micro\metre} & $a_1/L=0.015\le0.2$ \\
+fractional order & $\alpha$ & $0.5\le\alpha\le1$ & parameter \\
+relaxation time & $\tau$ & \SIrange{0.3}{30}{\nano\second} & parameter \\
+mesh (results) & --- & $48\times4$ BFS & converged, Sec.~\ref{sec:verification} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.72\textwidth]{F1_geometry.pdf}
 \caption{The two electrode configurations and the averaging window.
@@ -232,3 +284,5 @@ same half-width. (Material: $\mathrm{BaTiO_3}$, $h=\SI{10}{\micro\metre}$,
 $L=\SI{200}{\micro\metre}$, $a_1/L=0.2$, plane stress.)}
 \label{fig:geometry}
 \end{figure}
+
+\FloatBarrier

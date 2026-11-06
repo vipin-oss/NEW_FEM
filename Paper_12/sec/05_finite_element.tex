@@ -1,8 +1,10 @@
 %% ===========================================================================
+\FloatBarrier
 \section{Finite element formulation}
 \label{sec:fem}
 %% ===========================================================================
 
+\FloatBarrier
 \subsection{Weak form}
 \label{sec:weak}
 
@@ -29,6 +31,7 @@ term carries the electrode conditions of Sec.~\ref{sec:bc_elec} and is
 condensed before assembly, so that the mechanical problem never sees the
 potential degrees of freedom.
 
+\FloatBarrier
 \subsection{The BFS element and its degrees of freedom}
 \label{sec:bfs}
 
@@ -56,6 +59,7 @@ the $\mu_{kijl}\eta_{ijl}$ term of \eqref{eq:energy} produces; because it
 involves $B_{,k}$, it is the term for which the $C^1$ character of the element
 is indispensable.
 
+\FloatBarrier
 \subsection{Condensation of the potential}
 \label{sec:condensation}
 
@@ -72,10 +76,11 @@ returned pair $(d,\beta)$ is what the modal and the static solvers consume.
 Two conventions are enforced in the implementation because they are easy to get
 wrong: the charge is read as $q=d^{\mathsf T}\bm{u}/\beta$ rather than by
 pointwise integration of the electric displacement, and eigenvectors are
-phase-normalised on a nodal displacement degree of freedom -- normalising on
+phase-normalized on a nodal displacement degree of freedom -- normalizing on
 $\max|\phi|$ can select a derivative degree of freedom and return a
 meaningless voltage.
 
+\FloatBarrier
 \subsection{Modal L1 time stepping}
 \label{sec:stepping}
 
@@ -86,15 +91,16 @@ With the L1 weights of \eqref{eq:l1} the time-discrete problem is
     \left(\bm{u}^{k}-\bm{u}^{k-1}\right),
   \label{eq:step}
 \end{equation}
-solved by a Cholesky factorisation of the constant left-hand matrix, with
+solved by a Cholesky factorization of the constant left-hand matrix, with
 $K_{\rm mem}\in\{K_{\rm eff},K_{uu}\}$ the model choice quantified in
 Sec.~\ref{sec:memorystudy}. In the modal variant used for the long ring-downs,
-the same convolution is carried on the mass-normalised coordinates of the
+the same convolution is carried on the mass-normalized coordinates of the
 retained modes, so the cost per step is proportional to the number of retained
 modes rather than to the number of degrees of freedom; the truncation error of
 that projection is measured against the full-order solution rather than
 assumed small (Sec.~\ref{sec:verification}).
 
+\FloatBarrier
 \subsection{Implementation remarks}
 \label{sec:implementation}
 
@@ -112,8 +118,11 @@ govern both cost and accuracy.
 \item \emph{Cost.} A mesh of $48\times4$ BFS elements has $49\times5=245$
   nodes and $8\times245=1960$ mechanical degrees of freedom and is the
   workhorse of the results; the mesh-refinement study of
-  Sec.~\ref{sec:verification} shows that the fundamental frequency is converged
-  to better than $10^{-3}$ on that mesh, and the thinnest plates are solved on
-  it because the conditioning, not the number of elements, is the binding
-  constraint.
+  Sec.~\ref{sec:verification} shows that on that mesh the frequency of the
+  extensional mode is within $0.05\,\%$ and its quasi-static coupling factor
+  within $0.03\,\%$ of a $96\times4$ refinement, and the thinnest plates are
+  solved on it because the conditioning, not the number of elements, is the
+  binding constraint.
 \end{enumerate}
+
+\FloatBarrier
