@@ -12,7 +12,7 @@ twice, the strain-gradient term produces both the double traction
 \eqref{eq:doubletraction} and an integral over the element interiors,
 \begin{multline}
   \int_\Omega \delta\varepsilon_{ij}\,C_{ijkl}\,\varepsilon_{kl}\,\mathrm{d}A
-  + \int_\Omega \delta\varepsilon_{ij,m}\,M_{mn}\,C_{ijkl}\,
+  + \tfrac12\int_\Omega \delta\varepsilon_{ij,m}\,M_{mn}\,C_{ijkl}\,
      \varepsilon_{kl,n}\,\mathrm{d}A \\
   - \int_\Omega \delta\varepsilon_{ij}\,e_{kij}\,E_k\,\mathrm{d}A
   - \int_\Omega \delta\varepsilon_{ij,m}\,\mu_{kijm}\,E_k\,\mathrm{d}A \\
@@ -47,7 +47,7 @@ both integrated by $2\times2$ Gauss quadrature in the element frame; the
 gradient matrix $B_{,k}$ contains the third derivatives of the shape functions
 and is the reason the element has to be $C^1$. The element contributions are
 the elastic $K_e=\int B^{\mathsf T}CB$, the gradient
-$K_{g,e}=\int M_{mn}B_{,m}^{\mathsf T}CB_{,n}$, the piezoelectric coupling
+$K_{g,e}=\tfrac12\int M_{mn}B_{,m}^{\mathsf T}CB_{,n}$, the piezoelectric coupling
 $B_e=\int B^{\mathsf T}e^{\mathsf T}\nabla N_\phi$, the dielectric
 $C_{\phi,e}=-\int\kappa\,\nabla N_\phi\cdot\nabla N_\phi$ and a consistent mass
 matrix from the same interpolation. The flexoelectric contribution is

@@ -156,7 +156,7 @@ figure exists to show.
 | T4 | flexo k², 48×4 vs 96×4 witness, rel. diff < 2 % |
 | T5 | flexo k² at µ = 0 / value < 1e-5 |
 
-All five pass; the suite reports 57/57.
+All five pass; the suite reports 58/58.
 
 ## 5. Platform sensitivity of the h = 1 µm point
 

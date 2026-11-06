@@ -379,6 +379,13 @@
    "pass": true
   },
   {
+   "id": "W1",
+   "what": "gradient-energy coefficient: code vs manuscript",
+   "value": "0.5 x int, (1/4)M/((1/20)L)=1.000000000000",
+   "criterion": "factor 1/2 in the assembly, (1/4)M = (1/20)L, FEM-1 u_R within 2 %",
+   "pass": true
+  },
+  {
    "id": "P1",
    "what": "paper figures: vector set written",
    "value": "14 PDF",
@@ -400,8 +407,8 @@
    "pass": true
   }
  ],
- "n_pass": 57,
- "n_total": 57,
+ "n_pass": 58,
+ "n_total": 58,
  "scripts_ok": {
   "run_verification.py": true,
   "run_flexo_check.py": true,
@@ -416,6 +423,7 @@
   "run_config_table.py": true,
   "list_unverified.py": true,
   "run_sensitivity.py": true,
+  "check_gradient_energy.py": true,
   "run_demos.py": true,
   "run_paper_figures.py": true,
   "make_paper_table.py": true,

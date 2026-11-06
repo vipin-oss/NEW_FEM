@@ -92,7 +92,7 @@ The electromechanical enthalpy of the plate is
 \begin{equation}
   \Pi = \underbrace{\tfrac12\int_\Omega \varepsilon_{ij} C_{ijkl}
         \varepsilon_{kl}\,\mathrm{d}A}_{\text{elastic}}
-      + \underbrace{\tfrac12\int_\Omega M_{mn}\,
+      + \underbrace{\tfrac14\int_\Omega M_{mn}\,
         \varepsilon_{ij,m}\,C_{ijkl}\,\varepsilon_{kl,n}\,\mathrm{d}A}
         _{\text{strain gradient}}
       - \underbrace{\int_\Omega e_{kij} E_k \varepsilon_{ij}\,\mathrm{d}A
@@ -116,7 +116,7 @@ kinematic variables,
               = C_{ijkl}\,\varepsilon_{kl} - e_{kij} E_k,
   \label{eq:sig}\\
   \varsigma_{ijm} &= \frac{\partial \Pi}{\partial \varepsilon_{ij,m}}
-              = M_{mn}\,C_{ijkl}\,\varepsilon_{kl,n},
+              = \tfrac12 M_{mn}\,C_{ijkl}\,\varepsilon_{kl,n},
   \label{eq:tau}\\
   D_k &= -\frac{\partial \Pi}{\partial E_k}
               = e_{kij}\,\varepsilon_{ij} + \kappa_{kl}\,E_l
@@ -126,8 +126,10 @@ kinematic variables,
 so that the electric displacement contains the strain, the field and the strain
 gradient, and the higher-order stress $\varsigma_{ijm}$ is not an independent
 constitutive object but the elastic stress transported through the window.
-Setting $M_{mn}=\tfrac1{20}L_{mn}$ recovers the gradient energy of the
-one-scale theory with a tensorial characteristic length~\cite{fem1}.
+An ellipsoidal window carries $M_{mn}=L_{mn}/5$ in the notation of the
+one-scale theory with a tensorial characteristic length, so $\tfrac14 M_{mn}
+=\tfrac1{20}L_{mn}$ and the gradient energy of~\cite{fem1} is recovered
+exactly.
 
 Three remarks on \eqref{eq:energy} matter for the implementation. First, the
 gradient term couples the third derivatives of the displacement, so the element

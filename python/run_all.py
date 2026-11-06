@@ -65,7 +65,7 @@ def main():
                "run_application_table.py", "derive_k2_closed_form.py",
                "run_independent_checks.py", "audit_abstract_claims.py",
                "run_config_table.py", "list_unverified.py",
-               "run_sensitivity.py"]
+               "run_sensitivity.py", "check_gradient_energy.py"]
     if figs:
         scripts.append("run_demos.py")
         scripts.append("run_paper_figures.py")
@@ -86,6 +86,7 @@ def main():
     Gc = load("config_table.json")
     Uv = load("unverified_numbers.json")
     Sn = load("sensitivity.json")
+    Ge = load("gradient_energy.json")
     Cf = load("k2_closed_form.json")
     D = load("demo.json") if figs else None
     Pg = load("paper_figures_data.json") if figs else None
@@ -325,6 +326,15 @@ def main():
         fl = max(abs(r["k2_floor"]) / r["k2_flexo"] for r in TH)
         chk("T5", "flexo k^2 at mu = 0 / value (residual)", f"{fl:.0e}",
             "< 1e-5", fl < 1e-5)
+
+    chk("W1", "gradient-energy coefficient: code vs manuscript",
+        f"{Ge['assembly_factor']} x int, (1/4)M/((1/20)L)="
+        f"{Ge['quarter_M_over_twentieth_L']:.12f}",
+        "factor 1/2 in the assembly, (1/4)M = (1/20)L, FEM-1 u_R within 2 %",
+        Ge["assembly_line_present"]
+        and abs(Ge["quarter_M_over_twentieth_L"] - 1.0) < 1e-12
+        and Ge["fem1_benchmark_uR_um"] is not None
+        and abs(Ge["fem1_benchmark_uR_um"] / 4.23 - 1.0) < 0.02)
 
     if Pg is not None:
         pol = Pg["polar"]
