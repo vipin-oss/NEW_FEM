@@ -1,6 +1,6 @@
 # Every number in the manuscript against the JSON it came from
 
-69/69 claims agree; 0 disagree with the JSON, 0 are not found in the text.
+85/85 claims agree; 0 disagree with the JSON, 0 are not found in the text.
 
 | # | claim | manuscript | json | value | status |
 |---|---|---|---|---|---|
@@ -73,3 +73,19 @@
 | 67 | modulus ratio, w=1, alpha=1 | `1.35` | `memory_variants.json S2[3].ratio_KV_over_Zener` | `1.35` | ok |
 | 68 | modulus ratio, w=1, alpha=0.7 | `1.62` | `memory_variants.json S2[9].ratio_KV_over_Zener` | `1.62` | ok |
 | 69 | modulus ratio, w=100, alpha=1 | `91` | `memory_variants.json S2[5].ratio_KV_over_Zener` | `91` | ok |
+| 70 | worked, window M11 | `3.000e-12` | `worked_example window M11` | `3.000e-12` | ok |
+| 71 | worked, window M22 | `3.333e-13` | `worked_example window M22` | `3.333e-13` | ok |
+| 72 | worked, equal-M ellipsoid over cuboid | `1.2910` | `worked_example sqrt(5/3)` | `1.2910` | ok |
+| 73 | worked, equal-M cuboid over ellipsoid | `0.7746` | `worked_example sqrt(3/5)` | `0.7746` | ok |
+| 74 | worked, plane-stress C11 poling x | `9.5500e10` | `materials C_p[0,0] poling x` | `9.5500e+10` | ok |
+| 75 | worked, plane-stress C11 poling y | `1.6946e11` | `materials C_p[0,0] poling y` | `1.6946e+11` | ok |
+| 76 | worked, plane-stress C12 | `5.7000e10` | `materials C_p[0,1]` | `5.7000e+10` | ok |
+| 77 | worked, kappa33 | `4.9583e-10` | `k2_closed_form kappa_eff` | `4.9583e-10` | ok |
+| 78 | worked, condensed capacitance beta | `2.4792e-11` | `worked_example beta` | `2.4792e-11` | ok |
+| 79 | worked, x from the assembled matrices | `1.2631` | `worked_example x_fem` | `1.2631` | ok |
+| 80 | worked, distance to the closed form | `0.47` | `worked_example diff_percent` | `0.47` | ok |
+| 81 | worked, flexoelectric x at h=10 | `3.5704e-4` | `worked_example x_analytic_h10` | `3.5704e-4` | ok |
+| 82 | worked, peak ratio of the ring-down | `2.5700` | `exp(2 pi zeta_eff)` | `2.5700` | ok |
+| 83 | worked, logarithmic decrement | `0.94392` | `ln(peak ratio)` | `0.94392` | ok |
+| 84 | worked, L1 weight b1 at alpha=0.5 | `0.414214` | `sqrt(2)-1` | `0.414214` | ok |
+| 85 | worked, L1 weight b2 at alpha=0.7 | `0.159245` | `3^0.3-2^0.3` | `0.159245` | ok |

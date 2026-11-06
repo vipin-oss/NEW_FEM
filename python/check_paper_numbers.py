@@ -398,6 +398,48 @@ def main():
                  "memory_variants.json S2[5].ratio_KV_over_Zener",
                  g("memory_variants.json.S2.5.ratio_KV_over_Zener"), "{:.0f}"))
 
+    # ---- Round 14: the worked-calculation subsection ------------------------
+    W = J("worked_example.json")
+    wn, cf, fx, mm = W["window"], W["closed_form"], W["flexo"], W["memory"]
+    R.append(row("worked, window M11", "3.000e-12", "worked_example window M11",
+                 wn["M11"], "{:.3e}"))
+    R.append(row("worked, window M22", "3.333e-13", "worked_example window M22",
+                 wn["M22"], "{:.3e}"))
+    R.append(row("worked, equal-M ellipsoid over cuboid", "1.2910",
+                 "worked_example sqrt(5/3)", wn["a_ellipsoid_over_cuboid_equal_M"],
+                 "{:.4f}"))
+    R.append(row("worked, equal-M cuboid over ellipsoid", "0.7746",
+                 "worked_example sqrt(3/5)", wn["a_cuboid_over_ellipsoid_equal_M"],
+                 "{:.4f}"))
+    R.append(row("worked, plane-stress C11 poling x", "9.5500e10",
+                 "materials C_p[0,0] poling x", W["plane_stress"]["C11p_poling_x"],
+                 "{:.4e}"))
+    R.append(row("worked, plane-stress C11 poling y", "1.6946e11",
+                 "materials C_p[0,0] poling y", W["plane_stress"]["C11p_poling_y"],
+                 "{:.4e}", rel_tol=1e-4))
+    R.append(row("worked, plane-stress C12", "5.7000e10",
+                 "materials C_p[0,1]", W["plane_stress"]["C12p_poling_x"],
+                 "{:.4e}"))
+    R.append(row("worked, kappa33", "4.9583e-10", "k2_closed_form kappa_eff",
+                 cf["kappa_eff"], "{:.4e}", rel_tol=1e-4))
+    R.append(row("worked, condensed capacitance beta", "2.4792e-11",
+                 "worked_example beta", cf["beta"], "{:.4e}", rel_tol=1e-3))
+    R.append(row("worked, x from the assembled matrices", "1.2631",
+                 "worked_example x_fem", cf["x_fem"], "{:.4f}"))
+    R.append(row("worked, distance to the closed form", "0.47",
+                 "worked_example diff_percent", cf["diff_percent"], "{:.2f}"))
+    R.append(row("worked, flexoelectric x at h=10", "3.5704e-4",
+                 "worked_example x_analytic_h10", fx["x_analytic_h10"], "{:.4e}"))
+    R.append(row("worked, peak ratio of the ring-down", "2.5700",
+                 "exp(2 pi zeta_eff)", mm["zeta"]["peak_ratio"], "{:.4f}"))
+    R.append(row("worked, logarithmic decrement", "0.94392",
+                 "ln(peak ratio)", float(__import__("math").log(mm["zeta"]["peak_ratio"])),
+                 "{:.5f}"))
+    R.append(row("worked, L1 weight b1 at alpha=0.5", "0.414214",
+                 "sqrt(2)-1", mm["alpha"]["0.5"][1], "{:.6f}", rel_tol=1e-5))
+    R.append(row("worked, L1 weight b2 at alpha=0.7", "0.159245",
+                 "3^0.3-2^0.3", mm["alpha"]["0.7"][2], "{:.6f}", rel_tol=1e-4))
+
     # ---- the literal has to be in the manuscript as well
     missing = [r for r in R if r["tex"] not in tex]
     bad = [r for r in R if not r["ok"]]

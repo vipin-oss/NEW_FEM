@@ -10,22 +10,14 @@
 
 The material is tetragonal $\mathrm{BaTiO_3}$ at room temperature, with the
 elastic, piezoelectric and dielectric constants measured by Zgonik and
-co-workers~\cite{Zgonik1994}: $C_{11}=2.22\times10^{11}$,
-$C_{12}=1.08\times10^{11}$, $C_{13}=1.11\times10^{11}$,
-$C_{33}=1.51\times10^{11}$ and $C_{44}=6.10\times10^{10}$\,Pa;
-$e_{15}=34.2$, $e_{31}=-0.7$ and $e_{33}=6.7$\,\si{\coulomb\per\square\metre};
-$\kappa_{11}/\kappa_0=2200$ and $\kappa_{33}/\kappa_0=56$. The dielectric
-anisotropy ratio is therefore $39$, and a record with an isotropic dielectric
-tensor would give a ratio near unity; the anisotropy is retained so that the
-two poling configurations differ in their permittivity as well as in their
-modulus. Table~\ref{tab:params} collects the parameters of the model, the
-values used in the runs, and the status of each value: the elastic,
+co-workers~\cite{Zgonik1994}; Table~\ref{tab:params} collects them, the values
+used in the runs and the status of each value. The dielectric anisotropy ratio
+$\kappa_{11}/\kappa_{33}=39$ is retained, so that the two poling configurations
+differ in their permittivity as well as in their modulus. The elastic,
 piezoelectric and dielectric constants are measured, whereas the mass density
-and the flexoelectric coefficient are \emph{nominal} and are flagged as such.
-The density scales every frequency in the paper by a common factor and no
-conclusion depends on its value; the flexoelectric coefficient enters every
-bending coupling as $\mu^{2}$ and is the one material parameter that the
-present study does not verify.
+and the flexoelectric coefficient are \emph{nominal}: the density scales every
+frequency by a common factor, and the flexoelectric coefficient enters every
+bending coupling as $\mu^{2}$.
 
 
 
@@ -47,17 +39,15 @@ here.
 
 The numerical evidence is summarized here in a form that a reader can check
 against a re-implementation; the complete set of benchmarks, identities and
-independent routes is collected in Appendix~\ref{app:verification}.
+independent routes is collected in \ref{app:verification}.
 
 \emph{Benchmarks.} Three problems with known answers were solved with the same
 element: a one-dimensional strain-gradient bar, whose static tip displacement
-and fundamental frequency were compared with the closed-form solution of the
-gradient theory; the same bar in the classical limit, where the element must
-return Euler--Bernoulli values; and the constant-strain patch test, which the
-gradient terms must not perturb. The clamped-free and clamped-clamped
+and frequency were compared with the closed form; the same bar in the classical
+limit; and the constant-strain patch test. The clamped-free and clamped-clamped
 frequencies of the strip agree with the Euler--Bernoulli values to $0.26\,\%$
-and $0.10\,\%$ on the finest mesh, and the elastic strip reproduces the
-analytical result of the gradient theory whenever the window is set to zero.
+and $0.10\,\%$, and the elastic strip reproduces the gradient theory whenever
+the window is set to zero.
 
 \emph{Mesh convergence.} Figure~\ref{fig:convergence} shows the error in the
 frequency of the extensional mode and in its quasi-static coupling factor
@@ -67,9 +57,9 @@ bicubic Hermite interpolation, and the $48\times4$ mesh used throughout the
 paper is inside the asymptotic range: refining it to $96\times4$ changes the
 frequency by $0.05\,\%$ and the coupling factor by $0.03\,\%$, and the coarser
 $24\times2$ mesh used for the parameter sweeps differs from it by $0.04\,\%$
-and $0.03\,\%$. Table~\ref{tab:convergence} of Appendix~\ref{app:data} lists the
+and $0.03\,\%$. Table~\ref{tab:convergence} of \ref{app:data} lists the
 four meshes. The plane-stress and plane-strain reductions are compared with the
-three-dimensional solution in Appendix~\ref{app:verification}, which is the one
+three-dimensional solution in \ref{app:verification}, which is the one
 place where the two-dimensional idealization is visible.
 
 \emph{Time discretization.} The L1 scheme is first order in $\Delta t$ for
@@ -96,10 +86,10 @@ plane-stress one is adopted because the plate is free out of plane.
 \emph{Independent routes.} Eight headline numbers were recomputed along routes
 that do not use the assembled matrices at all -- the bar frequency from
 Euler--Bernoulli theory, the coupling factor from the constitutive tensors, the
-window coefficients from the geometry of Appendix~\ref{app:Mcoeff}, and the
+window coefficients from the geometry of \ref{app:Mcoeff}, and the
 damping ratio from the analytical Kelvin--Voigt limit. All agree with the
 finite element values within the tolerances stated in
-Appendix~\ref{app:verification}.
+\ref{app:verification}.
 
 \begin{figure}[!htbp]
 \centering
@@ -152,6 +142,145 @@ $h=\SI{10}{\micro\metre}$, poling $y$, plane stress,
 $a_1\times a_2=3\times1$\,\si{\micro\metre}, $\mu=10^{-6}$\,\si{\coulomb\per\metre}.)}
 \label{fig:fields}
 \end{figure}
+
+\FloatBarrier
+\subsection{Worked calculation of the headline numbers}
+\label{sec:worked}
+
+The numbers quoted in the abstract are reproduced here from the inputs, so that
+the route from a material constant to a coupling factor is visible and not only
+its outcome. Each value below is the one carried into the figures and tables of
+this section.
+
+\paragraph{Window.} For half-widths $a_1=\SI{3}{\micro\metre}$ and
+$a_2=\SI{1}{\micro\metre}$ the second-moment tensor of the cuboid window is
+diagonal with
+\begin{equation}
+  M_{11}=\frac{a_1^{2}}{3}=\SI{3.000e-12}{\metre\squared},\qquad
+  M_{22}=\frac{a_2^{2}}{3}=\SI{3.333e-13}{\metre\squared},
+  \label{eq:Mnumber}
+\end{equation}
+that is $M_{11}/a_1^{2}=M_{22}/a_2^{2}=1/3$ and an anisotropy ratio
+$M_{11}/M_{22}=9$. The three shapes are interchangeable once $M$ is fixed,
+because $M_{ii}=a_i^{2}/3$, $a_i^{2}/4$ and $a_i^{2}/5$ for the cuboid, the
+ellipse and the ellipsoid: an ellipsoid of half-width
+$a_{\rm ell}=1.2910\,a_{\rm cub}=\sqrt{5/3}\,a_{\rm cub}$ therefore reproduces
+the cuboid value of \eqref{eq:Mnumber} exactly, and the reciprocal statement,
+$a_{\rm cub}=0.7746\,a_{\rm ell}=\sqrt{3/5}\,a_{\rm ell}$, is the one used for
+the equal-$M$ pair of Sec.~\ref{sec:windowshape}.
+
+\paragraph{Plane-stress reduction.} The plate is free out of plane, so the
+stiffness that multiplies $\varepsilon_{xx}$ is not $C_{11}$ but the reduced
+entry
+\begin{equation}
+  C^{p}_{ij}=C_{ij}-\frac{C_{i3}C_{j3}}{C_{33}},
+  \label{eq:Cp}
+\end{equation}
+which for $\mathrm{BaTiO_3}$ gives $C^{p}_{xx}=\SI{9.5500e10}{\pascal}$ with the
+poling along $x$ and $\SI{1.6946e11}{\pascal}$ with the poling along $y$, with
+$C^{p}_{12}=\SI{5.7000e10}{\pascal}$ in both cases. The entries that pair with
+it are $e_{33}=6.7$ and $e_{31}=-0.7$\,\si{\coulomb\per\square\metre} and the
+permittivity along the electrode gap, $\kappa_{yy}=\kappa_{33}=$
+\SI{4.9583e-10}{\farad\per\metre}. The exchange of the two moduli between the
+two poling directions, and not a change of material, is what makes the
+extensional and the bending configuration different electrical problems
+(Table~\ref{tab:axes}).
+
+\paragraph{Closed form and the assembled route.} From the quantities above,
+\begin{equation}
+  x=\frac{e^{\mathsf T}C_{p}^{-1}e}{\kappa}=1.2768,
+  \qquad
+  k^{2}=\frac{x}{1+x}=0.5608,
+  \label{eq:xclosed}
+\end{equation}
+which involves no mesh. The same quantity on the assembled model is obtained
+from one short-circuit and one open-circuit reduction of the $48\times4$ mesh:
+$49\times5=245$ nodes, eight mechanical degrees of freedom per node
+($1960$ mechanical unknowns) and $245$ potential unknowns, condensed to a
+single electrode pair $(d,\beta)$ with $\beta=\SI{2.4792e-11}{\farad}$ and
+$d$ the charge vector of that pair. Then
+\begin{equation}
+  x_{\rm FEM}=\frac{d^{\mathsf T}K_{sc}^{-1}d}{\beta}=1.2631,
+  \qquad
+  k^{2}_{\rm FEM}=\frac{x_{\rm FEM}}{1+x_{\rm FEM}}=0.5581,
+  \label{eq:xFEM}
+\end{equation}
+$0.47\,\%$ below \eqref{eq:xclosed}. That residual is the discretization of the
+clamped $48\times4$ mesh, not a modeling difference: the free plate reproduces
+\eqref{eq:xclosed} to $10^{-10}$ (Table~\ref{tab:closedform}).
+
+\paragraph{Flexoelectric bending.} With the piezoelectric constants switched
+off, the same reduction gives the smallness parameter of the bending
+configuration,
+\begin{equation}
+  x=\frac{3\mu^{2}}{C^{p}_{xx}\,h^{2}\,\kappa_{yy}}
+   =\frac{3\,(10^{-6})^{2}}{1.6946\times10^{11}\cdot(10^{-5})^{2}\cdot
+     4.9583\times10^{-10}}
+   =\num{3.5704e-4}
+  \label{eq:xflexo}
+\end{equation}
+at $h=\SI{10}{\micro\metre}$, against a finite element value of
+\num{1.7437e-4}: the analytic route gives the order of the effect and the
+factor by which it grows, the finite element gives its value. Both are listed in
+Table~\ref{tab:worked}, where the local log--log slope of the finite element
+series is formed as $\ln(k^2_{i+1}/k^2_{i})/\ln(h_{i+1}/h_i)$ on consecutive
+thicknesses: $-1.96$ between $10$ and \SI{7}{\micro\metre}, $-1.52$ between $5$
+and \SI{3.5}{\micro\metre}, and $-0.43$ between $1.4$ and
+\SI{1}{\micro\metre}.
+
+\paragraph{Memory.} The L1 weights of \eqref{eq:l1} are fixed numbers that do
+not depend on the model,
+\begin{equation}
+  \alpha=0.5:\; (b_0,b_1,b_2)=(1,\;0.414214,\;0.317837),\qquad
+  \alpha=0.7:\; (b_0,b_1,b_2)=(1,\;0.231144,\;0.159245),
+  \label{eq:bweights}
+\end{equation}
+and the time march advances the modal state with the matrix
+$M+\Delta t^{\alpha}\Gamma(2-\alpha)K_{\rm mem}$, whose stiffness
+$K_{\rm mem}$ is either $K_{\rm eff}$ or $K_{uu}$. At $\omega\tau=0.3$ the ratio
+of two successive voltage peaks is $2.5700$, so the logarithmic decrement is
+$\delta=0.94392$ and
+\begin{equation}
+  \zeta_{\rm eff}=\frac{\delta}{2\pi}=0.15023
+  \quad\text{against}\quad
+  \frac{\omega\tau}{2}=0.15000,
+  \label{eq:zetaextract}
+\end{equation}
+an error of $0.15\,\%$; the same extraction on $K_{uu}$ gives $0.06749$, a ratio
+$K_{uu}/K_{\rm eff}=0.449$.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Inputs, intermediate quantities and outputs for the headline numbers
+of the abstract. Every entry is the value carried into the figures and tables
+of this paper; the last column is the number the abstract quotes.}
+\label{tab:worked}
+\begin{tabular}{@{}p{0.24\textwidth}p{0.20\textwidth}p{0.26\textwidth}p{0.18\textwidth}@{}}
+\toprule
+output & inputs & intermediate quantity & value \\
+\midrule
+extensional $k^{2}$ & $C_{p}$, $e$, $\kappa_{33}$ & $x=1.2768$
+(eq.~\ref{eq:xclosed}); $x_{\rm FEM}=1.2631$ (eq.~\ref{eq:xFEM}) &
+$0.5581$ ($0.5608$ closed form) \\
+thickness independence & $k^{2}$ at $10$ and \SI{1}{\micro\metre} &
+$0.55814\to0.55861$ & $0.09\,\%$ \\
+flexoelectric growth & $\mu$, $C^{p}_{xx}$, $h$, $\kappa_{yy}$ &
+$x=3.5704\times10^{-4}$ at \SI{10}{\micro\metre};
+$1.7437\times10^{-4}\to4.1736\times10^{-3}$ & factor $24$ \\
+flexoelectric slope & the eight thicknesses & local log--log slopes &
+$-1.96\to-0.43$ \\
+window anisotropy & $M_{11}$, $M_{22}$, $\theta$ & $M$ rotates, the
+mesh does not & $15$--$19\,\%$ \\
+two configurations & \eqref{eq:xclosed} in both & $0.4580$ against $0.1141$;
+\SI{138.99}{\volt} against \SI{2.41}{\volt} & factor $58$ \\
+memory ratio & $K_{\rm eff}$, $K_{uu}$ & $\zeta=0.15023$ against $0.06749$ &
+$0.449$ \\
+integer-order limit & $\omega\tau=0.3$ & $\zeta_{\rm eff}$ against
+$\omega\tau/2$ & $0.15\,\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \FloatBarrier
 \subsection{Window orientation and plate aspect ratio}
@@ -314,27 +443,7 @@ factor $91$. A
 single-relaxation fit is unusable outside the narrow band where it was fitted,
 which is the band a design map is meant to cover.
 
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Normalized modulus magnitude $|K^{*}|/K$ at matched $\tau$ for the
-integer-order Kelvin--Voigt element and for the fractional Zener element whose
-relaxation-strength ratio, $r=1.1$, is fitted to the spring-pot at
-$\omega\tau=0.3$ and then held fixed, at two Caputo orders.}
-\label{tab:modulus}
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-$\omega\tau$ & \multicolumn{2}{c}{$\alpha=1$} & \multicolumn{2}{c}{$\alpha=0.7$} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}
- & KV & Zener ($r=1.1$) & KV & Zener ($r=1.1$) \\
-\midrule
-0.3  & $1.0440$ & $1.0086$ & $1.2555$ & $1.0244$ \\
-1    & $1.4142$ & $1.0512$ & $1.7053$ & $1.0504$ \\
-10   & $10.050$ & $1.0991$ & $5.5380$ & $1.0894$ \\
-100  & $100.005$ & $1.1000$ & $25.588$ & $1.0981$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \paragraph{The damping map.} Figure~\ref{fig:damping}(a) is the pole of
 \eqref{eq:kvfreq} in the complex plane, traced over $\omega\tau$ for seven
@@ -458,11 +567,9 @@ estimates of one number: panel~(a) is poled across the thickness (electrodes on
 the long faces, gap $h$, $\kappa_{yy}=\kappa_{33}$) and panel~(b) along the
 length (electrodes on the short faces, gap $L$, $\kappa_{xx}=\kappa_{33}$), as
 set out in Table~\ref{tab:axes}. Panel~(a) is the flexoelectric bending
-coupling with $\mu=10^{-6}$\,\si{\coulomb\per\metre}, a \emph{nominal} value:
-no measured flexoelectric coefficient for $\mathrm{BaTiO_3}$ is used here, and
-the whole panel scales as $\mu^{2}$. Panel~(b) is the piezoelectric
-length-extensional coupling of the same plate, evaluated with $\mu=0$ and with
-the mode-free measure \eqref{eq:kstatic}.
+coupling with $\mu=10^{-6}$\,\si{\coulomb\per\metre}. Panel~(b) is the
+piezoelectric length-extensional coupling of the same plate, evaluated with
+$\mu=0$ and with the mode-free measure \eqref{eq:kstatic}.
 
 \begin{figure}[!htbp]
 \centering
@@ -569,7 +676,7 @@ the machine that computed it; at $h=\SI{10}{\micro\metre}$ the same spread is at
 most $10^{-4}\,\%$. A better solver does not recover further digits, which is
 why the two-significant-digit form is used here and in the abstract. The
 platform-sensitivity table behind this statement is in
-Appendix~\ref{app:verification}.
+\ref{app:verification}.
 
 \paragraph{The piezoelectric coupling is thickness independent.} Panel~(b) of
 Fig.~\ref{fig:thickness} is the counterpart of panel~(a). The quasi-static

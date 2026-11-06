@@ -141,3 +141,25 @@ would have flagged.
   frequency and were wrong; `table_C4` was rebuilt from the same run.
 - US spelling throughout the source (the bibliography keeps the titles as
   published). `Kogan1964` gained the citation that was missing.
+
+## Round 14 — worked calculation, appendix references, length
+
+- The 14 `Appendix~\ref{app:...}` sites were the cause of the double word: this
+  class prints the appendix name inside `\thesection`, so `\ref` already yields
+  "Appendix A" and the literal word in front of it printed it twice. The literal
+  was removed at all 14 sites and no bare "Appendix" remains in the sources.
+- New Sec. 6.3, "Worked calculation of the headline numbers": the window
+  moments, the plane-stress reduction, the closed form against the assembled
+  route, the flexoelectric smallness parameter with the finite element series
+  and its local slopes, the L1 weights and the damping extraction, plus a
+  summary table `tab:worked`. Every value is produced by
+  `python/worked_example.py` and audited by `check_paper_numbers.py`.
+- Conclusion rewritten to the requested structure: one paragraph of model, six
+  findings, one paragraph of use; 258 words, no figures.
+- Length: `\linespread` 1.3 -> 1.15, the parameter list of Sec. 6.1 no longer
+  repeats Table 1, the benchmark paragraph and the mu caveat were cut, and the
+  modulus table moved to Appendix C.
+- `python/check_float_order.py` rebuilds the numbering from the source and
+  reports the number every float will carry, where it is first cited, and
+  whether the two orders agree. Both do: figures 1-10 in citation order,
+  tables 1-8 in citation order.

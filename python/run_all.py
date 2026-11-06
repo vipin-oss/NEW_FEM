@@ -72,8 +72,10 @@ def main():
         scripts.append("run_paper_figures.py")
         scripts.append("make_paper_table.py")
         scripts.append("make_appendix_tables.py")
+        scripts.append("worked_example.py")
         scripts.append("check_paper_numbers.py")
         scripts.append("check_paper_structure.py")
+        scripts.append("check_float_order.py")
     ran = {s: run(s) for s in scripts}
 
     V = load("verification.json")

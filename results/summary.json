@@ -402,7 +402,7 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "69/69",
+   "value": "85/85",
    "criterion": "all agree",
    "pass": true
   }
@@ -429,8 +429,10 @@
   "run_paper_figures.py": true,
   "make_paper_table.py": true,
   "make_appendix_tables.py": true,
+  "worked_example.py": true,
   "check_paper_numbers.py": true,
-  "check_paper_structure.py": true
+  "check_paper_structure.py": true,
+  "check_float_order.py": true
  },
  "figures": true,
  "all_pass": true,
