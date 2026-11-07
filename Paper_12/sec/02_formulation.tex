@@ -13,6 +13,31 @@ order in which the finite element needs the result -- window, kinematics,
 energy, constitutive relations, reduction, memory, governing equations -- and
 the closed-form window coefficients are collected in \ref{app:Mcoeff}.
 
+\noindent\textbf{Notation and provenance.} Throughout, $\bm{x}$ is the in-plane
+position, $\mathcal W$ the averaging window of area $A_{\mathcal W}$, $\bm{s}$
+the window coordinate, $M_{mn}$ its second moment, $a_i$ its half-widths,
+$\theta$ its in-plane rotation, $\Omega$ the strip mid-plane, $h$ the
+thickness, $u_i$ the displacement ($u_2\equiv w$), $\varepsilon_{ij}$ the
+strain, $\eta_{ijk}$ the strain gradient, $E_k=-\phi_{,k}$ the electric field,
+$\phi$ the potential, $C_{ijkl}$ the elastic stiffness, $e_{kij}$ the
+piezoelectric tensor, $\kappa_{ij}$ the permittivity, $\mu_{kijl}$ the
+flexoelectric tensor, $\sigma_{ij}$ and $\varsigma_{ijm}$ the ordinary and
+higher-order stresses, $D_k$ the electric displacement, $\rho$ the mass
+density, $\Pi$ the total enthalpy and $W_{\rm ext}$ the work of external loads.
+The memory law uses $\alpha$ for the Caputo order, $\tau$ for the relaxation
+time, $K$ for a stiffness, $K^{*}$ for the complex modulus, $\omega$ for
+frequency, $t$ for time, $\Delta t$ for the time step, $b_j$ for the L1 weights
+and $n$ for the step index. Repeated indices are summed, and any remaining
+symbol is defined at its first occurrence. Unless a source is cited, every
+equation in this section and the next is derived here from the enthalpy
+\eqref{eq:energy}; the classical gradient and flexoelectric forms they
+generalize are cited at the point of use, and references marked UNVERIFIED in
+the bibliography are used only for those classical forms. Table~\ref{tab:params}
+cites the published material constants collectively; the remaining inputs are
+stated as assumed. The elementary integrals for the window coefficients are
+collected in \ref{app:Mcoeff}, and the single worked numerical calculation is
+given in Sec.~\ref{sec:worked}.
+
 \FloatBarrier
 \subsection{Nonlocal averaging window and the second-moment tensor}
 \label{sec:window}
@@ -376,13 +401,13 @@ therefore not additive.
 The parameters of the model are collected in Table~\ref{tab:params}. The
 elastic, piezoelectric and dielectric constants are the values measured by
 Zgonik and co-workers for $\mathrm{BaTiO_3}$~\cite{Zgonik1994}; the mass
-density is the standard crystallographic value for the same material. Five
-quantities are assumed rather than measured, and they are listed in the same
-table: the flexoelectric coefficient, taken as
+density is taken as the standard crystallographic value for the same material
+and is assumed here. Five quantities are assumed rather than measured, and they
+are listed in the same table: the flexoelectric coefficient, taken as
 $\mu=10^{-6}$\,\si{\coulomb\per\meter}, which is the order reported for
 perovskite ceramics, so that every flexoelectric coupling below is to be read
-as scaling with $\mu^{2}$; the window half-widths, which are held at
-$a_1/L\le0.2$ as the operating range of the second-moment truncation assumes;
+as scaling with $\mu^{2}$; the window half-widths, for which we assume
+$a/L\le0.2$ as the operating range of the second-moment truncation;
 the fractional order and the relaxation time, which are free parameters of the
 memory law and are varied over the ranges stated; and the mesh, which the
 convergence study of Sec.~\ref{sec:verification} shows to be adequate for
