@@ -1,0 +1,26 @@
+%% A compact list of the numerical benchmarks: what was computed, what it is
+%% compared with, and the agreement.
+\begin{tabular}{@{}l l l@{}}
+\toprule
+check & obtained & reference \\
+\midrule
+patch test, relative energy error & $4.44\times10^{-16}$ & $0$ \\
+gradient energy at constant strain & $1.06\times10^{-12}$ & $0$ \\
+$K_g$ of the ellipsoid vs closed form & $3.40\times10^{-16}$ & $0$ \\
+$K_g$(cuboid)$/K_g$(ellipsoid), equal half-width & 1.666667 & $5/3$ \\
+equal-$M$ cuboid and ellipsoid, max rel.\ difference & $0$ & $0$ \\
+tip displacement, length-scale sweep & 4.2339\,\si{\micro\meter} & 4.23\,\si{\micro\meter} \\
+observed order of convergence & 1.68 & $2.01$ on the finest pair \\
+piezoelectric $k^2$ of extensional mode 5, plane strain vs plane
+stress & 0.4024 vs 0.4580 & mode 5 of each model, MAC $0.99999$ \\
+L1 order at $\alpha=1$ & 0.99 & $1$ \\
+free strip $k^2$, FEM vs 2-D closed form & 0.56079 vs 0.56079 & $<10^{-3}$ rel. \\
+free strip, 3-D vs 2-D reduction & 2.83\,\% & modeling gap \\
+clamped strip, $96\times4$ vs $48\times4$ & 0.55992 vs 0.55957 & $6.2\times10^{-4}$ rel. \\
+flexoelectric energy, uniform curvature & $3.570415\times10^{-4}$ & $3.570415\times10^{-4}$ \\
+open-circuit voltage, uniform curvature & $1.7\times10^{-13}$\,\si{\volt} & $<10^{-10}$\,\si{\volt} \\
+clamped-free $f_1$, FEM vs Euler--Bernoulli & 144.6 vs 143.8\,\si{\kilo\hertz} & $128\times4$: 144.08 \\
+clamped-clamped $f_1$, FEM vs Euler--Bernoulli & 919.2 vs 915.0\,\si{\kilo\hertz} & $48\times4$ \\
+modal truncation, 24 modes & $3.19\times10^{-2}$ & monotone in $N$ \\
+\bottomrule
+\end{tabular}

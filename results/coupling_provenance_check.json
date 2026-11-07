@@ -1,0 +1,87 @@
+{
+ "n_pass": 10,
+ "n_total": 10,
+ "all_pass": true,
+ "rows": [
+  {
+   "label": "k2_free_nogradient_48x4",
+   "recomputed": 0.5607862968604258,
+   "archived": 0.5607862968604258,
+   "rel": 0.0,
+   "pass": true,
+   "what": "coupling_check.json fem.plane_stress.free_48x4"
+  },
+  {
+   "label": "k2_clamped_nogradient_48x4",
+   "recomputed": 0.5595713043155028,
+   "archived": 0.5595713043155028,
+   "rel": 0.0,
+   "pass": true,
+   "what": "coupling_check.json fem.plane_stress.clamped_48x4"
+  },
+  {
+   "label": "k2_clamped_gradient_48x4",
+   "recomputed": 0.5581368174245003,
+   "archived": 0.5581368174245003,
+   "rel": 0.0,
+   "pass": true,
+   "what": "demo.json flexo_thickness[0].k2_ext"
+  },
+  {
+   "label": "k2_mode_based_Kuu_24x2",
+   "recomputed": 0.46498183495530354,
+   "archived": 0.46498183495530354,
+   "rel": 0.0,
+   "pass": true,
+   "what": "memory_variants.json k2"
+  },
+  {
+   "label": "k2_mode_based_Ksc_24x2_mu0",
+   "recomputed": 0.45797234985416213,
+   "archived": 0.45797234985416213,
+   "rel": 0.0,
+   "pass": true,
+   "what": "application_table.json rows[3].k2"
+  },
+  {
+   "label": "k2_closed_form_plane_stress",
+   "recomputed": 0.560786296866519,
+   "archived": 0.560786296866519,
+   "rel": 0.0,
+   "pass": true,
+   "what": "k2_closed_form.json k2_2d_closed"
+  },
+  {
+   "label": "working_value",
+   "recomputed": 0.5581368174245003,
+   "archived": 0.5581368174245003,
+   "rel": 0.0,
+   "pass": true,
+   "what": "working value equals rows[2]"
+  },
+  {
+   "label": "gap K_uu vs K_sc",
+   "recomputed": 0.014586071068583707,
+   "archived": 0.015,
+   "rel": -0.0004139289314162922,
+   "pass": true,
+   "what": "1.5 % between the matrices"
+  },
+  {
+   "label": "gap mu = 0 vs 1e-6",
+   "recomputed": 0.0007085607091597253,
+   "archived": 0.0007,
+   "rel": 0.0007085607091597253,
+   "pass": true,
+   "what": "0.07 % between the mu values"
+  },
+  {
+   "label": "table quotes every row",
+   "recomputed": 8,
+   "archived": 8,
+   "rel": 0.0,
+   "pass": true,
+   "what": "Paper_12/table_coupling.tex"
+  }
+ ]
+}

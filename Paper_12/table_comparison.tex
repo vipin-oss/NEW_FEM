@@ -1,0 +1,30 @@
+%% The comparison table of the introduction.  One row per formulation cited in
+%% the text; a dash means the ingredient is not part of that formulation.
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Ingredients carried by representative strain-gradient and
+flexoelectric formulations. A dash means the ingredient is not part of the
+cited formulation; ``splines'' marks $C^1$ isogeometric interpolation. Only
+the three last columns distinguish the present work from the one-scale theory
+it extends.}
+\label{tab:comparison}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+formulation & nonlocal or & piezo- & flexo- & frac- & $C^1$ & aniso- \\
+ & gradient & electric & electric & tional & & tropic \\
+ & & & & memory & & length \\
+\midrule
+Mindlin, second gradient~\cite{Mindlin1965}          & gradient & -- & -- & -- & -- & -- \\
+Eringen, nonlocal elasticity~\cite{Eringen1972Polar} & nonlocal & -- & -- & -- & -- & -- \\
+Aifantis~\cite{Aifantis1992}                         & gradient & -- & -- & -- & -- & -- \\
+Polizzotto~\cite{Polizzotto2018}                     & gradient & -- & -- & -- & -- & \checkmark \\
+Amanatidou and Aravas~\cite{AmanatidouAravas2002}    & gradient & -- & -- & -- & mixed & -- \\
+Papanicolopulos and Zervos~\cite{Papanicolopulos2009} & gradient & -- & -- & -- & \checkmark & -- \\
+Chen, Yao and Yvonnet~\cite{ChenYaoYvonnet2023}      & gradient & -- & \checkmark & -- & splines & -- \\
+Joshan and Santapuri~\cite{JoshanSantapuri2024}      & gradient & -- & \checkmark & -- & -- & -- \\
+one-scale theory~\cite{fem1}                         & gradient & -- & -- & -- & \checkmark & \checkmark \\
+\textbf{present work} & gradient & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
