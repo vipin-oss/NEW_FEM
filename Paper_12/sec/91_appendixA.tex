@@ -24,6 +24,25 @@ the same $M$ is a statement about this truncated model: two kernels with the
 same second moment differ in their fourth moment, which \eqref{eq:energy}
 never sees.
 
+\noindent\textbf{Notation and provenance.} In this appendix, $M_{mn}$ is the
+window second moment, $a_i$ its half-widths, $R$ a rotation of the window,
+$\mathcal W$ the window domain, $K_g$ the gradient stiffness, $\ell$ an
+isotropic characteristic length and $L_{mn}$ the one-scale length tensor.
+Every closed form below is derived here by elementary integration of the
+average of Sec.~\ref{sec:formulation}; the reduction to the one-scale limit is
+cited at the point of use, and the isotropic Aifantis form is a classical
+limit restated here. References marked UNVERIFIED in the bibliography are used
+only for classical background; the one-scale reference \texttt{fem1} is
+flagged UNVERIFIED there because its publisher record was not checked offline,
+and it is used here only for the classical reduction. The published material
+constants are cited collectively in Table~\ref{tab:params}; the window
+geometry, fractional order, relaxation time, flexoelectric coefficient, density
+and the assumed operating range $a/L\le0.2$ are treated as assumed inputs, as
+stated in Sec.~\ref{sec:formulation} and identified in
+Sec.~\ref{sec:calibration}. The single worked numerical calculation is given
+in Sec.~\ref{sec:worked}, and the remaining tabulated values are collected in
+\ref{app:data} and \ref{app:verification}.
+
 \paragraph{Cuboid} For $\mathcal W=[-a_1,a_1]\times[-a_2,a_2]$ the area is
 $4a_1a_2$ and
 \begin{equation}
