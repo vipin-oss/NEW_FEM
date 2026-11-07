@@ -16,14 +16,15 @@ is in Sec.~\ref{sec:worked} and the tables in \ref{app:data} and
 \ref{app:verification}.
 
 \FloatBarrier
-\subsection{Window orientation and strip aspect ratio}
+\subsection{Window orientation and window aspect ratio}
 \label{sec:orientation}
 
 Figure~\ref{fig:orientation} shows what the orientation of an anisotropic
 sampling window is worth, which is the first design question because the
 gradient energy is linear in the second-moment tensor $M$ and a rotation of the
 window changes $M$ without changing the strip. The window is held at a
-half-width of \SI{3}{\micro\meter} along its long axis and the strip is
+half-width of \SI{3}{\micro\meter} along its long axis; its aspect ratio is
+${\rm AR}=a_1/a_2$. The strip is
 \SI{200}{\micro\meter}$\times$\SI{10}{\micro\meter}, for the poling-$x$
 configuration that carries the response; physically, the window is the domain
 over which the microstructure of the film is averaged, so its orientation
@@ -51,7 +52,7 @@ $3\times10^{-11}$ relative.
 
 \subsubsection{What the orientation is worth}
 
-Both quantities move monotonically with $\theta$ and saturate by
+The extensional frequency and coupling move monotonically with $\theta$ and saturate by
 $\theta=90^\circ$. The extensional frequency rises from $5012$ to
 \SI{5296}{kHz} at ${\rm AR}=2$ and from $4907$ to \SI{5288}{kHz} at
 ${\rm AR}=10$, that is by $6$--$8\,\%$, while the coupling falls from $0.4448$
@@ -84,14 +85,14 @@ gradient.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{F4_orientation.pdf}
-\caption{Variations of (a) the extensional frequency and (b) its coupling factor, both normalized to the aligned window, over the full circle of window orientation, and of the same two quantities as maps over orientation and strip aspect ratio in (c) and (d), for a \SI{200}{\micro\meter}$\times$\SI{10}{\micro\meter} strip with poling along $x$, plane stress and a $24\times2$ mesh. Markers are computed points, lines a periodic spline.}
+\caption{Variations of (a) the extensional frequency and (b) its coupling factor, both normalized to the aligned window, over the full circle of window orientation, and of the same two quantities as maps over orientation and window aspect ratio in (c) and (d), for a \SI{200}{\micro\meter}$\times$\SI{10}{\micro\meter} strip with poling along $x$, plane stress and a $24\times2$ mesh. Markers are computed points, lines a periodic spline.}
 \label{fig:orientation}
 \end{figure}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.86\textwidth]{F5_design.pdf}
-\caption{Variations of (a) the change of the extensional coupling relative to the aligned window, one curve per strip aspect ratio, and of (b) the anisotropy of the second-moment tensor, independent of the aspect ratio, for the window and poling of Fig.~\ref{fig:orientation}. The coupling spans $4$ percentage points at $90^\circ$ and reaches $-18.7\,\%$ where the anisotropy of (b) is largest.}
+\caption{Variations of (a) the change of the extensional coupling relative to the aligned window, one curve per window aspect ratio, and of (b) the anisotropy of the second-moment tensor, independent of the aspect ratio, for the window and poling of Fig.~\ref{fig:orientation}. The coupling spans $4$ percentage points at $90^\circ$ and reaches $-18.7\,\%$ where the anisotropy of (b) is largest.}
 \label{fig:design}
 \end{figure}
 
@@ -126,9 +127,9 @@ $K_{uu}$ and $k^2_{4}(K_{sc})=0.4583$ is the same measure on the short-circuit
 stiffness $K_{sc}$, both on the $24\times2$ mesh of the ring-down; the third,
 $0.4580$ in Sec.~\ref{sec:application}, is $k^2_{4}(K_{sc})$ again,
 recomputed with $\mu=0$ because that section quotes the material without
-flexoelectricity. The gap of $1.5\,\%$ between $0.4650$ and $0.4583$ is the
-choice of memory matrix and nothing else, and the $0.07\,\%$ between $0.4583$
-and $0.4580$ is $\mu$.
+flexoelectricity. The gap of $1.5\,\%$ between $0.4650$ and $0.4583$ reflects the
+choice of short-circuit stiffness in the coupling measure, while the
+$0.07\,\%$ between $0.4583$ and $0.4580$ reflects the inclusion of $\mu$.
 
 The damping ratio is extracted from two successive peaks with
 \eqref{eq:zeta}. At the $\omega\tau=0.3$ of Table~\ref{tab:memory} the ratio of
@@ -172,7 +173,7 @@ fourth, fifth and sixth of them are unchanged to three digits between
 $\Delta t$, $\Delta t/2$ and $\Delta t/4$, so they are a property of the
 fractional element -- whose relaxation is a Mittag-Leffler function, not an
 exponential -- and not of the step, while the third is a near-cancellation
-between two peaks of comparable height. A straight line fitted to $\ln A_k$
+between two peaks of comparable height. A straight line fitted to $\ln A_k$, with $A_k$ the successive peak amplitudes,
 over the twenty periods therefore returns a number that is not a damping ratio,
 which is why the $\alpha=0.7$ column of Table~\ref{tab:memory} carries the
 first-period decrement rather than a fitted slope. The $\alpha=1$ entries are
@@ -194,10 +195,11 @@ it was fitted, which is the band a design map is meant to cover.
 Figure~\ref{fig:damping}(a) is the pole of \eqref{eq:kvfreq} in the complex
 plane, traced over $\omega\tau$ for seven relaxation times and colored by
 $\tau$, with markers at five Caputo orders; Fig.~\ref{fig:damping}(b) is the
-damping ratio $\zeta=-\mathrm{Re}\,s/(\omega_0|s|)$ over the
+damping ratio $\zeta=-\mathrm{Re}\,s/|s|$, where $s$ is the dimensional
+complex pole and $\omega_0$ the undamped angular frequency, over the
 $(\alpha,\omega\tau)$ plane. Both are computed with branch continuation: the
-root is followed from one $\omega\tau$ to the next by warm-starting the Newton
-iteration at the previous pole, without which the iteration jumps to a spurious
+root is followed from one $\omega\tau$ to the next by initializing the Newton
+iteration at the adjacent converged pole, without which the iteration jumps to a spurious
 root of the negative-real-part branch. All poles lie in the left half-plane for
 every $(\alpha,\tau)$ examined, so the fractional Kelvin--Voigt element is
 dissipative by construction. The integer-order case sits at
@@ -246,7 +248,7 @@ $a=l\sqrt{3/5}$. The third curve is indistinguishable from the first: within
 the adopted second-moment model the shape of the window is irrelevant at fixed
 $M$. The second curve shows the error made by ignoring the distinction: equal
 half-widths instead of equal $M$ over-stiffen the response, and the
-discrepancy grows with the window size. At $l/L_x=0.2$ a cuboid of half-width
+discrepancy grows with the window size. Writing $L_x$ for the rectangle length, at $l/L_x=0.2$ a cuboid of half-width
 $l$ retains $0.922$ of the classical loaded-edge displacement, an ellipsoid of
 semi-axis $l$ retains $0.941$, and the equal-$M$ cuboid sits on the ellipsoid
 curve to the third decimal. At fixed $M$ the shape of the window is therefore
@@ -265,8 +267,8 @@ rather than local, and its size grows with the window. That is why $a/L\le0.2$
 is quoted as an assumed operating range and not as a validated truncation
 threshold. Hence, at a fixed second moment the shape of the window is immaterial
 to the third decimal, and its size and its anisotropy are the only window
-parameters left in the model. The entries of Appendix~A used here are the
-ellipsoidal second moment \eqref{eq:Mell} and its rotation \eqref{eq:Mrot}, and
+parameters left in the model. The entries of \ref{app:Mcoeff} used here are the
+ellipsoidal second moment \eqref{eq:Mellip} and its rotation \eqref{eq:Mrot}, and
 the classical profile the difference is taken against is the limit
 \eqref{eq:limitM}.
 
@@ -419,7 +421,7 @@ has to be designed against both at once. They depend on different variables: the
 window, the piezoelectric extensional coupling on neither. Figure~\ref{fig:designmap}
 resolves them over the same two parameters. Panel~(a) is the flexoelectric
 bending coupling on a grid of eight thicknesses and eight window
-half-thicknesses, computed with the same mode-based measure and the same
+half-thicknesses, computed with the mode-free measure \eqref{eq:kstatic} and the same
 $48\times4$ mesh as Fig.~\ref{fig:thickness}(a); panel~(b) is the ratio of that
 coupling to the extensional one of the same strip, computed with the mode-free
 measure of \eqref{eq:kstatic}. Both panels carry the line $a_2=h$, along which
@@ -447,9 +449,8 @@ The design rule that follows is that the window should be chosen for the
 gradient one wants to resolve and the thickness for the size effect one wants
 to exploit; and that a device in which the two couplings are meant to compete
 needs a window thinner than the strip and a flexoelectric coefficient two
-orders of magnitude larger than the value assumed here. Hence the two
-couplings can be read from one map, and on that map a device in which they
-compete has to satisfy both conditions at once.
+orders of magnitude larger than the value assumed here. The map therefore distinguishes the effect of thickness from the suppression
+caused by the gradient stiffness.
 
 \begin{figure}[!htbp]
 \centering
@@ -486,7 +487,7 @@ at $\alpha=0.6$, and the sign of the error cannot be guessed from $\alpha$
 alone. Hence a recorded ring-down identifies the pair $(\alpha,\tau)$ only if
 the order is known from an independent measurement, which is the route taken in
 Sec.~\ref{sec:calibration}. The march is the one of \eqref{eq:newmark} with the
-L1 history, and the decrement is converted with \eqref{eq:bweights}.
+L1 history, and the decrement is converted with \eqref{eq:zeta}.
 
 \begin{figure}[!htbp]
 \centering
@@ -507,8 +508,7 @@ the piezoelectric coupling dominates and the flexoelectric term is a
 size-dependent correction. Table~\ref{tab:application} collects the four
 polarization/kinematics combinations of that strip, each solved from the
 condensed system \eqref{eq:saddle} with the electrode charge
-\eqref{eq:electrode}, and each quoted as the mode-free measure
-\eqref{eq:xFEM}. The fundamental of the
+\eqref{eq:electrode}, and each quoted using the mode-based coupling \eqref{eq:k2mode}. The lowest-frequency mode of the
 extensional configuration is at \SI{147.73}{kHz}, above the clamped-free value
 of a beam of the same length because the gradient terms stiffen the member,
 while the strongly coupled extensional mode sits at \SI{6725.8}{kHz}.

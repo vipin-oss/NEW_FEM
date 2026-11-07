@@ -4,7 +4,7 @@
 \label{sec:limits}
 %% ===========================================================================
 
-The general model of Sec.~\ref{sec:formulation} contains four switches, and
+The general model of Sec.~\ref{sec:formulation} contains independent constitutive switches, and
 each of them has to reproduce a known theory when it is turned off. Each
 switch acts on one term of the energy: \eqref{eq:Eel} for the elastic part,
 \eqref{eq:Epiezo} for the piezoelectric and dielectric parts and
@@ -37,10 +37,8 @@ $\mu_{kijl}\to0$, in which the double-traction condition of
 Sec.~\ref{sec:bc} drops out of the formulation. What remains is the classical
 piezoelectric strip: the weak form keeps only the elastic, piezoelectric and
 dielectric terms, the displacement field needs $C^0$ continuity only, and the
-coupling factor is the purely piezoelectric one. The window size is therefore
-the single parameter that switches the model from a local electromechanical
-theory to a strain-gradient one, and it does so without changing any other
-term.
+coupling factor is the purely piezoelectric one. Thus, with flexoelectricity suppressed, the window size alone switches the
+strain-gradient stiffness on or off without changing the remaining terms.
 
 \FloatBarrier
 \subsection{Purely piezoelectric response}
@@ -87,10 +85,9 @@ damping ratio follows from the dashpot coefficient $\tau K$ alone,
   \zeta = \frac{\tau K}{2\sqrt{KM}} = \frac{\omega\tau}{2},
   \label{eq:limitKV}
 \end{equation}
-Here $K$ is the stiffness that carries the memory, $M$ the modal mass, $\tau$
-the relaxation time, $\alpha$ the Caputo order, $\sigma$ the stress,
-$\varepsilon$ the strain and $\zeta$ the damping ratio; $\omega=\sqrt{K/M}$ is
-the undamped frequency of the mode that carries it.
+In \eqref{eq:limitKV}, $M$ denotes the modal mass rather than the window
+second-moment tensor, and $\omega=\sqrt{K/M}$ is the undamped angular
+frequency for the stiffness $K$ carrying the memory.
 The implementation reproduces it: at $\omega\tau=0.3$ the ring-down of
 Sec.~\ref{sec:memorystudy} returns $\zeta_{\rm eff}=0.15003$ against the exact
 $0.15000$, a difference of $0.02\,\%$. For $\tau\to0$ the memory term of
@@ -112,8 +109,8 @@ the one-scale theory~\cite{fem1} is reproduced exactly, with the cuboid,
 ellipse and ellipsoid windows giving the scalar coefficients that
 \ref{app:Mcoeff} lists; setting $M_{mn}=\ell^{2}\delta_{mn}$ reduces
 the same expression to the isotropic Aifantis form~\cite{Aifantis1992}.
-Dropping the memory and the flexoelectric tensor leaves the classical
-piezoelectric strip. The present work differs from these in carrying the
+Dropping the memory and the flexoelectric tensor leaves a strain-gradient
+piezoelectric strip; the classical strip additionally requires $M_{mn}=0$. The present work differs from these in carrying the
 fractional memory on the reduced modal coordinates and in treating the
 window's second moment, rather than a scalar length, as the object that the
 discretization sees. Which of these reductions a given problem selects is
