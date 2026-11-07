@@ -1,9 +1,9 @@
 {
- "working_value": 0.5581368174242128,
+ "working_value": 0.5581368174245003,
  "rows": [
   {
    "label": "k2_free_nogradient_48x4",
-   "value": 0.5607862968600517,
+   "value": 0.5607862968604258,
    "x": null,
    "bc": "none (free, minimum-norm solve)",
    "mesh": "48x4",
@@ -17,7 +17,7 @@
   },
   {
    "label": "k2_clamped_nogradient_48x4",
-   "value": 0.5595713043152196,
+   "value": 0.5595713043155028,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "48x4",
@@ -31,7 +31,7 @@
   },
   {
    "label": "k2_clamped_gradient_48x4",
-   "value": 0.5581368174242128,
+   "value": 0.5581368174245003,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "48x4",
@@ -45,7 +45,7 @@
   },
   {
    "label": "k2_clamped_gradient_24x2",
-   "value": 0.5579682481629665,
+   "value": 0.5579682481629592,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "24x2",
@@ -59,7 +59,7 @@
   },
   {
    "label": "k2_mode_based_Kuu_24x2",
-   "value": 0.46498183495941714,
+   "value": 0.46498183495530354,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "24x2",
@@ -69,11 +69,11 @@
    "formula": "(w_oc^2 - w_u^2)/w_oc^2",
    "key": "memory_variants.json k2",
    "mode": 5,
-   "f_kHz": 6727.321873203973
+   "f_kHz": 6727.321873210225
   },
   {
    "label": "k2_mode_based_Ksc_24x2",
-   "value": 0.45829708115982404,
+   "value": 0.458297081158994,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "24x2",
@@ -83,11 +83,11 @@
    "formula": "(w_oc^2 - w_sc^2)/w_oc^2, mu = 1e-6",
    "key": "quoted as 0.4583 in the ring-down section",
    "mode": 5,
-   "f_kHz": 6727.321873203973
+   "f_kHz": 6727.321873210225
   },
   {
    "label": "k2_mode_based_Ksc_24x2_mu0",
-   "value": 0.4579723498584602,
+   "value": 0.45797234985416213,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "24x2",
@@ -97,7 +97,7 @@
    "formula": "(w_oc^2 - w_sc^2)/w_oc^2, mu = 0",
    "key": "application_table.json rows[3].k2",
    "mode": 5,
-   "f_kHz": 6725.792506558617
+   "f_kHz": 6725.792506544914
   },
   {
    "label": "k2_closed_form_plane_stress",

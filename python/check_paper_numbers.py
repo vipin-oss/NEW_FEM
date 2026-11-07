@@ -515,6 +515,16 @@ def main():
     R.append(row("verification table, largest overlap between different modes",
                  "2.8e-6", "reduction_mac.json mac_offdiag_max",
                  _rm["mac_offdiag_max"], "{:.1e}"))
+    _nu = J("numerics.json")["truncation"]
+    R.append(row("Sec. 5.4, 8 vs 40 modes with the memory on K_eff", "2.0e-14",
+                 "numerics.json keff_relerr_8_vs_40",
+                 _nu["keff_relerr_8_vs_40"], "{:.1e}"))
+    R.append(row("Sec. 5.4, 8 vs 40 modes with the memory on K_uu", "3.0e-4",
+                 "numerics.json kuu_relerr_8_vs_40",
+                 _nu["kuu_relerr_8_vs_40"], "{:.1e}"))
+    R.append(row("Sec. 5.4, 20 vs 40 modes with the memory on K_uu", "5.1e-5",
+                 "numerics.json kuu_relerr_20_vs_40",
+                 _nu["kuu_relerr_20_vs_40"], "{:.1e}"))
     _kf = J("k2_closed_form.json")["fem"]
     R.append(row("verification table, clamped 96x4 vs 48x4, relative", "6.2e-4",
                  "k2_closed_form.json fem clamped 96x4 / 48x4 - 1",
@@ -542,10 +552,10 @@ def main():
                  _at(1.0, 0.25) / _at(1.0, 1.0), "{:.1f}"))
     R.append(row("design map, flexo k^2 at h=1, a2=1 um", "4.17e-3",
                  "design_map.json [h=1][a2=1]", _at(1.0, 1.0), "{:.2e}"))
-    R.append(row("design map, smallest flexo k^2", "3.69e-6",
+    R.append(row("design map, smallest flexo k^2", "3.6e-6",
                  "design_map.json range k2_flexo_min",
-                 dm["range"]["k2_flexo_min"], "{:.2e}"))
-    R.append(row("design map, smallest flexo/piezo ratio", "6.6e-6",
+                 dm["range"]["k2_flexo_min"], "{:.1e}"))
+    R.append(row("design map, smallest flexo/piezo ratio", "6.5e-6",
                  "design_map.json range ratio_min",
                  dm["range"]["ratio_min"], "{:.1e}"))
     R.append(row("design map, largest flexo/piezo ratio", "1.85e-2",

@@ -4,24 +4,24 @@ No TeX in this environment, so nothing here is compiled. Text width 481.9 pt, te
 
 | block | amount | pt | pages |
 |---|---|---|---|
-| body figures | 11 | 3120 | 4.37 |
+| body figures | 11 | 3124 | 4.37 |
 | body tables | 6 | 884 | 1.24 |
 | body prose and display maths | 15860 words | 14065 | 19.69 |
 | appendix figures | 0 | 0 | 0.00 |
 | appendix tables | 4 | 721 | 1.01 |
 | appendix prose |  | 1281 | 1.79 |
 | reference list | 68 entries | 2543 | 3.56 |
-| **sum** | | **22614** | **31.66** |
+| **sum** | | **22617** | **31.66** |
 
 ## Where the body stands
 
 | | body content | pages of area |
 |---|---|---|
-| this revision | 18069 pt | 25.29 |
-| `47a21a3` | 16342 pt | 22.88 |
-| **change** | **+1727 pt** | **+2.42** |
+| this revision | 18072 pt | 25.30 |
+| `47a21a3` | 16346 pt | 22.88 |
+| **change** | **+1726 pt** | **+2.42** |
 
-Package content: 22471 -> 22614 pt (31.46 -> 31.66 pages).
+Package content: 22474 -> 22617 pt (31.46 -> 31.66 pages).
 
 ## From area to pages
 
@@ -35,7 +35,7 @@ The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page
 |---|---|---|---|
 | `fig:orientation` (figure) | 495 | 0.69 | body |
 | `fig:geometry` (figure) | 450 | 0.63 | body |
-| `fig:fields` (figure) | 293 | 0.41 | body |
+| `fig:fields` (figure) | 296 | 0.41 | body |
 | `fig:ringdown` (figure) | 263 | 0.37 | body |
 | `fig:convergence` (figure) | 244 | 0.34 | body |
 | `tab:verification` (table) | 238 | 0.33 | appendix |
@@ -68,7 +68,7 @@ To reach 30 pages, 2787 pt of area (3.9 pages) has to go. Ranked by what each is
 | lever | saves | pages | cost to the paper |
 |---|---|---|---|
 | Appendix B to supplementary material (4 floats, 238 pt) | 238 pt | 0.3 | the verification table is the evidence of Sec. 6.1; a supplementary file is standard practice but changes the submission |
-| all ten body figures to 0.85\textwidth | 468 pt | 0.7 | axes get smaller; none is removed |
+| all ten body figures to 0.85\textwidth | 469 pt | 0.7 | axes get smaller; none is removed |
 | `tab:verification` at \footnotesize with tighter rules | 48 pt | 0.1 | 54 rows at 9 pt instead of 12 |
 | Sec. 2 and Sec. 5 tightened by a quarter | 1104 pt | 1.5 | prose only: the two sections have never been shortened |
 

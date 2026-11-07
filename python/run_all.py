@@ -44,10 +44,45 @@ def load(name):
         return json.load(fh)
 
 
+ENV = dict(os.environ)
+ENV.update({"PYTHONHASHSEED": "0", "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"})
+
+
+def environment():
+    """Versions and the commit the numbers were produced from.
+
+    The suite is deterministic: every script is a fixed sequence of dense
+    linear algebra calls, no random number generator is used anywhere in the
+    package (`grep -r random python/` is empty), and the BLAS thread count is
+    pinned below so that reduction order cannot change from run to run.
+    """
+    import platform
+    import scipy
+    import matplotlib
+    import fem6_core
+    try:
+        git = subprocess.run(["git", "rev-parse", "--short", "HEAD"],
+                             cwd=ROOT, capture_output=True, text=True
+                             ).stdout.strip()
+    except Exception:
+        git = "unknown"
+    env = {"python": platform.python_version(),
+           "numpy": np.__version__, "scipy": scipy.__version__,
+           "matplotlib": matplotlib.__version__,
+           "platform": platform.platform(), "git_commit": git,
+           "pythonhashseed": "0", "blas_threads": "1",
+           "rng": "none: the package draws no random numbers",
+           "entry_point": "python3 python/run_all.py"}
+    with open(os.path.join(RESULTS, "environment.json"), "w") as fh:
+        json.dump(env, fh, indent=1)
+    return env
+
+
 def run(script):
     t0 = time.time()
     p = subprocess.run([sys.executable, os.path.join(HERE, script)],
-                       capture_output=True, text=True)
+                       capture_output=True, text=True, env=ENV)
     ok = p.returncode == 0
     if not ok:
         print(p.stdout[-3000:])
@@ -66,6 +101,8 @@ def main():
                "run_independent_checks.py", "audit_abstract_claims.py",
                "run_config_table.py", "list_unverified.py", "length_budget.py",
                "run_sensitivity.py", "check_gradient_energy.py",
+               "check_coupled_patch.py", "check_numerics.py",
+               "sensitivity_tornado.py", "run_design_map.py",
                os.path.join("..", "Paper_12", "check_refs.py")]
     if figs:
         scripts.append("run_demos.py")
@@ -94,6 +131,9 @@ def main():
     Uv = load("unverified_numbers.json")
     Sn = load("sensitivity.json")
     Ge = load("gradient_energy.json")
+    Cp = load("coupled_patch.json")
+    Nu = load("numerics.json")
+    To = load("sensitivity_tornado.json")
     Cf = load("k2_closed_form.json")
     D = load("demo.json") if figs else None
     Pg = load("paper_figures_data.json") if figs else None
@@ -292,6 +332,57 @@ def main():
     mw = Ic["F4_window_moments"]["worst_rel"]
     chk("I8", "window second-moment factors 1/3, 1/4, 1/5 by quadrature",
         f"{mw:.1e}", "< 1e-5", mw < 1e-5)
+
+    chk("P3", "coupled patch test: exact field on one element, assembled vs "
+        "analytic enthalpy",
+        f"{Cp['patch']['worst_rel_err']:.1e}",
+        "< 1e-10 (elastic + piezo + flexo + gradient + dielectric)",
+        Cp["patch"]["worst_rel_err"] < 1e-10)
+    Sy = Cp["symmetry"]
+    chk("Y1", "coupled matrix symmetric, blocks exact, inertia "
+        f"({Sy['ndof_mech']}, {Sy['ndof_phi']})",
+        f"|S-S^T|/|S| {Sy['rel_asymmetry']:.1e}, "
+        f"({Sy['n_positive']}, {Sy['n_negative']}, {Sy['n_zero']}), "
+        f"min eig K/|K| {Sy['min_eig_K_rel']:.1e}",
+        "< 1e-12, inertia (n_mech, n_phi, 0), one null mode of C_phi",
+        Sy["symmetric"] and Sy["inertia_ok"] and Sy["blocks_exact"])
+    Sc = Nu["scaling"]
+    chk("H1", "generalized vs Cholesky-standardized pencil, first six modes",
+        f"{Sc['worst_rel_diff']:.1e} at h = 1 um "
+        f"(cond K {Sc['max_cond_K']:.1e})",
+        "< 1e-3 in w^2: the paper quotes 2 s.f., and this path moves at the "
+        "1e-5 level between numeric stacks",
+        Sc["worst_rel_diff"] < 1e-3)
+    Lw = Nu["l1"]
+    chk("H2", "L1 weights: b_0 = 1 for every alpha (the 0**0 case) and the "
+        "cancellation at alpha -> 1",
+        f"b_0 ok {Lw['b0_ok']}, worst rel. error "
+        f"{max(Lw['worst_cancellation_rel'].values()):.1e}",
+        "< 1e-8 against a 50-digit Decimal evaluation",
+        Lw["b0_ok"] and max(Lw["worst_cancellation_rel"].values()) < 1e-8)
+    Dt = Nu["dt"]
+    chk("H3", "time-step independence at alpha < 1: dt, dt/2, dt/4, dt/8",
+        "orders " + ", ".join(f"{o:.2f}" for v in Dt["cases"].values()
+                              for o in v["orders"]),
+        "first order: every observed order > 0.8", Dt["first_order_ok"])
+    Tn = Nu["truncation"]
+    chk("H4", "modal truncation of the ring-down, 8 and 20 modes against 40",
+        f"K_uu {Tn['kuu_relerr_8_vs_40']:.1e} / "
+        f"{Tn['kuu_relerr_20_vs_40']:.1e}, "
+        f"K_eff {Tn['keff_relerr_8_vs_40']:.1e}",
+        "20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-10", Tn["converged"])
+    tor = {r["input"] + r["perturbation"]: r for r in To["rows"]}
+    chk("S3", "tornado: +/-10 % in mu, rho, a2, tau against the headline numbers",
+        "factor 24 " + f"{tor['a2+10 %']['d_factor24_pct']:+.1f} % for a2 +10 %, "
+        f"flexo k^2 {tor['mu+10 %']['d_k2ext_pct']:+.1f} % for mu +10 %",
+        "reported, not graded: each row is a scaling law or a solver run",
+        len(To["rows"]) == 8)
+    Env = environment()
+    chk("E1", "environment recorded for this run",
+        f"python {Env['python']}, numpy {Env['numpy']}, scipy "
+        f"{Env['scipy']}, commit {Env['git_commit']}",
+        "a JSON with the versions and the commit exists",
+        os.path.exists(os.path.join(RESULTS, "environment.json")))
 
     chk("U1", "h = 1 um flexo k^2 over four equivalent solver paths and "
         f"{Sn['n_stacks']} numeric stacks",

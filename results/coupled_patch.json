@@ -1,0 +1,40 @@
+{
+ "patch": {
+  "rows": [
+   {
+    "case": "constant strain, uniform field",
+    "fem": -9.739606598699998e-11,
+    "analytic": -9.7396065987e-11,
+    "rel_err": 2.6540491015039947e-16
+   },
+   {
+    "case": "constant strain gradient, uniform field",
+    "fem": 0.0015533682809823117,
+    "analytic": 0.0015533682809823128,
+    "rel_err": 6.979685279783626e-16
+   },
+   {
+    "case": "gradient operator off, constant strain",
+    "fem": -9.739606598699998e-11,
+    "analytic": -9.7396065987e-11,
+    "rel_err": 2.6540491015039947e-16
+   }
+  ],
+  "worst_rel_err": 6.979685279783626e-16
+ },
+ "symmetry": {
+  "ndof_mech": 96,
+  "ndof_phi": 14,
+  "rel_asymmetry": 1.7058672371414864e-17,
+  "n_positive": 96,
+  "n_negative": 14,
+  "n_zero": 0,
+  "min_eig_K": -0.00010499087586848064,
+  "min_eig_K_rel": -6.676097754437491e-17,
+  "min_eig_Cphi": 1.3224164827363566e-10,
+  "n_null_Cphi_ungrounded": 1,
+  "blocks_exact": true,
+  "symmetric": true,
+  "inertia_ok": true
+ }
+}

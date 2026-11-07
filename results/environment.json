@@ -1,0 +1,12 @@
+{
+ "python": "3.11.2",
+ "numpy": "2.4.6",
+ "scipy": "1.17.1",
+ "matplotlib": "3.11.2",
+ "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+ "git_commit": "4730213",
+ "pythonhashseed": "0",
+ "blas_threads": "1",
+ "rng": "none: the package draws no random numbers",
+ "entry_point": "python3 python/run_all.py"
+}

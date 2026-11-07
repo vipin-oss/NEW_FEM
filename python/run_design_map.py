@@ -20,6 +20,8 @@ configuration with $\\mu = 0$ (48x4 BFS, electrodes on the short faces).
 """
 from __future__ import annotations
 
+import deterministic  # noqa: F401  (pins the numeric stack)
+
 import json
 import os
 import sys
@@ -137,17 +139,24 @@ def draw(H, A, KB, KE):
         cb.locator = matplotlib.ticker.MaxNLocator(nbins=4)
         cb.update_ticks()
         if levels:
-            cl = ax.contour(XX, YY, Z, levels=levels, colors="w",
-                            linewidths=0.9, linestyles=["--", "-", "-."])
+            cl = ax.contour(XX, YY, Z, levels=levels, colors="k",
+                            linewidths=0.8, linestyles=["--", "-", "-."])
             ax.clabel(cl, fmt={levels[0]: "0.01 %", levels[1]: "0.1 %",
-                               levels[2]: "1 %"}, fontsize=6)
-        ax.plot(H, H, ":", color="w", lw=1.1)
-        ax.text(1.05, 4.2, r"$a_2=h$", color="w", fontsize=6.5)
-        ax.set_ylim(A.min(), 45.0)
-        ax.axhline(0.2 * 200.0, color="w", lw=1.0, alpha=0.9)
-        ax.text(1.05, 34.0, r"$a_2/L=0.2$", color="w", fontsize=6.2)
+                               levels[2]: "1 %"}, fontsize=6,
+                      inline_spacing=3)
         ax.set_xscale("log"); ax.set_yscale("log")
         ax.set_xlim(H.min(), H.max()); ax.set_ylim(A.min(), A.max())
+        # orientation lines in black with a white halo: white-on-viridis
+        # vanishes over the bright part of the map, and the a2/L = 0.2 line
+        # previously sat exactly on the top spine and could not be seen
+        ax.plot(H, H, ":", color="k", lw=1.0, zorder=5)
+        ax.text(1.05, 4.2, r"$a_2=h$", fontsize=6.5, zorder=6,
+                bbox=dict(fc="w", ec="none", alpha=0.75, pad=0.6))
+        # the map itself stops at a2/L = 0.2 (the top of the frame), so no
+        # line is drawn there: the note sits inside, clear of the title
+        ax.text(0.97, 0.955, r"$a_2/L\leq0.2$", transform=ax.transAxes,
+                fontsize=6.2, ha="right", va="top", zorder=6,
+                bbox=dict(fc="w", ec="none", alpha=0.75, pad=0.6))
         ax.set_xlabel(r"strip thickness $h$ ($\mu$m)")
         ax.set_ylabel(r"window half-thickness $a_2$ ($\mu$m)")
         ax.set_title(title)

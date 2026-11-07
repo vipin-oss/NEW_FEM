@@ -22,7 +22,7 @@
 | 09_conclusions.tex | `0.5608` | elsewhere in the manuscript |
 | 09_conclusions.tex | `1.03\times10^{-2}` | elsewhere in the manuscript |
 | 09_conclusions.tex | `3.1\times10^{-4}` | elsewhere in the manuscript |
-| 09_conclusions.tex | `3.69\times10^{-6}` | elsewhere in the manuscript |
+| 09_conclusions.tex | `3.6\times10^{-6}` | elsewhere in the manuscript |
 | 09_conclusions.tex | `5.46` | elsewhere in the manuscript |
 | 09_conclusions.tex | `6.2\times10^{-4}` | elsewhere in the manuscript |
 | 09_conclusions.tex | `7.5\times10^{-3}` | elsewhere in the manuscript |

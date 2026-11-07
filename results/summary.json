@@ -52,7 +52,7 @@
   {
    "id": "V4a",
    "what": "bending mode k_eff^2 (piezo only)",
-   "value": "2.27e-10",
+   "value": "4.08e-09",
    "criterion": "< 1e-6 (no net charge in bending)",
    "pass": true
   },
@@ -213,7 +213,7 @@
   {
    "id": "K2",
    "what": "worst f2/f1 over the thickness sweep (mode off-diagonal)",
-   "value": "2.3e-06, f2/f1 >= 6.21",
+   "value": "2.2e-06, f2/f1 >= 6.21",
    "criterion": "off-diag < 1e-5, ratio > 6",
    "pass": true
   },
@@ -276,7 +276,7 @@
   {
    "id": "I7",
    "what": "flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33",
-   "value": "1.7e-13",
+   "value": "1.9e-13",
    "criterion": "< 1e-10",
    "pass": true
   },
@@ -316,6 +316,62 @@
    "pass": true
   },
   {
+   "id": "P3",
+   "what": "coupled patch test: exact field on one element, assembled vs analytic enthalpy",
+   "value": "7.0e-16",
+   "criterion": "< 1e-10 (elastic + piezo + flexo + gradient + dielectric)",
+   "pass": true
+  },
+  {
+   "id": "Y1",
+   "what": "coupled matrix symmetric, blocks exact, inertia (96, 14)",
+   "value": "|S-S^T|/|S| 1.7e-17, (96, 14, 0), min eig K/|K| -6.7e-17",
+   "criterion": "< 1e-12, inertia (n_mech, n_phi, 0), one null mode of C_phi",
+   "pass": true
+  },
+  {
+   "id": "H1",
+   "what": "generalized vs Cholesky-standardized pencil, first six modes",
+   "value": "2.3e-04 at h = 1 um (cond K 7.3e+27)",
+   "criterion": "< 1e-3 in w^2: the paper quotes 2 s.f., and this path moves at the 1e-5 level between numeric stacks",
+   "pass": true
+  },
+  {
+   "id": "H2",
+   "what": "L1 weights: b_0 = 1 for every alpha (the 0**0 case) and the cancellation at alpha -> 1",
+   "value": "b_0 ok True, worst rel. error 3.9e-10",
+   "criterion": "< 1e-8 against a 50-digit Decimal evaluation",
+   "pass": true
+  },
+  {
+   "id": "H3",
+   "what": "time-step independence at alpha < 1: dt, dt/2, dt/4, dt/8",
+   "value": "orders 1.97, 1.50, 0.84, 1.47",
+   "criterion": "first order: every observed order > 0.8",
+   "pass": true
+  },
+  {
+   "id": "H4",
+   "what": "modal truncation of the ring-down, 8 and 20 modes against 40",
+   "value": "K_uu 3.0e-04 / 5.1e-05, K_eff 2.0e-14",
+   "criterion": "20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-10",
+   "pass": true
+  },
+  {
+   "id": "S3",
+   "what": "tornado: +/-10 % in mu, rho, a2, tau against the headline numbers",
+   "value": "factor 24 -15.0 % for a2 +10 %, flexo k^2 +19.3 % for mu +10 %",
+   "criterion": "reported, not graded: each row is a scaling law or a solver run",
+   "pass": true
+  },
+  {
+   "id": "E1",
+   "what": "environment recorded for this run",
+   "value": "python 3.11.2, numpy 2.4.6, scipy 1.17.1, commit 4730213",
+   "criterion": "a JSON with the versions and the commit exists",
+   "pass": true
+  },
+  {
    "id": "U1",
    "what": "h = 1 um flexo k^2 over four equivalent solver paths and 4 numeric stacks",
    "value": "spread 0.182 %, k^2 4.1705e-03..4.1781e-03",
@@ -325,14 +381,14 @@
   {
    "id": "U2",
    "what": "the same spread at h = 10 um",
-   "value": "1.49e-05 %",
+   "value": "1.16e-05 %",
    "criterion": "< 1e-3 %",
    "pass": true
   },
   {
    "id": "U3",
    "what": "truncating the secular sum to 12 modes is not an alternative",
-   "value": "85 % off",
+   "value": "84 % off",
    "criterion": "> 50 % (hence the sum runs over all modes)",
    "pass": true
   },
@@ -395,7 +451,7 @@
   {
    "id": "T4",
    "what": "flexo k^2, 48x4 vs 96x4 witness",
-   "value": "3.5e-03",
+   "value": "3.1e-03",
    "criterion": "< 0.02",
    "pass": true
   },
@@ -430,13 +486,13 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "99/99",
+   "value": "102/102",
    "criterion": "all agree",
    "pass": true
   }
  ],
- "n_pass": 62,
- "n_total": 62,
+ "n_pass": 70,
+ "n_total": 70,
  "scripts_ok": {
   "run_verification.py": true,
   "run_flexo_check.py": true,
@@ -455,6 +511,10 @@
   "length_budget.py": true,
   "run_sensitivity.py": true,
   "check_gradient_energy.py": true,
+  "check_coupled_patch.py": true,
+  "check_numerics.py": true,
+  "sensitivity_tornado.py": true,
+  "run_design_map.py": true,
   "../Paper_12/check_refs.py": true,
   "run_demos.py": true,
   "run_paper_figures.py": true,

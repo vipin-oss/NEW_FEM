@@ -280,7 +280,8 @@ def fig_orientation(pol):
     fig = plt.figure(figsize=(6.9, 6.1))
     gs = fig.add_gridspec(2, 2, hspace=0.30, wspace=0.46,
                           left=0.075, right=0.955, top=0.95, bottom=0.075)
-    cfg = (("f_ext_kHz", (0.945, 1.090), [0.95, 1.05], r"$f_{\rm ext}/f_{\rm ext}(0)$"),
+    cfg = (("f_ext_kHz", (0.945, 1.090), [0.95, 1.05],
+            r"$f_{\mathrm{ext}}/f_{\mathrm{ext}}(0)$"),
            ("k2_axial", (0.74, 1.025), [0.8, 0.9], r"$k^2/k^2(0)$"))
     for k, (key, rlim, rticks, rlab) in enumerate(cfg):
         ax = fig.add_subplot(gs[0, k], projection="polar")
@@ -305,7 +306,7 @@ def fig_orientation(pol):
         ax.set_rticks(rticks)
         ax.set_yticklabels([f"{v:g}" for v in rticks], fontsize=6.2)
         ax.set_theta_zero_location("E")
-        ax.set_rlabel_position(118)
+        ax.set_rlabel_position(104)
         ax.set_thetagrids(np.arange(0, 360, 45),
                           labels=["0", "45", "90", "135", "180", "225",
                                   "270", "315"], fontsize=6.2)
@@ -322,13 +323,13 @@ def fig_orientation(pol):
                       columnspacing=0.8)
     for k, (key, lab, cm, fmt) in enumerate((
             ("k2_axial", r"$k^2$", "viridis", "%.2f"),
-            ("f_ext_kHz", r"$f_{\rm ext}$ (kHz)", "cividis", "%.0f"))):
+            ("f_ext_kHz", r"$f_{\mathrm{ext}}$ (kHz)", "cividis", "%.0f"))):
         ax = fig.add_subplot(gs[1, k])
         thf, arf, Z = _polarmap(pol, key)
         m = thf <= 180.0
         T, A = np.meshgrid(thf[m], arf)
-        cf = ax.contourf(T, A, Z[:, m], levels=16, cmap=cm)
-        cs = ax.contour(T, A, Z[:, m], levels=4, colors="k", linewidths=0.4)
+        cf = ax.contourf(T, A, Z[:, m], levels=40, cmap=cm)
+        cs = ax.contour(T, A, Z[:, m], levels=6, colors="k", linewidths=0.4)
         ax.clabel(cs, fontsize=5.4, inline=True, inline_spacing=2, fmt=fmt)
         for AR in sorted({round(r["AR"], 3) for r in pol}):
             ax.plot([0, 180], [AR, AR], "o", ms=1.1, color="w", alpha=0.85)
@@ -453,9 +454,26 @@ def fig_damping():
                         xytext=(-42, 0) if first else (5, 5),
                         ha="right" if first else "left", va="center",
                         fontsize=6.0, color="0.25")
+    # exact Kelvin-Voigt locus: s/w0 = -zeta +- i sqrt(1 - zeta^2).  At
+    # alpha = 1 the fractional element *is* Kelvin-Voigt, so the top curve of
+    # panel (a) must lie on this arc for every tau.
+    zk = np.linspace(0.0, 0.72, 400)
+    ax.plot(zk[1:], np.sqrt(1.0 - zk[1:] ** 2), "--", color="0.1",
+            lw=0.9, zorder=4,
+            label=r"Kelvin-Voigt, exact")
+    _kv = {}
+    for tau in taus:
+        s0 = None
+        for a in (0.9999999,):
+            z = complex(f6.complex_frequency(w0, tau, a, s0=s0))
+            _kv[tau] = (-z.real / w0, abs(z.imag) / w0)
+    _dv = max(abs(y - np.sqrt(max(0.0, 1.0 - min(x, 1.0) ** 2)))
+              for x, y in _kv.values())
+    ax.legend(loc="lower left", frameon=False, fontsize=6.0,
+              handlelength=1.6, borderaxespad=0.1)
     ax.set_xscale("log")
     ax.set_xlim(5e-3, 1.5)
-    ax.set_ylim(0.955, 1.52)
+    ax.set_ylim(0.60, 1.55)
     ax.axhline(1.0, color="0.55", lw=0.6, ls=":", zorder=1)
     ax.text(0.03, 0.94, r"markers: $\alpha=0.2,0.4,0.6,0.8,1$",
             transform=ax.transAxes, ha="left", va="top", fontsize=5.8)
@@ -486,6 +504,7 @@ def fig_damping():
     cb = fig.colorbar(cf, ax=axb, pad=0.02, fraction=0.055)
     cb.set_label(r"$\zeta$", fontsize=7.5)
     cb.ax.tick_params(labelsize=6.5)
+    print(f"    F6: alpha->1 poles vs exact KV arc, worst |dy| = {_dv:.2e}")
     save(fig, "F6_damping")
 
 def fig_p6_waterfall():
@@ -535,9 +554,9 @@ def fig_p6_waterfall():
             out[f"delta_{a}"] = dl
             out[f"zeta_{a}"] = float(dl / np.sqrt(4 * np.pi ** 2 + dl ** 2))
     ax[0].set_xlabel(r"$t$ ($\mu$s)")
-    ax[0].set_ylabel(r"$u_{\rm tip}$ (nm)")
+    ax[0].set_ylabel(r"$u_{\mathrm{tip}}$ (nm)")
     ax[1].set_xlabel(r"$t$ ($\mu$s)")
-    ax[1].set_ylabel(r"$V_{\rm oc}$ (V)")
+    ax[1].set_ylabel(r"$V_{\mathrm{oc}}$ (V)")
     ax[0].legend(frameon=False, fontsize=6.5, ncol=2)
     ax[0].set_title("(a) tip displacement", fontsize=7.5)
     ax[1].set_title("(b) open-circuit voltage", fontsize=7.5)
@@ -604,7 +623,7 @@ def fig_p7_thickness(thick, closed_form):
     ax[2].loglog(h, kf / ke, "o", ms=3.4, color=OI[4], mfc="none", mew=0.6)
     ax[2].axhline(1.0, color="0.45", lw=0.9, ls="--")
     ax[2].set_xlabel(r"thickness $h$ ($\mu$m)")
-    ax[2].set_ylabel(r"ratio $k^2_{\rm flexo}/k^2_{\rm piezo}$")
+    ax[2].set_ylabel(r"ratio $k^2_{\mathrm{flexo}}/k^2_{\mathrm{piezo}}$")
     ax[2].invert_xaxis()
     ax[2].set_ylim(2.0e-4, 3.0)
     ax[2].tick_params(labelsize=6.5)
@@ -770,6 +789,51 @@ def fig_p11_convergence():
 # ---------------------------------------------------------------------------
 # P12  field panels of the coupled mode (open circuit)
 # ---------------------------------------------------------------------------
+
+_SOL = [None, None]
+
+
+def _fine_fields(mdl, mesh, u_full, phi_full, nsub=8):
+    """u_x, w and phi of the assembled solution on a fine rectilinear grid.
+
+    The displacement of a BFS element is a bicubic Hermite polynomial *inside*
+    the element, so it is evaluated from its own basis rather than interpolated
+    through the nodal samples: the plotted field is the computed field and no
+    smoothing is invented.  The potential is bilinear, which is what the
+    element carries.  (Before round 2 these panels were drawn with gouraud
+    shading on the 5 x 49 nodal array, which is what produced the moire
+    banding visible in the old figure.)
+    """
+    nx, ny = mesh.nx, mesh.ny
+    xs = np.linspace(0.0, nx * mesh.hx, nx * nsub + 1)
+    ys = np.linspace(0.0, ny * mesh.hy, ny * nsub + 1)
+    X, Y = np.meshgrid(xs, ys, indexing="xy")
+    U = np.zeros_like(X); W = np.zeros_like(X); P = np.zeros_like(X)
+    iel = np.minimum((X / mesh.hx).astype(int), nx - 1)
+    jel = np.minimum((Y / mesh.hy).astype(int), ny - 1)
+    for j in range(ny):
+        for i in range(nx):
+            sel = (iel == i) & (jel == j)
+            if not sel.any():
+                continue
+            base = i + (nx + 1) * j
+            nloc = (base, base + 1, base + 1 + (nx + 1), base + (nx + 1))
+            du = np.zeros(16); dv = np.zeros(16); dp = np.zeros(4)
+            for c, nid in enumerate(nloc):
+                for d in range(4):
+                    du[4 * c + d] = u_full[mdl.mech_dof[nid][d]]
+                    dv[4 * c + d] = u_full[mdl.mech_dof[nid][4 + d]]
+                g = mdl.phi_dof[nid]
+                dp[c] = phi_full[g] if g >= 0 else 0.0
+            xc = i * mesh.hx; yc = j * mesh.hy
+            xi = 2.0 * (X[sel] - xc) / mesh.hx - 1.0
+            eta = 2.0 * (Y[sel] - yc) / mesh.hy - 1.0
+            N = f6.bfs_scalar(xi, eta, mesh.hx, mesh.hy)[0]
+            Nb = f6.bilinear(xi, eta)[0]
+            U[sel] = N @ du; W[sel] = N @ dv; P[sel] = Nb @ dp
+    return X * 1e6, Y * 1e6, U, W, P
+
+
 def fig_p12_fields():
     """u_x, w, phi and |E| of the coupled bending mode, open circuit."""
     Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)
@@ -797,43 +861,44 @@ def fig_p12_fields():
     phi[inter] = np.linalg.solve(Cin, b[inter] - Cif @ phi_f)
     phi[top] = V
 
-    nn = mesh.nnode
-    phin = 1e3 * np.array([phi[int(mdl.phi_dof[n])] if mdl.phi_dof[n] >= 0
-                           else 0.0 for n in range(nn)])
-    ux = np.array([u_full[mdl.mech_dof[n][0]] for n in range(nn)])
-    w = np.array([u_full[mdl.mech_dof[n][4]] for n in range(nn)])
-    ph = phin.reshape(5, 49)
-    Ey, Ex = np.gradient(ph, axis=0), np.gradient(ph, axis=1)
+    X, Y, U, W, P = _fine_fields(mdl, mesh, u_full, phi)
+    ph = P * 1e3                                  # mV
+    dx = float(X[0, 1] - X[0, 0]); dy = float(Y[1, 0] - Y[0, 0])
+    Ey = np.gradient(ph, dy, axis=0)
+    Ex = np.gradient(ph, dx, axis=1)
     Emag = np.sqrt(Ex ** 2 + Ey ** 2)
+    uxn = U / np.abs(U).max()
+    wn = W / np.abs(W).max()
+    eps_xx = np.gradient(U * 1e6, dx, axis=1)
+    eta_y = np.abs(np.gradient(eps_xx, dy, axis=0))
+    eta_y = eta_y / eta_y.max()
 
-    X = (mesh.nodes[:, 0] * 1e6).reshape(5, 49)
-    Y = (mesh.nodes[:, 1] * 1e6).reshape(5, 49)
-    uxn = ux.reshape(5, 49) / np.abs(ux).max()
-    wn = w.reshape(5, 49) / np.abs(w).max()
-    # (e) the strain gradient that drives the flexoelectric term: the
-    # through-thickness derivative of eps_xx, by central differences of the
-    # nodal solution on the regular 5 x 49 mesh (a plot, not a quoted number).
-    dx_um = float(X[0, 1] - X[0, 0])
-    dy_um = float(Y[1, 0] - Y[0, 0])
-    eps_xx = np.gradient(ux.reshape(5, 49) * 1e6, dx_um, axis=1)
-    eta_y = np.abs(np.gradient(eps_xx, dy_um, axis=0))
-    eta_y = eta_y / eta_y.max()              # plotted normalized: no number quoted
-
-    fields = [(uxn, "(a)", r"$u_x/|u_x|_{\max}$"),
-              (wn, "(b)", r"$w/|w|_{\max}$"),
-              (ph, "(c)", r"$\phi$ (mV)"),
-              (Emag, "(d)", r"$|\nabla\phi|$ (mV/$\mu$m)"),
-              (eta_y, "(e)", r"$|\partial\varepsilon_{xx}/\partial y|\,/\,\max$")]
-    fig, axs = plt.subplots(2, 3, figsize=(7.0, 3.4), layout="constrained")
-    axs.ravel()[-1].axis("off")
-    for ax, (Z, tag, lab) in zip(axs.ravel(), fields):
-        m = ax.pcolormesh(X, Y, Z, shading="gouraud", cmap="viridis")
+    fields = [(uxn, "(a)", r"$u_x/|u_x|_{\max}$", "RdBu_r"),
+              (wn, "(b)", r"$w/|w|_{\max}$", "viridis"),
+              (ph, "(c)", r"$\phi$ (mV)", "viridis"),
+              (Emag, "(d)", r"$|\nabla\phi|$ (mV/$\mu$m)", "viridis"),
+              (eta_y, "(e)", r"$|\partial\varepsilon_{xx}/\partial y|\,/\,\max$",
+               "viridis")]
+    fig = plt.figure(figsize=(7.1, 3.5), layout="constrained")
+    gs = fig.add_gridspec(2, 3, height_ratios=[1, 1])
+    axes = [fig.add_subplot(gs[0, 0]), fig.add_subplot(gs[0, 1]),
+            fig.add_subplot(gs[0, 2]), fig.add_subplot(gs[1, 0:2]),
+            fig.add_subplot(gs[1, 2:3])]
+    for ax, (Z, tag, lab, cm) in zip(axes, fields):
+        vmax = np.abs(Z).max() if cm == "RdBu_r" else None
+        # (b) is single-signed and would waste half a diverging map
+        kw = dict(cmap=cm, shading="auto", rasterized=True)
+        if cm == "RdBu_r":
+            kw.update(vmin=-vmax, vmax=vmax)
+        m = ax.pcolormesh(X, Y, Z, **kw)
         cb = fig.colorbar(m, ax=ax, pad=0.02, fraction=0.046)
-        cb.set_label(lab, fontsize=7)
-        cb.ax.tick_params(labelsize=6)
-        ax.set_xlabel(r"$x$ ($\mu$m)"); ax.set_ylabel(r"$y$ ($\mu$m)")
-        ax.set_title(tag, loc="left")
-        ax.set_aspect("auto")
+        cb.set_label(lab, fontsize=6.8)
+        cb.ax.tick_params(labelsize=5.8)
+        ax.set_xlabel(r"$x$ ($\mu$m)", fontsize=7)
+        ax.set_ylabel(r"$y$ ($\mu$m)", fontsize=7)
+        ax.set_title(tag, loc="left", fontsize=8, pad=2)
+        ax.tick_params(labelsize=6.4)
+        ax.set_xlim(X.min(), X.max()); ax.set_ylim(Y.min(), Y.max())
         ax.grid(False)
     save(fig, "F3_fields")
     return {"V_open_V": V, "u_peak_nm": 10.0}
@@ -905,7 +970,7 @@ def fig_window():
     ax.set_xlim(0.0, 0.215)
     ax.set_ylim(0.912, 1.004)
     ax.set_xlabel(r"$l/L_x$")
-    ax.set_ylabel(r"$u_R/u_{R}^{\rm classical}$")
+    ax.set_ylabel(r"$u_R/u_{R}^{\mathrm{classical}}$")
     ax.tick_params(labelsize=6.5)
     ax.set_title("(a) loaded edge", fontsize=7.8, loc="left")
     ax.legend(frameon=False, fontsize=6.0, loc="lower left")
@@ -934,7 +999,7 @@ def fig_window():
     axb.set_title("(b) clamped strip", fontsize=7.8, loc="left")
     axb.legend(frameon=False, fontsize=6.2, loc="upper left")
     axc.set_xlabel(r"$x/L$")
-    axc.set_ylabel(r"$|w-w_{\rm cl}|/w_{\rm cl}(L)$")
+    axc.set_ylabel(r"$|w-w_{\mathrm{cl}}|/w_{\mathrm{cl}}(L)$")
     axc.tick_params(labelsize=6.5)
     axc.set_xlim(0, 1.0)
     axc.set_title("(c) departure from the classical", fontsize=7.8, loc="left")
