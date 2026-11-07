@@ -107,3 +107,19 @@ all numerical findings, including the mesh convergence result. Condensed the
 closing design/use/limitations discussion, preserving the electrode comparison
 and 2.8% kinematic limitation. No change to the assumed operating range.
 Gates: **70/70 PASS; 102/102, zero stale hits** (task5 logs).
+
+## Task 6 — citation coverage
+
+Added `Paper_12/check_citation_coverage.py`, a read-only bibliography-key check
+against main.tex and recursively reached input files, excluding comments.
+Its report is `results/citation_coverage.md`. It detects uncited entries,
+undefined citation keys and duplicate bibliography keys; this is not a
+publisher-record or claim-support audit. The audit found **68 entries, 61 distinct cited keys, 65 citation commands**,
+zero undefined keys and zero duplicates. **Seven uncited entries** are retained
+and listed, without inventing citations or changing reference data:
+`AltanAifantis1997`, `Jiang2023`, `Love1927`, `PhungVan2024AMM127`,
+`PhungVan2024AMM128`, `Schwartz2012EABE36`, `ZhangRen2023EWC39`.
+The standalone coverage checker intentionally exits 1 while uncited entries
+remain; the requested numerical and structural gates still pass.
+`results/reference_audit.md` was neither run nor rewritten.
+Gates: **70/70 PASS; 102/102, zero stale hits** (task6 logs).
