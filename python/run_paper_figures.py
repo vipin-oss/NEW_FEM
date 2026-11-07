@@ -559,7 +559,9 @@ def fig_p6_waterfall():
     fig, ax = plt.subplots(1, 2, figsize=(7.2, 3.3))
     fig.subplots_adjust(bottom=0.32, wspace=0.28, top=0.88,
                         left=0.08, right=0.98)
-    cmap = plt.get_cmap("cividis")
+    # Insets reuse the exact histories plotted below; no resampling or second solve.
+    zoom = [axis.inset_axes([0.51, 0.60, 0.46, 0.36]) for axis in ax]
+    zoom_curves = [[], []]
     styles = ("-", "--", "-.", ":", "-", "--", "-.", ":")
     markers = ("o", "s", "^", "D", "v", "<", ">", "x")
     out = {"tau_s": tau, "mode_index": j + 1,
@@ -578,6 +580,11 @@ def fig_p6_waterfall():
         ax[1].plot(t * 1e6, V, color=c, lw=1.2, ls=styles[i],
                    marker=markers[i], markevery=250, ms=3.0, mfc="none",
                    mew=0.6)
+        for axis, values, curves in zip(zoom, (u, V), zoom_curves):
+            axis.plot(t * 1e6, values, color=c, lw=0.9, ls=styles[i],
+                      marker=markers[i], markevery=125, ms=2.0, mfc="none",
+                      mew=0.4)
+            curves.extend(values[t <= 0.35e-6])
         # first-period decrement on the first two positive peaks, converted
         # with the exact relation zeta = delta / sqrt(4 pi^2 + delta^2).
         # For alpha < 1 this is a first-period measure, not a damping ratio:
@@ -592,6 +599,16 @@ def fig_p6_waterfall():
     ax[0].set_ylabel(r"$u_{\mathrm{tip}}$ (nm)")
     ax[1].set_xlabel(r"$t$ ($\mu$s)")
     ax[1].set_ylabel(r"$V_{\mathrm{oc}}$ (V)")
+    for axis, values in zip(zoom, zoom_curves):
+        axis.set_xlim(0, 0.35)
+        lo, hi = min(values), max(values)
+        axis.set_ylim(lo - 0.06 * (hi - lo), hi + 0.06 * (hi - lo))
+        axis.set_xticks([0, 0.15, 0.30])
+        axis.tick_params(labelsize=6, pad=1)
+        axis.set_title(r"first 0.35 $\mu$s", fontsize=7, pad=2)
+        axis.spines["top"].set_visible(True)
+        axis.spines["right"].set_visible(True)
+        axis.patch.set_alpha(1.0)
     handles, labels = ax[0].get_legend_handles_labels()
     fig.legend(handles, labels, frameon=False, loc="lower center",
                bbox_to_anchor=(0.5, 0.04), ncol=4, fontsize=9,
