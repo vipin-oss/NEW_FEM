@@ -1,0 +1,198 @@
+{
+ "n": 32,
+ "rows": [
+  {
+   "literal": "0.09",
+   "what": "spread of the piezo $k^2$ between 10 and 1 micron",
+   "source": "abstract_audit.json",
+   "why": "FEM thickness sweep (T3, T2 for mesh independence); the spread is small but no closed form predicts it"
+  },
+  {
+   "literal": "24",
+   "what": "growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports",
+   "source": "abstract_audit.json",
+   "why": "the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not"
+  },
+  {
+   "literal": "15",
+   "what": "lower end of the effect of window anisotropy and orientation on the coupling",
+   "source": "abstract_audit.json",
+   "why": "FEM rotation study (criterion T5 for the mesh/rotation trend); no independent route"
+  },
+  {
+   "literal": "19",
+   "what": "upper end of the same range",
+   "source": "abstract_audit.json",
+   "why": "the same rotation study (T5); the spread is a property of the second-moment tensor, which is verified (I8), the spread is not"
+  },
+  {
+   "literal": "0.450",
+   "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
+   "source": "abstract_audit.json",
+   "why": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
+  },
+  {
+   "literal": "0.4580",
+   "what": "extensional $k^2$ of the 200x10 strip, plane stress, poling $x$",
+   "source": "abstract_audit.json",
+   "why": "the application table (rows[3]); a clamped strip has no closed form, and the mesh convergence behind the table is the subject of T2"
+  },
+  {
+   "literal": "0.4024",
+   "what": "the same coupling of the same strip in plane strain",
+   "source": "abstract_audit.json",
+   "why": "the application table (rows[2]); the plane-strain and plane-stress reductions differ by the modelling error of Appendix B"
+  },
+  {
+   "literal": "0.1",
+   "what": "thickness at which the flexoelectric bending term reaches $0.1\\,\\%$ of the piezoelectric one",
+   "source": "abstract_audit.json",
+   "why": "the design map (F12); the $0.1\\,\\%$ level is a stated engineering threshold and the thickness is read from the FEM grid"
+  },
+  {
+   "literal": "6721.8",
+   "what": "application table, y/plane_strain, mode 4 frequency [kHz]",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve"
+  },
+  {
+   "literal": "0.1749",
+   "what": "application table, y/plane_strain $k^2$",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve; no closed form for this mode and this clamping"
+  },
+  {
+   "literal": "3.48",
+   "what": "application table, y/plane_strain open-circuit voltage [V]",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve plus the rank-one electrode update"
+  },
+  {
+   "literal": "6361.0",
+   "what": "application table, y/plane_stress, mode 4 frequency [kHz]",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve"
+  },
+  {
+   "literal": "0.1141",
+   "what": "application table, y/plane_stress $k^2$",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve; no closed form for this mode and this clamping"
+  },
+  {
+   "literal": "2.41",
+   "what": "application table, y/plane_stress open-circuit voltage [V]",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve plus the rank-one electrode update"
+  },
+  {
+   "literal": "7161.0",
+   "what": "application table, x/plane_strain, mode 5 frequency [kHz]",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve"
+  },
+  {
+   "literal": "0.4024",
+   "what": "application table, x/plane_strain $k^2$",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve; no closed form for this mode and this clamping"
+  },
+  {
+   "literal": "141.45",
+   "what": "application table, x/plane_strain open-circuit voltage [V]",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve plus the rank-one electrode update"
+  },
+  {
+   "literal": "6725.8",
+   "what": "application table, x/plane_stress, mode 5 frequency [kHz]",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve"
+  },
+  {
+   "literal": "0.4580",
+   "what": "application table, x/plane_stress $k^2$",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve; no closed form for this mode and this clamping"
+  },
+  {
+   "literal": "138.99",
+   "what": "application table, x/plane_stress open-circuit voltage [V]",
+   "source": "application_table.json",
+   "why": "FEM eigen-solve plus the rank-one electrode update"
+  },
+  {
+   "literal": "0.999",
+   "what": "lowest MAC of mode 1 against the $h=\\SI{10}{\\micro\\metre}$ shape",
+   "source": "mode_tracking.json",
+   "why": "an FEM eigenvector overlap; the reference is another FEM eigenvector"
+  },
+  {
+   "literal": "6.21",
+   "what": "smallest $f_2/f_1$ over the thickness sweep",
+   "source": "mode_tracking.json",
+   "why": "FEM eigen-solve; exact for no geometry of this kind"
+  },
+  {
+   "literal": "210.4",
+   "what": "$f_1$ at $h=\\SI{10}{\\micro\\metre}$ [kHz]",
+   "source": "demo.json flexo_thickness[0]",
+   "why": "FEM eigen-solve; the Euler--Bernoulli value is the one quoted as the comparison, not as this number"
+  },
+  {
+   "literal": "-1.96",
+   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{10}{\\micro\\metre}$",
+   "source": "demo.json flexo_thickness (finite differences)",
+   "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
+  },
+  {
+   "literal": "-1.52",
+   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{5}{\\micro\\metre}$",
+   "source": "demo.json flexo_thickness (finite differences)",
+   "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
+  },
+  {
+   "literal": "-0.43",
+   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{2}{\\micro\\metre}$",
+   "source": "demo.json flexo_thickness (finite differences)",
+   "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
+  },
+  {
+   "literal": "0.15003",
+   "what": "$\\zeta_{\\rm eff}$ at $\\alpha=1$",
+   "source": "memory_variants.json S1 zeta_eff",
+   "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
+  },
+  {
+   "literal": "0.06746",
+   "what": "$\\zeta(K_{uu})$ at $\\alpha=1$",
+   "source": "memory_variants.json S1 zeta_eff",
+   "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
+  },
+  {
+   "literal": "0.1942",
+   "what": "first-period $\\zeta_{\\rm eff}$ at $\\alpha=0.7$",
+   "source": "memory_variants.json S1 zeta_first",
+   "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
+  },
+  {
+   "literal": "0.0831",
+   "what": "first-period $\\zeta(K_{uu})$ at $\\alpha=0.7$",
+   "source": "memory_variants.json S1 zeta_first",
+   "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
+  },
+  {
+   "literal": "139.07",
+   "what": "open-circuit voltage of the ring-down initial condition [V]",
+   "source": "memory_variants.json S1",
+   "why": "FEM mode shape times the rank-one electrode update"
+  },
+  {
+   "literal": "2.8",
+   "what": "2-D plane-stress against 3-D free-bar closed form [%]",
+   "source": "coupling_check.json rel_gap_2d_vs_3d",
+   "why": "the gap itself is a comparison, but its *attribution* to the dropped $e_{31}\\varepsilon_{zz}$ is not separable here"
+  }
+ ],
+ "stale": []
+}

@@ -1,0 +1,53 @@
+{
+ "rows": [
+  {
+   "poling": "y",
+   "kinematics": "plane_strain",
+   "mode": "bending",
+   "mode_index": 4,
+   "f_kHz": 6721.814859498478,
+   "f_short_kHz": 6105.6682075957315,
+   "k2": 0.17492522857846934,
+   "f1_kHz": 220.46001193857845,
+   "k2_mode1": -2.4149277821626146e-09,
+   "V0_V": 3.482271728988687
+  },
+  {
+   "poling": "y",
+   "kinematics": "plane_stress",
+   "mode": "bending",
+   "mode_index": 4,
+   "f_kHz": 6360.999139643585,
+   "f_short_kHz": 5987.1123314039,
+   "k2": 0.11410114695562294,
+   "f1_kHz": 208.73201176180535,
+   "k2_mode1": 1.0222874824023899e-09,
+   "V0_V": 2.409908171121016
+  },
+  {
+   "poling": "x",
+   "kinematics": "plane_strain",
+   "mode": "extensional",
+   "mode_index": 5,
+   "f_kHz": 7160.990114084378,
+   "f_short_kHz": 5535.757853289073,
+   "k2": 0.40240353292399667,
+   "f1_kHz": 165.57103862654287,
+   "k2_mode1": 3.6039788247598867e-09,
+   "V0_V": 141.45358144303478
+  },
+  {
+   "poling": "x",
+   "kinematics": "plane_stress",
+   "mode": "extensional",
+   "mode_index": 5,
+   "f_kHz": 6725.792506558617,
+   "f_short_kHz": 4951.698413034903,
+   "k2": 0.4579723498584602,
+   "f1_kHz": 147.72743371639334,
+   "k2_mode1": 4.856279812950726e-10,
+   "V0_V": 138.99313989428498
+  }
+ ],
+ "note": "24x2 mesh, window 3x1 um, mu = 0, k^2 denominator = short-circuit matrix"
+}
