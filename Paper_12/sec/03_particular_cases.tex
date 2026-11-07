@@ -12,7 +12,12 @@ switch acts on one term of the energy: \eqref{eq:Eel} for the elastic part,
 about a matrix rather than about a material. This
 section states those reductions; the numerical results that follow are read
 against them, and Sec.~\ref{sec:verification} checks two of them as exact
-identities rather than as trends.
+identities rather than as trends. All reductions below are derived here from
+the enthalpy of Sec.~\ref{sec:formulation}; the classical limits they recover
+are cited at the point of use, and references marked UNVERIFIED in the
+bibliography are used only for those classical forms. The single worked
+numerical calculation is given in Sec.~\ref{sec:worked}, and the window
+integrals behind the coefficients are collected in \ref{app:Mcoeff}.
 
 \FloatBarrier
 \subsection{Classical piezoelectricity}
@@ -86,7 +91,10 @@ damping ratio follows from the dashpot coefficient $\tau K$ alone,
   \zeta = \frac{\tau K}{2\sqrt{KM}} = \frac{\omega\tau}{2},
   \label{eq:limitKV}
 \end{equation}
-with $\omega=\sqrt{K/M}$ the undamped frequency of the mode that carries it.
+Here $K$ is the stiffness that carries the memory, $M$ the modal mass, $\tau$
+the relaxation time, $\alpha$ the Caputo order, $\sigma$ the stress,
+$\varepsilon$ the strain and $\zeta$ the damping ratio; $\omega=\sqrt{K/M}$ is
+the undamped frequency of the mode that carries it.
 The implementation reproduces it: at $\omega\tau=0.3$ the ring-down of
 Sec.~\ref{sec:memorystudy} returns $\zeta_{\rm eff}=0.15003$ against the exact
 $0.15000$, a difference of $0.02\,\%$. For $\tau\to0$ the memory term of
