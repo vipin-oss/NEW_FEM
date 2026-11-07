@@ -295,8 +295,8 @@ def fig_orientation(pol):
     """Window orientation: normalized polar sections of f1 and k2, and their
     maps over the aspect ratio."""
     ARS = (2.0, 5.0, 10.0)
-    fig = plt.figure(figsize=(6.9, 6.1))
-    gs = fig.add_gridspec(2, 2, hspace=0.38, wspace=0.46,
+    fig = plt.figure(figsize=(6.9, 5.2))
+    gs = fig.add_gridspec(2, 2, hspace=0.48, wspace=0.46,
                           left=0.075, right=0.955, top=0.94, bottom=0.075)
     cfg = (("f_ext_kHz", (0.945, 1.090), [0.95, 1.05],
             r"$f_{\mathrm{ext}}/f_{\mathrm{ext}}(0)$"),
@@ -411,8 +411,8 @@ def fig_p4_modeshape():
     Xs = X.reshape(5, 49)
     Ys = Y.reshape(5, 49)
     display_scale = 1.0e9                   # meters -> nanometers
-    fig = plt.figure(figsize=(7.0, 3.6))
-    ax = fig.add_axes([0.02, 0.22, 0.55, 0.70], projection="3d")
+    fig = plt.figure(figsize=(7.0, 2.9))
+    ax = fig.add_axes([0.02, 0.23, 0.55, 0.72], projection="3d")
     cmap = plt.get_cmap("viridis")
     norm = matplotlib.colors.Normalize(vmin=0.0, vmax=Ps.max())
     ax.plot_surface(Xs, Ys, Zs * display_scale, facecolors=cmap(norm(Ps)),
@@ -437,7 +437,7 @@ def fig_p4_modeshape():
                       orientation="horizontal")
     cb.set_label(r"$\phi$ (mV), open circuit", fontsize=9)
     cb.ax.tick_params(labelsize=8, pad=1)
-    axins = fig.add_axes([0.72, 0.48, 0.26, 0.38])
+    axins = fig.add_axes([0.72, 0.48, 0.26, 0.40])
     axins.contourf(Xs, Ys, Ps, levels=10, cmap="viridis")
     cs = axins.contour(Xs, Ys, Ps, levels=5, colors="k", linewidths=0.5)
     axins.clabel(cs, fmt="%d", fontsize=7)
@@ -457,7 +457,7 @@ def fig_p4_modeshape():
 def fig_damping():
     """The fractional element: where its poles go, and what it means for the
     damping ratio."""
-    fig, axs = plt.subplots(1, 2, figsize=(6.9, 3.3),
+    fig, axs = plt.subplots(1, 2, figsize=(6.9, 2.9),
                             gridspec_kw={"wspace": 0.30, "left": 0.085,
                                          "right": 0.975, "bottom": 0.30,
                                          "top": 0.90})
@@ -1079,7 +1079,7 @@ def fig_p14_design_space(pol):
     """The two quantities that are not already in the polar sections: the
     change of the coupling relative to the aligned window, and the anisotropy
     of the second-moment tensor that causes it."""
-    fig, axs = plt.subplots(1, 2, figsize=(6.6, 3.3),
+    fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.85),
                             gridspec_kw={"wspace": 0.26, "left": 0.10,
                                          "right": 0.975, "bottom": 0.30,
                                          "top": 0.90})
