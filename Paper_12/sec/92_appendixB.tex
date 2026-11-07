@@ -66,16 +66,15 @@ solution, and a linear functional such as $u_R$ converges at least as fast as
 the energy norm; the requirement is the empirical slope above 1.5, and no
 theoretical exponent is claimed beyond that bound. The extensional coupling is
 compared across the two reductions on the same $24\times2$ mesh: $0.4024$ in
-plane strain against $0.4580$ in plane stress. The two models are compared mode
-by mode before the couplings are, because the two reductions could in principle
-select different shapes and then the comparison would be empty. They do not:
-the shape selected by the rule of Table~\ref{tab:application} is mode 5 in
-both, and the two short-circuit mode shapes, mass-normalized, overlap with
-$\mathrm{MAC}=0.99999$, while the largest overlap between different members of
-the two six-mode sets is $2.8\times10^{-6}$. The coupling therefore differs by
-the elastic reduction alone, which stiffens the section and lowers
-$k^{2}=e^{2}/(C\kappa)$; it is a property of the model, not a convergence
-error.
+plane strain against $0.4580$ in plane stress. The two models are compared
+mode by mode before the couplings are, because the two reductions could in
+principle select different shapes and then the comparison would be empty. They
+do not: the shape selected by the rule of Table~\ref{tab:application} is mode
+5 in both, and the two short-circuit mode shapes, mass-normalized, overlap
+with $\mathrm{MAC}=0.99999$, while the largest overlap between different
+members of the two six-mode sets is $2.8\times10^{-6}$. The coupling therefore
+differs by the elastic reduction alone, which stiffens the section and lowers
+$k^{2}=e^{2}/(C\kappa)$; the difference is a property of the model.
 
 Table~\ref{tab:convergence} is the convergence study behind
 Fig.~\ref{fig:convergence}. The frequency of the extensional mode and its
@@ -92,20 +91,18 @@ $6.2\times10^{-4}$ relative.
 
 \paragraph{Numerical precision of the thinnest point} The
 $h=\SI{1}{\micro\metre}$ coupling is a difference of two nearly equal
-eigenvalues of a pencil whose condition number is $\sim10^{12}$, so it inherits
-the accuracy of the eigensolver. The same model was solved through four
-mathematically equivalent eigensolver paths -- a QZ generalized eigenproblem, a
-dense symmetric reduction, a sparse Lanczos reduction and a truncated modal
-sum -- and through four numeric stacks, and all of them return
-$4.2\times10^{-3}$ and the factor $24$ to within $0.5\,\%$, and not more
-closely. Deviations are measured from the midpoint of the equivalent results
-rather than from any one stack, so the spread is a property of the model and
-not of the machine that computed it; at $h=\SI{10}{\micro\metre}$ the same
-spread is at most $10^{-4}\,\%$. Every path keeps the whole spectrum in the
-secular sum: truncating it to twelve modes moves $k^{2}$ by more than
-$80\,\%$, which is a different approximation and not a different round-off. A
-run of the same suite on a later numeric stack returns
-$4.18\times10^{-3}$ ($+0.2\,\%$), consistent with this statement. This
+eigenvalues of a pencil whose condition number is $\sim10^{12}$, so it
+inherits the accuracy of the eigensolver. The same model was solved through
+four mathematically equivalent eigensolver paths -- a QZ generalized
+eigenproblem, a dense symmetric reduction, a sparse Lanczos reduction and a
+truncated modal sum -- and through four numeric stacks, and all of them return
+$4.2\times10^{-3}$ and the factor $24$ to within $0.5\,\%$. Deviations are
+measured from the midpoint of the equivalent results, so the spread quoted is
+the spread of the model, and at $h=\SI{10}{\micro\metre}$ it is at most
+$10^{-4}\,\%$. Every path keeps the whole spectrum in the secular sum:
+truncating it to twelve modes moves $k^{2}$ by more than $80\,\%$, an effect
+of the approximation alone. A run of the same suite on a later numeric stack
+returns $4.18\times10^{-3}$ ($+0.2\,\%$), consistent with this statement. This
 spread fixes the two significant digits quoted in the text and in the
 abstract.
 

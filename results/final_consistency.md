@@ -1,14 +1,10 @@
 # Numbers in the abstract, the conclusion, the Highlights and the captions
 
-48 numbers checked, 48 traced, 0 untraced.
+44 numbers checked, 44 traced, 0 untraced.
 
 | place | number | found in |
 |---|---|---|
-| main.tex abstract | `0.02` | elsewhere in the manuscript |
-| main.tex abstract | `0.09` | elsewhere in the manuscript |
-| main.tex abstract | `0.4024` | elsewhere in the manuscript |
 | main.tex abstract | `0.450` | elsewhere in the manuscript |
-| main.tex abstract | `0.4580` | elsewhere in the manuscript |
 | main.tex abstract | `0.5581` | elsewhere in the manuscript |
 | main.tex abstract | `0.5608` | elsewhere in the manuscript |
 | main.tex abstract | `200` | elsewhere in the manuscript |

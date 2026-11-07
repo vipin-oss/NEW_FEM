@@ -184,19 +184,18 @@ $\bm{a}^{0}=M^{-1}(\bm{f}^{0}-K\bm{u}^{0})$ with $\bm{v}^{0}$ supplied by the
 initial condition.
 
 Two limits check the expression. At $\alpha=1$ the weights are $b_0=1$ and
-$b_j=0$ for every $j\ge1$, not $b_j=1$: the history vanishes identically, the
-operator $\tau K\,\mathrm{D}^{1}$ becomes the backward difference
-$\tau K(\bm{u}^{n+1}-\bm{u}^{n})/\Delta t$, and \eqref{eq:step} reduces to the
-classical Kelvin--Voigt equation $M\bm{a}+K\bm{u}+\tau K\bm{v}=\bm{f}$ only up
-to the $O(\Delta t)$ error of that difference, so the scheme is first order at
-$\alpha=1$ as well and not exact there. The ring-down of
-Sec.~\ref{sec:memorystudy} reproduces the exact $\omega\tau/2$ to that accuracy
-($0.150111$, $0.150057$, $0.150029$ against $0.150000$ at $N$, $2N$ and $4N$
-steps, Sec.~\ref{sec:verification}). At $\tau\to0$ the memory matrix vanishes
-and the elastic problem is recovered. The dimensions fix the two exponents: a
-left-hand matrix written $M+\Delta t^{\alpha}\Gamma(2-\alpha)K_{\rm mem}$ would
-not have the dimensions of $M$, whereas
-$\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ does.
+$b_j=0$ for every $j\ge1$: the history vanishes identically, the operator
+$\tau K\,\mathrm{D}^{1}$ becomes the backward difference $\tau
+K(\bm{u}^{n+1}-\bm{u}^{n})/\Delta t$, and \eqref{eq:step} reduces to the
+classical Kelvin--Voigt equation $M\bm{a}+K\bm{u}+\tau K\bm{v}=\bm{f}$ up to
+the $O(\Delta t)$ error of that difference, so the scheme is first order at
+$\alpha=1$ as well. The ring-down of Sec.~\ref{sec:memorystudy} reproduces the
+exact $\omega\tau/2$ to that accuracy ($0.150111$, $0.150057$, $0.150029$
+against $0.150000$ at $N$, $2N$ and $4N$ steps, Sec.~\ref{sec:verification}).
+At $\tau\to0$ the memory matrix vanishes and the elastic problem is recovered.
+The dimensions fix the exponents: the exponent $2-\alpha$ of $\Delta t$ makes
+$\beta\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ dimensionally
+consistent with $M$.
 
 The truncation of the modal projection was measured on the ring-down of
 Sec.~\ref{sec:memorystudy}: with the memory on $K_{\rm eff}$ the motion is a
@@ -260,16 +259,17 @@ $O(C/h)$, so the assembled pencil becomes badly scaled as the thickness falls;
 the implementation scales the two blocks separately before the eigensolve and
 returns the eigenpairs unscaled, and the thinnest case of
 Sec.~\ref{sec:thickness} is at a condition number of about $10^{12}$, whose
-effect is measured rather than assumed (Sec.~\ref{sec:verification}). A mesh of
-$48\times4$ elements has $245$ nodes and $1960$ mechanical degrees of freedom
-and is the workhorse of the results; refining it to $96\times4$ changes the
-coupling factor by $6.2\times10^{-4}$ relative to the $48\times4$ value of the
-same clamped strip, and the thinnest strips are solved on it because the
-conditioning, not the number of elements, is the binding constraint. The
-assembly uses the strain and gradient matrices \eqref{eq:Bmat}, the gradient
-stiffness \eqref{eq:Kg}, the coupling \eqref{eq:Be} and the Schur complement
-\eqref{eq:saddle}, and the charge constraint \eqref{eq:electrode} closes the
-electrode of the reduced model. The accuracy of this discretization, rather than its construction, is what
-Sec.~\ref{sec:verification} establishes before any result is quoted.
+effect is measured rather than assumed (Sec.~\ref{sec:verification}). A mesh
+of $48\times4$ elements has $245$ nodes and $1960$ mechanical degrees of
+freedom and is the workhorse of the results; refining it to $96\times4$
+changes the coupling factor by $6.2\times10^{-4}$ relative to the $48\times4$
+value of the same clamped strip, and the thinnest strips are solved on it
+because the conditioning, not the number of elements, is the binding
+constraint. The assembly uses the strain and gradient matrices
+\eqref{eq:Bmat}, the gradient stiffness \eqref{eq:Kg}, the coupling
+\eqref{eq:Be} and the Schur complement \eqref{eq:saddle}, and the charge
+constraint \eqref{eq:electrode} closes the electrode of the reduced model.
+Section~\ref{sec:verification} establishes the accuracy of this discretization
+before any result is quoted.
 
 \FloatBarrier

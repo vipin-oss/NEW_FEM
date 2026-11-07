@@ -6,28 +6,28 @@ No TeX in this environment, so nothing here is compiled. Text width 481.9 pt, te
 |---|---|---|---|
 | body figures | 11 | 3120 | 4.37 |
 | body tables | 6 | 884 | 1.24 |
-| body prose and display maths | 15965 words | 14135 | 19.79 |
+| body prose and display maths | 15860 words | 14065 | 19.69 |
 | appendix figures | 0 | 0 | 0.00 |
 | appendix tables | 4 | 721 | 1.01 |
-| appendix prose |  | 1297 | 1.82 |
+| appendix prose |  | 1281 | 1.79 |
 | reference list | 68 entries | 2543 | 3.56 |
-| **sum** | | **22700** | **31.78** |
+| **sum** | | **22614** | **31.66** |
 
 ## Where the body stands
 
 | | body content | pages of area |
 |---|---|---|
-| this revision | 18138 pt | 25.39 |
+| this revision | 18069 pt | 25.29 |
 | `47a21a3` | 16342 pt | 22.88 |
-| **change** | **+1796 pt** | **+2.51** |
+| **change** | **+1727 pt** | **+2.42** |
 
-Package content: 22471 -> 22700 pt (31.46 -> 31.78 pages).
+Package content: 22471 -> 22614 pt (31.46 -> 31.66 pages).
 
 ## From area to pages
 
 The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page of area costs 1.08 printed pages -- floats leave gaps that cannot be filled.
 
-**Estimated PDF now: 34.3 pages (target 30, previous 34).** To reach 30 another 2872 pt = 4.0 pages of area has to go.
+**Estimated PDF now: 34.2 pages (target 30, previous 34).** To reach 30 another 2787 pt = 3.9 pages of area has to go.
 
 ## Biggest items now
 
@@ -47,13 +47,13 @@ The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page
 | section | words of source | pages of area |
 |---|---|---|
 | Introduction | 1751 | 2.07 |
-| Formulation | 2497 | 3.81 |
+| Formulation | 2490 | 3.80 |
 | Particular cases | 822 | 1.01 |
 | Boundary conditions | 915 | 1.23 |
-| Finite element formulation | 1714 | 2.40 |
-| Validation and limiting cases | 1595 | 2.01 |
-| Numerical results and discussion | 4378 | 4.54 |
-| Parameter identification and limitations | 1287 | 1.54 |
+| Finite element formulation | 1693 | 2.38 |
+| Validation and limiting cases | 1588 | 2.00 |
+| Numerical results and discussion | 4331 | 4.50 |
+| Parameter identification and limitations | 1284 | 1.54 |
 | Conclusions | 536 | 0.58 |
 | CRediT authorship contribution statement | 68 | 0.09 |
 | Declaration of competing interest | 30 | 0.03 |
@@ -63,14 +63,14 @@ The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page
 
 ## Levers, measured but **not applied** (round 20 was scope-locked)
 
-To reach 30 pages, 2872 pt of area (4.0 pages) has to go. Ranked by what each is worth:
+To reach 30 pages, 2787 pt of area (3.9 pages) has to go. Ranked by what each is worth:
 
 | lever | saves | pages | cost to the paper |
 |---|---|---|---|
 | Appendix B to supplementary material (4 floats, 238 pt) | 238 pt | 0.3 | the verification table is the evidence of Sec. 6.1; a supplementary file is standard practice but changes the submission |
 | all ten body figures to 0.85\textwidth | 468 pt | 0.7 | axes get smaller; none is removed |
 | `tab:verification` at \footnotesize with tighter rules | 48 pt | 0.1 | 54 rows at 9 pt instead of 12 |
-| Sec. 2 and Sec. 5 tightened by a quarter | 1108 pt | 1.6 | prose only: the two sections have never been shortened |
+| Sec. 2 and Sec. 5 tightened by a quarter | 1104 pt | 1.5 | prose only: the two sections have never been shortened |
 
 
 The estimate carries about one page of error and is not a substitute for `pdflatex`.

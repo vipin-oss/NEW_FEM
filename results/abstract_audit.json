@@ -37,12 +37,6 @@
    "route": "D1: the same two numbers, 0.56079 against 0.55814"
   },
   {
-   "literal": "0.09",
-   "what": "spread of the piezo $k^2$ between 10 and 1 micron",
-   "verdict": "nahi hua",
-   "route": "FEM thickness sweep (T3, T2 for mesh independence); the spread is small but no closed form predicts it"
-  },
-  {
    "literal": "24",
    "what": "growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports",
    "verdict": "nahi hua",
@@ -65,34 +59,10 @@
    "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
    "verdict": "nahi hua",
    "route": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
-  },
-  {
-   "literal": "0.4580",
-   "what": "extensional $k^2$ of the 200x10 strip, plane stress, poling $x$",
-   "verdict": "nahi hua",
-   "route": "the application table (rows[3]); a clamped strip has no closed form, and the mesh convergence behind the table is the subject of T2"
-  },
-  {
-   "literal": "0.4024",
-   "what": "the same coupling of the same strip in plane strain",
-   "verdict": "nahi hua",
-   "route": "the application table (rows[2]); the plane-strain and plane-stress reductions differ by the modelling error of Appendix B"
-  },
-  {
-   "literal": "0.1",
-   "what": "thickness at which the flexoelectric bending term reaches $0.1\\,\\%$ of the piezoelectric one",
-   "verdict": "nahi hua",
-   "route": "the design map (F12); the $0.1\\,\\%$ level is a stated engineering threshold and the thickness is read from the FEM grid"
-  },
-  {
-   "literal": "0.02",
-   "what": "distance of $\\zeta_{\\rm eff}$ from the classical limit",
-   "verdict": "hua",
-   "route": "I5: at $\\alpha=1$ the pole equation is quadratic and gives $\\omega\\tau/2=0.15000$ exactly, so the $0.02\\,\\%$ is a comparison with an exact value"
   }
  ],
- "n_hua": 4,
- "n_nahi_hua": 8,
+ "n_hua": 3,
+ "n_nahi_hua": 4,
  "n_input": 3,
  "tokens": [
   "200",
@@ -101,15 +71,10 @@
   "0.5581",
   "0.5",
   "0.5608",
-  "0.09",
   "24",
   "15",
   "19",
-  "0.450",
-  "0.02",
-  "0.4580",
-  "0.4024",
-  "0.1"
+  "0.450"
  ],
  "missing": [],
  "stale": []
