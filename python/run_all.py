@@ -61,7 +61,7 @@ def main():
     print("running the suite")
     scripts = ["run_verification.py", "run_flexo_check.py",
                "run_material_check.py", "run_memory_variants.py", "run_dt_study.py",
-               "run_coupling_check.py", "run_mode_tracking.py",
+               "run_coupling_check.py", "run_mode_tracking.py", "run_reduction_mac.py",
                "run_application_table.py", "derive_k2_closed_form.py",
                "run_independent_checks.py", "audit_abstract_claims.py",
                "run_config_table.py", "list_unverified.py", "length_budget.py",

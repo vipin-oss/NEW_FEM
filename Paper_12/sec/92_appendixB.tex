@@ -65,9 +65,15 @@ Hermite rectangle is $O(h^{4})$ in $L^2$ and $O(h^{3})$ in $H^1$ on a smooth
 solution, and a linear functional such as $u_R$ converges at least as fast as
 the energy norm; the requirement is the empirical slope above 1.5, and no
 theoretical exponent is claimed beyond that bound. The extensional coupling is
-compared across the two reductions of the same mode on the same $24\times2$
-mesh: $0.4024$ in plane strain against $0.4580$ in plane stress, the difference
-being the elastic reduction itself, which stiffens the section and lowers
+compared across the two reductions on the same $24\times2$ mesh: $0.4024$ in
+plane strain against $0.4580$ in plane stress. The two models are compared mode
+by mode before the couplings are, because the two reductions could in principle
+select different shapes and then the comparison would be empty. They do not:
+the shape selected by the rule of Table~\ref{tab:application} is mode 5 in
+both, and the two short-circuit mode shapes, mass-normalised, overlap with
+$\mathrm{MAC}=0.99999$, while the largest overlap between different members of
+the two six-mode sets is $2.8\times10^{-6}$. The coupling therefore differs by
+the elastic reduction alone, which stiffens the section and lowers
 $k^{2}=e^{2}/(C\kappa)$; it is a property of the model, not a convergence
 error.
 

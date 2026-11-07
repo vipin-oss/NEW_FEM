@@ -65,4 +65,4 @@
 | gradient-energy coefficient: code vs manuscript | 0.5 x int, (1/4)M/((1/20)L)=1.000000000000 | factor 1/2 in the assembly, (1/4)M = (1/20)L, FEM-1 u_R within 2 % | `results/?` |
 | paper figures: vector set written | 12 PDF | = 12 (F1-F9, FB1-FB2, F11_designmap) | `results/paper_figures_data.json` |
 | orientation sweep rows / k^2 range | 133 rows, 0.3786-0.4677 | 133 rows (114 cuboid + 19 ellipse), k^2 in (0.35, 0.50) | `results/paper_figures_data.json` |
-| manuscript numbers vs the JSON they came from | 97/97 | all agree | `results/?` |
+| manuscript numbers vs the JSON they came from | 99/99 | all agree | `results/?` |

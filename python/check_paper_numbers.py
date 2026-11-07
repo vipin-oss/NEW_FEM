@@ -508,6 +508,13 @@ def main():
     R.append(row("verification table, order on the finest mesh pair", "2.01",
                  "verification.json convergence rel_err[2]/rel_err[3]",
                  _math.log2(_cg[2]["rel_err"] / _cg[3]["rel_err"]), "{:.2f}"))
+    _rm = J("reduction_mac.json")
+    R.append(row("verification table, MAC of mode 5 across the two reductions",
+                 "0.99999", "reduction_mac.json mac_mode5",
+                 _rm["mac_mode5"], "{:.5f}"))
+    R.append(row("verification table, largest overlap between different modes",
+                 "2.8e-6", "reduction_mac.json mac_offdiag_max",
+                 _rm["mac_offdiag_max"], "{:.1e}"))
     _kf = J("k2_closed_form.json")["fem"]
     R.append(row("verification table, clamped 96x4 vs 48x4, relative", "6.2e-4",
                  "k2_closed_form.json fem clamped 96x4 / 48x4 - 1",

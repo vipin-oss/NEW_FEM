@@ -9,9 +9,9 @@ No TeX in this environment, so nothing here is compiled. Text width 481.9 pt, te
 | body prose and display maths | 14146 words | 12823 | 17.95 |
 | appendix figures | 0 | 0 | 0.00 |
 | appendix tables | 4 | 721 | 1.01 |
-| appendix prose |  | 1215 | 1.70 |
+| appendix prose |  | 1268 | 1.78 |
 | reference list | 68 entries | 2543 | 3.56 |
-| **sum** | | **21305** | **29.83** |
+| **sum** | | **21359** | **29.90** |
 
 ## Where the body stands
 
@@ -21,13 +21,13 @@ No TeX in this environment, so nothing here is compiled. Text width 481.9 pt, te
 | `47a21a3` | 16342 pt | 22.88 |
 | **change** | **+484 pt** | **+0.68** |
 
-Package content: 22471 -> 21305 pt (31.46 -> 29.83 pages).
+Package content: 22471 -> 21359 pt (31.46 -> 29.90 pages).
 
 ## From area to pages
 
 The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page of area costs 1.08 printed pages -- floats leave gaps that cannot be filled.
 
-**Estimated PDF now: 32.2 pages (target 30, previous 34).** To reach 30 another 1478 pt = 2.1 pages of area has to go.
+**Estimated PDF now: 32.3 pages (target 30, previous 34).** To reach 30 another 1532 pt = 2.1 pages of area has to go.
 
 ## Biggest items now
 
@@ -62,7 +62,7 @@ The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page
 
 ## Levers, measured but **not applied** (round 20 was scope-locked)
 
-To reach 30 pages, 1478 pt of area (2.1 pages) has to go. Ranked by what each is worth:
+To reach 30 pages, 1532 pt of area (2.1 pages) has to go. Ranked by what each is worth:
 
 | lever | saves | pages | cost to the paper |
 |---|---|---|---|

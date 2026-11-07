@@ -1,6 +1,6 @@
 # Every number in the manuscript against the JSON it came from
 
-97/97 claims agree; 0 disagree with the JSON, 0 are not found in the text.
+99/99 claims agree; 0 disagree with the JSON, 0 are not found in the text.
 
 | # | claim | manuscript | json | value | status |
 |---|---|---|---|---|---|
@@ -91,16 +91,18 @@
 | 85 | worked, L1 weight b1 at alpha=0.5 | `0.414214` | `sqrt(2)-1` | `0.414214` | ok |
 | 86 | worked, L1 weight b2 at alpha=0.7 | `0.159245` | `3^0.3-2^0.3` | `0.159245` | ok |
 | 87 | verification table, order on the finest mesh pair | `2.01` | `verification.json convergence rel_err[2]/rel_err[3]` | `2.01` | ok |
-| 88 | verification table, clamped 96x4 vs 48x4, relative | `6.2e-4` | `k2_closed_form.json fem clamped 96x4 / 48x4 - 1` | `6.2e-4` | ok |
-| 89 | design map, flexo k^2 at h=10, a2=0.25 | `1.648e-4` | `design_map.json [h=10][a2=0.25]` | `1.6483e-4` | ok |
-| 90 | design map, change of k^2 at h=10 for a2 1 -> 0.25 um | `5.5` | `design_map.json 100*(1-k(a2=.25)/k(a2=1)) at h=10` | `5.5` | ok |
-| 91 | design map, flexo k^2 at h=1, a2=0.25 | `1.03e-2` | `design_map.json [h=1][a2=0.25]` | `1.03e-2` | ok |
-| 92 | design map, gain from the window at h=1 | `2.5` | `design_map.json k(a2=.25)/k(a2=1) at h=1` | `2.5` | ok |
-| 93 | design map, flexo k^2 at h=1, a2=1 um | `4.17e-3` | `design_map.json [h=1][a2=1]` | `4.17e-3` | ok |
-| 94 | design map, smallest flexo k^2 | `3.69e-6` | `design_map.json range k2_flexo_min` | `3.69e-6` | ok |
-| 95 | design map, smallest flexo/piezo ratio | `6.6e-6` | `design_map.json range ratio_min` | `6.6e-6` | ok |
-| 96 | design map, largest flexo/piezo ratio | `1.85e-2` | `design_map.json range ratio_max` | `1.85e-2` | ok |
-| 97 | design map, thickness of the 0.1 % crossing at a2=1 um | `5.46` | `design_map.json thresholds h_at_0p1pct_a2_1um` | `5.46` | ok |
+| 88 | verification table, MAC of mode 5 across the two reductions | `0.99999` | `reduction_mac.json mac_mode5` | `0.99999` | ok |
+| 89 | verification table, largest overlap between different modes | `2.8e-6` | `reduction_mac.json mac_offdiag_max` | `2.8e-6` | ok |
+| 90 | verification table, clamped 96x4 vs 48x4, relative | `6.2e-4` | `k2_closed_form.json fem clamped 96x4 / 48x4 - 1` | `6.2e-4` | ok |
+| 91 | design map, flexo k^2 at h=10, a2=0.25 | `1.648e-4` | `design_map.json [h=10][a2=0.25]` | `1.6483e-4` | ok |
+| 92 | design map, change of k^2 at h=10 for a2 1 -> 0.25 um | `5.5` | `design_map.json 100*(1-k(a2=.25)/k(a2=1)) at h=10` | `5.5` | ok |
+| 93 | design map, flexo k^2 at h=1, a2=0.25 | `1.03e-2` | `design_map.json [h=1][a2=0.25]` | `1.03e-2` | ok |
+| 94 | design map, gain from the window at h=1 | `2.5` | `design_map.json k(a2=.25)/k(a2=1) at h=1` | `2.5` | ok |
+| 95 | design map, flexo k^2 at h=1, a2=1 um | `4.17e-3` | `design_map.json [h=1][a2=1]` | `4.17e-3` | ok |
+| 96 | design map, smallest flexo k^2 | `3.69e-6` | `design_map.json range k2_flexo_min` | `3.69e-6` | ok |
+| 97 | design map, smallest flexo/piezo ratio | `6.6e-6` | `design_map.json range ratio_min` | `6.6e-6` | ok |
+| 98 | design map, largest flexo/piezo ratio | `1.85e-2` | `design_map.json range ratio_max` | `1.85e-2` | ok |
+| 99 | design map, thickness of the 0.1 % crossing at a2=1 um | `5.46` | `design_map.json thresholds h_at_0p1pct_a2_1um` | `5.46` | ok |
 
 ## Forbidden stale tokens
 

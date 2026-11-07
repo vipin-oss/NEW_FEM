@@ -20,7 +20,7 @@
 | `fig:ringdown` | 11 | sec/06_results.tex:753 | sec/06_results.tex:725 |
 | `tab:application` | 6 | sec/06_results.tex:779 | sec/06_results.tex:765 |
 | `tab:verification` | B.1 | sec/92_appendixB.tex:34 | sec/92_appendixB.tex:14 |
-| `tab:convergence` | B.2 | sec/92_appendixB.tex:121 | sec/06_results.tex:53 |
+| `tab:convergence` | B.2 | sec/92_appendixB.tex:127 | sec/06_results.tex:53 |
 | `tab:closedform` | C.1 | sec/93_appendixC.tex:22 | sec/93_appendixC.tex:9 |
 | `tab:ringdown` | C.2 | sec/93_appendixC.tex:52 | sec/06_results.tex:739 |
 

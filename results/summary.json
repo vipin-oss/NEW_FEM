@@ -430,7 +430,7 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "97/97",
+   "value": "99/99",
    "criterion": "all agree",
    "pass": true
   }
@@ -445,6 +445,7 @@
   "run_dt_study.py": true,
   "run_coupling_check.py": true,
   "run_mode_tracking.py": true,
+  "run_reduction_mac.py": true,
   "run_application_table.py": true,
   "derive_k2_closed_form.py": true,
   "run_independent_checks.py": true,
