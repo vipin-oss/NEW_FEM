@@ -10,8 +10,8 @@ moment of the averaging window sets the gradient stiffness, while modal L1
 integration retains the dielectric history. The principal findings are:
 
 \begin{itemize}
-\item \textbf{The averaging window, through its second-moment tensor $M$,
-  supplies the internal length.} Physically, the window is the domain over which
+\item The averaging window, through its second-moment tensor $M$,
+  supplies the internal length. Physically, the window is the domain over which
   the microstructure is averaged, and because the gradient energy is linear in
   $M$ the shape of that domain is not a parameter: windows of equal second
   moment give identical solutions to the third decimal, while their size spans
@@ -19,30 +19,29 @@ integration retains the dielectric history. The principal findings are:
   computed here. Rotating an anisotropic window changes the extensional
   coupling by $15$--$19\,\%$ between the aligned and transverse positions,
   because the gradient stiffness samples different directional strain gradients.
-\item \textbf{The thickness $h$} converts a curvature into a strain gradient
+\item The thickness $h$ converts a curvature into a strain gradient
   of order $\kappa_c/h$ and thereby separates the two couplings: the
   flexoelectric bending coupling grows by a factor $24$ between
   \SI{10}{\micro\meter} and \SI{1}{\micro\meter}, while the piezoelectric
   extensional coupling stays constant to $0.09\,\%$ and its quasi-static value,
   $0.5581$, lies within $0.5\,\%$ of the closed form $0.5608$.
-\item \textbf{The flexoelectric coefficient $\mu$}, the polarization produced by
+\item The flexoelectric coefficient $\mu$, the polarization produced by
   a unit strain gradient, fixes the absolute size of the bending coupling: at
   the assumed $\mu=10^{-6}$\,\si{\coulomb\per\meter} the ratio of the two
   couplings spans $3.1\times10^{-4}$ to $7.5\times10^{-3}$ and reaches
   $0.1\,\%$ only below $h=5.5\,\si{\micro\meter}$.
-\item \textbf{The Caputo order $\alpha$}, which measures how broad the
+\item The Caputo order $\alpha$, which measures how broad the
   relaxation spectrum is, controls the shape of the decay: the first-period
   decrement of the tip displacement runs from $0.063$ at $\alpha=1$ to $0.104$
   at $\alpha=0.6$ and back to $0.085$ at $\alpha=0.4$, so a free decay is not
   exponential below $\alpha=1$ and an integer-order reading is in error by
   $64\,\%$ at $\alpha=0.6$.
-\item \textbf{The relaxation time $\tau$}, which places the loss peak at
+\item The relaxation time $\tau$, which places the loss peak at
   $\omega\tau$ of order unity, fixes where that damping acts: at $\alpha=1$ and
   $\omega\tau=0.3$ the damping ratio is $0.15003$ on the condensed matrix
   against $0.0675$ on the short-circuit one, a ratio of $0.450$, and the
   Kelvin--Voigt limit is reproduced to $0.02\,\%$.
-\item \textbf{The element that carries all of it}, a $C^1$ Bogner--Fox--Schmit
-  rectangle, converges at the $N^{-2}$ rate of bicubic Hermite interpolation, so
+\item The $C^1$ Bogner--Fox--Schmit rectangle converges at the $N^{-2}$ rate of bicubic Hermite interpolation, so
   that $48\times4$ elements reproduce the coupling factor to
   $6.2\times10^{-4}$ relative.
 \end{itemize}
