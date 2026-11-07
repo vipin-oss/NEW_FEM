@@ -36,3 +36,17 @@ in the requested order, including captions, displayed equations and table inputs
   Physical explanations were retained rather than padded with repeated lead-ins.
 
 Gates: **70/70 PASS; 102/102, zero stale hits** (task1 logs).
+
+## Task 2 — candidate overflow fixes (compile confirmation needed)
+
+- `sec/03_particular_cases.tex`, eq:limitM: split the four-term enthalpy
+  across two aligned rows, with the same equation number and all terms intact.
+- `sec/91_appendixA.tex`, eq:Mrot: split the three rotated components onto
+  three aligned rows, keeping the single equation number.
+No font size, figure size or page geometry was reduced. These are source-level
+fixes to long displays, not identified compiler-log sites: the two actual
+overfull-box locations were not supplied. Their elimination and final page
+count cannot be certified until the independent compile. Final source line
+ranges are listed in the delivery section.
+
+Gates: **70/70 PASS; 102/102, zero stale hits** (task2 logs).

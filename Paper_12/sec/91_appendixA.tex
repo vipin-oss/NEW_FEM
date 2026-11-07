@@ -70,9 +70,11 @@ half-width pair expresses analytically.
 \paragraph{Rotated window} A rectangular window whose long axis makes an angle
 $\theta$ with $x$ has
 \begin{equation}
-  M_{11}(\theta) = M_{11}\cos^{2}\theta + M_{22}\sin^{2}\theta,\qquad
-  M_{22}(\theta) = M_{11}\sin^{2}\theta + M_{22}\cos^{2}\theta,\qquad
-  M_{12}(\theta) = \tfrac12\left(M_{22}-M_{11}\right)\sin2\theta,
+  \begin{aligned}
+  M_{11}(\theta) &= M_{11}\cos^{2}\theta + M_{22}\sin^{2}\theta,\\
+  M_{22}(\theta) &= M_{11}\sin^{2}\theta + M_{22}\cos^{2}\theta,\\
+  M_{12}(\theta) &= \tfrac12\left(M_{22}-M_{11}\right)\sin2\theta.
+  \end{aligned}
   \label{eq:Mrot}
 \end{equation}
 so that the off-diagonal coupling is largest at $\theta=45^\circ$ and vanishes
