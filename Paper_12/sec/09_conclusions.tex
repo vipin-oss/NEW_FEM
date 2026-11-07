@@ -1,0 +1,65 @@
+%% ===========================================================================
+\FloatBarrier
+\section{Conclusions}
+\label{sec:conclusions}
+%% ===========================================================================
+
+The key conclusions of this investigation are summarized as follows:
+
+\begin{enumerate}
+\item \textbf{The averaging window, through its second-moment tensor $M$,
+  supplies the internal length.} Physically, the window is the domain over which
+  the microstructure is averaged, and because the gradient energy is linear in
+  $M$ the shape of that domain is not a parameter: windows of equal second
+  moment give identical solutions to the third decimal, while their size spans
+  the coupling from $3.69\times10^{-6}$ to $1.03\times10^{-2}$ over the map
+  computed here.
+\item \textbf{The orientation of an anisotropic window} decides which component
+  of the strain gradient is transmitted, and it is worth $15$--$19\,\%$ of the
+  extensional coupling between the aligned and the transverse positions.
+\item \textbf{The thickness $h$} converts a curvature into a strain gradient
+  of order $\kappa_c/h$ and thereby separates the two couplings: the
+  flexoelectric bending coupling grows by a factor $24$ between
+  \SI{10}{\micro\metre} and \SI{1}{\micro\metre}, while the piezoelectric
+  extensional coupling stays constant to $0.09\,\%$ and its quasi-static value,
+  $0.5581$, lies within $0.5\,\%$ of the closed form $0.5608$.
+\item \textbf{The flexoelectric coefficient $\mu$}, the polarization produced by
+  a unit strain gradient, fixes the absolute size of the bending coupling: at
+  the assumed $\mu=10^{-6}$\,\si{\coulomb\per\metre} the ratio of the two
+  couplings spans $3.1\times10^{-4}$ to $7.5\times10^{-3}$ and reaches
+  $0.1\,\%$ only below $h=5.46\,\si{\micro\metre}$.
+\item \textbf{The Caputo order $\alpha$}, which measures how broad the
+  relaxation spectrum is, controls the shape of the decay: the first-period
+  decrement of the tip displacement runs from $0.063$ at $\alpha=1$ to $0.104$
+  at $\alpha=0.6$ and back to $0.085$ at $\alpha=0.4$, so a free decay is not
+  exponential below $\alpha=1$ and an integer-order reading is in error by
+  $64\,\%$ at $\alpha=0.6$.
+\item \textbf{The relaxation time $\tau$}, which places the loss peak at
+  $\omega\tau$ of order unity, fixes where that damping acts: at $\alpha=1$ and
+  $\omega\tau=0.3$ the damping ratio is $0.15003$ on the condensed matrix
+  against $0.0675$ on the short-circuit one, a ratio of $0.450$, and the
+  Kelvin--Voigt limit is reproduced to $0.02\,\%$.
+\item \textbf{The element that carries all of it}, a $C^1$ Bogner--Fox--Schmit
+  rectangle, converges at the $N^{-2}$ rate of bicubic Hermite interpolation, so
+  that $48\times4$ elements reproduce the coupling factor to
+  $6.2\times10^{-4}$ relative.
+\end{enumerate}
+
+For the design of a thin sensing strip these conclusions translate into a
+sequence of decisions: the electrode arrangement comes first, because it
+dominates the response ($0.4580$ against $0.1141$ at equal tip motion); the
+window is then chosen for the gradient that has to be resolved and the thickness
+for the size effect that is to be exploited; and a damping number is quoted only
+together with $\alpha$, $\tau$ and the memory matrix that carries the
+convolution.
+
+Two extensions follow from the limits stated in Sec.~\ref{sec:limitations}. An
+interface with a measured microstructure would replace the window size by the
+correlation length of that microstructure, which is the route by which the
+internal length becomes a measured rather than an assumed input. And the
+two-dimensional reduction, whose plane-stress coupling differs from the
+three-dimensional value by $2.8\,\%$, would give way to a shell element in which
+the thickness is a variable and thinning is a design output rather than a
+parameter.
+
+\FloatBarrier

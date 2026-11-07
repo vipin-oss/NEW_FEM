@@ -4,7 +4,7 @@ from results/coupling_provenance.json.
 Every coupling factor the paper quotes appears once, with its boundary
 condition, mesh, mu, the matrix and formula behind it, and the entry of the
 JSON archive that reproduces it.  The table float and the caption live in
-sec/06_results.tex, so that check_float_order.py sees the label.
+sec/07_results.tex, so that check_float_order.py sees the label.
 
 Layout note: the table is set at \\small with short headers and two wrapping
 p-columns, because the seven natural-width columns of the first version came to

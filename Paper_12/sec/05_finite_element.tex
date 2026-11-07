@@ -4,6 +4,12 @@
 \label{sec:fem}
 %% ===========================================================================
 
+This section turns the weak statement of Sec.~\ref{sec:formulation} into a
+discretization that makes the second displacement gradient admissible: the
+element, the condensation of the electrode, the memory march on modal
+coordinates and the mesh on which every number of Secs.~\ref{sec:verification}
+and~\ref{sec:results} is computed.
+
 \FloatBarrier
 \subsection{Weak form}
 \label{sec:weak}
@@ -35,7 +41,7 @@ potential degrees of freedom.
 \subsection{The BFS element and its contributions}
 \label{sec:bfs}
 
-The domain is covered by Bogner--Fox--Schmit rectangles. Each element has four
+The domain is covered by Bogner--Fox--Schmit (BFS) rectangles. Each element has four
 nodes and, per node, the eight mechanical degrees of freedom \eqref{eq:dofs}
 carried by a bicubic Hermite tensor-product interpolation, that is 32
 mechanical degrees of freedom per element, together with the four nodal
@@ -257,8 +263,13 @@ Sec.~\ref{sec:thickness} is at a condition number of about $10^{12}$, whose
 effect is measured rather than assumed (Sec.~\ref{sec:verification}). A mesh of
 $48\times4$ elements has $245$ nodes and $1960$ mechanical degrees of freedom
 and is the workhorse of the results; refining it to $96\times4$ changes the
-frequency by $0.05\,\%$ and the coupling factor by $0.03\,\%$, and the thinnest
-strips are solved on it because the conditioning, not the number of elements,
-is the binding constraint.
+coupling factor by $6.2\times10^{-4}$ relative to the $48\times4$ value of the
+same clamped strip, and the thinnest strips are solved on it because the
+conditioning, not the number of elements, is the binding constraint. The
+assembly uses the strain and gradient matrices \eqref{eq:Bmat}, the gradient
+stiffness \eqref{eq:Kg}, the coupling \eqref{eq:Be} and the Schur complement
+\eqref{eq:saddle}, and the charge constraint \eqref{eq:electrode} closes the
+electrode of the reduced model. The accuracy of this discretization, rather than its construction, is what
+Sec.~\ref{sec:verification} establishes before any result is quoted.
 
 \FloatBarrier

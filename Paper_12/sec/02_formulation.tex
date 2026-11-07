@@ -18,7 +18,7 @@ the closed-form window coefficients are collected in \ref{app:Mcoeff}.
 \label{sec:window}
 
 Let the strain gradient at a material point $\bm{x}$ be replaced by its average
-over a window $\mathcal{W}$ of area $A_{\mathcal W}$ centred at that point,
+over a window $\mathcal{W}$ of area $A_{\mathcal W}$ centered at that point,
 \begin{equation}
   \bar\eta_{ijk}(\bm{x}) = \frac{1}{A_{\mathcal W}}
      \int_{\mathcal W} \eta_{ijk}(\bm{x}+\bm{s})\,\mathrm{d}\bm{s}.
@@ -31,7 +31,7 @@ Expanding the integrand to second order in the window coordinate,
   \label{eq:expand}
 \end{equation}
 and integrating term by term, the linear term vanishes because the window is
-centred, so
+centered, so
 \begin{equation}
   \bar\eta_{ijk} \simeq \eta_{ijk} + \tfrac12 M_{mn}\,\eta_{ijk,mn},
   \qquad
@@ -389,6 +389,11 @@ convergence study of Sec.~\ref{sec:verification} shows to be adequate for
 every quantity quoted.
 
 \input{table_params}
+
+With the energy, the constitutive relations and the governing equations in
+place, the reductions that connect this model to the theories it generalizes
+are enumerated in Sec.~\ref{sec:limits}, and each of them is a switch on one of
+the terms written above.
 
 \begin{figure}[!t]
 \centering

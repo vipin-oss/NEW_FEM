@@ -283,7 +283,7 @@
   {
    "id": "A2",
    "what": "every number in the abstract has an independent-check verdict",
-   "value": "4 hua / 5 nahi hua / 3 inputs, 12 tokens",
+   "value": "4 hua / 8 nahi hua / 3 inputs, 15 tokens",
    "criterion": "0 uncovered, 0 stale",
    "pass": true
   },
@@ -353,14 +353,14 @@
   {
    "id": "N5",
    "what": "every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive",
-   "value": "37/37 traced, 0 untraced",
+   "value": "48/48 traced, 0 untraced",
    "criterion": "0 untraced",
    "pass": true
   },
   {
    "id": "N2",
    "what": "the list of unverified numbers cites only numbers still in the manuscript",
-   "value": "29 entries, 0 stale",
+   "value": "32 entries, 0 stale",
    "criterion": "0 stale",
    "pass": true
   },

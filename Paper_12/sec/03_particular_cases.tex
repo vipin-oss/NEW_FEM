@@ -5,7 +5,11 @@
 %% ===========================================================================
 
 The general model of Sec.~\ref{sec:formulation} contains four switches, and
-each of them has to reproduce a known theory when it is turned off. This
+each of them has to reproduce a known theory when it is turned off. Each
+switch acts on one term of the energy: \eqref{eq:Eel} for the elastic part,
+\eqref{eq:Epiezo} for the piezoelectric and dielectric parts and
+\eqref{eq:Eflexo} for the flexoelectric one, so a reduction is a statement
+about a matrix rather than about a material. This
 section states those reductions; the numerical results that follow are read
 against them, and Sec.~\ref{sec:verification} checks two of them as exact
 identities rather than as trends.
@@ -108,6 +112,8 @@ Dropping the memory and the flexoelectric tensor leaves the classical
 piezoelectric strip. The present work differs from these in carrying the
 fractional memory on the reduced modal coordinates and in treating the
 window's second moment, rather than a scalar length, as the object that the
-discretization sees.
+discretization sees. Which of these reductions a given problem selects is
+decided by its boundary and electrode conditions, which Sec.~\ref{sec:bc}
+states.
 
 \FloatBarrier

@@ -65,6 +65,16 @@ CLAIMS = [
      "nahi hua", "a property of the two condensation choices, read off the "
      "FEM matrices (S1b); the pole solver that converts the pole into "
      "$\\zeta$ is itself checked (I4)"),
+    ("0.4580", "extensional $k^2$ of the 200x10 strip, plane stress, poling $x$",
+     "nahi hua", "the application table (rows[3]); a clamped strip has no closed "
+     "form, and the mesh convergence behind the table is the subject of T2"),
+    ("0.4024", "the same coupling of the same strip in plane strain",
+     "nahi hua", "the application table (rows[2]); the plane-strain and "
+     "plane-stress reductions differ by the modelling error of Appendix B"),
+    ("0.1", "thickness at which the flexoelectric bending term reaches "
+     "$0.1\\,\\%$ of the piezoelectric one",
+     "nahi hua", "the design map (F12); the $0.1\\,\\%$ level is a stated "
+     "engineering threshold and the thickness is read from the FEM grid"),
     ("0.02", "distance of $\\zeta_{\\rm eff}$ from the classical limit",
      "hua", "I5: at $\\alpha=1$ the pole equation is quadratic and gives "
      "$\\omega\\tau/2=0.15000$ exactly, so the $0.02\\,\\%$ is a comparison "

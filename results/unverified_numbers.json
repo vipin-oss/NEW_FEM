@@ -1,5 +1,5 @@
 {
- "n": 29,
+ "n": 32,
  "rows": [
   {
    "literal": "0.09",
@@ -30,6 +30,24 @@
    "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
    "source": "abstract_audit.json",
    "why": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
+  },
+  {
+   "literal": "0.4580",
+   "what": "extensional $k^2$ of the 200x10 strip, plane stress, poling $x$",
+   "source": "abstract_audit.json",
+   "why": "the application table (rows[3]); a clamped strip has no closed form, and the mesh convergence behind the table is the subject of T2"
+  },
+  {
+   "literal": "0.4024",
+   "what": "the same coupling of the same strip in plane strain",
+   "source": "abstract_audit.json",
+   "why": "the application table (rows[2]); the plane-strain and plane-stress reductions differ by the modelling error of Appendix B"
+  },
+  {
+   "literal": "0.1",
+   "what": "thickness at which the flexoelectric bending term reaches $0.1\\,\\%$ of the piezoelectric one",
+   "source": "abstract_audit.json",
+   "why": "the design map (F12); the $0.1\\,\\%$ level is a stated engineering threshold and the thickness is read from the FEM grid"
   },
   {
    "literal": "6721.8",

@@ -157,8 +157,8 @@ def main():
     m = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", main, re.S)
     if m:
         abstract.append(("main.tex abstract", m.group(1)))
-    concl.append(("08_conclusion.tex", strip_comments(
-        open(os.path.join(PAPER, "sec", "08_conclusion.tex")).read())))
+    concl.append(("09_conclusions.tex", strip_comments(
+        open(os.path.join(PAPER, "sec", "09_conclusions.tex")).read())))
     high.append(("Highlights.tex", strip_comments(
         open(os.path.join(PAPER, "Highlights.tex")).read())))
     for f in files():

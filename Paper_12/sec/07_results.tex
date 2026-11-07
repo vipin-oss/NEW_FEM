@@ -4,231 +4,32 @@
 \label{sec:results}
 %% ===========================================================================
 
-\FloatBarrier
-\subsection{Material and simulation parameters}
-\label{sec:material}
-
-The material is tetragonal $\mathrm{BaTiO_3}$ at room temperature, with the
-constants of Table~\ref{tab:params}. The dielectric anisotropy ratio
-$\kappa_{11}/\kappa_{33}=39$ is retained, so the two poling configurations
-differ in their permittivity as well as in their modulus. The strain-gradient
-length scale is set by the window: with half-widths
-$a_1\times a_2=3\times1$\,\si{\micro\metre} the cuboid window of
-\eqref{eq:Mshapes} gives $M_{11}=3.0\times10^{-12}$ and
-$M_{22}=3.3\times10^{-13}$\,\si{\square\metre}, that is characteristic lengths
-$\sqrt{M_{11}}=\SI{1.73}{\micro\metre}$ and
-$\sqrt{M_{22}}=\SI{0.58}{\micro\metre}$ along and across the strip. The ratio
-$a_1/L=0.015$ is far inside the operating range $a/L\le0.2$ of
-Sec.~\ref{sec:limit_window}. Two of the inputs are not material constants of
-this crystal. The density $\rho$ rescales every frequency by the common factor
-$1/2\pi\sqrt{\rho}$ and therefore moves the kilohertz numbers without touching
-any ratio; the flexoelectric coefficient $\mu$ enters every flexoelectric
-energy linearly and every flexoelectric coupling as $\mu^{2}$, so the growth
-factors and the comparison with the piezoelectric response stand whatever its
-value, while the absolute flexoelectric coupling follows it quadratically.
-
-\FloatBarrier
-\subsection{Verification and convergence}
-\label{sec:verification}
-
-The numerical evidence is summarized here in a form that a reader can check
-against a re-implementation; the full record of benchmarks, identities and
-independent routes is \ref{app:verification}.
-
-\subsubsection{Benchmarks and mesh convergence}
-
-Three problems with known answers were solved with the same element: a
-one-dimensional strain-gradient bar, whose static tip displacement and
-frequency were compared with the closed form; the same bar in the classical
-limit; and the constant-strain patch test. The clamped-free and clamped-clamped
-frequencies of the strip agree with the Euler--Bernoulli values to $0.26\,\%$
-and $0.10\,\%$, and the elastic strip reproduces the gradient theory whenever
-the window is set to zero. Figure~\ref{fig:convergence} then shows the error in
-the frequency of the extensional mode and in its quasi-static coupling factor
-against the number of degrees of freedom. Both converge from above at the rate
-expected of a bicubic Hermite interpolation, and the $48\times4$ mesh used
-throughout the paper is inside the asymptotic range: refining it to $96\times4$
-changes the frequency by $0.05\,\%$ and the coupling factor by $0.03\,\%$,
-while the coarser $24\times2$ mesh used for the parameter sweeps differs from
-it by $0.04\,\%$ and $0.03\,\%$. Table~\ref{tab:convergence} lists the four
-meshes.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\textwidth]{F2_convergence.pdf}
-\caption{Convergence of the extensional coupling factor $k^2$ and of the
-frequency of the mode that carries it, against the number of mechanical
-degrees of freedom. (a) Relative error referred to the finest mesh, with the
-$N^{-2}$ rate of a bicubic Hermite interpolation; (b) the two quantities
-themselves with the converged value dotted. The $48\times4$ mesh is marked.}
-\label{fig:convergence}
-\end{figure}
-
-\subsubsection{The coupling factor and its closed form}
-
-The coupling factor of the extensional electrode pair is the one quantity in
-this paper that can be obtained without a mesh, and doing so fixes the meaning
-of every assembled value that follows. From the constitutive tensors alone,
-\begin{equation}
-  x=\frac{e^{\mathsf T}C_{p}^{-1}e}{\kappa}=1.2768,
-  \qquad
-  k^{2}=\frac{x}{1+x}=0.5608 ,
-  \label{eq:xclosed}
-\end{equation}
-which is the closed-form value for the plane-stress strip; the
-three-dimensional free bar gives $0.5771$, the three-dimensional uniaxial case
-$0.3748$ and the two-dimensional plane-strain case $0.5132$, all from the same
-tensors and all listed in \ref{app:data}. The plane-stress value is
-the relevant one, because the strip is free out of plane.
-
-The assembled model returns three numbers that belong to this same closed
-form and differ from it for stated reasons. With the window switched off and
-the strip unconstrained, the assembled route reproduces \eqref{eq:xclosed} to
-$1.2\times10^{-11}$ relative, at $0.56079$: that is the validation of the
-assembly, and it is a comparison of two computations of one number, not a
-physical result. Clamping the left edge lowers the coupling to $0.55957$,
-because the clamp restrains the in-plane deformation that carries the
-piezoelectric charge, and switching the window on lowers it further to
-$0.55814$, because the gradient stiffness adds energy to the same mode without
-adding charge. The working value quoted in the abstract is the last of the
-three, $k^{2}=0.5581$, which is $0.4\,\%$ below the free-strip closed form and
-is the value a clamped device actually has. The two mode-based values,
-$k^2_4=0.4650$ on the elastic memory matrix and $k^2_4=0.4583$ on the
-short-circuit stiffness, are different measures again and are introduced where
-the ring-down uses them (Sec.~\ref{sec:memorystudy}); they are not comparable
-with the mode-free ones and are never averaged with them.
-
-\subsubsection{Time discretization and the step actually used}
-
-The L1 scheme is first order in $\Delta t$ for every $\alpha\in(0,1]$, at
-$\alpha=1$ as well. At $\alpha=1$ and $\omega\tau=0.3$ the damping ratio
-extracted from the ring-down is $0.150111$, $0.150057$ and $0.150029$ at $N$,
-$2N$ and $4N$ steps over twenty periods ($N=12000$, that is $600$ steps per
-period), against the exact $\omega\tau/2=0.150000$: halving the step halves the
-residual, an observed order of $0.97$, and the sequence extrapolates to the
-exact value. The ring-downs of Sec.~\ref{sec:memorystudy} are run at the $4N$
-step. The eight curves of Sec.~\ref{sec:transient} are a coarser march, $400$
-steps per period, and their decrements carry the step in the last decimal.
-
-\subsubsection{Fields of the coupled bending mode}
-
-Figure~\ref{fig:fields} records the four fields of the coupled bending mode in
-the open-circuit configuration, together with the strain gradient that drives
-the flexoelectric term. The in-plane and the transverse displacement are those
-of a first bending mode; the potential is not. It reaches tens of millivolts a
-few tens of micrometres from the clamped edge and near mid-height, and falls
-toward both the edge and the free end, so the two face electrodes sit where the
-potential is smallest. That is the spatial form of the cancellation that makes
-this configuration insensitive to the piezoelectric charge and responsive to
-the strain gradient, and the gradient panel shows where the flexoelectric
-charge is generated: in the boundary layer at the clamp and along the neutral
-axis, not at the electrodes.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\textwidth]{F3_fields.pdf}
-\caption{Fields of the coupled bending mode in the open-circuit configuration,
-$48\times4$ mesh: (a) in-plane displacement, (b) deflection, (c) potential at
-\SI{10}{\nano\metre} of tip motion, (d) electric field, (e) magnitude of the
-strain gradient that drives the flexoelectric term. The potential is smallest
-at the face electrodes and the gradient is largest at the clamp.}
-\label{fig:fields}
-\end{figure}
-
-\FloatBarrier
-\subsection{Worked calculation of the headline numbers}
-\label{sec:worked}
-
-The numbers quoted in the abstract follow from the inputs in four short steps,
-collected here so that the route from a material constant to a coupling factor
-is visible and not only its outcome; Table~\ref{tab:worked} lists inputs and
-outputs side by side.
-
-\paragraph{Window} For half-widths $a_1=\SI{3}{\micro\metre}$ and
-$a_2=\SI{1}{\micro\metre}$ the second-moment tensor of the cuboid window is
-diagonal with
-\begin{equation}
-  M_{11}=\frac{a_1^{2}}{3}=3.000\times10^{-12}\ \si{\metre\squared},\qquad
-  M_{22}=\frac{a_2^{2}}{3}=3.333\times10^{-13}\ \si{\metre\squared},
-  \label{eq:Mnumber}
-\end{equation}
-an anisotropy ratio $M_{11}/M_{22}=9$. The three shapes are interchangeable
-once $M$ is fixed, because $M_{ii}=a_i^{2}/3$, $a_i^{2}/4$ and $a_i^{2}/5$ for
-the cuboid, the ellipse and the ellipsoid: an ellipsoid of half-width
-$a_{\rm ell}=1.2910\,a_{\rm cub}=\sqrt{5/3}\,a_{\rm cub}$ reproduces
-\eqref{eq:Mnumber} exactly, and the reciprocal
-$a_{\rm cub}=0.7746\,a_{\rm ell}$ is the conversion used for the equal-$M$ pair
-of Sec.~\ref{sec:windowshape}.
-
-\paragraph{Plane-stress reduction and closed form} The strip is free out of
-plane, so the stiffness that multiplies $\varepsilon_{xx}$ is the reduced entry
-\eqref{eq:Cp}, which for $\mathrm{BaTiO_3}$ gives
-$C^{p}_{xx}=9.5500\times10^{10}$\,Pa with the poling along $x$ and
-$1.6946\times10^{11}$\,Pa with the poling along $y$, and
-$C^{p}_{12}=5.7000\times10^{10}$\,Pa in both cases. The entries that pair with
-it are $e_{33}=6.7$ and $e_{31}=-0.7$\,\si{\coulomb\per\square\metre} and the
-permittivity across the electrode gap,
-$\kappa_{yy}=\kappa_{33}=4.9583\times10^{-10}$\,\si{\farad\per\metre}. Hence
-$x=1.2768$ and $k^{2}=0.5608$ from \eqref{eq:xclosed}, with no mesh involved.
-
-\paragraph{Assembled route} The same quantity on the assembled model comes from
-one short-circuit and one open-circuit reduction of the $48\times4$ mesh:
-$245$ nodes, eight mechanical degrees of freedom per node ($1960$ unknowns)
-and $245$ potential unknowns, condensed to a single electrode pair $(d,\beta)$
-with $\beta=2.4792\times10^{-11}$\,\si{\farad}. Then
-\begin{equation}
-  x_{\rm FEM}=\frac{d^{\mathsf T}K_{sc}^{-1}d}{\beta}=1.2631,
-  \qquad
-  k^{2}_{\rm FEM}=\frac{x_{\rm FEM}}{1+x_{\rm FEM}}=0.5581 ,
-  \label{eq:xFEM}
-\end{equation}
-$0.47\,\%$ below \eqref{eq:xclosed}; the clamped edge accounts for $0.22\,\%$
-of that and the gradient stiffness for a further $0.26\,\%$.
-
-\paragraph{Flexoelectric smallness and L1 weights} With the piezoelectric
-constants switched off, the same reduction gives the smallness parameter of the
-bending configuration,
-\begin{equation}
-  x=\frac{3\mu^{2}}{C^{p}_{xx}\,h^{2}\,\kappa_{33}}
-   =\frac{3\,(10^{-6})^{2}}{1.6946\times10^{11}\cdot(10^{-6})^{2}\cdot
-     4.9583\times10^{-10}}
-   =3.5704\times10^{-4}
-  \label{eq:xflexo}
-\end{equation}
-at $h=\SI{10}{\micro\metre}$, against a finite element value of
-$1.7437\times10^{-4}$; the two routes differ by a factor $2.05$ and the
-difference is discussed with the thickness sweep in Sec.~\ref{sec:thickness}.
-The L1 weights are fixed numbers that do not depend on the model,
-\begin{equation}
-  \alpha=0.5:\; (b_0,b_1,b_2)=(1,\;0.414214,\;0.317837),\qquad
-  \alpha=0.7:\; (b_0,b_1,b_2)=(1,\;0.231144,\;0.159245),
-  \label{eq:bweights}
-\end{equation}
-and the damping ratio follows from the decrement of two successive peaks,
-\begin{equation}
-  \delta=\ln\frac{A_k}{A_{k+1}},\qquad
-  \zeta_{\rm eff}=\frac{\delta}{\sqrt{4\pi^{2}+\delta^{2}}} ,
-  \label{eq:zeta}
-\end{equation}
-of which $\zeta=\delta/2\pi$ is the small-damping approximation. At
-$\omega\tau=0.3$ the ratio of two successive voltage peaks is $2.5947$, so
-$\delta=0.95345$ and $\zeta_{\rm eff}=0.15003$ against the exact
-$\omega\tau/2=0.15000$.
-
-\input{table_worked}
+The five design questions raised in Sec.~\ref{sec:intro} are answered here, one
+subsection each: whether the direction in which the microstructure is sampled
+matters, what the size and the shape of the window do, whether thinning a device
+helps, what the memory order and the relaxation time do to the damping, and what
+the four electrode configurations return for one strip. Every number quoted is a
+solved eigenvalue or a time march of the model of Sec.~\ref{sec:formulation},
+discretized as in Sec.~\ref{sec:fem} and checked as in
+Sec.~\ref{sec:verification}.
 
 \FloatBarrier
 \subsection{Window orientation and strip aspect ratio}
 \label{sec:orientation}
 
-The first design question is whether the direction in which the microstructure
-is sampled matters. Figure~\ref{fig:orientation} varies the orientation
-$\theta$ of the rectangular window and the strip aspect ratio, for the
-poling-$x$ configuration that carries the response. The window is held at a
+Figure~\ref{fig:orientation} shows what the orientation of an anisotropic
+sampling window is worth, which is the first design question because the
+gradient energy is linear in the second-moment tensor $M$ and a rotation of the
+window changes $M$ without changing the strip. The window is held at a
 half-width of \SI{3}{\micro\metre} along its long axis and the strip is
-\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}; over the $6\times19$
-cuboid cases the extensional mode remains the one with the largest coupling,
-its short-circuit frequency varying smoothly from $4907$ to \SI{5296}{kHz}.
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}, for the poling-$x$
+configuration that carries the response; physically, the window is the domain
+over which the microstructure of the film is averaged, so its orientation
+decides which component of the strain gradient the material is asked to
+transmit. Over the $6\times19$ cuboid cases the extensional mode remains the one
+with the largest coupling, its short-circuit frequency varying smoothly from
+$4907$ to \SI{5296}{kHz}, so the mode identity is not in question while the
+window turns.
 
 \subsubsection{Why one quadrant is computed}
 
@@ -273,42 +74,43 @@ squarest, $-14.9\,\%$ at ${\rm AR}=2$. Panel (b) is
 $(M_{11}-M_{22})/(M_{11}+M_{22})$, a function of the orientation alone, which
 passes through zero at $45^\circ$ and changes fastest there. The coupling
 follows the anisotropy of the second-moment tensor and not the shape of the
-window: that is the answer this section gives.
+window. Hence the orientation of the window is a design variable worth
+$15$--$19\,\%$ of the coupling, while the aspect ratio of an already elongated
+window is worth $5\,\%$ or less once the window is turned transverse to the
+gradient.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{F4_orientation.pdf}
-\caption{Window orientation at fixed window size on
-\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} strips, poling $x$, plane
-stress, $24\times2$ mesh. (a) Extensional frequency and (b) its coupling
-factor, both normalized to the aligned window, over the full circle; markers
-are computed points, lines a periodic spline. (c), (d) The same quantities as
-maps over window angle and aspect ratio. The $15$--$19\,\%$ spread is the
-anisotropy of the second moment.}
+\caption{Variations of (a) the extensional frequency and (b) its coupling factor, both normalized to the aligned window, over the full circle of window orientation, and of the same two quantities as maps over orientation and strip aspect ratio in (c) and (d), for a \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} strip with poling along $x$, plane stress and a $24\times2$ mesh. Markers are computed points, lines a periodic spline.}
 \label{fig:orientation}
 \end{figure}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.86\textwidth]{F5_design.pdf}
-\caption{The same sweep read as a design space. (a) Change of the extensional
-coupling relative to the aligned window, one curve per aspect ratio, spanning
-$4$ percentage points at $90^\circ$ and reaching $-18.7\,\%$. (b) Anisotropy of
-the second-moment tensor, independent of the aspect ratio, whose zero at
-$45^\circ$ is where the coupling in (a) changes fastest.}
+\caption{Variations of (a) the change of the extensional coupling relative to the aligned window, one curve per strip aspect ratio, and of (b) the anisotropy of the second-moment tensor, independent of the aspect ratio, for the window and poling of Fig.~\ref{fig:orientation}. The coupling spans $4$ percentage points at $90^\circ$ and reaches $-18.7\,\%$ where the anisotropy of (b) is largest.}
 \label{fig:design}
 \end{figure}
 
 \FloatBarrier
-\subsection{Fractional memory and the damping map}
+\subsection{Memory order, relaxation time and the damping map}
 \label{sec:memorystudy}
 
-Two questions are separated here. The first is \emph{model}: the fractional
-Kelvin--Voigt element of \eqref{eq:kv} is one way to represent dielectric loss,
-and it differs measurably from the integer-order element that finite element
-codes usually provide. The second is \emph{implementation}: the convolution of
-\eqref{eq:step} may multiply the fully condensed stiffness $K_{\rm eff}$ or
-only the short-circuit matrix $K_{uu}$, and the two give different damping.
+Figure~\ref{fig:damping} shows how the two parameters of the dielectric law move
+the damping of a mode, and the answer separates into a modeling and an
+implementation question. The modeling question is the fractional
+Kelvin--Voigt element of \eqref{eq:kv}, which differs measurably from the
+integer-order element that finite element codes usually provide; physically,
+$\alpha$ measures how broad the relaxation spectrum is, a single time constant
+at $\alpha=1$ and a spectrum spread over decades below it, while $\tau$ is the
+center of that spectrum and fixes the $\omega\tau$ at which the loss peaks. The
+implementation question is the convolution of \eqref{eq:step}, which may
+multiply the fully condensed stiffness $K_{\rm eff}$ or only the short-circuit
+matrix $K_{uu}$; the two give different damping, and the difference is not a
+numerical detail. The loss tangent \eqref{eq:tandelta} and its small-loss limit
+\eqref{eq:zetasmall} of Sec.~\ref{sec:calib_alpha_tau} are what the map plots,
+and the integer-order limit it is compared against is \eqref{eq:limitKV}.
 
 \subsubsection{Which matrix carries the memory}
 
@@ -389,7 +191,7 @@ it was fitted, which is the band a design map is meant to cover.
 \subsubsection{The damping map}
 
 Figure~\ref{fig:damping}(a) is the pole of \eqref{eq:kvfreq} in the complex
-plane, traced over $\omega\tau$ for seven relaxation times and coloured by
+plane, traced over $\omega\tau$ for seven relaxation times and colored by
 $\tau$, with markers at five Caputo orders; Fig.~\ref{fig:damping}(b) is the
 damping ratio $\zeta=-\mathrm{Re}\,s/(\omega_0|s|)$ over the
 $(\alpha,\omega\tau)$ plane. Both are computed with branch continuation: the
@@ -414,25 +216,26 @@ device frequency. That flatness is the qualitative reason the fractional
 description is used for dielectric loss in the first place. The band
 $\omega\tau\le1$, which contains the strip mode at \SI{6.73}{MHz} for every
 $\tau\le\SI{32}{\nano\second}$ used here, is the one in which the element is
-calibrated and claimed.
+calibrated and claimed. Hence, in the range where the element is used, $\alpha$
+sets the shape of the decay and $\tau$ sets where the loss peaks, and neither of
+them alone fixes a damping ratio.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{F6_damping.pdf}
-\caption{The fractional Kelvin--Voigt element from the pole of
-\eqref{eq:kvfreq} with branch continuation. (a) Pole of a mode at
-$\omega_0=\SI{6.73}{MHz}$ over $\omega\tau=0.02$--$1.35$ for seven relaxation
-times, coloured by $\tau$, markers at five Caputo orders. (b) Damping ratio
-over $\omega\tau=10^{-1.5}$--$10^{1.5}$ and $\alpha=0.2$--$1$, contours every
-$0.1$. Fractional poles fan upward, integer-order poles over-damp.}
+\caption{Variations of (a) the pole of a mode at $\omega_0=\SI{6.73}{MHz}$ over $\omega\tau=0.02$--$1.35$ for seven relaxation times, colored by $\tau$ with markers at five Caputo orders, and of (b) the damping ratio over $\omega\tau=10^{-1.5}$--$10^{1.5}$ and $\alpha=0.2$--$1$ with contours every $0.1$, for the fractional Kelvin--Voigt element with branch continuation. Fractional poles fan upward, integer-order poles over-damp.}
 \label{fig:damping}
 \end{figure}
 
 \FloatBarrier
-\subsection{Window shape versus second moment}
+\subsection{Window size and shape against the second moment}
 \label{sec:windowshape}
 
-Figure~\ref{fig:window}(a) is the numerical statement of
+Figure~\ref{fig:window} shows what the size and the shape of the window do on
+a problem whose classical answer is known, which is the second design question
+because the strain-gradient energy is linear in $M$: if that linearity holds,
+the shape cannot matter once $M$ is fixed, and any size dependence must enter
+through $M$ alone. Panel~(a) is the numerical statement of
 Sec.~\ref{sec:window} on an isotropic plane-strain test problem (rectangle
 $1\times0.2$, $20\times4$ mesh, uniaxial edge traction, displacement averaged
 over the loaded edge), plotted against the normalized window size for an
@@ -459,17 +262,17 @@ kinematic conditions, and then accumulates along the member instead of decaying
 over a thin layer: at these window sizes the gradient effect is distributed
 rather than local, and its size grows with the window. That is why $a/L\le0.2$
 is quoted as an assumed operating range and not as a validated truncation
-threshold.
+threshold. Hence, at a fixed second moment the shape of the window is immaterial
+to the third decimal, and its size and its anisotropy are the only window
+parameters left in the model. The entries of Appendix~A used here are the
+ellipsoidal second moment \eqref{eq:Mell} and its rotation \eqref{eq:Mrot}, and
+the classical profile the difference is taken against is the limit
+\eqref{eq:limitM}.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{F7_window.pdf}
-\caption{What the window size and shape do, on problems with an exact classical
-counterpart. (a) Loaded-edge displacement of an isotropic plane-strain
-rectangle against normalized window size, for an ellipsoid, a cuboid of equal
-half-width and a cuboid of equal second moment; equal-$M$ windows collapse.
-(b) Deflected shape of the clamped strip for three window sizes. (c) Its
-difference from the classical profile, which accumulates along the member.}
+\caption{Variations of (a) the loaded-edge displacement of an isotropic plane-strain rectangle against normalized window size, for an ellipsoid, a cuboid of equal half-width and a cuboid of equal second moment, and of (b) the deflected shape of a clamped strip for three window sizes together with (c) its difference from the classical profile. Windows of equal second moment collapse onto one curve.}
 \label{fig:window}
 \end{figure}
 
@@ -478,8 +281,13 @@ difference from the classical profile, which accumulates along the member.}
 piezoelectric coupling}
 \label{sec:thickness}
 
-The central design question is whether thinning a device helps. Figure~\ref{fig:thickness}
-answers it by solving the same strip at eight thicknesses between
+Figure~\ref{fig:thickness} shows whether thinning a device helps, which is the
+third design question because the two available couplings scale differently with
+thickness: physically, a bending mode of thickness $h$ carries a strain gradient
+of order $\kappa_c/h$, so a coupling proportional to the gradient grows as
+$h^{-2}$, while a coupling proportional to the strain does not grow at all. The
+figure answers the question by solving the same strip at eight thicknesses
+between
 \SI{10}{\micro\metre} and \SI{1}{\micro\metre} with a \SI{200}{\micro\metre}
 length and the window held at half-widths $3\times1$\,\si{\micro\metre}, so that
 the thickness is the only variable; Table~\ref{tab:thickness} lists the sweep, and
@@ -498,12 +306,7 @@ on the short faces, gap $L$, $\kappa_{xx}=\kappa_{33}$).
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{F8_thickness.pdf}
-\caption{(a) Flexoelectric bending coupling against strip thickness at eight
-thicknesses, with local log--log slopes, a $96\times4$ witness at both ends and
-the $h^{-2}$ guide. (b) Piezoelectric extensional coupling of the same strip
-with $\mu=0$: constant to $0.09\,\%$ over $10\to1$\,\si{\micro\metre}.
-(c) Ratio of the two, which spans $3.1\times10^{-4}$ to
-$7.5\times10^{-3}$: the effects are not additive.}
+\caption{Variations of (a) the flexoelectric bending coupling against strip thickness at eight thicknesses, with local log--log slopes, a $96\times4$ witness at both ends and the $h^{-2}$ guide, of (b) the piezoelectric extensional coupling of the same strip with $\mu=0$, constant to $0.09\,\%$ over $10\to1\,\si{\micro\metre}$, and of (c) their ratio, which spans $3.1\times10^{-4}$ to $7.5\times10^{-3}$.}
 \label{fig:thickness}
 \end{figure}
 
@@ -538,11 +341,7 @@ every thickness.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.72\textwidth]{FB1_tracking.pdf}
-\caption{Mode tracking across the thickness sweep. (a) Defect $1-\mathrm{MAC}$
-between the shape at each thickness and the shape at
-$h=\SI{10}{\micro\metre}$, with the MAC printed; (b) frequencies of the first
-two modes and their ratio. The tracked branch stays within $10^{-3}$ of itself,
-so the identification is unambiguous.}
+\caption{Variations of (a) the defect $1-\mathrm{MAC}$, the MAC being the modal assurance criterion, between the mode shape at each thickness and the shape at $h=\SI{10}{\micro\metre}$, with the MAC printed, and of (b) the frequencies of the first two modes and their ratio, over a sweep from $10$ to $1\,\si{\micro\metre}$. The tracked branch stays within $10^{-3}$ of itself, so the identification is unambiguous.}
 \label{fig:modetrack}
 \end{figure}
 
@@ -589,15 +388,21 @@ $4.2\times10^{-3}$ and on the factor $24$ to within $0.5\,\%$, and not more
 closely. The spread is the range over its midpoint and is therefore a property
 of the model rather than of the machine that computed it; at
 $h=\SI{10}{\micro\metre}$ the same spread is at most $10^{-4}\,\%$. Values
-are quoted to two significant digits.
+are quoted to two significant digits. Hence thinning the strip multiplies the
+flexoelectric bending coupling by $24$ while leaving the piezoelectric
+extensional coupling unchanged to $0.09\,\%$, which is the size effect that
+this model was built to separate from the material property. The estimate
+\eqref{eq:xflexo} is the $h^{-2}$ guide drawn in panel~(a), and the inverse
+route \eqref{eq:muV} of Sec.~\ref{sec:calib_a_mu} is the one that would measure
+$\mu$ rather than assume it.
 
 \FloatBarrier
 \subsection{The design map}
 \label{sec:designmap}
 
-The two couplings of Fig.~\ref{fig:thickness} are not comparable in size, but a
-device has to be designed against both at once, and the two depend on different
-variables: the flexoelectric bending coupling on the thickness and on the
+Figure~\ref{fig:designmap} shows the two couplings of the third question on one
+grid, which a designer needs because they are not comparable in size and a device
+has to be designed against both at once. They depend on different variables: the flexoelectric bending coupling on the thickness and on the
 window, the piezoelectric extensional coupling on neither. Figure~\ref{fig:designmap}
 resolves them over the same two parameters. Panel~(a) is the flexoelectric
 bending coupling on a grid of eight thicknesses and eight window
@@ -627,16 +432,14 @@ should be chosen for the gradient one wants to resolve and the thickness for
 the size effect one wants to exploit, not the other way round; and that a
 device in which the two couplings are meant to compete needs a window thinner
 than the strip and a flexoelectric coefficient two orders of magnitude larger
-than the value assumed here.
+than the value assumed here. Hence the two couplings can be read from one map,
+and on that map a device in which they compete has to satisfy both conditions at
+once rather than either of them.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{F11_designmap.pdf}
-\caption{Design map of the two couplings over strip thickness and window
-half-thickness, $L=\SI{200}{\micro\metre}$, $a_1=\SI{3}{\micro\metre}$.
-(a) Flexoelectric bending coupling; (b) its ratio to the piezoelectric
-extensional coupling, with the $0.01\,\%$ and $0.1\,\%$ contours. The dotted
-line is $a_2=h$; the map ends at the assumed $a_2/L=0.2$.}
+\caption{Variations of (a) the flexoelectric bending coupling and of (b) its ratio to the piezoelectric extensional coupling over strip thickness and window half-thickness, for $L=\SI{200}{\micro\metre}$ and $a_1=\SI{3}{\micro\metre}$, with the $0.01\,\%$ and $0.1\,\%$ contours. The dotted line is $a_2=h$ and the map ends at the assumed $a_2/L=0.2$.}
 \label{fig:designmap}
 \end{figure}
 
@@ -644,9 +447,12 @@ line is $a_2=h$; the map ends at the assumed $a_2/L=0.2$.}
 \subsection{Transient response and the memory model}
 \label{sec:transient}
 
-Figure~\ref{fig:ringdown} shows the ring-down of the extensional mode after an
-initial tip displacement of \SI{10}{\nano\metre}, for eight Caputo orders
-between $\alpha=1$ and $0.4$ at fixed $\tau=\SI{3}{\nano\second}$
+Figure~\ref{fig:ringdown} shows the ring-down of the extensional mode in the
+time domain, which is the memory question of Sec.~\ref{sec:memorystudy} seen as
+a device records it, because a damping ratio is a frequency-domain summary and a
+sensor is read in time. The strip starts from a tip displacement of
+\SI{10}{\nano\metre} and is followed for eight Caputo orders between
+$\alpha=1$ and $0.4$ at fixed $\tau=\SI{3}{\nano\second}$
 ($\omega\tau=0.13$): the tip displacement in panel~(a) and the open-circuit
 voltage in panel~(b). The initial voltage, \SI{139}{\volt}, is set by the mode
 shape and the electrode configuration and is independent of $\alpha$, as it
@@ -662,16 +468,15 @@ $\alpha=0.6$ and back to $0.085$ at $\alpha=0.4$
 not a damping ratio, because those records are not exponential; a design that
 takes the integer-order early decay as representative is in error by $64\,\%$
 at $\alpha=0.6$, and the sign of the error cannot be guessed from $\alpha$
-alone.
+alone. Hence a recorded ring-down identifies the pair $(\alpha,\tau)$ only if
+the order is known from an independent measurement, which is the route taken in
+Sec.~\ref{sec:calibration}. The march is the one of \eqref{eq:newmark} with the
+L1 history, and the decrement is converted with \eqref{eq:bweights}.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{F9_ringdown.pdf}
-\caption{Ring-down of the extensional mode at \SI{6.727}{MHz} for eight Caputo
-orders: (a) tip displacement, (b) open-circuit voltage. Modal memory on
-$K_{\rm eff}$ with eight modes, $\tau=\SI{3}{\nano\second}$ ($\omega\tau=0.13$),
-initial tip displacement \SI{10}{\nano\metre}, $4000$ L1 steps over ten
-periods. Only the $\alpha=1$ decay is exponential.}
+\caption{Variations of (a) the tip displacement and (b) the open-circuit voltage of the extensional mode at \SI{6.727}{MHz} for eight Caputo orders, with modal memory on $K_{\rm eff}$, eight modes, $\tau=\SI{3}{\nano\second}$ ($\omega\tau=0.13$), an initial tip displacement of \SI{10}{\nano\metre} and $4000$ L1 steps over ten periods. Only the $\alpha=1$ decay is exponential.}
 \label{fig:ringdown}
 \end{figure}
 
@@ -685,7 +490,10 @@ $\mathrm{BaTiO_3}$ strip clamped on one short edge, poled along its length and
 electroded on the two ends: the strain in the active region is extensional, so
 the piezoelectric coupling dominates and the flexoelectric term is a
 size-dependent correction. Table~\ref{tab:application} collects the four
-polarization/kinematics combinations of that strip. The fundamental of the
+polarization/kinematics combinations of that strip, each solved from the
+condensed system \eqref{eq:saddle} with the electrode charge
+\eqref{eq:electrode}, and each quoted as the mode-free measure
+\eqref{eq:xFEM}. The fundamental of the
 extensional configuration is at \SI{147.73}{kHz}, above the clamped-free value
 of a beam of the same length because the gradient terms stiffen the member,
 while the strongly coupled extensional mode sits at \SI{6725.8}{kHz}.
@@ -693,11 +501,12 @@ while the strongly coupled extensional mode sits at \SI{6725.8}{kHz}.
 \begin{table}[!htbp]
 \centering
 \small
-\caption{The same \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre}
-strip in four polarization/kinematics combinations: the coupling of the
-strongest mode, its frequency and the open-circuit voltage at
-\SI{10}{\nano\metre} of tip motion. The two plane-stress rows are the
-configurations of Fig.~\ref{fig:geometry}; they are not additive.}
+\caption{The coupling of the strongest mode, its frequency and the
+open-circuit voltage at \SI{10}{\nano\metre} of tip motion, for a
+\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} strip in four polarization
+and kinematics combinations. The two plane-stress rows are the configurations
+of Fig.~\ref{fig:geometry}, and the couplings of the four rows are not
+additive.}
 \label{tab:application}
 \input{table_application}
 \end{table}
@@ -720,5 +529,9 @@ Three consequences follow.
   ratio of $0.450$. A damping number quoted without $\alpha$, $\tau$ and the
   memory matrix is under-specified.
 \end{enumerate}
+
+These numbers are the output of the model, and each of them rests on an input
+that no constitutive table supplies; Sec.~\ref{sec:calibration} identifies those
+inputs one at a time and states the ranges over which the numbers hold.
 
 \FloatBarrier

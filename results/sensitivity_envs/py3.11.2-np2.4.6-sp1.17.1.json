@@ -11,7 +11,7 @@
    "QZ (eig, general)": 0.0041730788739666015,
    "numpy eig, all modes": 0.004175023783741744,
    "dense eigh, 12 modes": 0.007711703028111181,
-   "sparse eigsh, 12 modes": 0.007682276937026152
+   "sparse eigsh, 12 modes": 0.00768231497459831
   },
   "h10_um": {
    "dense eigh, scaled": 0.00017437295529581213,
@@ -19,7 +19,7 @@
    "QZ (eig, general)": 0.0001743729582247224,
    "numpy eig, all modes": 0.0001743729488202331,
    "dense eigh, 12 modes": 0.0003034044755325805,
-   "sparse eigsh, 12 modes": 0.00030340454751975155
+   "sparse eigsh, 12 modes": 0.00030340454198912487
   }
  }
 }

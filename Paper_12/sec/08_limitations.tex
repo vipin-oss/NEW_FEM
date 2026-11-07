@@ -1,13 +1,14 @@
 %% ===========================================================================
 \FloatBarrier
-\section{Parameter identification, positioning and limitations}
+\section{Parameter identification and limitations}
 \label{sec:calibration}
 %% ===========================================================================
 
 Four parameters are supplied by no constitutive table: the window size $a$,
 the fractional order $\alpha$, the relaxation time $\tau$ and the flexoelectric
-coefficient $\mu$. This section states how each is obtained, what the model adds
-to the literature it builds on, and over which ranges the results hold.
+coefficient $\mu$. This section states how each is obtained from a separate
+observable and over which ranges the results of Sec.~\ref{sec:results} hold, so
+that a reader can tell a measured input from an assumed one.
 
 \FloatBarrier
 \subsection{Measurement routes for the four parameters}
@@ -118,7 +119,7 @@ EnelundLesieutre1999} supply the broad relaxation spectrum, in mechanical
 settings that have no strain gradient and no electrodes. What this paper adds
 is the combination and the two consequences of the combination: the window
 enters as a tensor that can be measured from a microstructure, the memory
-matrix becomes an explicit modelling choice with a measurable consequence
+matrix becomes an explicit modeling choice with a measurable consequence
 ($0.450$ on the damping ratio at $\alpha=1$), and the coupling factor of a
 strain-gradient electromechanical strip is separated into a material property
 ($0.5581$, thickness independent) and a size effect (a factor $24$).
@@ -127,7 +128,7 @@ strain-gradient electromechanical strip is separated into a material property
 \subsection{Validity window}
 \label{sec:limit_window}
 
-Three inequalities bound the results, and each is a modelling assumption rather
+Three inequalities bound the results, and each is a modeling assumption rather
 than a numerical tolerance.
 
 \begin{enumerate}
@@ -155,7 +156,7 @@ than a numerical tolerance.
 \label{sec:limitations}
 
 The formulation is two-dimensional with a plane-stress reduction, which is a
-modelling choice: plane strain would change the extensional coupling to
+modeling choice: plane strain would change the extensional coupling to
 $0.5132$, and the three-dimensional solution differs from both, so the
 thin-strip results of Sec.~\ref{sec:thickness} are two-dimensional results. Of
 the inputs, two are not material constants of this crystal. The density
