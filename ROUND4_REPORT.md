@@ -98,3 +98,12 @@ token; the existing 3 independently reproduced claims / 11 JSON-traceable
 claims / 5 inputs distinction is retained. The audit does not turn the eleven
 solver-dependent claims into independent experiments or analytical validations.
 Gates: **70/70 PASS; 102/102, zero stale hits** (task4 logs).
+
+## Task 5 — conclusions
+
+`sec/09_conclusions.tex`: added a short model summary; combined window shape
+and orientation into one finding to give **six bulleted findings**. Retained
+all numerical findings, including the mesh convergence result. Condensed the
+closing design/use/limitations discussion, preserving the electrode comparison
+and 2.8% kinematic limitation. No change to the assumed operating range.
+Gates: **70/70 PASS; 102/102, zero stale hits** (task5 logs).
