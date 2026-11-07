@@ -214,12 +214,7 @@ read with that difference in mind.
 \subsection{Solution procedure}
 \label{sec:algorithm}
 
-The steps that produce every number in this paper are the following.
-
-\begin{center}
-\fbox{\begin{minipage}{0.95\textwidth}
-\small
-Algorithm 1. Assembly, condensation and solution for one geometry.
+For each geometry, assembly, condensation and solution proceed as follows.
 \begin{enumerate}
 \item Build the material record of Table~\ref{tab:params} for the poling axis
   of the configuration and reduce it to plane stress with
@@ -250,11 +245,9 @@ Algorithm 1. Assembly, condensation and solution for one geometry.
 \item Extract the damping ratio from two successive peaks with
   \eqref{eq:zeta}; for $\alpha<1$ report the first-period decrement instead.
 \end{enumerate}
-\end{minipage}}
-\end{center}
 
 \FloatBarrier
-\subsection{Implementation remarks}
+\subsection{Conditioning and cost}
 \label{sec:implementation}
 
 Two properties of the implementation govern both cost and accuracy. The
