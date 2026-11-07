@@ -141,6 +141,11 @@ python3 python/run_all.py
 * **Figure rendering at press size.** The defects above were judged on 150 dpi
   raster copies; whether 6 pt labels survive the final two-column reduction is a
   typesetting question this environment cannot answer.
+* **Seven figures were not re-opened at 150 dpi in this pass.** F1, F2, F7,
+  F8, F9, FB1 and FB2 were reviewed in round 1 and are unchanged here except for
+  the `\rm` → `\mathrm` conversion of their math labels; no defect was reported
+  for them then. The four figures whose content changed (F3, F4, F5, F6, F11)
+  were opened and re-checked after each edit.
 * **The 2 % stack sensitivity of the design map's lower endpoints** is measured,
   not eliminated. Single-threaded, the map's smallest coupling is 3.608e-6;
   multi-threaded it is 3.687e-6, i.e. the second significant digit moves. The
