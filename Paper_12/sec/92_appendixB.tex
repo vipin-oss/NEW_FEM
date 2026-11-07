@@ -49,20 +49,38 @@ $48\times4$ mesh and 143.8\,\si{\kilo\hertz} from Euler--Bernoulli theory.
 The two-dimensional reduction is quantified in the same record: the
 plane-stress coupling differs from the three-dimensional value by $2.8\,\%$,
 which is the size of the modelling error that the reduction introduces and the
-reason the two reductions are not used interchangeably. Two of the independent
-values are worth naming here because they are used in the discussion of the two
-configurations. The pairing of the poling-$x$ modulus with the poling-$y$
-permittivity -- the hybrid that a careless table would produce -- gives a
-coupling strength of $6.34\times10^{-4}$, which is rejected by the finite
-element value, and the damping ratio of the element at $\alpha=0.3$ and
-$\omega\tau=0.3$ is $0.108$, against a peak of $0.179$ at $\alpha=0.7$.
+reason the two reductions are not used interchangeably. Of the independent
+values, the damping ratio of the element at $\alpha=0.3$ and $\omega\tau=0.3$
+is $0.108$, against a peak of $0.179$ at $\alpha=0.7$
+(Sec.~\ref{sec:memorystudy}).
+
+Two rows of Table~\ref{tab:verification} are comparisons rather than exact
+identities. The order of convergence is the least-squares slope of
+$\log|u_R/u_{\rm ref}-1|$ against $\log h$, with $h=L/n_x$ halved over the
+four meshes $5\times1$, $10\times2$, $20\times4$ and $40\times8$ of the
+gradient-free benchmark of Sec.~\ref{sec:verification}; the slope over all
+four is 1.68 and the finest pair alone gives 2.01, so the sequence is entering
+its asymptotic range from the coarse end. The expected rate for the bicubic
+Hermite rectangle is $O(h^{4})$ in $L^2$ and $O(h^{3})$ in $H^1$ on a smooth
+solution, and a linear functional such as $u_R$ converges at least as fast as
+the energy norm; the requirement is the empirical slope above 1.5, and no
+theoretical exponent is claimed beyond that bound. The extensional coupling is
+compared across the two reductions of the same mode on the same $24\times2$
+mesh: $0.4024$ in plane strain against $0.4580$ in plane stress, the difference
+being the elastic reduction itself, which stiffens the section and lowers
+$k^{2}=e^{2}/(C\kappa)$; it is a property of the model, not a convergence
+error.
 
 Table~\ref{tab:convergence} is the convergence study behind
 Fig.~\ref{fig:convergence}. The frequency of the extensional mode and its
-mode-free coupling factor are listed for four meshes; both quantities are
-converged to better than $0.05\,\%$ on the $48\times4$ mesh used in the paper,
-and the $24\times2$ mesh used for the parameter sweeps differs from it by
-$0.04\,\%$ in frequency and $0.03\,\%$ in coupling.
+mode-free coupling factor are listed for four meshes, with the errors referred
+to the $48\times4$ mesh used in the paper: the coarser $24\times2$ mesh of the
+parameter sweeps differs from it by $0.04\,\%$ in frequency and by
+$0.03\,\%$ in the coupling factor, and the other two rows by less. None of
+the four rows is a clamped strip; the
+clamped strip is the $96\times4$ against $48\times4$ entry of
+Table~\ref{tab:verification}, whose coupling factors differ by
+$6.2\times10^{-4}$ relative.
 
 \input{table_convergence}
 

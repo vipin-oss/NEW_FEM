@@ -301,6 +301,9 @@ def main():
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 10.0 and r["shape"] == "cuboid"
                   and r["theta_deg"] == 90.0][0]["f1_kHz"], "{:.1f}"))
+    R.append(row("application, k2 extensional plane strain", "0.4024",
+                 "application_table.json rows[2].k2",
+                 g("application_table.json.rows.2.k2"), "{:.4f}"))
     R.append(row("application, k2 extensional plane stress", "0.4580",
                  "application_table.json rows[3].k2",
                  g("application_table.json.rows.3.k2"), "{:.4f}"))
@@ -430,12 +433,9 @@ def main():
     R.append(row("axes, kappa11/kappa33", "39",
                  "independent F5 kappa_ratio_11_over_33",
                  F5["kappa_ratio_11_over_33"], "{:.0f}"))
-    R.append(row("pairing, the hybrid x", "6.34",
-                 "independent F5 x_hybrid x1e4",
-                 F5["x_hybrid_9p55_kappa33"] * 1e4, "{:.2f}"))
-    R.append(row("pairing, distance from the FEM value", "77",
-                 "independent F5 hybrid_vs_fem_rel x100",
-                 100 * F5["hybrid_vs_fem_rel"], "{:.0f}"))
+    # the cross-paired value is still computed and archived in
+    # independent_checks.json; the paper no longer quotes it, so there is no
+    # literal to audit (the pairing rule is stated once, in Sec. 4.2)
     R.append(row("independent, flexo x, uniform curvature", "3.570415",
                  "independent F3 x_analytic x1e4",
                  J(I)["F3_flexo_curvature"]["x_analytic"] * 1e4, "{:.6f}"))
@@ -501,6 +501,18 @@ def main():
                  "sqrt(2)-1", mm["alpha"]["0.5"][1], "{:.6f}", rel_tol=1e-5))
     R.append(row("worked, L1 weight b2 at alpha=0.7", "0.159245",
                  "3^0.3-2^0.3", mm["alpha"]["0.7"][2], "{:.6f}", rel_tol=1e-4))
+
+    # ---- Table B.1: the two rows that are comparisons rather than identities
+    _cg = J("verification.json")["convergence"]["rows"]
+    import math as _math
+    R.append(row("verification table, order on the finest mesh pair", "2.01",
+                 "verification.json convergence rel_err[2]/rel_err[3]",
+                 _math.log2(_cg[2]["rel_err"] / _cg[3]["rel_err"]), "{:.2f}"))
+    _kf = J("k2_closed_form.json")["fem"]
+    R.append(row("verification table, clamped 96x4 vs 48x4, relative", "6.2e-4",
+                 "k2_closed_form.json fem clamped 96x4 / 48x4 - 1",
+                 abs(_kf["FEM clamped 96x4"] / _kf["FEM clamped 48x4"] - 1.0),
+                 "{:.1e}"))
 
     # ---- the design map of Fig. 12 (results/design_map.json)
     dm = J("design_map.json")

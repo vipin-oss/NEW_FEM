@@ -6,28 +6,28 @@ No TeX in this environment, so nothing here is compiled. Text width 481.9 pt, te
 |---|---|---|---|
 | body figures | 11 | 3120 | 4.37 |
 | body tables | 6 | 884 | 1.24 |
-| body prose and display maths | 14139 words | 12819 | 17.95 |
+| body prose and display maths | 14146 words | 12823 | 17.95 |
 | appendix figures | 0 | 0 | 0.00 |
 | appendix tables | 4 | 721 | 1.01 |
-| appendix prose |  | 1094 | 1.53 |
+| appendix prose |  | 1215 | 1.70 |
 | reference list | 68 entries | 2543 | 3.56 |
-| **sum** | | **21181** | **29.65** |
+| **sum** | | **21305** | **29.83** |
 
 ## Where the body stands
 
 | | body content | pages of area |
 |---|---|---|
-| this revision | 16823 pt | 23.55 |
+| this revision | 16826 pt | 23.56 |
 | `47a21a3` | 16342 pt | 22.88 |
-| **change** | **+481 pt** | **+0.67** |
+| **change** | **+484 pt** | **+0.68** |
 
-Package content: 22471 -> 21181 pt (31.46 -> 29.65 pages).
+Package content: 22471 -> 21305 pt (31.46 -> 29.83 pages).
 
 ## From area to pages
 
 The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page of area costs 1.08 printed pages -- floats leave gaps that cannot be filled.
 
-**Estimated PDF now: 32.0 pages (target 30, previous 34).** To reach 30 another 1354 pt = 1.9 pages of area has to go.
+**Estimated PDF now: 32.2 pages (target 30, previous 34).** To reach 30 another 1478 pt = 2.1 pages of area has to go.
 
 ## Biggest items now
 
@@ -49,7 +49,7 @@ The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page
 | Introduction | 1326 | 1.66 |
 | Formulation | 2455 | 3.77 |
 | Particular cases | 761 | 0.94 |
-| Boundary conditions | 888 | 1.20 |
+| Boundary conditions | 895 | 1.21 |
 | Finite element formulation | 1608 | 2.27 |
 | Numerical results and discussion | 5034 | 5.60 |
 | Parameter identification, positioning and limitations | 1278 | 1.53 |
@@ -62,7 +62,7 @@ The last counted PDF (`47a21a3`) was 34 pages for 31.46 pages of area, so a page
 
 ## Levers, measured but **not applied** (round 20 was scope-locked)
 
-To reach 30 pages, 1354 pt of area (1.9 pages) has to go. Ranked by what each is worth:
+To reach 30 pages, 1478 pt of area (2.1 pages) has to go. Ranked by what each is worth:
 
 | lever | saves | pages | cost to the paper |
 |---|---|---|---|

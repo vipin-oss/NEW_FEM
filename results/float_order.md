@@ -4,7 +4,7 @@
 |---|---|---|---|
 | `tab:comparison` | 1 | sec/01_introduction.tex:122 | sec/01_introduction.tex:107 |
 | `tab:params` | 2 | sec/02_formulation.tex:400 | sec/02_formulation.tex:255 |
-| `fig:geometry` | 1 | sec/02_formulation.tex:433 | sec/02_formulation.tex:370 |
+| `fig:geometry` | 1 | sec/02_formulation.tex:434 | sec/02_formulation.tex:370 |
 | `fig:convergence` | 2 | sec/06_results.tex:64 | sec/06_results.tex:46 |
 | `fig:fields` | 3 | sec/06_results.tex:135 | sec/06_results.tex:115 |
 | `tab:worked` | 3 | sec/06_results.tex:225 | sec/06_results.tex:144 |
@@ -20,7 +20,7 @@
 | `fig:ringdown` | 11 | sec/06_results.tex:753 | sec/06_results.tex:725 |
 | `tab:application` | 6 | sec/06_results.tex:779 | sec/06_results.tex:765 |
 | `tab:verification` | B.1 | sec/92_appendixB.tex:34 | sec/92_appendixB.tex:14 |
-| `tab:convergence` | B.2 | sec/92_appendixB.tex:102 | sec/06_results.tex:53 |
+| `tab:convergence` | B.2 | sec/92_appendixB.tex:121 | sec/06_results.tex:53 |
 | `tab:closedform` | C.1 | sec/93_appendixC.tex:22 | sec/93_appendixC.tex:9 |
 | `tab:ringdown` | C.2 | sec/93_appendixC.tex:52 | sec/06_results.tex:739 |
 

@@ -446,14 +446,13 @@ def write_latex(F1, F2, F3, F4, F5):
         L.append(f"{r['configuration']} & {_num(r['C_xx'])} & "
                  f"{_num(r['kappa_y'])} & {_num(r['V'])} & "
                  f"{_num(r['x_fem'])}@@ROW@@")
-    L.append("Step-3 modulus with $@@BS@@kappa_{33}$ (no configuration) & "
-             f"{_num(9.55e10)} & {_num(4.9583e-10)} & -- & "
-             f"{_num(F5['x_hybrid_9p55_kappa33'])}@@ROW@@")
+    # the cross-paired (poling-x modulus, poling-y permittivity) value is
+    # computed and archived in the JSON; it is not tabulated in the paper
     L += ["@@BS@@bottomrule", "@@BS@@end{tabular}"]
     txt = "\n".join(L) + "\n"
     txt = txt.replace("@@BS@@", BS).replace("@@ROW@@", ROW)
-    with open(os.path.join(ROOT, "Paper_12", "table_independent.tex"), "w") as fh:
-        fh.write(txt)
+    # Paper_12/table_independent.tex is not part of the manuscript (archive only);
+    # the values stay in the JSON.
 
 
 def write_axes(F1, F3, F5):
@@ -513,8 +512,8 @@ def write_axes(F1, F3, F5):
          "@@BS@@bottomrule", "@@BS@@end{tabular}"]
     txt = "\n".join(L) + "\n"
     txt = txt.replace("@@BS@@", BS).replace("@@ROW@@", ROW)
-    with open(os.path.join(ROOT, "Paper_12", "table_axes.tex"), "w") as fh:
-        fh.write(txt)
+    # Paper_12/table_axes.tex is not part of the manuscript (archive only);
+    # the values stay in the JSON.
 
 
 def main():
