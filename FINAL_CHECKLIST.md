@@ -54,37 +54,38 @@ i.e. **−0.3 page**; the move buys tidy body pages, not a shorter appendix.
 
 | gate | result |
 |---|---|
-| `python/run_all.py` | **62/62 checks pass** (8 min) |
-| `python/check_paper_numbers.py` | **90/90** claims agree with their JSON, 0 stale-token hits of 12 |
-| `python/check_final_consistency.py` | **57/57** numbers in abstract, conclusion, Highlights and captions traced, 0 untraced (N5) |
+| `python/run_all.py` | **70/70 checks pass** (~14 min full, ~25 s incremental) |
+| `python/check_paper_numbers.py` | **102/102** claims agree with their JSON, 0 stale-token hits of 20 |
+| `python/check_final_consistency.py` | **48/48** numbers in abstract, conclusion, Highlights and captions traced, 0 untraced (N5) |
 | `python/check_coupling_provenance.py` | 10/10, every coupling factor equals its archive entry |
 | `python/run_dt_study.py` | 0.150111 / 0.150057 / 0.150029 vs 0.150000, order **0.97** |
-| `python/check_float_order.py` | order agrees, 10 figures, 6 body tables, 9 Appendix-C tables |
+| `python/check_float_order.py` | order agrees, 12 figures, 6 body tables, 2 Appendix-B tables, 2 Appendix-C tables |
 | `python/check_paper_structure.py` | nothing to report; no missing graphic or `\input` |
-| `python/list_unverified.py` | 29 entries, 0 stale |
+| `python/list_unverified.py` | 28 entries, 0 stale |
 | `python/audit_abstract_claims.py` | 0 uncovered tokens |
-| `Paper_12/check_refs.py` | 62 entries, 0 field mismatches, Crossref offline |
-| `python/length_budget.py` (new) | 33.7 estimated pages, see §5 |
+| `Paper_12/check_refs.py` | not run by request; `results/reference_audit.md` untouched |
+| `python/length_budget.py` (new) | area budget; 35 pages measured by static Tectonic, see §5 |
 
-## 5. UNVERIFIED — no TeX distribution and no network in this environment
+## 5. UNVERIFIED — no full TeX Live; offline static Tectonic diagnostic
 
 | item | status |
 |---|---|
-| **Compilation** | offline Tectonic diagnostic: 33 pages, 0 undefined references, no doubled appendix or run-in heading. The mandated `pdflatex → bibtex → pdflatex ×2` sequence has not been executed on this tree (no full TeX Live) |
-| **Page count** | **not measured.** Estimated at **33.7 pages** (34 before) by `python/length_budget.py` → `results/length_budget.md`: every figure height from its PDF box and `width=`, every table from its row count, the reference list from 68 entries, and the gap factor (1.08 printed pages per page of area) calibrated on the last counted PDF. Body content fell by **744 pt = 1.04 page of area**, but the three tables moved into Appendix C reappear there, so the package total falls only 203 pt. **≤ 30 is not reached**: about 2440 pt = 3.4 pages of area still has to go, and the model carries ~1 page of error |
+| **Compilation** | offline static Tectonic diagnostic: 35 pages, 0 undefined references, no doubled appendix, no `..` or run-in heading. The mandated `pdflatex → bibtex → pdflatex ×2` sequence has not been executed on this tree (no full TeX Live) |
+| **Page count** | **35 pages** measured by the offline static Tectonic diagnostic. `python/length_budget.py` estimates 37.4 pages of area with ~1 page of error and is not a substitute for the mandated full TeX sequence. The 30-page target is not reached; see §6 for the unapplied levers |
 | **On which page each float lands** | not measured; `check_float_order.py` verifies citation *order*, not page placement |
 | **Overfull/underfull boxes** | not measured; the height of the new five-column `tab:coupling` and of the three tables moved to Appendix C is untested |
-| **DOI resolution** | not checked: Crossref unreachable. `fem1` (10.1016/j.finel.2026.104681) and the 15 `UNVERIFIED` entries are unchecked, not confirmed |
+| **DOI resolution** | six entries were resolved against Crossref; fifteen entries carry visible `UNVERIFIED` notes. `fem1` (10.1016/j.finel.2026.104681) is flagged because its publisher record was not checked offline; `Gupta2026Rayleigh` is flagged for the FEM-1 list 2024 versus Crossref published-print 2026 mismatch; the printed year is retained |
 | **Typeset heading of `\paragraph`** | the 21 trailing periods were removed in round 19 on the evidence of the author's compiled PDF; the result has not been compiled here |
 
 ## 6. What would get to 30 pages, measured and not done
 
-Ranked by area, from `results/length_budget.md`. None of these is in round 20:
-the brief named the levers and forbade others.
+Ranked by area, from the final `results/length_budget.md`. None of these was
+applied in Round 3; the brief named the levers and forbade others. The current
+estimate is **37.4 pages**, with 4881 pt = 6.8 pages of area still to remove.
 
 | lever | saves | cost |
 |---|---|---|
-| Appendix B to a supplementary file (verification 666 pt, independent 420 pt, sensitivity, mode shapes) | **2.3 pages** | the verification table is the evidence of Sec. 6.1 |
-| Secs. 2 and 5 tightened by a quarter (1936 + 1322 words, never shortened) | 1.0 page | prose only, no result touched |
-| all ten body figures at `0.85\textwidth` instead of the present 0.72–1.0 | 0.7 page | smaller axes; no figure removed |
-| `tab:verification` at `\footnotesize` | 0.2 page | 54 rows at 9 pt |
+| Secs. 2 and 5 tightened by a quarter (1194 pt) | **1.7 pages** | prose only, no result touched |
+| all twelve body figures at `0.85\\textwidth` instead of the present 0.72–1.0 (512 pt) | 0.7 page | smaller axes; no figure removed |
+| Appendix B to a supplementary file (4 floats, 238 pt) | 0.3 page | the verification table is the evidence of Sec. 6.1 |
+| `tab:verification` at `\\footnotesize` with tighter rules (48 pt) | 0.1 page | 54 rows at 9 pt |

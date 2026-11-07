@@ -1,6 +1,6 @@
 # Piezoelectric and flexoelectric coupling on the same bending mode
 
-Poling $y$, electrodes on the long faces (gap $h$), 48$\times4$ mesh, $L=\SI{200}{\micro\metre}$, window half-widths $3\times\SI{1}{\micro\metre}$, $\mu=10^{-6}$ C/m.
+Poling $y$, electrodes on the long faces (gap $h$), 48$\times4$ mesh, $L=\SI{200}{\micro\meter}$, window half-widths $3\times\SI{1}{\micro\meter}$, $\mu=10^{-6}$ C/m.
 
 | $h$ [µm] | $k^2$ piezo only | $k^2$ flexo only ($e=0$) | $k^2$ both (as reported) | piezo share | both/flexo $-1$ |
 |---|---|---|---|---|---|

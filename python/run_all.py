@@ -20,7 +20,7 @@ Runs, in order:
     run_demos.py           the thickness sweep (optional)
     run_paper_figures.py   the paper figure set (optional)
     check_paper_numbers.py N1 every number in the manuscript (optional)
-    check_paper_structure.py   manuscript structure; no full TeX Live (opt.)
+    check_paper_structure.py   manuscript structure; static Tectonic (opt.)
 then applies the pass/fail criteria below to the generated JSON and writes
 results/SUMMARY.md and results/summary.json.
 

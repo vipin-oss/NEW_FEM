@@ -29,7 +29,7 @@ One model (48$\times4$, poling $y$, electrodes on the long faces, $\mu=10^{-6}$ 
 | py3.11.2 np2.4.6 sp1.17.1 | QZ (eig, general) | 4.17288e-03 | -0.034 | 1.74373e-04 | -4.25e-06 | 23.93 |
 | py3.11.2 np2.4.6 sp1.17.1 | numpy eig, all modes | 4.17082e-03 | -0.084 | 1.74373e-04 | -3.75e-06 | 23.92 |
 | py3.11.2 np2.4.6 sp1.17.1 | dense eigh, 12 modes | 7.66536e-03 | +83.632 | 3.03405e-04 | +7.40e+01 | 25.26 |
-| py3.11.2 np2.4.6 sp1.17.1 | sparse eigsh, 12 modes | 7.67537e-03 | +83.872 | 3.03404e-04 | +7.40e+01 | 25.30 |
+| py3.11.2 np2.4.6 sp1.17.1 | sparse eigsh, 12 modes | 7.67535e-03 | +83.871 | 3.03404e-04 | +7.40e+01 | 25.30 |
 
 The h = 1 um value is the least reproducible number in the paper: it is a small difference of two nearly equal eigenvalues of a pencil with condition $\sim10^{12}$, so it inherits the eigenvector accuracy of the stack.  Two significant digits (4.2e-3, growth 24) are stable across every row of this table; the fourth digit is not, which is why the manuscript quotes two.
 

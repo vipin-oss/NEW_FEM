@@ -1,5 +1,5 @@
 {
- "n": 28,
+ "n": 35,
  "rows": [
   {
    "literal": "24",
@@ -24,6 +24,48 @@
    "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
    "source": "abstract_audit.json",
    "why": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
+  },
+  {
+   "literal": "0.09",
+   "what": "thickness independence of the mode-free extensional coupling",
+   "source": "abstract_audit.json",
+   "why": "T1: the same FEM sweep; the closed form is thickness independent but the 0.09 % residual is a solver property"
+  },
+  {
+   "literal": "3.6",
+   "what": "smallest flexoelectric coupling on the design map",
+   "source": "abstract_audit.json",
+   "why": "design_map.json range k2_flexo_min, quoted to two significant digits (N1)"
+  },
+  {
+   "literal": "1.0",
+   "what": "largest flexoelectric coupling on the design map",
+   "source": "abstract_audit.json",
+   "why": "design_map.json largest k2_flexo, quoted to two significant digits (N1)"
+  },
+  {
+   "literal": "6.5",
+   "what": "smallest flexoelectric/piezoelectric ratio on the design map",
+   "source": "abstract_audit.json",
+   "why": "design_map.json range ratio_min, quoted to two significant digits (N1)"
+  },
+  {
+   "literal": "1.9",
+   "what": "largest flexoelectric/piezoelectric ratio on the design map",
+   "source": "abstract_audit.json",
+   "why": "design_map.json range ratio_max, quoted to two significant digits (N1)"
+  },
+  {
+   "literal": "0.1",
+   "what": "the 0.1 % contour on the design map",
+   "source": "abstract_audit.json",
+   "why": "design_map.json 0.1 % contour; a threshold of the solved map (N1)"
+  },
+  {
+   "literal": "5.5",
+   "what": "thickness of the 0.1 % crossing at a2 = 1 micrometer",
+   "source": "abstract_audit.json",
+   "why": "design_map.json threshold h_at_0p1pct_a2_1um, quoted to two significant digits (N1)"
   },
   {
    "literal": "6721.8",
@@ -99,7 +141,7 @@
   },
   {
    "literal": "0.999",
-   "what": "lowest MAC of mode 1 against the $h=\\SI{10}{\\micro\\metre}$ shape",
+   "what": "lowest MAC of mode 1 against the $h=\\SI{10}{\\micro\\meter}$ shape",
    "source": "mode_tracking.json",
    "why": "an FEM eigenvector overlap; the reference is another FEM eigenvector"
   },
@@ -111,25 +153,25 @@
   },
   {
    "literal": "210.4",
-   "what": "$f_1$ at $h=\\SI{10}{\\micro\\metre}$ [kHz]",
+   "what": "$f_1$ at $h=\\SI{10}{\\micro\\meter}$ [kHz]",
    "source": "demo.json flexo_thickness[0]",
    "why": "FEM eigen-solve; the Euler--Bernoulli value is the one quoted as the comparison, not as this number"
   },
   {
    "literal": "-1.96",
-   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{10}{\\micro\\metre}$",
+   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{10}{\\micro\\meter}$",
    "source": "demo.json flexo_thickness (finite differences)",
    "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
   {
    "literal": "-1.52",
-   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{5}{\\micro\\metre}$",
+   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{5}{\\micro\\meter}$",
    "source": "demo.json flexo_thickness (finite differences)",
    "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
   {
    "literal": "-0.43",
-   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{2}{\\micro\\metre}$",
+   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{2}{\\micro\\meter}$",
    "source": "demo.json flexo_thickness (finite differences)",
    "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },

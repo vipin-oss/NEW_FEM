@@ -1,7 +1,7 @@
 """Page budget for the manuscript, measured from the sources.
 
 No full TeX Live is installed in this environment; an offline static Tectonic
-diagnostic compiles the manuscript separately and reports 34 pages.  The count
+diagnostic compiles the manuscript separately and reports 35 pages.  The count
 below is an area *budget*, not a measurement: every figure's height follows
 from its PDF box and its ``width=`` option, every table's height from its row
 count, and the prose from its character count.  The one unknown, how much a
@@ -211,7 +211,8 @@ def main():
     old = measure(rev) if rev else None
     tot = total(cur)
     lines = ["# Page budget (estimate, not a measurement)", "",
-             "No TeX in this environment, so nothing here is compiled. Text width "
+             "No full TeX Live here; an offline static Tectonic diagnostic compiles "
+             "separately. Text width "
              "%.1f pt, text height %.1f pt, %.0f characters per line, %.0f pt per line; "
              "figure heights from each PDF's MediaBox and its `width=` option, table "
              "heights from row counts." % (TEXTWIDTH, TEXTHEIGHT, CHARLINE, LINESKIP), ""]

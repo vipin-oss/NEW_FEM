@@ -11,4 +11,4 @@ Same 48x4 mesh topology at every thickness; bending configuration (poling y, thr
 
 Minimum MAC: 0.999186; largest off-diagonal MAC: 2.24e-06; smallest f2/f1: 6.21.
 
-A MAC of 1 means the same shape; the off-diagonal entries stay at round-off, so the tracked mode is not drifting towards a neighbour, and f2/f1 stays above 2, so no crossing is approached.
+A MAC of 1 means the same shape; the off-diagonal entries stay at round-off, so the tracked mode is not drifting towards a neighbor, and f2/f1 stays above 2, so no crossing is approached.

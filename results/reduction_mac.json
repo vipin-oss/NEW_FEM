@@ -66,5 +66,5 @@
    0.9999823016604745
   ]
  ],
- "note": "MAC = |phi_a^T M phi_b|^2 with M-normalised eigenvectors of the short-circuit problem; 1 means the same shape"
+ "note": "MAC = |phi_a^T M phi_b|^2 with M-normalized eigenvectors of the short-circuit problem; 1 means the same shape"
 }

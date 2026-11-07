@@ -13,9 +13,10 @@ Two stages:
 * **Stage 2** — the edit made for each confirmed row, and the re-run that
   backs it.
 
-Everything marked UNVERIFIED was not measured: there is no TeX distribution in
-this environment, so nothing about compilation, page count, float placement,
-overfull boxes or rendered reference numbering has been observed.
+Everything marked UNVERIFIED was not measured by the mandated full TeX
+sequence. An offline static Tectonic diagnostic now reports 35 pages, 0
+undefined references and no doubled appendix or run-in heading; it remains a
+diagnostic, not a full TeX Live build.
 
 ---
 
@@ -57,7 +58,7 @@ search-and-replace.
 | C3 | equation (27) text, table row 100 vs 24 | **not confirmed in round 18; confirmed and fixed in round 19.** I looked for the pair 100/24 in the thickness table (`tab:C2`), where it is not; it belongs to the worked-example table `tab:worked`, whose "flexoelectric growth" row quoted only the FEM factor 24 while the text claimed the analytic route "gives the factor by which it grows" — that factor is 100, because $x\propto h^{-2}$ | **CONFIRMED** (round 19) | `sec/06_results.tex` "Flexoelectric bending" paragraph and the `tab:worked` row; see the addendum |
 | C4 | a suspicious row of the anisotropy table | **not confirmed.** `table_C1_orientation.tex` is monotone in θ for all three aspect ratios and consistent with the sweep of Fig. 4 | no edit | `Paper_12/table_C1_orientation.tex`, `check_paper_numbers` row "orientation sweep" |
 | C5 | "eight thicknesses" | **disproved as a defect.** The eight are 10, 7, 5, 3.5, 2.7, 2, 1.4, 1 µm, listed once in Table C.2 and matched by the text and the figure | consistent, unchanged | `table_C2_thickness.tex:23–31` |
-| C6 | page count ≤ 30 | **unmeasurable here.** No TeX in the environment. Nothing was cut for length in this round, because a cut made without a page count would be a guess | UNVERIFIED | — |
+| C6 | page count ≤ 30 | **35 pages** by the offline static Tectonic diagnostic; the 30-page target is not reached. Nothing was cut for length in this round | measured, target not met | — |
 
 ---
 
@@ -146,9 +147,9 @@ make_coupling_table.py, check_coupling_provenance.py, run_all.py}`.
 | provenance (new) | `python/check_coupling_provenance.py` | **10/10**, every recomputed row equal to the archive at relative difference 0 |
 | float order | `python/check_float_order.py` | agrees: figs 1–10, **tabs 1–9** (the new table is #3) |
 | structure / labels | `python/check_paper_structure.py` | nothing to report |
-| unverified list | `python/list_unverified.py` | 29 entries, 0 stale |
+| unverified list | `python/list_unverified.py` | 28 entries, 0 stale |
 | abstract claims | `python/audit_abstract_claims.py` | 3 held, 5 not held, 3 inputs, 0 uncovered tokens |
-| references | `Paper_12/check_refs.py` | 68 entries, 47/58 FEM-1 references carried, 0 field mismatches; Crossref offline, 62 unchecked |
+| references | `Paper_12/check_refs.py` | not run by request in Round 3; 6 Crossref-resolved entries, 15 visible `UNVERIFIED` notes, `results/reference_audit.md` untouched |
 
 `run_all.py` now also runs `coupling_provenance.py → make_coupling_table.py →
 check_coupling_provenance.py` and gates the result as **N4**.
@@ -157,17 +158,18 @@ check_coupling_provenance.py` and gates the result as **N4**.
 
 ## UNVERIFIED
 
-* **Compilation, page count, float placement, overfull boxes.** No TeX
-  distribution in this environment. The paper was **not** compiled, and the
-  30-page target is unmeasured.
+* **Compilation, page count, float placement, overfull boxes.** No full TeX
+  Live in this environment. The offline static Tectonic diagnostic compiles the
+  paper to 35 pages with 0 undefined references; the mandated full sequence,
+  float page placement and overfull-box list remain unobserved.
 * **The new table has never been typeset.** Seven columns at `\footnotesize`
   may still be too wide; `\small` or a landscape float is the fallback.
 * **Rendered reference numbers.** `elsarticle-num` numbers by citation order,
   so "[62]" in the brief cannot be confirmed to be the Gupta entry in the
   typeset output; the *entry* is exactly as specified.
-* **DOI resolution** for `fem1` (10.1016/j.finel.2026.104681) and for the 15
-  entries carrying `UNVERIFIED`: Crossref is unreachable, so they are
-  unchecked, not confirmed.
+* **DOI resolution** for `fem1` and the 15 entries carrying `UNVERIFIED`:
+  six entries were resolved against Crossref; the rest remain unchecked, not
+  confirmed. `Gupta2026Rayleigh` carries the 2024/2026 year-mismatch flag.
 * ~~**C3**~~ — reproducible after all, and fixed in round 19 (see the addendum
   at the end); **C4** could not be reproduced in the current files and was
   therefore not edited.
@@ -195,8 +197,9 @@ sites:
 | `Paper_12/sec/91_appendixA.tex` | 24, 37, 46, 56, 67, 79 (6) |
 
 `grep -c '\\paragraph{[^}]*\.}'` over `main.tex` and `sec/*.tex` is **0** after
-the edit. **The typeset heading output is UNVERIFIED**: there is no TeX here, so
-the only evidence for the class behavior is the PDF the author compiled. If the
+the edit. **The typeset heading output is UNVERIFIED**: the offline static Tectonic
+diagnostic checks for run-in headings, but the only visual evidence for the
+class behavior is the PDF the author compiled. If the
 class turns out to print no terminator at all, the fix is to restore the 21
 periods, which is a one-line `sed`.
 
@@ -230,8 +233,8 @@ they already held `x_analytic_h10 = 3.57041e-4` and `growth = 23.935`.
 | **defect found and fixed** | the file ended with `}}`: **595 opening and 596 closing braces**, a stray brace left by the round-18 `fem1` replacement (it is present in `8c07ba8` and absent in `2a88232`). BibTeX would have had to recover from it; it is removed, and the braces now balance 595/595 |
 | "nanos" | one hit in the whole repository, `nanostructures` (`sec/01_introduction.tex:67,110`), which is a word and not a unit. Nothing to fix |
 
-`Paper_12/check_refs.py` re-run: 68 entries, 47/58 FEM-1 references carried,
-0 field mismatches (Crossref still offline).
+`Paper_12/check_refs.py` is not run in Round 3 by request; six entries were
+resolved against Crossref and 15 visible `UNVERIFIED` notes remain.
 
 ### 4. `tab:coupling` width
 
@@ -273,19 +276,20 @@ $\textwidth\approx470$ pt, i.e. about 0.78 of the text block.
 | `python/check_coupling_provenance.py` | 10/10, table still quotes all 8 rows |
 | `python/check_float_order.py` | agrees: figs 1–10, tabs 1–9 |
 | `python/check_paper_structure.py` | nothing to report |
-| `python/list_unverified.py` | 29 entries, 0 stale |
+| `python/list_unverified.py` | 28 entries, 0 stale |
 | `python/audit_abstract_claims.py` | 0 uncovered tokens |
-| `Paper_12/check_refs.py` | 68 entries, 0 field mismatches |
+| `Paper_12/check_refs.py` | not run by request |
 | `python/run_all.py` | **60/60 checks pass** |
 
 ## Round 19 — UNVERIFIED
 
-* **Compilation, page count, float placement, overfull boxes.** No TeX in this
-  environment. In particular the doubled-period fix is verified only against the
-  compiled PDF the author supplied, not re-compiled here.
+* **Compilation, page count, float placement, overfull boxes.** No full TeX
+  Live in this environment. The offline static Tectonic diagnostic reports 35
+  pages; the doubled-period fix is verified only against the compiled PDF the
+  author supplied and the static heading check.
 * **The heading output of `\paragraph`** after the edit: the class must supply
   the single terminator for the text to read "Window. For half-widths …".
 * **The width of `tab:coupling`**: 370 pt is an estimate from nominal widths,
   not a measurement; and it has still never been typeset.
-* **DOI resolution** for `fem1` and the 15 `UNVERIFIED` entries (Crossref
-  unreachable).
+* **DOI resolution** for `fem1` and the 15 `UNVERIFIED` entries: six entries
+  were resolved against Crossref; the rest remain unchecked.

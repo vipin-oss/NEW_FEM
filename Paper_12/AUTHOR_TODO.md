@@ -65,8 +65,8 @@ that built this repository). Check each against the journal page:
 | `Roundy2003` | `Paper_12/references.bib:722` |
 | `ErturkInman2011` | `Paper_12/references.bib:732` |
 
-`Paper_12/check_refs.py` re-runs the comparison as soon as network access is
-available and rewrites `results/reference_audit.md`.
+`Paper_12/check_refs.py` is not run in Round 3 by request; it would rewrite
+`results/reference_audit.md`, which is intentionally left untouched.
 
 ## 5. Parameters that are nominal, not measured
 
@@ -101,15 +101,15 @@ and the audit file `results/paper_number_audit.md` names the row.
 |---|---|
 | ~~`\cite{fem1}`, `\cite{fem4}`, `\cite{fem5}`~~ | closed in round 18: `fem1` carries the published record and `fem4`/`fem5` are deleted, so no self-citation is incomplete; what remains is to confirm that the DOI of `fem1` resolves (see Sec. 3) |
 | `Kogan1964` | the entry carries `UNVERIFIED` because its volume and pages were taken from memory; it is now cited in the introduction, so check it before submission |
-| every DOI | the reference audit (`python/Paper_12/check_refs.py`) carries 47 of the 58 published FEM-1 references with 0 field mismatches, but no DOI could be resolved: the check runs offline, so "resolves" is unverified, not confirmed |
-| page count | an offline Tectonic diagnostic reports 33 pages with 0 undefined references; the mandated `pdflatex`/`bibtex` sequence, the 28-page limit, the overfull-box list and the page on which each float lands remain to be checked by the author. Compile once and check `\listfiles` |
+| every DOI | six entries were resolved against Crossref; 15 visible `UNVERIFIED` notes remain, including the `fem1` publisher-record flag and the `Gupta2026Rayleigh` 2024/2026 year-mismatch flag |
+| page count | an offline static Tectonic diagnostic reports 35 pages with 0 undefined references; the mandated `pdflatex`/`bibtex` sequence, the 28-page limit, the overfull-box list and the page on which each float lands remain to be checked by the author. Compile once and check `\\listfiles` |
 | verbatim | the abstract is 218 words, the conclusion 250, the five highlights at most 85 characters, but a journal's own counter may differ by a word or two |
 
 ## 9. What round 14 left for the author
 
 | item | why it is still open |
 |---|---|
-| compile | this environment has no TeX, so the page count, the float-vs-citation page numbers and `pdftotext | grep -c "Appendix Appendix"` were not measured here; compile on Overleaf and check the number is 0 |
+| compile | this environment has no full TeX Live; an offline static Tectonic diagnostic reports 35 pages, 0 undefined references and 0 doubled appendix headings. Float-vs-citation page numbers and overfull boxes remain unmeasured; compile on Overleaf and check `Appendix Appendix` is 0 |
 | length | `\linespread` went from 1.3 to 1.0, the parameter list of Sec. 6.1, the benchmark paragraph and the mu caveat were cut, the modulus table moved to Appendix C, and Sec. 6.3 was added: the net effect on the page count is unverified, so compile and, if it is still above 30 pages, the next candidates are Secs. 3 and 4, which have not been shortened |
 | worked subsection | every number in it is produced by `python/worked_example.py` and audited by `check_paper_numbers.py`; if a parameter changes, re-run `python/run_all.py` before touching the text |
 
@@ -143,9 +143,9 @@ the scripts in `python/` and are audited again by
 | B18 | Sec. 6.5 | flexoelectric saturation | kept as a hypothesis, now explicitly labeled as untested | none |
 | B19 | Sec. 1 | four contribution bullets, one of them a protocol | three bullets against the FEM-1/FEM-4/FEM-5 comparison, plus one sentence on which observable fixes each parameter and a statement that joint identifiability was not tested | none |
 
-**Still unverified after round 16.** No TeX distribution is installed here, so
-the page count, the float placement, the overfull boxes and the reference
-resolution were not measured; the typeset equations of A1, A2 and B12 must be
+**Still unverified after round 16.** No full TeX Live is installed here; an
+offline static Tectonic diagnostic now reports 35 pages, but float placement,
+overfull boxes and full reference resolution were not measured; the typeset equations of A1, A2 and B12 must be
 read once on Overleaf. The $\alpha<1$ first-period decrements are dt-converged
 to three digits but are not damping ratios, and no claim beyond that is made.
 
@@ -160,9 +160,10 @@ to three digits but are not damping ratios, and no claim beyond that is made.
 | 4 | Fig. 6 and Fig. 10 (ring-down) | the captions did not say which $\zeta$ is quoted | Fig. 6: the pole ratio is now stated to be a map of the element, not a prediction of the decay, with the ring-down read from the first-period decrement. Fig. 10 and Table C.5: the caption states the exact conversion, that the entry is a damping ratio only at $\alpha=1$, and that it is a first-period decrement otherwise. The plotted curves are unchanged; the figures were regenerated anyway, and the window-figure panel title that said "clamped plate" now says "clamped strip" |
 | 5 | `run_all.py` | `make_paper_table.py` ran before `summary.json` was written, so the verification table lagged one run behind | it is now regenerated after the summary and the two text checks are repeated on the final table, so N1 and N3 grade what is in the package |
 
-**Still unverified after round 17.** No TeX here: compilation, page count,
-float placement and overfull boxes are unmeasured, and the new caption text has
-never been typeset. The $64\,\%$ at $\alpha=0.6$ is a first-period measure of
+**Still unverified after round 17.** No full TeX Live here: the offline static
+Tectonic diagnostic compiles to 35 pages, but float placement, overfull boxes
+and the mandated full sequence remain unmeasured, and the new caption text has
+never been typeset in full TeX. The $64\,\%$ at $\alpha=0.6$ is a first-period measure of
 two curves, not a damping ratio of a fractional element.
 
 ## 12. What round 18 addressed (audit first, then only the confirmed items)
@@ -196,9 +197,10 @@ Items the brief listed that the audit could **not** confirm in the current
 files are recorded as such in `ROUND18_REPORT.md` and were not edited -- except
 C3, which turned out to be reproducible and is addressed in Sec. 13.
 
-**Still unverified after round 18.** No TeX distribution is installed here, so
-compilation, the page count (30 pages, 28 for the letter), float placement,
-overfull boxes and the rendered reference numbering are unmeasured; the new
+**Still unverified after round 18.** No full TeX Live is installed here; the
+offline static Tectonic diagnostic compiles to 35 pages, but float placement,
+overfull boxes, rendered reference numbering and the mandated full sequence
+remain unmeasured; the new
 Table `tab:coupling` has never been typeset and, at seven columns, it may need
 `\small` or a landscape float. DOI resolution for `fem1` is unchecked (offline).
 (Rounds 19 and 20 address the table: it is now five columns at `\small` with no
@@ -211,7 +213,9 @@ addendum). Summary:
 
 | # | item | correction |
 |---|---|---|
-| 1 | run-in headings printed `Window..` | the period inside the braces is removed at all 21 `\paragraph{}` sites (14 in `sec/06_results.tex`, 1 in `sec/07_calibration_limitations.tex`, 6 in `sec/91_appendixA.tex`); the class supplies the single terminator. **The typeset output is unverified** -- no TeX here -- so if the class turns out to print none, restore the 21 periods |
+| 1 | run-in headings printed `Window..` | the period inside the braces is removed at all 21 `\paragraph{}` sites (14 in `sec/06_results.tex`, 1 in `sec/07_calibration_limitations.tex`, 6 in `sec/91_appendixA.tex`); the class supplies the single terminator. **The typeset output is unverified** -- no full TeX Live here; the static
+  diagnostic checks run-in headings -- so if the class turns out to print none,
+  restore the 21 periods |
 | 2 | the flexoelectric growth sentence | it claimed the analytic route "gives the factor by which it grows"; that factor is $100$ ($x\propto h^{-2}$), against $24$ for the finite element, and the FEM value is $2.05$ times below the analytic $x$ at \SI{10}{\micro\meter}. The gap is read as the $3\times1$\,\si{\micro\meter} window averaging the through-thickness gradient, **stated as a hypothesis**. `tab:worked` now reads `100 (h^-2) vs 24 (FEM)` |
 | 3 | `references.bib` | the "part 3: placeholders for self-citations" comment block is deleted (no entry removed: 62 entries, all cited), and a **stray brace** left by the round-18 `fem1` replacement -- the file ended `}}`, 596 closing against 595 opening -- is removed. `nanos` appears only inside `nanostructures`, which is a word, not a unit |
 | 4 | `tab:coupling` width | seven natural-width columns (~540 pt) became six columns at `\small` with two short `p{}` columns (~370 pt estimated); no value changed and N4 still passes 10/10 |
@@ -255,9 +259,9 @@ numbers gate is `python/check_paper_numbers.py` (96/96), the consistency sweep
 | 7 | audit language | no file name, script name, round number or audit word survives in `main.tex`, `sec/`, or the tables |
 
 **Still UNVERIFIED after this pass.**
-1. **Compilation.** No TeX distribution in this environment: page count
-   (estimated 30.2 pages by `python/length_budget.py`), float placement,
-   overfull boxes, and the appearance of the seven-column comparison table are
+1. **Compilation.** No full TeX Live in this environment: the offline static
+   Tectonic diagnostic reports 35 pages, but float placement, overfull boxes,
+   the appearance of the comparison table and the mandated full sequence are
    all unconfirmed.
 2. **DOIs of the seven references added for the introduction** (`Lim2015`,
    `ChenYvonnetYaoPark2021`, `ChenYaoYvonnet2023`, `JoshanSantapuri2024`,

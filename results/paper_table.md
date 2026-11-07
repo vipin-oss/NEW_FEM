@@ -30,7 +30,7 @@
 | zeta(K_uu)/zeta(K_eff) at alpha=1 | 0.450 | in (0, 1) -- the choice matters | `results/memory_variants.json` |
 | KV/Zener modulus at omega*tau = 1, alpha = 1 | 1.345 | > 1.3 (KV unbounded) | `results/memory_variants.json` |
 | FEM k^2 (unconstrained strip) vs 2-D closed form e^T C^-1 e/kappa | 0.56079 vs 0.56079 | rel. diff < 1e-3 | `results/coupling_check.json` |
-| 2-D model vs 3-D free bar (plane-stress reduction) | 2.83 % | < 5 % (documented modelling gap) | `results/coupling_check.json` |
+| 2-D model vs 3-D free bar (plane-stress reduction) | 2.83 % | < 5 % (documented modeling gap) | `results/coupling_check.json` |
 | FEM k^2, clamped strip, 96x4 vs 48x4 | 0.55992 vs 0.55957 | rel. diff < 1e-3 | `results/coupling_check.json` |
 | FEM k^2, clamped strip, 24x2 vs 48x4 | 0.13 % | < 0.5 % (coarse mesh) | `results/coupling_check.json` |
 | lowest MAC of mode 1 vs the h = 10 um shape (4 thicknesses) | 0.99919 | > 0.999 | `results/mode_tracking.json` |
@@ -44,7 +44,7 @@
 | zeta at alpha = 1 vs omega*tau/2 (both omega*tau) | 0.0e+00 | < 1e-9 | `results/?` |
 | flexo x, uniform curvature: FEM energy triple vs 3 mu^2/(C11 h^2 kappa33) | 3.570415e-04 vs 3.570415e-04 | rel. diff < 1e-8 (worst 1.8e-10) | `results/?` |
 | flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33 | 1.9e-13 | < 1e-10 | `results/?` |
-| every number in the abstract has an independent-check verdict | 3 hua / 4 nahi hua / 3 inputs, 10 tokens | 0 uncovered, 0 stale | `results/?` |
+| every number in the abstract has an independent-check verdict | 3 hua / 11 nahi hua / 5 inputs, 19 tokens | 0 uncovered, 0 stale | `results/?` |
 | piezoelectric share of the bending device (poling y, long faces) at every thickness | 5.7e-07 | < 1e-5 (electrically silent bending mode) | `results/?` |
 | flexo growth with and without the piezoelectric terms | 23.9 vs 31.1 | reported 24 (2 s.f.) uses the real crystal; 31 with e = 0, both graded at 1 % | `results/?` |
 | the same bending field, four poling/electrode pairings: only the long faces collect it, and each pairing with its own permittivity | poled y 3.570e-04 vs 3.570e-04; poled x 1.613e-05 vs 1.613e-05; short-face pairs 7.5e-14 V | rel. diff < 1e-6, short-face charge < 1e-12 | `results/?` |
@@ -54,16 +54,16 @@
 | generalized vs Cholesky-standardized pencil, first six modes | 2.3e-04 at h = 1 um (cond K 7.3e+27) | < 1e-3 in w^2: the paper quotes 2 s.f., and this path moves at the 1e-5 level between numeric stacks | `results/?` |
 | L1 weights: b_0 = 1 for every alpha (the 0**0 case) and the cancellation at alpha -> 1 | b_0 ok True, worst rel. error 3.9e-10 | < 1e-8 against a 50-digit Decimal evaluation | `results/?` |
 | time-step independence at alpha < 1: dt, dt/2, dt/4, dt/8 | orders 1.97, 1.50, 0.84, 1.47 | first order: every observed order > 0.8 | `results/?` |
-| modal truncation of the ring-down, 8 and 20 modes against 40 | K_uu 3.0e-04 / 5.1e-05, K_eff 2.0e-14 | 20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-10 | `results/?` |
+| modal truncation of the ring-down, 8 and 20 modes against 40 | K_uu 3.0e-04 / 5.1e-05, K_eff < 1e-12 (measured 2.0e-14) | 20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-12 (round-off bound) | `results/?` |
 | tornado: +/-10 % in mu, rho, a2, tau against the headline numbers | factor 24 -15.0 % for a2 +10 %, flexo k^2 +19.3 % for mu +10 % | reported, not graded: each row is a scaling law or a solver run | `results/memory_variants.json` |
-| environment recorded for this run | python 3.11.2, numpy 2.4.6, scipy 1.17.1, commit 4730213 | a JSON with the versions and the commit exists | `results/?` |
+| environment recorded for this run | python 3.11.2, numpy 2.4.6, scipy 1.17.1, commit 9bcc98f | a JSON with the versions and the commit exists | `results/?` |
 | h = 1 um flexo k^2 over four equivalent solver paths and 4 numeric stacks | spread 0.182 %, k^2 4.1705e-03..4.1781e-03 | < 0.5 % (quoted to 2 s.f.) | `results/?` |
 | the same spread at h = 10 um | 1.16e-05 % | < 1e-3 % | `results/?` |
 | truncating the secular sum to 12 modes is not an alternative | 84 % off | > 50 % (hence the sum runs over all modes) | `results/?` |
-| no quantity replaced in the round-16 audit has come back | 0 hits of 14 forbidden tokens | 0 hits | `results/?` |
+| no quantity replaced in the round-16 audit has come back | 0 hits of 20 forbidden tokens | 0 hits | `results/?` |
 | every coupling factor recomputed and quoted in one row of the coupling table | 10/10 | all, no averaging | `results/?` |
-| every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive | 44/44 traced, 0 untraced | 0 untraced | `results/?` |
-| the list of unverified numbers cites only numbers still in the manuscript | 28 entries, 0 stale | 0 stale | `results/?` |
+| every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive | 48/48 traced, 0 untraced | 0 untraced | `results/?` |
+| the list of unverified numbers cites only numbers still in the manuscript | 35 entries, 0 stale | 0 stale | `results/?` |
 | application table: extensional plane stress is the strongest coupling of the four | 0.4580 | = 0.4580, largest, > 0.4 | `results/?` |
 | piezo k^2 (mode-free) over h = 10 -> 1 um, max/min | 1.0009 | < 1.005 (thickness independent) | `results/demo.json` |
 | piezo k^2, 24x2 vs 48x4, max rel. diff | 5.7e-04 | < 1e-3 | `results/demo.json` |

@@ -2,9 +2,9 @@
 check_paper_structure.py -- what can be checked about the manuscript without a
 TeX installation.
 
-No full TeX Live (`pdflatex`, `bibtex`) is available here; an offline Tectonic
-diagnostic compiles the manuscript separately and reports the page count and
-undefined references.  This file lists everything a compiler would report as an
+No full TeX Live (`pdflatex`, `bibtex`) is available here; an offline static
+Tectonic diagnostic compiles the manuscript separately and reports the page
+count and undefined references.  This file lists everything a compiler would report as an
 error before it reaches the typesetter:
 
   * balanced braces, and no stray $ or unmatched begin/end,
@@ -119,7 +119,7 @@ def main():
     lines = ["# Structural check of Paper_12/main.tex", "",
              "**No full TeX Live is available in this environment.** "
              "An offline static Tectonic diagnostic compiles the manuscript "
-             "to 34 pages with 0 undefined references; the mandated "
+             "to 35 pages with 0 undefined references; the mandated "
              "`pdflatex; bibtex; pdflatex x2` sequence remains to be run by "
              "the author. This file lists what a compiler would have flagged "
              "before typesetting.", "",

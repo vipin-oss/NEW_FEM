@@ -4,7 +4,7 @@ Each row compares a number used in the paper with a value obtained along a route
 
 ## F1 -- fundamental frequency of the elastic strip (e = mu = 0, no gradient term)
 
-$L=\SI{200}{\micro\metre}$, depth $h=\SI{10}{\micro\metre}$, $\rho=\SI{6020}{\kilo\gram\per\cubic\metre}$ (unverified), beam modulus $E_b=1/(\bm C_p^{-1})_{xx}=7.6327e+10$ Pa (a wide plate would use $C^p_{11}=9.5500e+10$ Pa).
+$L=\SI{200}{\micro\meter}$, depth $h=\SI{10}{\micro\meter}$, $\rho=\SI{6020}{\kilo\gram\per\cubic\meter}$ (unverified), beam modulus $E_b=1/(\bm C_p^{-1})_{xx}=7.6327e+10$ Pa (a wide plate would use $C^p_{11}=9.5500e+10$ Pa).
 
 | boundary | closed form | value (kHz) | FEM 48x4 | 96x4 | 128x4 | err vs EB | err vs Timoshenko |
 |---|---|---|---|---|---|---|---|

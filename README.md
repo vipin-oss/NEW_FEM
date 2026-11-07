@@ -86,7 +86,8 @@ available in this environment, so the mirror has never been executed.
 ## Round 12: submission polish
 
 The manuscript in `Paper_12/` is the deliverable; `main.tex` is not compiled in
-this environment (no TeX), and the structural check reports what a compiler
+this environment (no full TeX Live; an offline static Tectonic diagnostic is
+available), and the structural check reports what a compiler
 would have flagged.
 
 - Figures: 14 single-panel figures became 10 in the main text and 1 in

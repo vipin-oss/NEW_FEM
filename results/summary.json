@@ -186,7 +186,7 @@
    "id": "C2",
    "what": "2-D model vs 3-D free bar (plane-stress reduction)",
    "value": "2.83 %",
-   "criterion": "< 5 % (documented modelling gap)",
+   "criterion": "< 5 % (documented modeling gap)",
    "pass": true
   },
   {
@@ -283,7 +283,7 @@
   {
    "id": "A2",
    "what": "every number in the abstract has an independent-check verdict",
-   "value": "3 hua / 4 nahi hua / 3 inputs, 10 tokens",
+   "value": "3 hua / 11 nahi hua / 5 inputs, 19 tokens",
    "criterion": "0 uncovered, 0 stale",
    "pass": true
   },
@@ -353,8 +353,8 @@
   {
    "id": "H4",
    "what": "modal truncation of the ring-down, 8 and 20 modes against 40",
-   "value": "K_uu 3.0e-04 / 5.1e-05, K_eff 2.0e-14",
-   "criterion": "20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-10",
+   "value": "K_uu 3.0e-04 / 5.1e-05, K_eff < 1e-12 (measured 2.0e-14)",
+   "criterion": "20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-12 (round-off bound)",
    "pass": true
   },
   {
@@ -367,7 +367,7 @@
   {
    "id": "E1",
    "what": "environment recorded for this run",
-   "value": "python 3.11.2, numpy 2.4.6, scipy 1.17.1, commit 4730213",
+   "value": "python 3.11.2, numpy 2.4.6, scipy 1.17.1, commit 9bcc98f",
    "criterion": "a JSON with the versions and the commit exists",
    "pass": true
   },
@@ -395,7 +395,7 @@
   {
    "id": "N3",
    "what": "no quantity replaced in the round-16 audit has come back",
-   "value": "0 hits of 14 forbidden tokens",
+   "value": "0 hits of 20 forbidden tokens",
    "criterion": "0 hits",
    "pass": true
   },
@@ -409,14 +409,14 @@
   {
    "id": "N5",
    "what": "every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive",
-   "value": "44/44 traced, 0 untraced",
+   "value": "48/48 traced, 0 untraced",
    "criterion": "0 untraced",
    "pass": true
   },
   {
    "id": "N2",
    "what": "the list of unverified numbers cites only numbers still in the manuscript",
-   "value": "28 entries, 0 stale",
+   "value": "35 entries, 0 stale",
    "criterion": "0 stale",
    "pass": true
   },
@@ -515,7 +515,6 @@
   "check_numerics.py": true,
   "sensitivity_tornado.py": true,
   "run_design_map.py": true,
-  "../Paper_12/check_refs.py": true,
   "run_demos.py": true,
   "run_paper_figures.py": true,
   "make_appendix_tables.py": true,
@@ -531,5 +530,6 @@
  },
  "figures": true,
  "all_pass": true,
- "runtime_note": "run_verification ~45 s, run_demos ~~55 s of the total"
+ "incremental_regrade": false,
+ "runtime_note": "full numerical suite ~14 min of the total"
 }
