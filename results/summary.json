@@ -367,7 +367,7 @@
   {
    "id": "E1",
    "what": "environment recorded for this run",
-   "value": "python 3.11.2, numpy 2.4.6, scipy 1.17.1, commit 4d2be09",
+   "value": "python 3.11.2, numpy 2.4.6, scipy 1.17.1, commit a7c0a2f",
    "criterion": "a JSON with the versions and the commit exists",
    "pass": true
   },
@@ -409,7 +409,7 @@
   {
    "id": "N5",
    "what": "every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive",
-   "value": "48/48 traced, 0 untraced",
+   "value": "46/46 traced, 0 untraced",
    "criterion": "0 untraced",
    "pass": true
   },
@@ -486,7 +486,7 @@
   {
    "id": "N1",
    "what": "manuscript numbers vs the JSON they came from",
-   "value": "102/102",
+   "value": "96/96",
    "criterion": "all agree",
    "pass": true
   }

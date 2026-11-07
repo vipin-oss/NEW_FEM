@@ -34,16 +34,8 @@ def strip_comments(s):
 
 def manuscript_sources():
     """main.tex plus every file it includes with \\input, as one string."""
-    out = [open(os.path.join(PAPER, "main.tex")).read()]
-    sec = os.path.join(PAPER, "sec")
-    if os.path.isdir(sec):
-        for fn in sorted(os.listdir(sec)):
-            if fn.endswith(".tex"):
-                out.append(open(os.path.join(sec, fn)).read())
-    for fn in sorted(os.listdir(PAPER)):
-        if fn.startswith("table_") and fn.endswith(".tex"):
-            out.append(open(os.path.join(PAPER, fn)).read())
-    return "\n".join(out)
+    from check_paper_numbers import manuscript_text
+    return manuscript_text()
 
 
 def main():

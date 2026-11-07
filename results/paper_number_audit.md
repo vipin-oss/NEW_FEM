@@ -1,6 +1,6 @@
 # Every number in the manuscript against the JSON it came from
 
-102/102 claims agree; 0 disagree with the JSON, 0 are not found in the text.
+96/96 claims agree; 0 disagree with the JSON, 0 are not found in the text.
 
 | # | claim | manuscript | json | value | status |
 |---|---|---|---|---|---|
@@ -45,67 +45,61 @@
 | 39 | closed form, 2-D plane strain | `0.5132` | `k2_closed_form.json k2_2d_plane_strain` | `0.5132` | ok |
 | 40 | closed form, x_2D | `1.2768` | `k2_closed_form.json x_2d` | `1.2768` | ok |
 | 41 | closed form, C_p[0][0] | `9.5500` | `k2_closed_form.json C_p[0][0] / 1e10` | `9.5500` | ok |
-| 42 | closed form, e'C^-1 e | `6.3308e-10` | `k2_closed_form.json eC` | `6.3308e-10` | ok |
-| 43 | independent, clamped-free EB | `143.8` | `independent F1 clamped-free f_EB_kHz` | `143.8` | ok |
-| 44 | independent, clamped-free FEM 48x4 | `144.6` | `independent F1 clamped-free mesh[0] f_FEM_kHz` | `144.6` | ok |
-| 45 | independent, clamped-clamped EB | `915.0` | `independent F1 clamped-clamped f_EB_kHz` | `915.0` | ok |
-| 46 | independent, clamped-clamped FEM 48x4 | `919.2` | `independent F1 clamped-clamped mesh[0] f_FEM_kHz` | `919.2` | ok |
-| 47 | independent, clamped-free FEM 128x4 | `144.08` | `independent F1 clamped-free mesh[2] f_FEM_kHz` | `144.08` | ok |
-| 48 | independent, beam modulus | `7.63` | `independent F1 E_beam / 1e10` | `7.63` | ok |
-| 49 | independent, zeta maximum in alpha | `0.179` | `independent F2 zeta at alpha=0.7, omega*tau=0.3` | `0.179` | ok |
-| 50 | independent, zeta at alpha=0.3 | `0.108` | `independent F2 zeta at alpha=0.3, omega*tau=0.3` | `0.108` | ok |
-| 51 | sensitivity, spread at h=1 um, per cent, upper bound | `0.5\%` | `sensitivity.json spread_h1_pct (range/midpoint)` | `<= 0.5` | ok |
-| 52 | sensitivity, spread at h=10 um, per cent, upper bound | `10^{-4}\%` | `sensitivity.json spread_h10_pct (range/midpoint)` | `<= 0.0001` | ok |
-| 53 | ring-down, decrement at alpha=1 | `0.063` | `paper_figures_data.json notes.P6 zeta_1.0` | `0.063` | ok |
-| 54 | ring-down, peak decrement at alpha=0.6 | `0.104` | `paper_figures_data.json notes.P6 zeta_0.6` | `0.104` | ok |
-| 55 | ring-down, decrement at alpha=0.4 | `0.085` | `paper_figures_data.json notes.P6 zeta_0.4` | `0.085` | ok |
-| 56 | ring-down, error at alpha=0.6 against alpha=1 | `64` | `paper_figures_data.json notes.P6 zeta_0.6/zeta_1.0 - 1, in percent` | `64` | ok |
-| 57 | config table, flexo only at h=10 | `1.76e-4` | `config_table rows[0] k2_flexo` | `1.76e-4` | ok |
-| 58 | config table, flexo only at h=1 | `5.5e-3` | `config_table rows[3] k2_flexo` | `5.5e-3` | ok |
-| 59 | config table, growth with e=0 | `31` | `config_table growth_flexo_only` | `31` | ok |
-| 60 | config table, piezo shift at h=1, per cent | `24` | `config_table min flexo_shift x100` | `24` | ok |
-| 61 | axes, C_xx poled y | `1.6946` | `independent F5 poling y C_xx / 1e11` | `1.6946` | ok |
-| 62 | axes, E_b poled y | `1.3544` | `independent F5 E_beam_pol_y / 1e11` | `1.3544` | ok |
-| 63 | axes, kappa11/kappa33 | `39` | `independent F5 kappa_ratio_11_over_33` | `39` | ok |
-| 64 | independent, flexo x, uniform curvature | `3.570415` | `independent F3 x_analytic x1e4` | `3.570415` | ok |
-| 65 | closed form, 3-D free bar | `0.5771` | `k2_closed_form.json k2_3d_free` | `0.5771` | ok |
-| 66 | closed form, 3-D uniaxial | `0.3748` | `k2_closed_form.json k2_3d_uniaxial` | `0.3748` | ok |
-| 67 | closed form, FEM clamped 48x4 | `0.55957` | `k2_closed_form.json fem.FEM clamped 48x4` | `0.55957` | ok |
-| 68 | modulus ratio, w=1, alpha=1 | `1.35` | `memory_variants.json S2[3].ratio_KV_over_Zener` | `1.35` | ok |
-| 69 | modulus ratio, w=1, alpha=0.7 | `1.62` | `memory_variants.json S2[9].ratio_KV_over_Zener` | `1.62` | ok |
-| 70 | modulus ratio, w=100, alpha=1 | `91` | `memory_variants.json S2[5].ratio_KV_over_Zener` | `91` | ok |
-| 71 | worked, window M11 | `3.000e-12` | `worked_example window M11` | `3.000e-12` | ok |
-| 72 | worked, window M22 | `3.333e-13` | `worked_example window M22` | `3.333e-13` | ok |
-| 73 | worked, equal-M ellipsoid over cuboid | `1.2910` | `worked_example sqrt(5/3)` | `1.2910` | ok |
-| 74 | worked, equal-M cuboid over ellipsoid | `0.7746` | `worked_example sqrt(3/5)` | `0.7746` | ok |
-| 75 | worked, plane-stress C11 poling x | `9.5500e10` | `materials C_p[0,0] poling x` | `9.5500e+10` | ok |
-| 76 | worked, plane-stress C11 poling y | `1.6946e11` | `materials C_p[0,0] poling y` | `1.6946e+11` | ok |
-| 77 | worked, plane-stress C12 | `5.7000e10` | `materials C_p[0,1]` | `5.7000e+10` | ok |
-| 78 | worked, kappa33 | `4.9583e-10` | `k2_closed_form kappa_eff` | `4.9583e-10` | ok |
-| 79 | worked, condensed capacitance beta | `2.4792e-11` | `worked_example beta` | `2.4792e-11` | ok |
-| 80 | worked, x from the assembled matrices | `1.2631` | `worked_example x_fem` | `1.2631` | ok |
-| 81 | worked, distance to the closed form | `0.47` | `worked_example diff_percent` | `0.47` | ok |
-| 82 | worked, flexoelectric x at h=10 | `3.5704e-4` | `worked_example x_analytic_h10` | `3.5704e-4` | ok |
-| 83 | worked, peak ratio of the ring-down | `2.5947` | `exp(delta) from memory_variants.json` | `2.5947` | ok |
-| 84 | worked, logarithmic decrement | `0.95345` | `ln(peak ratio)` | `0.95345` | ok |
-| 85 | worked, L1 weight b1 at alpha=0.5 | `0.414214` | `sqrt(2)-1` | `0.414214` | ok |
-| 86 | worked, L1 weight b2 at alpha=0.7 | `0.159245` | `3^0.3-2^0.3` | `0.159245` | ok |
-| 87 | verification table, order on the finest mesh pair | `2.01` | `verification.json convergence rel_err[2]/rel_err[3]` | `2.01` | ok |
-| 88 | verification table, MAC of mode 5 across the two reductions | `0.99999` | `reduction_mac.json mac_mode5` | `0.99999` | ok |
-| 89 | verification table, largest overlap between different modes | `2.8e-6` | `reduction_mac.json mac_offdiag_max` | `2.8e-6` | ok |
-| 90 | Sec. 5.4, 8 vs 40 modes with the memory on K_eff | `1e-12` | `numerics.json keff_relerr_8_vs_40 (upper bound)` | `<= 1e-12` | ok |
-| 91 | Sec. 5.4, 8 vs 40 modes with the memory on K_uu | `3.0e-4` | `numerics.json kuu_relerr_8_vs_40` | `3.0e-4` | ok |
-| 92 | Sec. 5.4, 20 vs 40 modes with the memory on K_uu | `5.1e-5` | `numerics.json kuu_relerr_20_vs_40` | `5.1e-5` | ok |
-| 93 | verification table, clamped 96x4 vs 48x4, relative | `6.2e-4` | `k2_closed_form.json fem clamped 96x4 / 48x4 - 1` | `6.2e-4` | ok |
-| 94 | design map, flexo k^2 at h=10, a2=0.25 | `1.6e-4` | `design_map.json [h=10][a2=0.25]` | `1.6e-4` | ok |
-| 95 | design map, change of k^2 at h=10 for a2 1 -> 0.25 um | `5.5` | `design_map.json 100*(1-k(a2=.25)/k(a2=1)) at h=10` | `5.5` | ok |
-| 96 | design map, flexo k^2 at h=1, a2=0.25 | `1.0e-2` | `design_map.json [h=1][a2=0.25]` | `1.0e-2` | ok |
-| 97 | design map, gain from the window at h=1 | `2.5` | `design_map.json k(a2=.25)/k(a2=1) at h=1` | `2.5` | ok |
-| 98 | design map, flexo k^2 at h=1, a2=1 um | `4.2e-3` | `design_map.json [h=1][a2=1]` | `4.2e-3` | ok |
-| 99 | design map, smallest flexo k^2 | `3.6e-6` | `design_map.json range k2_flexo_min` | `3.6e-6` | ok |
-| 100 | design map, smallest flexo/piezo ratio | `6.5e-6` | `design_map.json range ratio_min` | `6.5e-6` | ok |
-| 101 | design map, largest flexo/piezo ratio | `1.9e-2` | `design_map.json range ratio_max` | `1.9e-2` | ok |
-| 102 | design map, thickness of the 0.1 % crossing at a2=1 um | `5.5` | `design_map.json thresholds h_at_0p1pct_a2_1um` | `5.5` | ok |
+| 42 | independent, clamped-free EB | `143.8` | `independent F1 clamped-free f_EB_kHz` | `143.8` | ok |
+| 43 | independent, clamped-free FEM 48x4 | `144.6` | `independent F1 clamped-free mesh[0] f_FEM_kHz` | `144.6` | ok |
+| 44 | independent, clamped-clamped EB | `915.0` | `independent F1 clamped-clamped f_EB_kHz` | `915.0` | ok |
+| 45 | independent, clamped-clamped FEM 48x4 | `919.2` | `independent F1 clamped-clamped mesh[0] f_FEM_kHz` | `919.2` | ok |
+| 46 | independent, clamped-free FEM 128x4 | `144.08` | `independent F1 clamped-free mesh[2] f_FEM_kHz` | `144.08` | ok |
+| 47 | independent, beam modulus | `7.63` | `independent F1 E_beam / 1e10` | `7.63` | ok |
+| 48 | sensitivity, spread at h=1 um, per cent, upper bound | `0.5\%` | `sensitivity.json spread_h1_pct (range/midpoint)` | `<= 0.5` | ok |
+| 49 | sensitivity, spread at h=10 um, per cent, upper bound | `10^{-4}\%` | `sensitivity.json spread_h10_pct (range/midpoint)` | `<= 0.0001` | ok |
+| 50 | ring-down, decrement at alpha=1 | `0.063` | `paper_figures_data.json notes.P6 zeta_1.0` | `0.063` | ok |
+| 51 | ring-down, peak decrement at alpha=0.6 | `0.104` | `paper_figures_data.json notes.P6 zeta_0.6` | `0.104` | ok |
+| 52 | ring-down, decrement at alpha=0.4 | `0.085` | `paper_figures_data.json notes.P6 zeta_0.4` | `0.085` | ok |
+| 53 | ring-down, error at alpha=0.6 against alpha=1 | `64` | `paper_figures_data.json notes.P6 zeta_0.6/zeta_1.0 - 1, in percent` | `64` | ok |
+| 54 | config table, flexo only at h=10 | `1.76e-4` | `config_table rows[0] k2_flexo` | `1.76e-4` | ok |
+| 55 | config table, flexo only at h=1 | `5.5e-3` | `config_table rows[3] k2_flexo` | `5.5e-3` | ok |
+| 56 | config table, growth with e=0 | `31` | `config_table growth_flexo_only` | `31` | ok |
+| 57 | config table, piezo shift at h=1, per cent | `24` | `config_table min flexo_shift x100` | `24` | ok |
+| 58 | axes, C_xx poled y | `1.6946` | `independent F5 poling y C_xx / 1e11` | `1.6946` | ok |
+| 59 | axes, E_b poled y | `1.3544` | `independent F5 E_beam_pol_y / 1e11` | `1.3544` | ok |
+| 60 | axes, kappa11/kappa33 | `39` | `independent F5 kappa_ratio_11_over_33` | `39` | ok |
+| 61 | closed form, 3-D free bar | `0.5771` | `k2_closed_form.json k2_3d_free` | `0.5771` | ok |
+| 62 | closed form, 3-D uniaxial | `0.3748` | `k2_closed_form.json k2_3d_uniaxial` | `0.3748` | ok |
+| 63 | closed form, FEM clamped 48x4 | `0.55957` | `k2_closed_form.json fem.FEM clamped 48x4` | `0.55957` | ok |
+| 64 | modulus ratio, w=1, alpha=1 | `1.35` | `memory_variants.json S2[3].ratio_KV_over_Zener` | `1.35` | ok |
+| 65 | modulus ratio, w=1, alpha=0.7 | `1.62` | `memory_variants.json S2[9].ratio_KV_over_Zener` | `1.62` | ok |
+| 66 | modulus ratio, w=100, alpha=1 | `91` | `memory_variants.json S2[5].ratio_KV_over_Zener` | `91` | ok |
+| 67 | worked, window M11 | `3.000e-12` | `worked_example window M11` | `3.000e-12` | ok |
+| 68 | worked, window M22 | `3.333e-13` | `worked_example window M22` | `3.333e-13` | ok |
+| 69 | worked, equal-M ellipsoid over cuboid | `1.2910` | `worked_example sqrt(5/3)` | `1.2910` | ok |
+| 70 | worked, equal-M cuboid over ellipsoid | `0.7746` | `worked_example sqrt(3/5)` | `0.7746` | ok |
+| 71 | worked, plane-stress C11 poling x | `9.5500e10` | `materials C_p[0,0] poling x` | `9.5500e+10` | ok |
+| 72 | worked, plane-stress C11 poling y | `1.6946e11` | `materials C_p[0,0] poling y` | `1.6946e+11` | ok |
+| 73 | worked, plane-stress C12 | `5.7000e10` | `materials C_p[0,1]` | `5.7000e+10` | ok |
+| 74 | worked, kappa33 | `4.9583e-10` | `k2_closed_form kappa_eff` | `4.9583e-10` | ok |
+| 75 | worked, condensed capacitance beta | `2.4792e-11` | `worked_example beta` | `2.4792e-11` | ok |
+| 76 | worked, x from the assembled matrices | `1.2631` | `worked_example x_fem` | `1.2631` | ok |
+| 77 | worked, distance to the closed form | `0.47` | `worked_example diff_percent` | `0.47` | ok |
+| 78 | worked, flexoelectric x at h=10 | `3.5704e-4` | `worked_example x_analytic_h10` | `3.5704e-4` | ok |
+| 79 | worked, peak ratio of the ring-down | `2.5947` | `exp(delta) from memory_variants.json` | `2.5947` | ok |
+| 80 | worked, logarithmic decrement | `0.95345` | `ln(peak ratio)` | `0.95345` | ok |
+| 81 | worked, L1 weight b1 at alpha=0.5 | `0.414214` | `sqrt(2)-1` | `0.414214` | ok |
+| 82 | worked, L1 weight b2 at alpha=0.7 | `0.159245` | `3^0.3-2^0.3` | `0.159245` | ok |
+| 83 | verification table, order on the finest mesh pair | `2.01` | `verification.json convergence rel_err[2]/rel_err[3]` | `2.01` | ok |
+| 84 | Sec. 5.4, 8 vs 40 modes with the memory on K_eff | `1e-12` | `numerics.json keff_relerr_8_vs_40 (upper bound)` | `<= 1e-12` | ok |
+| 85 | Sec. 5.4, 8 vs 40 modes with the memory on K_uu | `3.0e-4` | `numerics.json kuu_relerr_8_vs_40` | `3.0e-4` | ok |
+| 86 | Sec. 5.4, 20 vs 40 modes with the memory on K_uu | `5.1e-5` | `numerics.json kuu_relerr_20_vs_40` | `5.1e-5` | ok |
+| 87 | verification table, clamped 96x4 vs 48x4, relative | `6.2e-4` | `k2_closed_form.json fem clamped 96x4 / 48x4 - 1` | `6.2e-4` | ok |
+| 88 | design map, flexo k^2 at h=10, a2=0.25 | `1.6e-4` | `design_map.json [h=10][a2=0.25]` | `1.6e-4` | ok |
+| 89 | design map, change of k^2 at h=10 for a2 1 -> 0.25 um | `5.5` | `design_map.json 100*(1-k(a2=.25)/k(a2=1)) at h=10` | `5.5` | ok |
+| 90 | design map, flexo k^2 at h=1, a2=0.25 | `1.0e-2` | `design_map.json [h=1][a2=0.25]` | `1.0e-2` | ok |
+| 91 | design map, gain from the window at h=1 | `2.5` | `design_map.json k(a2=.25)/k(a2=1) at h=1` | `2.5` | ok |
+| 92 | design map, flexo k^2 at h=1, a2=1 um | `4.2e-3` | `design_map.json [h=1][a2=1]` | `4.2e-3` | ok |
+| 93 | design map, smallest flexo k^2 | `3.6e-6` | `design_map.json range k2_flexo_min` | `3.6e-6` | ok |
+| 94 | design map, smallest flexo/piezo ratio | `6.5e-6` | `design_map.json range ratio_min` | `6.5e-6` | ok |
+| 95 | design map, largest flexo/piezo ratio | `1.9e-2` | `design_map.json range ratio_max` | `1.9e-2` | ok |
+| 96 | design map, thickness of the 0.1 % crossing at a2=1 um | `5.5` | `design_map.json thresholds h_at_0p1pct_a2_1um` | `5.5` | ok |
 
 ## Forbidden stale tokens
 

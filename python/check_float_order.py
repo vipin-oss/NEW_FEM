@@ -88,6 +88,8 @@ def appendix_order():
     out = {}
     for name, a in letters.items():
         path = os.path.join(PAPER, "sec", name)
+        if not os.path.exists(path):
+            continue
         labs = re.findall(r"\\label\{((?:fig|tab):[^}]+)\}", expand(path))
         for i, lab in enumerate(labs, 1):
             out[lab] = f"{a}.{i}"

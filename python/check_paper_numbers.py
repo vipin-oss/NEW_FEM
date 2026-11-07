@@ -121,18 +121,25 @@ def normalize(text):
 
 
 def manuscript_text():
-    """main.tex plus every section file it includes, concatenated."""
-    base = os.path.dirname(TEX)
-    parts = [open(TEX).read()]
-    sec = os.path.join(base, "sec")
-    if os.path.isdir(sec):
-        for fn in sorted(os.listdir(sec)):
-            if fn.endswith(".tex"):
-                parts.append(open(os.path.join(sec, fn)).read())
-    for fn in sorted(os.listdir(base)):
-        if fn.startswith("table_") and fn.endswith(".tex"):
-            parts.append(open(os.path.join(base, fn)).read())
-    return "\n".join(parts)
+    """Expand only files reached by main.tex, not unprinted archive tables."""
+    from pathlib import Path
+    base = Path(TEX).parent
+
+    def expand(path, stack=()):
+        path = path.resolve()
+        if path in stack:
+            raise ValueError(f"Cyclic manuscript input: {path}")
+        body = re.sub(r"(?<!\\)%[^\n]*", "", path.read_text())
+
+        def include(match):
+            child = base / match.group(1)
+            if not child.suffix:
+                child = child.with_suffix(".tex")
+            return expand(child, (*stack, path))
+
+        return re.sub(r"\\(?:input|include)\{([^}]+)\}", include, body)
+
+    return expand(Path(TEX))
 
 # ---------------------------------------------------------------------------
 # Forbidden tokens: quantities that round 16 and the Step-0 numerical-hygiene
@@ -354,10 +361,6 @@ def main():
     R.append(row("closed form, C_p[0][0]", "9.5500",
                  "k2_closed_form.json C_p[0][0] / 1e10",
                  g("k2_closed_form.json.C_p.0.0") / 1e10, "{:.4f}"))
-    R.append(row("closed form, e'C^-1 e", "6.3308e-10",
-                 "k2_closed_form.json eC",
-                 g("k2_closed_form.json.x_2d")
-                 * g("k2_closed_form.json.kappa_eff"), "{:.4e}"))
     # the count is checked in words, because that is how the abstract says it
     words = {41: "forty-one", 49: "forty-nine", 50: "fifty",
              51: "fifty-one", 54: "fifty-four",
@@ -389,16 +392,6 @@ def main():
     R.append(row("independent, beam modulus", "7.63",
                  "independent F1 E_beam / 1e10",
                  J(I)["F1_frequencies"]["E_beam"] / 1e10, "{:.2f}"))
-    zb = [r for r in J(I)["F2_damping"]["rows"]
-          if r["alpha"] == 0.7 and r["omega_tau"] == 0.3][0]["zeta_newton"]
-    R.append(row("independent, zeta maximum in alpha", "0.179",
-                 "independent F2 zeta at alpha=0.7, omega*tau=0.3", zb,
-                 "{:.3f}"))
-    zc = [r for r in J(I)["F2_damping"]["rows"]
-          if r["alpha"] == 0.3 and r["omega_tau"] == 0.3][0]["zeta_newton"]
-    R.append(row("independent, zeta at alpha=0.3", "0.108",
-                 "independent F2 zeta at alpha=0.3, omega*tau=0.3", zc,
-                 "{:.3f}"))
     SN = J("sensitivity.json")
     R.append(row("sensitivity, spread at h=1 um, per cent, upper bound",
                  "0.5\\%", "sensitivity.json spread_h1_pct (range/midpoint)",
@@ -453,9 +446,6 @@ def main():
     # the cross-paired value is still computed and archived in
     # independent_checks.json; the paper no longer quotes it, so there is no
     # literal to audit (the pairing rule is stated once, in Sec. 4.2)
-    R.append(row("independent, flexo x, uniform curvature", "3.570415",
-                 "independent F3 x_analytic x1e4",
-                 J(I)["F3_flexo_curvature"]["x_analytic"] * 1e4, "{:.6f}"))
 
     # ---- round 11: the closed forms of Sec. 6.2 and the modulus table
     R.append(row("closed form, 3-D free bar", "0.5771",
@@ -525,13 +515,6 @@ def main():
     R.append(row("verification table, order on the finest mesh pair", "2.01",
                  "verification.json convergence rel_err[2]/rel_err[3]",
                  _math.log2(_cg[2]["rel_err"] / _cg[3]["rel_err"]), "{:.2f}"))
-    _rm = J("reduction_mac.json")
-    R.append(row("verification table, MAC of mode 5 across the two reductions",
-                 "0.99999", "reduction_mac.json mac_mode5",
-                 _rm["mac_mode5"], "{:.5f}"))
-    R.append(row("verification table, largest overlap between different modes",
-                 "2.8e-6", "reduction_mac.json mac_offdiag_max",
-                 _rm["mac_offdiag_max"], "{:.1e}"))
     _nu = J("numerics.json")["truncation"]
     # A pure round-off residual: the text states an upper bound, and the gate
     # grades the bound rather than the last bits of the measured residual.

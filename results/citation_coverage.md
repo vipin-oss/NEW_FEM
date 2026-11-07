@@ -6,7 +6,7 @@ No reference-audit file or bibliography field is modified.
 
 - Bibliography entries: 68
 - Distinct keys cited in text: 61
-- Citation commands: 65
+- Citation commands: 51
 - Undefined citation keys: none
 - Uncited bibliography entries: AltanAifantis1997, Jiang2023, Love1927, PhungVan2024AMM127, PhungVan2024AMM128, Schwartz2012EABE36, ZhangRen2023EWC39
 - Duplicate entry keys: none
