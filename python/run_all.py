@@ -369,8 +369,10 @@ def main():
     chk("H4", "modal truncation of the ring-down, 8 and 20 modes against 40",
         f"K_uu {Tn['kuu_relerr_8_vs_40']:.1e} / "
         f"{Tn['kuu_relerr_20_vs_40']:.1e}, "
-        f"K_eff {Tn['keff_relerr_8_vs_40']:.1e}",
-        "20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-10", Tn["converged"])
+        f"K_eff < 1e-12 (measured {Tn['keff_relerr_8_vs_40']:.1e})",
+        "20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-12 (round-off bound)",
+        Tn["kuu_relerr_20_vs_40"] < 1e-2
+        and Tn["keff_relerr_8_vs_40"] < 1e-12)
     tor = {r["input"] + r["perturbation"]: r for r in To["rows"]}
     chk("S3", "tornado: +/-10 % in mu, rho, a2, tau against the headline numbers",
         "factor 24 " + f"{tor['a2+10 %']['d_factor24_pct']:+.1f} % for a2 +10 %, "

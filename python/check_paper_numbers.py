@@ -76,9 +76,11 @@ def row(where, literal, source, value, fmt, rel_tol=1e-6, upper=None):
     The second route is what keeps the suite portable.  A handful of numbers
     in this paper are differences of nearly equal eigenvalues of a pencil with
     condition ~1e12 (the h = 1 um flexoelectric coupling is the worst), and
-    they move at the 1e-3 relative level between numeric stacks; those rows
-    carry a wider tolerance and are quoted to two significant digits in the
-    text for exactly that reason.  Everything else keeps 1e-6, which is
+    they move at the 1e-3 relative level between numeric stacks.  Those rows
+    are quoted to two significant digits in the text and carry a 2e-2 relative
+    tolerance here.  A pure round-off residual is not a converged quantity at
+    all: it is stated as an upper bound and graded against an absolute
+    threshold through ``upper``.  Everything else keeps 1e-6, which is
     stricter than the rounding of the printed literal, so a real drift still
     fails.
     """
@@ -133,8 +135,9 @@ def manuscript_text():
     return "\n".join(parts)
 
 # ---------------------------------------------------------------------------
-# Forbidden tokens: quantities that round 16 replaced.  They must not come back
-# into the manuscript, its tables, its captions or its highlights.
+# Forbidden tokens: quantities that round 16 and the Step-0 numerical-hygiene
+# pass replaced.  They must not come back into the manuscript, its tables, its
+# captions or its highlights.
 # ---------------------------------------------------------------------------
 STALE_TOKENS = {
     "2.5700": "peak ratio of the ring-down (round 16: 2.5947)",
@@ -152,6 +155,12 @@ STALE_TOKENS = {
     "Appendix~\\ref{app:": "the class prints 'Appendix' inside \\thesection, so "
                             "the literal word doubles it ('Appendix Appendix A')",
     "Appendix \\ref{app:": "same doubling without the tie",
+    "2.0\\times10^{-14}": "K_eff 8-vs-40 round-off (Step 0: below 1e-12)",
+    "4.17\\times10^{-3}": "design map h=1, a2=1 (Step 0: 4.2e-3, 2 s.f.)",
+    "1.03\\times10^{-2}": "design map h=1, a2=0.25 (Step 0: 1.0e-2, 2 s.f.)",
+    "1.648\\times10^{-4}": "design map h=10, a2=0.25 (Step 0: 1.6e-4, 2 s.f.)",
+    "1.85\\times10^{-2}": "largest design-map ratio (Step 0: 1.9e-2, 2 s.f.)",
+    "h=5.46": "0.1 % crossing thickness (Step 0: h=5.5, 2 s.f.)",
 }
 
 
@@ -516,9 +525,11 @@ def main():
                  "2.8e-6", "reduction_mac.json mac_offdiag_max",
                  _rm["mac_offdiag_max"], "{:.1e}"))
     _nu = J("numerics.json")["truncation"]
-    R.append(row("Sec. 5.4, 8 vs 40 modes with the memory on K_eff", "2.0e-14",
-                 "numerics.json keff_relerr_8_vs_40",
-                 _nu["keff_relerr_8_vs_40"], "{:.1e}"))
+    # A pure round-off residual: the text states an upper bound, and the gate
+    # grades the bound rather than the last bits of the measured residual.
+    R.append(row("Sec. 5.4, 8 vs 40 modes with the memory on K_eff", "1e-12",
+                 "numerics.json keff_relerr_8_vs_40 (upper bound)",
+                 _nu["keff_relerr_8_vs_40"], "{:.0e}", upper=1e-12))
     R.append(row("Sec. 5.4, 8 vs 40 modes with the memory on K_uu", "3.0e-4",
                  "numerics.json kuu_relerr_8_vs_40",
                  _nu["kuu_relerr_8_vs_40"], "{:.1e}"))
@@ -539,31 +550,40 @@ def main():
     def _at(hh, aa):
         return _kb[_h.index(hh)][_a.index(aa)]
 
-    R.append(row("design map, flexo k^2 at h=10, a2=0.25", "1.648e-4",
-                 "design_map.json [h=10][a2=0.25]", _at(10.0, 0.25), "{:.4e}",
-                 rel_tol=2e-4))
+    # Every design-map quote is two significant digits: the thin-strip entries
+    # are differences of nearly equal eigenvalues and move in the third digit
+    # between BLAS builds.  A 2e-2 relative tolerance complements the formatted
+    # two-digit literal, so a regenerated map on another stack still agrees.
+    _TOL = 2e-2
+    R.append(row("design map, flexo k^2 at h=10, a2=0.25", "1.6e-4",
+                 "design_map.json [h=10][a2=0.25]", _at(10.0, 0.25), "{:.1e}",
+                 rel_tol=_TOL))
     R.append(row("design map, change of k^2 at h=10 for a2 1 -> 0.25 um", "5.5",
                  "design_map.json 100*(1-k(a2=.25)/k(a2=1)) at h=10",
-                 100.0 * (1.0 - _at(10.0, 0.25) / _at(10.0, 1.0)), "{:.1f}"))
-    R.append(row("design map, flexo k^2 at h=1, a2=0.25", "1.03e-2",
-                 "design_map.json [h=1][a2=0.25]", _at(1.0, 0.25), "{:.2e}"))
+                 100.0 * (1.0 - _at(10.0, 0.25) / _at(10.0, 1.0)), "{:.1f}",
+                 rel_tol=_TOL))
+    R.append(row("design map, flexo k^2 at h=1, a2=0.25", "1.0e-2",
+                 "design_map.json [h=1][a2=0.25]", _at(1.0, 0.25), "{:.1e}",
+                 rel_tol=_TOL))
     R.append(row("design map, gain from the window at h=1", "2.5",
                  "design_map.json k(a2=.25)/k(a2=1) at h=1",
-                 _at(1.0, 0.25) / _at(1.0, 1.0), "{:.1f}"))
-    R.append(row("design map, flexo k^2 at h=1, a2=1 um", "4.17e-3",
-                 "design_map.json [h=1][a2=1]", _at(1.0, 1.0), "{:.2e}"))
+                 _at(1.0, 0.25) / _at(1.0, 1.0), "{:.1f}", rel_tol=_TOL))
+    R.append(row("design map, flexo k^2 at h=1, a2=1 um", "4.2e-3",
+                 "design_map.json [h=1][a2=1]", _at(1.0, 1.0), "{:.1e}",
+                 rel_tol=_TOL))
     R.append(row("design map, smallest flexo k^2", "3.6e-6",
                  "design_map.json range k2_flexo_min",
-                 dm["range"]["k2_flexo_min"], "{:.1e}"))
+                 dm["range"]["k2_flexo_min"], "{:.1e}", rel_tol=_TOL))
     R.append(row("design map, smallest flexo/piezo ratio", "6.5e-6",
                  "design_map.json range ratio_min",
-                 dm["range"]["ratio_min"], "{:.1e}"))
-    R.append(row("design map, largest flexo/piezo ratio", "1.85e-2",
+                 dm["range"]["ratio_min"], "{:.1e}", rel_tol=_TOL))
+    R.append(row("design map, largest flexo/piezo ratio", "1.9e-2",
                  "design_map.json range ratio_max",
-                 dm["range"]["ratio_max"], "{:.2e}"))
-    R.append(row("design map, thickness of the 0.1 % crossing at a2=1 um", "5.46",
+                 dm["range"]["ratio_max"], "{:.1e}", rel_tol=_TOL))
+    R.append(row("design map, thickness of the 0.1 % crossing at a2=1 um", "5.5",
                  "design_map.json thresholds h_at_0p1pct_a2_1um",
-                 dm["thresholds"]["h_at_0p1pct_a2_1um"], "{:.2f}"))
+                 dm["thresholds"]["h_at_0p1pct_a2_1um"], "{:.1f}",
+                 rel_tol=_TOL))
 
     # ---- the literal has to be in the manuscript as well
     missing = [r for r in R if r["tex"] not in tex]

@@ -166,9 +166,11 @@ def truncation():
     """How many modes the ring-down needs, on both memory matrices.
 
     Memory on K_uu couples the modes, so the projection has to be wide;
-    memory on K_eff leaves the motion in a single mode and eight modes are
-    exact to the last bit.  Both numbers are the max-norm of the voltage
-    difference over ten periods, referred to the forty-mode peak.
+    memory on K_eff leaves the motion in a single mode and eight modes agree
+    to round-off.  The latter residual is a BLAS-dependent bit-level quantity,
+    so the manuscript states an upper bound and the gate grades the bound.
+    Both numbers are the max-norm of the voltage difference over ten periods,
+    referred to the forty-mode peak.
     """
     _tg, recs = _records(0.7, (8, 20, 40))
     v8, v20, v40 = recs
@@ -194,7 +196,7 @@ def truncation():
             "kuu_relerr_20_vs_40": float(np.abs(v20 - v40).max() / scale),
             "keff_relerr_8_vs_40": eff_rel,
             "converged": bool(np.abs(v20 - v40).max() / scale < 1e-2
-                              and eff_rel < 1e-10)}
+                              and eff_rel < 1e-12)}
 
 
 def main():
