@@ -8,7 +8,7 @@ writes
 
 This is the archive copy.  The table typeset in the appendix is a hand-curated,
 compact selection of the same benchmarks (Paper_12/table_verification.tex): a
-manuscript table summarises the evidence, it is not the evidence, so this
+manuscript table summarizes the evidence, it is not the evidence, so this
 script no longer writes it.
 """
 from __future__ import annotations
@@ -42,7 +42,7 @@ TEX_WHAT = {
     "V7": r"equal-$M$ cuboid vs ellipsoid, max rel.\ diff",
     "F1": r"flexo patch test, $\mu=0$", "F2": r"flexo patch test, $\mu\neq0$",
     "F3": r"linearity of the flexo response in $\mu$",
-    "F4": r"bending $k^2$ with $\mu=10^{-6}$\,\si{\coulomb\per\metre}",
+    "F4": r"bending $k^2$ with $\mu=10^{-6}$\,\si{\coulomb\per\meter}",
     "M1": r"$\kappa_{11}/\kappa_{33}$ of the material record",
     "S1a": r"$\zeta_{\rm eff}(K_{\rm eff},\alpha{=}1)$ vs $\omega\tau/2$",
     "S1b": r"$\zeta(K_{uu})/\zeta(K_{\rm eff})$, $\alpha=1$",
@@ -51,7 +51,7 @@ TEX_WHAT = {
     "C2": r"2-D model vs 3-D free bar (plane-stress reduction)",
     "C3": r"FEM $k^2$, clamped, $96\times4$ vs $48\times4$",
     "C4": r"FEM $k^2$, clamped, $24\times2$ vs $48\times4$",
-    "K1": r"lowest MAC of mode 1, $h=10\to1$\,\si{\micro\metre}",
+    "K1": r"lowest MAC of mode 1, $h=10\to1$\,\si{\micro\meter}",
     "K2": r"worst MAC off-diagonal / $f_2/f_1$",
     "T1": r"piezo $k^2$ (mode-free), max/min over $h$",
     "T2": r"piezo $k^2$, $24\times2$ vs $48\times4$",
@@ -71,7 +71,7 @@ def texify(s):
     return "".join(out)
 
 
-UNIT = {"um": r"\,\si{\micro\metre}", "kHz": r"\,\si{\kilo\hertz}",
+UNIT = {"um": r"\,\si{\micro\meter}", "kHz": r"\,\si{\kilo\hertz}",
         "MPa": r"\,\si{\mega\pascal}", " s ": r"\,\si{\second} "}
 
 
@@ -109,7 +109,7 @@ def main():
                     "|---|---|---|---|"]
     for r in rows:
         what = TEX_WHAT.get(r["id"], texify(r["what"]))
-        what = re.sub(r"(?<=[0-9])\s*um\b", lambda m: r"\,\si{\micro\metre}", what)
+        what = re.sub(r"(?<=[0-9])\s*um\b", lambda m: r"\,\si{\micro\meter}", what)
         src = SOURCE.get(r["id"].rstrip("ab")[0], "?")
         body.append(f"{what} & {pretty(r['value'])} & "
                     f"{pretty(r['criterion'])} \\\\")
@@ -122,13 +122,13 @@ def main():
 
 
 def application_table():
-    """The four polarisation/kinematics combinations of the worked strip."""
+    """The four polarization/kinematics combinations of the worked strip."""
     import json
     with open(os.path.join(RES, "application_table.json")) as fh:
         A = json.load(fh)["rows"]
     tex = ["% table generated from the archived results",
            r"\begin{tabular}{@{}llcccc@{}}", r"\toprule",
-           r"poling & kinematics & mode & $f$ (kHz) & $k^2$ & $V$ at \SI{10}{\nano\metre} (V) \\",
+           r"poling & kinematics & mode & $f$ (kHz) & $k^2$ & $V$ at \SI{10}{\nano\meter} (V) \\",
            r"\midrule"]
     for r in A:
         tex.append(f"{r['poling']} & {r['kinematics'].replace('_', ' ')} & "

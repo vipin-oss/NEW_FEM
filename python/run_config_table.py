@@ -79,8 +79,8 @@ def main():
     md = ["# Piezoelectric and flexoelectric coupling on the same bending mode",
           "",
           "Poling $y$, electrodes on the long faces (gap $h$), 48$\\times4$ "
-          "mesh, $L=\\SI{200}{\\micro\\metre}$, window half-widths "
-          "$3\\times\\SI{1}{\\micro\\metre}$, $\\mu=10^{-6}$ C/m.", "",
+          "mesh, $L=\\SI{200}{\\micro\\meter}$, window half-widths "
+          "$3\\times\\SI{1}{\\micro\\meter}$, $\\mu=10^{-6}$ C/m.", "",
           "| $h$ [µm] | $k^2$ piezo only | $k^2$ flexo only ($e=0$) | "
           "$k^2$ both (as reported) | piezo share | both/flexo $-1$ |",
           "|---|---|---|---|---|---|"]
@@ -116,7 +116,7 @@ def main():
     BS = chr(92)
     Ltx = ["% table generated from the archived results",
            BS + "begin{tabular}{@{}lcccc@{}}", BS + "toprule",
-           "$h$ [" + BS + "si{" + BS + "micro" + BS + "metre}] & "
+           "$h$ [" + BS + "si{" + BS + "micro" + BS + "meter}] & "
            "$k^2$ piezo only & $k^2$ flexo only, $e=0$ & "
            "$k^2$ both, as reported & both/flexo $-1$" + ROW,
            BS + "midrule"]

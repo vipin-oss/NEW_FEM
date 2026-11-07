@@ -658,7 +658,7 @@ def _condense_phi(Kmm, Bf, C, fixed, floating, return_float=False):
 
 
 # --------------------------------------------------------------------------
-# Eigen-solver with diagonal scaling (FEM-1 corrected formulation)
+# Eigen-solver with diagonal scaling (current FEM-1 formulation)
 # --------------------------------------------------------------------------
 
 
@@ -682,7 +682,7 @@ def modes(K, M, nmodes=6, dense_limit=2600):
     w2 = w2[:nmodes]
     y = y[:, :nmodes]
     x = S[:, None] * y
-    # mass-normalise
+    # mass-normalize
     for k in range(x.shape[1]):
         x[:, k] /= np.sqrt(x[:, k] @ M @ x[:, k])
     return np.sqrt(np.maximum(w2, 0.0)), x
@@ -714,7 +714,7 @@ def transient(K, M, Kd, f_hat, alpha, tau, dt, nsteps, nmodes=12,
 
         M x'' + K x + tau^alpha Kd D^alpha x = f(t)
 
-    in a mass-normalised modal basis of (K, M).  Returns t, x, y, v, a.
+    in a mass-normalized modal basis of (K, M).  Returns t, x, y, v, a.
 
     Kd is the matrix receiving the memory (K for 'full Keff', or K_uu for the
     mechanical-only variant).  When Kd == K the system is proportional and the

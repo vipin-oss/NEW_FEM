@@ -8,13 +8,13 @@ and paper; the numerical checks at the end are reproduced by
 
 ## Step A — what the averaging window contributes
 
-Average the strain over a window `w` centred at `x`:
+Average the strain over a window `w` centered at `x`:
 
 ```
 ε̄(x) = (1/|w|) ∫_w ε(x + ξ) dξ .                                          (A1)
 ```
 
-Taylor-expand and use the symmetry of the window (`⟨ξ_p⟩ = 0` for a centred
+Taylor-expand and use the symmetry of the window (`⟨ξ_p⟩ = 0` for a centered
 window):
 
 ```
@@ -58,7 +58,7 @@ K_g = c ∫ M_mn (B_,m)ᵀ C (B_,n) dΩ ,        c = 1 for (B1).                
 the gradient stiffness is linear in `M`, contracted once on each side, for any
 window and any kernel. The *scalar* `c` depends on which energy functional one
 identifies with `U_g` (½ for "energy removed", 1 for (B1) as written, ¼ for the
-squared difference form); it is a **normalisation**, equivalent to redefining
+squared difference form); it is a **normalization**, equivalent to redefining
 the length scale. It does not depend on the shape. The paper fixes it once
 (next step) and never re-derives it.
 
@@ -145,7 +145,7 @@ is the physically meaningful "same window size":
 | 0.10 | 0.9732 | 0.9638 | 5/3 |
 | 0.20 | 0.9408 | 0.9220 | 5/3 |
 
-(`ū` on the FEM-1 benchmark, 20×4 mesh, normalised by the classical 4.5003 µm;
+(`ū` on the FEM-1 benchmark, 20×4 mesh, normalized by the classical 4.5003 µm;
 V7.) The cuboid is stiffer by exactly the second-moment ratio
 `(a²/3)/(l²/5) = 5/3` at `a = l`, and **at equal `M` the two are identical to
 machine precision**. The paper states both sentences:

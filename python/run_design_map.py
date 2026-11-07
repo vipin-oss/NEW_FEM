@@ -148,7 +148,7 @@ def draw(H, A, KB, KE):
         ax.set_xlim(H.min(), H.max()); ax.set_ylim(A.min(), A.max())
         # orientation lines in black with a white halo: white-on-viridis
         # vanishes over the bright part of the map, and the a2/L = 0.2 line
-        # previously sat exactly on the top spine and could not be seen
+        # initially sat exactly on the top spine and could not be seen
         ax.plot(H, H, ":", color="k", lw=1.0, zorder=5)
         ax.text(1.05, 4.2, r"$a_2=h$", fontsize=6.5, zorder=6,
                 bbox=dict(fc="w", ec="none", alpha=0.75, pad=0.6))

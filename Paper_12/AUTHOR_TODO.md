@@ -42,26 +42,28 @@ resolution is unverified.
 
 ## 4. Bibliography entries that are not verified
 
-These entries carry `annote = {TO VERIFY: ...}` because their fields were not
-matched against a publisher record; `annote` is a non-printing field, so the
-submitted bibliography does not show the flag (Crossref is not reachable from the machine
+Fifteen entries carry `note = {UNVERIFIED: ...}` because their fields were not
+matched against a publisher record; `note` prints in the bibliography, so the
+flag is visible to a reader (Crossref is not reachable from the machine
 that built this repository). Check each against the journal page:
 
 | key | line |
 |---|---|
-| `Mindlin1968` | `Paper_12/references.bib:575` |
-| `Kogan1964` | `Paper_12/references.bib:587` |
-| `YudinTagantsev2013` | `Paper_12/references.bib:597` |
-| `Zubko2013` | `Paper_12/references.bib:609` |
-| `Cross2006` | `Paper_12/references.bib:620` |
-| `Caputo1967` | `Paper_12/references.bib:632` |
-| `BagleyTorvik1983` | `Paper_12/references.bib:644` |
-| `Koeller1984` | `Paper_12/references.bib:656` |
-| `ColeCole1941` | `Paper_12/references.bib:668` |
-| `HavriliakNegami1967` | `Paper_12/references.bib:680` |
-| `EnelundLesieutre1999` | `Paper_12/references.bib:691` |
-| `Roundy2003` | `Paper_12/references.bib:703` |
-| `ErturkInman2011` | `Paper_12/references.bib:715` |
+| `fem1` | `Paper_12/references.bib:745` |
+| `Gupta2026Rayleigh` | `Paper_12/references.bib:457` |
+| `Mindlin1968` | `Paper_12/references.bib:594` |
+| `Kogan1964` | `Paper_12/references.bib:604` |
+| `YudinTagantsev2013` | `Paper_12/references.bib:616` |
+| `Zubko2013` | `Paper_12/references.bib:627` |
+| `Cross2006` | `Paper_12/references.bib:639` |
+| `Caputo1967` | `Paper_12/references.bib:651` |
+| `BagleyTorvik1983` | `Paper_12/references.bib:663` |
+| `Koeller1984` | `Paper_12/references.bib:675` |
+| `ColeCole1941` | `Paper_12/references.bib:687` |
+| `HavriliakNegami1967` | `Paper_12/references.bib:698` |
+| `EnelundLesieutre1999` | `Paper_12/references.bib:710` |
+| `Roundy2003` | `Paper_12/references.bib:722` |
+| `ErturkInman2011` | `Paper_12/references.bib:732` |
 
 `Paper_12/check_refs.py` re-runs the comparison as soon as network access is
 available and rewrites `results/reference_audit.md`.
@@ -98,9 +100,9 @@ and the audit file `results/paper_number_audit.md` names the row.
 | item | why it is still open |
 |---|---|
 | ~~`\cite{fem1}`, `\cite{fem4}`, `\cite{fem5}`~~ | closed in round 18: `fem1` carries the published record and `fem4`/`fem5` are deleted, so no self-citation is incomplete; what remains is to confirm that the DOI of `fem1` resolves (see Sec. 3) |
-| `Kogan1964` | the entry carries `TO VERIFY` because its volume and pages were taken from memory; it is now cited in the introduction, so check it before submission |
-| every DOI | the reference audit (`python/Paper_12/check_refs.py`) carries 47 of the 62 entries from the earlier paper with 0 field mismatches, but no DOI could be resolved: the check runs offline, so "resolves" is unverified, not confirmed |
-| page count | no TeX distribution is installed in the build environment, so the 28-page limit, the overfull-box list and the page on which each float lands were not measured here. Compile once and check `\listfiles` |
+| `Kogan1964` | the entry carries `UNVERIFIED` because its volume and pages were taken from memory; it is now cited in the introduction, so check it before submission |
+| every DOI | the reference audit (`python/Paper_12/check_refs.py`) carries 47 of the 58 published FEM-1 references with 0 field mismatches, but no DOI could be resolved: the check runs offline, so "resolves" is unverified, not confirmed |
+| page count | an offline Tectonic diagnostic reports 33 pages with 0 undefined references; the mandated `pdflatex`/`bibtex` sequence, the 28-page limit, the overfull-box list and the page on which each float lands remain to be checked by the author. Compile once and check `\listfiles` |
 | verbatim | the abstract is 218 words, the conclusion 250, the five highlights at most 85 characters, but a journal's own counter may differ by a word or two |
 
 ## 9. What round 14 left for the author
@@ -111,7 +113,7 @@ and the audit file `results/paper_number_audit.md` names the row.
 | length | `\linespread` went from 1.3 to 1.0, the parameter list of Sec. 6.1, the benchmark paragraph and the mu caveat were cut, the modulus table moved to Appendix C, and Sec. 6.3 was added: the net effect on the page count is unverified, so compile and, if it is still above 30 pages, the next candidates are Secs. 3 and 4, which have not been shortened |
 | worked subsection | every number in it is produced by `python/worked_example.py` and audited by `check_paper_numbers.py`; if a parameter changes, re-run `python/run_all.py` before touching the text |
 
-## 10. What round 16 corrected (scientific audit)
+## 10. What round 16 addressed (scientific audit)
 
 Every item below is a defect the audit proved either from the code (file and
 function named) or from a re-run; the numbers that changed were recomputed by
@@ -136,9 +138,9 @@ the scripts in `python/` and are audited again by
 | B13 | Sec. 6.6 | $K_{\rm eff}$ vs $K_{uu}$ was described as a choice without saying what a derivation would give | added: a relaxing permittivity puts the memory on $B_iC^{-1}B_i^T$ alone, so the two matrices bracket it; $0.450$ is restricted to $\alpha=1$ and to this device | none |
 | B14 | Sec. 6.7, conclusion | the 58x voltage factor could be read as a sensing figure of merit | restricted to equal tip displacement, with the caveat printed | none |
 | B15 | whole manuscript | "plate" for a plane-stress strip with in-plane fields only | "strip" (66 occurrences); "plate theory"/"plate kinematics" removed | none |
-| B16 | Sec. 6.2 | three values near 0.56 for one set of tensors were not labelled | the three are now listed with their boundary condition, mesh and measure, and the abstract's choice is named | none |
+| B16 | Sec. 6.2 | three values near 0.56 for one set of tensors were not labeled | the three are now listed with their boundary condition, mesh and measure, and the abstract's choice is named | none |
 | B17 | Sec. 6.2 | the time-step claim was not tied to the rerun | the $\zeta$ sequence $0.15011/0.15006/0.15003$ at $N/2N/4N$ is given | see A6 |
-| B18 | Sec. 6.5 | flexoelectric saturation | kept as a hypothesis, now explicitly labelled as untested | none |
+| B18 | Sec. 6.5 | flexoelectric saturation | kept as a hypothesis, now explicitly labeled as untested | none |
 | B19 | Sec. 1 | four contribution bullets, one of them a protocol | three bullets against the FEM-1/FEM-4/FEM-5 comparison, plus one sentence on which observable fixes each parameter and a statement that joint identifiability was not tested | none |
 
 **Still unverified after round 16.** No TeX distribution is installed here, so
@@ -147,7 +149,7 @@ resolution were not measured; the typeset equations of A1, A2 and B12 must be
 read once on Overleaf. The $\alpha<1$ first-period decrements are dt-converged
 to three digits but are not damping ratios, and no claim beyond that is made.
 
-## 11. What round 17 corrected (consistency sweep, no new physics)
+## 11. What round 17 addressed (consistency sweep, no new physics)
 
 | # | item | defect | correction |
 |---|---|---|---|
@@ -163,7 +165,7 @@ float placement and overfull boxes are unmeasured, and the new caption text has
 never been typeset. The $64\,\%$ at $\alpha=0.6$ is a first-period measure of
 two curves, not a damping ratio of a fractional element.
 
-## 12. What round 18 corrected (audit first, then only the confirmed items)
+## 12. What round 18 addressed (audit first, then only the confirmed items)
 
 Stage 1 was an audit of every claim the round-18 brief named, checked against the
 code, the archived JSON and a fresh recomputation
@@ -178,7 +180,7 @@ stood.
 | A2 | Sec. 3.1 | "the piezoelectric strip of~\cite{fem1}" attributed a piezoelectric model to an elastic paper | it now says: with the flexoelectric tensor set to zero the model reduces to the linear piezoelectric strip of the plane-stress reduction, with the strain-gradient stiffness retained |
 | A3 | reference [62] | the record was a placeholder with `TODO` fields | replaced by the full Gupta *et al.* record; the entry is the last in the file and its *rendered* number depends on citation order, which cannot be read without TeX |
 | A4 | Sec. 7 title | "Experimental calibration protocol and limitations", although no experiment is reported | "Parameter identification and limitations", with the two subsections renamed to "Measurement routes for the four parameters" and "Identification of the fractional order and of the relaxation time"; the one remaining "obtained experimentally" in the introduction became "identified from measurements" |
-| B1 | Eq. (22) | the L1 quadrature was printed as $\sum_{k=0}^{n}b_{n-k}\Delta u^{n+1-k}$, which pairs the newest increment with the oldest weight; Eq. (12) prints the correct $b_0$-first form | index corrected to $b_k$, the history sum to $\sum_{k\ge1}b_k\Delta u^{n+1-k}$, and the $\alpha=1$ limit restated: $b_0=1$, $b_j=0$ for $j\ge1$, so the operator becomes the backward difference and Kelvin--Voigt is recovered to $O(\Delta t)$, not exactly |
+| B1 | Eq. (22) | the L1 quadrature was printed as $\sum_{k=0}^{n}b_{n-k}\Delta u^{n+1-k}$, which pairs the newest increment with the oldest weight; Eq. (12) prints the correct $b_0$-first form | index updated to $b_k$, the history sum to $\sum_{k\ge1}b_k\Delta u^{n+1-k}$, and the $\alpha=1$ limit restated: $b_0=1$, $b_j=0$ for $j\ge1$, so the operator becomes the backward difference and Kelvin--Voigt is recovered to $O(\Delta t)$, not exactly |
 | B1b | `fem6_core.l1_weights` | the closed form returns $b_0=1-0^0=0$ at $\alpha=1$ because numpy evaluates $0^0=1$; index 0 is never read by the transient, so no number changed | `b[0] = 1.0` is now set explicitly, with the reason in the docstring; `l1_weights(4,1.0)` returns `[1,0,0,0,0]` and `l1_weights(4,0.7)` is unchanged |
 | B2 | Sec. 6.2, Table 3, Fig. 2, Table C.4, ring-down caption | six different measures were quoted with three labels that were wrong: $0.5596$ was called "mode-based" and $0.55814$ "the free-strip value of Appendix C", while the ring-down caption called $0.4583$ "mode-free" | new Table `tab:coupling` (8 rows) lists every coupling factor with its boundary condition, mesh, electrode pair, $\mu$, matrix, formula and the JSON entry that reproduces it; the wrong labels are replaced by the matrix they belong to, and the two near $0.46$ are explained as $K_{uu}$ vs $K_{sc}$ ($1.5\,\%$) and $\mu=10^{-6}$ vs $0$ ($0.07\,\%$). Nothing is averaged |
 | B2b | `results/coupling_provenance.json` | not present | every row recomputed from scratch and compared with the archive: `check_coupling_provenance.py` reports 10/10 with relative differences $0$, including $0.56079$ vs the closed form $0.5607863$ ($1.2\times10^{-11}$ relative), $0.55957$, $0.55814$, $0.55797$, $0.46498$, $0.45830$, $0.45797$ |
@@ -186,13 +188,13 @@ stood.
 | B4 | Sec. 2 | the memory, the window and the flexoelectric coefficient were never set apart in one place | one sentence: the memory acts on the damping at fixed eigenfrequency, the window on the stiffness at fixed memory, $\mu$ on the coupling at fixed geometry |
 | B5 | Sec. 7.3, Sec. 6.3 | $a/L\le0.2$ was called "the bound claimed for the model" and "the bound set by" a figure | an "assumed operating range, not a validated truncation threshold", stated twice, with the reason (no experiment and no exact averaging operator available here) |
 | B6 | Sec. 7.2 | the small-loss decrement was printed as $\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2)/2$ and "a measurement at two amplitudes fixes the pair" | that expression is $\zeta$, not $\delta$: the decrement is $\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2)$, checked against $\delta=\pi\omega\tau$ at $\alpha=1$; a single decrement fixes only the product, so the pair needs two frequencies |
-| C1 | run-in headings | all 21 `\paragraph{}` headings end with a period inside the braces | ~~already consistent; left unchanged~~ -- wrong: see Sec. 13, the class adds its own period and the compiled PDF shows "Window..". Corrected in round 19 |
+| C1 | run-in headings | all 21 `\paragraph{}` headings end with a period inside the braces | ~~already consistent; left unchanged~~ -- wrong: see Sec. 13, the class adds its own period and the compiled PDF shows "Window..". Addressed in round 19 |
 | C2 | editorial asides | "easy to get wrong", "worth recording", "The exponent and the gamma factor are both easy to misplace" | reworded as statements of fact |
-| C5 | Sec. 6.5 | "eight thicknesses" | checked against Table C.2: the eight are 10, 7, 5, 3.5, 2.7, 2, 1.4 and 1 \si{\micro\metre}, in the table and in the figure; unchanged |
+| C5 | Sec. 6.5 | "eight thicknesses" | checked against Table C.2: the eight are 10, 7, 5, 3.5, 2.7, 2, 1.4 and 1 \si{\micro\meter}, in the table and in the figure; unchanged |
 
 Items the brief listed that the audit could **not** confirm in the current
 files are recorded as such in `ROUND18_REPORT.md` and were not edited -- except
-C3, which turned out to be reproducible and is corrected in Sec. 13.
+C3, which turned out to be reproducible and is addressed in Sec. 13.
 
 **Still unverified after round 18.** No TeX distribution is installed here, so
 compilation, the page count (30 pages, 28 for the letter), float placement,
@@ -202,7 +204,7 @@ Table `tab:coupling` has never been typeset and, at seven columns, it may need
 (Rounds 19 and 20 address the table: it is now five columns at `\small` with no
 file names in it, see Secs. 13 and 14.)
 
-## 13. What round 19 corrected (four leftovers)
+## 13. What round 19 addressed (four leftovers)
 
 Full detail, with the changed lines, in `ROUND18_REPORT.md` (round-19
 addendum). Summary:
@@ -210,7 +212,7 @@ addendum). Summary:
 | # | item | correction |
 |---|---|---|
 | 1 | run-in headings printed `Window..` | the period inside the braces is removed at all 21 `\paragraph{}` sites (14 in `sec/06_results.tex`, 1 in `sec/07_calibration_limitations.tex`, 6 in `sec/91_appendixA.tex`); the class supplies the single terminator. **The typeset output is unverified** -- no TeX here -- so if the class turns out to print none, restore the 21 periods |
-| 2 | the flexoelectric growth sentence | it claimed the analytic route "gives the factor by which it grows"; that factor is $100$ ($x\propto h^{-2}$), against $24$ for the finite element, and the FEM value is $2.05$ times below the analytic $x$ at \SI{10}{\micro\metre}. The gap is read as the $3\times1$\,\si{\micro\metre} window averaging the through-thickness gradient, **stated as a hypothesis**. `tab:worked` now reads `100 (h^-2) vs 24 (FEM)` |
+| 2 | the flexoelectric growth sentence | it claimed the analytic route "gives the factor by which it grows"; that factor is $100$ ($x\propto h^{-2}$), against $24$ for the finite element, and the FEM value is $2.05$ times below the analytic $x$ at \SI{10}{\micro\meter}. The gap is read as the $3\times1$\,\si{\micro\meter} window averaging the through-thickness gradient, **stated as a hypothesis**. `tab:worked` now reads `100 (h^-2) vs 24 (FEM)` |
 | 3 | `references.bib` | the "part 3: placeholders for self-citations" comment block is deleted (no entry removed: 62 entries, all cited), and a **stray brace** left by the round-18 `fem1` replacement -- the file ended `}}`, 596 closing against 595 opening -- is removed. `nanos` appears only inside `nanostructures`, which is a word, not a unit |
 | 4 | `tab:coupling` width | seven natural-width columns (~540 pt) became six columns at `\small` with two short `p{}` columns (~370 pt estimated); no value changed and N4 still passes 10/10 |
 

@@ -17,7 +17,7 @@ Files:
 | `python/fem6_core.py` | element, assembly, condensation, modes, L1 stepping, complex pole |
 | `python/run_verification.py` | V1–V7, 40 s, writes `results/verification.{md,json}` |
 | `python/run_demos.py` | figures 1–4, writes `results/demo.json` |
-| `matlab/FEM6_memory_piezo_SG_2D_v2.m` | corrected MATLAB mirror |
+| `matlab/FEM6_memory_piezo_SG_2D_v2.m` | current MATLAB mirror |
 | `docs/FEM6_cuboid_coefficient.md` | Q1 in full |
 
 **Verdict (revised after re-reading the delivered `.m` line by line).** The
@@ -26,7 +26,7 @@ against the analytic transfer function, §1a) and the gradient coefficient is
 self-consistent with FEM-1 for an ellipsoidal length tensor. What remains is
 (1) a demonstration that cannot produce a voltage (A3), (2) placeholder
 materials (B1), and (3) a re-parametrisation of the nonlocal length to a cuboid
-half-width, which changes the gradient stiffness by 5/3 and is a modelling
+half-width, which changes the gradient stiffness by 5/3 and is a modeling
 decision rather than a bug (A2). My original A1 finding was **wrong** and is
 withdrawn — see `docs/FEM6_A1_clarification.md`.
 
@@ -71,7 +71,7 @@ So **FEM-1's 1/10 is the 3-D-ellipsoid entry**; a cuboid needs **1/6**, i.e.
 
 1. *Keeping 1/10 in front of the cuboid moment* is 5× too small (frequencies
    off by `√5`). This is the error the blueprint's note is circling.
-2. The blueprint's "corrected" column (1/12, 1/16, 1/20) is the **energy**
+2. The blueprint's "final" column (1/12, 1/16, 1/20) is the **energy**
    coefficient. `U = ½qᵀK_g q`, so the stiffness entries are 1/6, 1/8, 1/10.
    Putting 1/12 into `K_g` halves the model and breaks the FEM-1 benchmark.
 
@@ -134,7 +134,7 @@ and reduces to KV in the limit `C_∞ → ∞` (rigid series spring). Recommenda
 * keep KV for the numerical demonstration (it is the one that keeps `K_eff`
   proportional and the modal system diagonal — a genuine advantage);
 * add one paragraph stating that the unbounded high-frequency modulus is a
-  modelling artefact, that the Zener form removes it, and that at the
+  modeling artefact, that the Zener form removes it, and that at the
   frequencies of interest (`ωτ ≪ 1`) the two differ by `O((ωτ)^{2α})`;
 * if a reviewer asks for the Zener, it is a one-line change in the modal
   equation and does not disturb anything else.
@@ -162,7 +162,7 @@ relaxation caveat of Q2 it is doubly exposed.
    (`1.95×10⁻⁸` vs `5.0×10⁻¹⁰`). That single number changes the capacitance by
    20× and the voltage by the same factor.
 4. Fix: use the FEM-5 set (given in §4) as the default and keep the
-   placeholders behind a switch, labelled "placeholder, for code verification
+   placeholders behind a switch, labeled "placeholder, for code verification
    only". A verification case may use any material; a results section may not.
 
 ---

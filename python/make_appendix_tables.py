@@ -50,8 +50,8 @@ def table_orientation():
 \centering
 \caption{Window orientation: frequency of the extensional mode and its coupling
 factor, for the three aspect ratios of Fig.~\ref{fig:orientation}, on the
-\SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre} strip with
-$h=\SI{10}{\micro\metre}$, poling $x$, plane stress, $24\times2$ mesh,
+\SI{200}{\micro\meter}$\times$\SI{10}{\micro\meter} strip with
+$h=\SI{10}{\micro\meter}$, poling $x$, plane stress, $24\times2$ mesh,
 $\mu=0$ and $\alpha=1$. Every fifth degree is listed; the figure uses the same
 sweep at $5^\circ$ spacing. The remaining orientations follow from
 $\theta\to\theta+180^\circ$ and $\theta\to-\theta$, which reproduce the values
@@ -88,13 +88,13 @@ def table_thickness():
 \small
 \caption{Thickness sweep behind Fig.~\ref{fig:thickness}. First frequency,
 flexoelectric bending coupling and extensional coupling of the poled strip. The
-bending column carries $\mu=10^{-6}$\,\si{\coulomb\per\metre}, the extensional
+bending column carries $\mu=10^{-6}$\,\si{\coulomb\per\meter}, the extensional
 column $\mu=0$, and both are converged to the tolerance of
 \ref{app:verification}.}
 \label{tab:thickness}
 \begin{tabular}{@{}r r r r@{}}
 \toprule
-$h$ (\si{\micro\metre}) & $f_1$ (kHz) & $k^2_{\rm flexo}$ & $k^2_{\rm piezo}$ \\
+$h$ (\si{\micro\meter}) & $f_1$ (kHz) & $k^2_{\rm flexo}$ & $k^2_{\rm piezo}$ \\
 \midrule
 """ + "\n".join(body) + r"""
 \bottomrule
@@ -172,8 +172,8 @@ def table_convergence():
     text = r"""\begin{table}[!htbp]
 \centering
 \caption{Convergence of the extensional mode behind
-Fig.~\ref{fig:convergence}: strip \SI{200}{\micro\metre}$\times$\SI{10}{\micro\metre},
-poling $x$, plane stress, $\mu=0$, $a_1\times a_2=3\times1$\,\si{\micro\metre}.
+Fig.~\ref{fig:convergence}: strip \SI{200}{\micro\meter}$\times$\SI{10}{\micro\meter},
+poling $x$, plane stress, $\mu=0$, $a_1\times a_2=3\times1$\,\si{\micro\meter}.
 The frequency is that of the extensional mode of the short-circuit eigenvalue
 problem and the coupling is the mode-free quasi-static value of
 \eqref{eq:kstatic}, the number quoted in the text; the errors are referred to

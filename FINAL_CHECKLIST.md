@@ -70,11 +70,11 @@ i.e. **−0.3 page**; the move buys tidy body pages, not a shorter appendix.
 
 | item | status |
 |---|---|
-| **Compilation** | not run. `pdflatex → bibtex → pdflatex ×2` has never been executed on this tree |
-| **Page count** | **not measured.** Estimated at **33.7 pages** (34 before) by `python/length_budget.py` → `results/length_budget.md`: every figure height from its PDF box and `width=`, every table from its row count, the reference list from 62 entries, and the gap factor (1.08 printed pages per page of area) calibrated on the last counted PDF. Body content fell by **744 pt = 1.04 page of area**, but the three tables moved into Appendix C reappear there, so the package total falls only 203 pt. **≤ 30 is not reached**: about 2440 pt = 3.4 pages of area still has to go, and the model carries ~1 page of error |
+| **Compilation** | offline Tectonic diagnostic: 33 pages, 0 undefined references, no doubled appendix or run-in heading. The mandated `pdflatex → bibtex → pdflatex ×2` sequence has not been executed on this tree (no full TeX Live) |
+| **Page count** | **not measured.** Estimated at **33.7 pages** (34 before) by `python/length_budget.py` → `results/length_budget.md`: every figure height from its PDF box and `width=`, every table from its row count, the reference list from 68 entries, and the gap factor (1.08 printed pages per page of area) calibrated on the last counted PDF. Body content fell by **744 pt = 1.04 page of area**, but the three tables moved into Appendix C reappear there, so the package total falls only 203 pt. **≤ 30 is not reached**: about 2440 pt = 3.4 pages of area still has to go, and the model carries ~1 page of error |
 | **On which page each float lands** | not measured; `check_float_order.py` verifies citation *order*, not page placement |
 | **Overfull/underfull boxes** | not measured; the height of the new five-column `tab:coupling` and of the three tables moved to Appendix C is untested |
-| **DOI resolution** | not checked: Crossref unreachable. `fem1` (10.1016/j.finel.2026.104681) and the 13 `TO VERIFY` entries are unchecked, not confirmed |
+| **DOI resolution** | not checked: Crossref unreachable. `fem1` (10.1016/j.finel.2026.104681) and the 15 `UNVERIFIED` entries are unchecked, not confirmed |
 | **Typeset heading of `\paragraph`** | the 21 trailing periods were removed in round 19 on the evidence of the author's compiled PDF; the result has not been compiled here |
 
 ## 6. What would get to 30 pages, measured and not done

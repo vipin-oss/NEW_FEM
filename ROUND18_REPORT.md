@@ -52,7 +52,7 @@ search-and-replace.
 
 | # | claim in the brief | finding | class | evidence |
 |---|---|---|---|---|
-| C1 | periods in run-in headings | ~~disproved as a defect~~ **corrected in round 19: confirmed defect.** I checked only that all 21 sites were *consistent*; consistency was the wrong question, because the class prints its own terminator, so `\paragraph{Window.}` sets as "Window.." — visible about 20 times in the compiled `Paper_12_4.pdf` | **CONFIRMED** — my "consistent, unchanged" verdict was wrong | `grep -rho "\\\\paragraph{[^}]*}"` → 21 hits, all `….`; the compiled PDF supplied by the author shows the doubled periods. Fixed in round 19 (see the addendum) |
+| C1 | periods in run-in headings | ~~disproved as a defect~~ **addressed in round 19: confirmed defect.** I checked only that all 21 sites were *consistent*; consistency was the wrong question, because the class prints its own terminator, so `\paragraph{Window.}` sets as "Window.." — visible about 20 times in the compiled `Paper_12_4.pdf` | **CONFIRMED** — my "consistent, unchanged" verdict was wrong | `grep -rho "\\\\paragraph{[^}]*}"` → 21 hits, all `….`; the compiled PDF supplied by the author shows the doubled periods. Addressed in round 19 (see the addendum) |
 | C2 | unit macros and editorial asides | `{\nano\second}` is correct siunitx in every one of the 8 occurrences (the plural defect of an earlier round is gone). The asides "easy to get wrong", "worth recording", "both easy to misplace" survived | manuscript-only | `grep -n "nano"`, `grep -n "easy to\|worth recording"` |
 | C3 | equation (27) text, table row 100 vs 24 | **not confirmed in round 18; confirmed and fixed in round 19.** I looked for the pair 100/24 in the thickness table (`tab:C2`), where it is not; it belongs to the worked-example table `tab:worked`, whose "flexoelectric growth" row quoted only the FEM factor 24 while the text claimed the analytic route "gives the factor by which it grows" — that factor is 100, because $x\propto h^{-2}$ | **CONFIRMED** (round 19) | `sec/06_results.tex` "Flexoelectric bending" paragraph and the `tab:worked` row; see the addendum |
 | C4 | a suspicious row of the anisotropy table | **not confirmed.** `table_C1_orientation.tex` is monotone in θ for all three aspect ratios and consistent with the sweep of Fig. 4 | no edit | `Paper_12/table_C1_orientation.tex`, `check_paper_numbers` row "orientation sweep" |
@@ -148,7 +148,7 @@ make_coupling_table.py, check_coupling_provenance.py, run_all.py}`.
 | structure / labels | `python/check_paper_structure.py` | nothing to report |
 | unverified list | `python/list_unverified.py` | 29 entries, 0 stale |
 | abstract claims | `python/audit_abstract_claims.py` | 3 held, 5 not held, 3 inputs, 0 uncovered tokens |
-| references | `Paper_12/check_refs.py` | 62 entries, 47/58 FEM-1 references carried, 0 field mismatches; Crossref offline, 62 unchecked |
+| references | `Paper_12/check_refs.py` | 68 entries, 47/58 FEM-1 references carried, 0 field mismatches; Crossref offline, 62 unchecked |
 
 `run_all.py` now also runs `coupling_provenance.py → make_coupling_table.py →
 check_coupling_provenance.py` and gates the result as **N4**.
@@ -165,8 +165,8 @@ check_coupling_provenance.py` and gates the result as **N4**.
 * **Rendered reference numbers.** `elsarticle-num` numbers by citation order,
   so "[62]" in the brief cannot be confirmed to be the Gupta entry in the
   typeset output; the *entry* is exactly as specified.
-* **DOI resolution** for `fem1` (10.1016/j.finel.2026.104681) and for the 13
-  entries carrying `TO VERIFY`: Crossref is unreachable, so they are
+* **DOI resolution** for `fem1` (10.1016/j.finel.2026.104681) and for the 15
+  entries carrying `UNVERIFIED`: Crossref is unreachable, so they are
   unchecked, not confirmed.
 * ~~**C3**~~ — reproducible after all, and fixed in round 19 (see the addendum
   at the end); **C4** could not be reproduced in the current files and was
@@ -196,7 +196,7 @@ sites:
 
 `grep -c '\\paragraph{[^}]*\.}'` over `main.tex` and `sec/*.tex` is **0** after
 the edit. **The typeset heading output is UNVERIFIED**: there is no TeX here, so
-the only evidence for the class behaviour is the PDF the author compiled. If the
+the only evidence for the class behavior is the PDF the author compiled. If the
 class turns out to print no terminator at all, the fix is to restore the 21
 periods, which is a one-line `sed`.
 
@@ -210,7 +210,7 @@ $k^{2}\ll1$ — grows by **24** over the same span. The two routes are not the s
 quantity and the text now says so, with the gap read as the window averaging the
 through-thickness gradient, **stated as a hypothesis** because the
 second-moment model carries no through-thickness resolution. At
-$h=\SI{10}{\micro\metre}$ the FEM value is **2.05** times below the analytic $x$
+$h=\SI{10}{\micro\meter}$ the FEM value is **2.05** times below the analytic $x$
 ($3.5704\times10^{-4}/1.7437\times10^{-4}=2.047$).
 
 | where | change |
@@ -230,7 +230,7 @@ they already held `x_analytic_h10 = 3.57041e-4` and `growth = 23.935`.
 | **defect found and fixed** | the file ended with `}}`: **595 opening and 596 closing braces**, a stray brace left by the round-18 `fem1` replacement (it is present in `8c07ba8` and absent in `2a88232`). BibTeX would have had to recover from it; it is removed, and the braces now balance 595/595 |
 | "nanos" | one hit in the whole repository, `nanostructures` (`sec/01_introduction.tex:67,110`), which is a word and not a unit. Nothing to fix |
 
-`Paper_12/check_refs.py` re-run: 62 entries, 47/58 FEM-1 references carried,
+`Paper_12/check_refs.py` re-run: 68 entries, 47/58 FEM-1 references carried,
 0 field mismatches (Crossref still offline).
 
 ### 4. `tab:coupling` width
@@ -275,7 +275,7 @@ $\textwidth\approx470$ pt, i.e. about 0.78 of the text block.
 | `python/check_paper_structure.py` | nothing to report |
 | `python/list_unverified.py` | 29 entries, 0 stale |
 | `python/audit_abstract_claims.py` | 0 uncovered tokens |
-| `Paper_12/check_refs.py` | 62 entries, 0 field mismatches |
+| `Paper_12/check_refs.py` | 68 entries, 0 field mismatches |
 | `python/run_all.py` | **60/60 checks pass** |
 
 ## Round 19 — UNVERIFIED
@@ -287,5 +287,5 @@ $\textwidth\approx470$ pt, i.e. about 0.78 of the text block.
   the single terminator for the text to read "Window. For half-widths …".
 * **The width of `tab:coupling`**: 370 pt is an estimate from nominal widths,
   not a measurement; and it has still never been typeset.
-* **DOI resolution** for `fem1` and the 13 `TO VERIFY` entries (Crossref
+* **DOI resolution** for `fem1` and the 15 `UNVERIFIED` entries (Crossref
   unreachable).

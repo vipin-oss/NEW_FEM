@@ -19,7 +19,7 @@ python/run_memory_variants.py memory on K_eff vs K_uu; KV vs fractional Zener
 python/run_verification.py   V1–V7 verification suite (~40 s)
 python/run_all.py            ONE command: whole suite + one pass/fail table (29 checks)
 python/run_demos.py          figures 1–5 + results/demo.json
-matlab/FEM6_memory_piezo_SG_2D_v2.m   corrected MATLAB mirror + self-tests
+matlab/FEM6_memory_piezo_SG_2D_v2.m   current MATLAB mirror + self-tests
 docs/FEM6_checker_report.md           answers to the four blueprint questions,
                                       findings A/B/C/D, revised blueprint
 docs/FEM6_cuboid_coefficient.md       Q1 in full (second-moment derivation)

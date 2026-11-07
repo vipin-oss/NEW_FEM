@@ -9,7 +9,7 @@ quick inspection.
 House style
     * STIX (Times-like) for text and maths; on a machine with Times New Roman
       installed, set FIG_FONT = "Times New Roman" below.
-    * perceptually uniform, colour-blind-safe maps only (viridis / cividis);
+    * perceptually uniform, color-blind-safe maps only (viridis / cividis);
       categorical series use the Okabe-Ito palette.
     * no figure is drawn whose third dimension is not a real variable.
 
@@ -61,7 +61,7 @@ plt.rcParams.update({
     "ps.fonttype": 42,
 })
 
-# Okabe-Ito colour-blind-safe categorical palette
+# Okabe-Ito color-blind-safe categorical palette
 OI = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9",
       "#F0E442", "#000000"]
 
@@ -277,7 +277,7 @@ AR_ORDER = (2.0, 3.0, 4.0, 5.0, 7.0, 10.0)
 
 
 def ar_color(AR):
-    """One colour per aspect ratio, shared by every figure that sweeps it.
+    """One color per aspect ratio, shared by every figure that sweeps it.
 
     The categorical palette is indexed by the *value* of the aspect ratio, not
     by its position in the current figure's list, so AR = 2 is the same blue in
@@ -291,7 +291,7 @@ def ar_color(AR):
 
 
 def fig_orientation(pol):
-    """Window orientation: normalised polar sections of f1 and k2, and their
+    """Window orientation: normalized polar sections of f1 and k2, and their
     maps over the aspect ratio."""
     ARS = (2.0, 5.0, 10.0)
     fig = plt.figure(figsize=(6.9, 6.1))
@@ -380,7 +380,7 @@ def fig_p4_modeshape():
     Koc, _, _, (d, beta) = f6.reduce(mdl, "open", pair=("bottom", "top"))
     ws, Phi = f6.modes(Ksc, M, 3)
     phi_mode = Phi[:, 0].copy()
-    # normalise the mode so that the peak transverse displacement is 10 nm
+    # normalize the mode so that the peak transverse displacement is 10 nm
     vpeak = np.abs(phi_mode[[np.searchsorted(idx, mdl.mech_dof[n][4])
                              for n in range(mesh.nnode)]]).max()
     scale_nm = 10.0 / vpeak
@@ -529,9 +529,9 @@ def fig_damping():
 def fig_p6_waterfall():
     """Ring-down for eight Caputo orders.
 
-    Drawn as coloured time traces rather than a 3-D waterfall: the
+    Drawn as colored time traces rather than a 3-D waterfall: the
     perspective view is dominated by the overlapping of the traces and the
-    alpha axis carries no more information than the colour does.
+    alpha axis carries no more information than the color does.
     """
     Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)
     mesh = f6.mesh_rect(24, 2, LPLATE, HPLATE)

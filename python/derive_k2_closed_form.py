@@ -265,7 +265,7 @@ def main():
 
     wtex = ["% table generated from the archived results",
             r"\begin{tabular}{@{}lccc@{}}", r"\toprule",
-            r"$h$ (\si{\micro\metre}) & correct $k^2$ & "
+            r"$h$ (\si{\micro\meter}) & correct $k^2$ & "
             r"$k^2/(1+k^2)$ & value that was quoted @@ROW@@", r"\midrule"]
     for w in wrong_table:
         wtex.append("%.0f & %.5f & %.5f & %.5f @@ROW@@"

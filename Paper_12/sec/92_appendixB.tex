@@ -90,7 +90,7 @@ $6.2\times10^{-4}$ relative.
 \input{table_convergence}
 
 \paragraph{Numerical precision of the thinnest point} The
-$h=\SI{1}{\micro\metre}$ coupling is a difference of two nearly equal
+$h=\SI{1}{\micro\meter}$ coupling is a difference of two nearly equal
 eigenvalues of a pencil whose condition number is $\sim10^{12}$, so it
 inherits the accuracy of the eigensolver. The same model was solved through
 four mathematically equivalent eigensolver paths -- a QZ generalized
@@ -98,10 +98,10 @@ eigenproblem, a dense symmetric reduction, a sparse Lanczos reduction and a
 truncated modal sum -- and through four numeric stacks, and all of them return
 $4.2\times10^{-3}$ and the factor $24$ to within $0.5\,\%$. Deviations are
 measured from the midpoint of the equivalent results, so the spread quoted is
-the spread of the model, and at $h=\SI{10}{\micro\metre}$ it is at most
+the spread of the model, and at $h=\SI{10}{\micro\meter}$ it is at most
 $10^{-4}\,\%$. Every path keeps the whole spectrum in the secular sum:
 truncating it to twelve modes moves $k^{2}$ by more than $80\,\%$, an effect
-of the approximation alone. A run of the same suite on a later numeric stack
+of the approximation alone. A run of the same suite on an additional numeric stack
 returns $4.18\times10^{-3}$ ($+0.2\,\%$), consistent with this statement. This
 spread fixes the two significant digits quoted in the text and in the
 abstract.

@@ -32,9 +32,9 @@ TEX = os.path.join(ROOT, "Paper_12", "main.tex")
 
 # (literal in the abstract, what it is, verdict, route / where it is checked)
 CLAIMS = [
-    ("200", "plate length, \\SI{200}{\\micro\\metre}",
+    ("200", "plate length, \\SI{200}{\\micro\\meter}",
      "n/a", "an input of the model, not a measured quantity"),
-    ("10", "plate thickness, \\SI{10}{\\micro\\metre}",
+    ("10", "plate thickness, \\SI{10}{\\micro\\meter}",
      "n/a", "an input of the model"),
     ("1", "$\\alpha=1$ and the one L1 history",
      "n/a", "the classical limit, chosen for the comparison"),
@@ -62,6 +62,31 @@ CLAIMS = [
      "nahi hua", "a property of the two condensation choices, read off the "
      "FEM matrices (S1b); the pole solver that converts the pole into "
      "$\\zeta$ is itself checked (I4)"),
+    ("0.09", "thickness independence of the mode-free extensional coupling",
+     "nahi hua", "T1: the same FEM sweep; the closed form is thickness "
+     "independent but the 0.09 % residual is a solver property"),
+    ("3.6", "smallest flexoelectric coupling on the design map",
+     "nahi hua", "design_map.json range k2_flexo_min, quoted to two "
+     "significant digits (N1)"),
+    ("1.0", "largest flexoelectric coupling on the design map",
+     "nahi hua", "design_map.json largest k2_flexo, quoted to two "
+     "significant digits (N1)"),
+    ("6.5", "smallest flexoelectric/piezoelectric ratio on the design map",
+     "nahi hua", "design_map.json range ratio_min, quoted to two "
+     "significant digits (N1)"),
+    ("1.9", "largest flexoelectric/piezoelectric ratio on the design map",
+     "nahi hua", "design_map.json range ratio_max, quoted to two "
+     "significant digits (N1)"),
+    ("0.1", "the 0.1 % contour on the design map",
+     "nahi hua", "design_map.json 0.1 % contour; a threshold of the solved "
+     "map (N1)"),
+    ("5.5", "thickness of the 0.1 % crossing at a2 = 1 micrometer",
+     "nahi hua", "design_map.json threshold h_at_0p1pct_a2_1um, quoted to "
+     "two significant digits (N1)"),
+    ("2", "subscript index in $a_2$",
+     "n/a", "a symbol index, not a measured quantity"),
+    ("0.2", "assumed operating range $a/L\\le0.2$",
+     "n/a", "an assumed modeling range, not a measured quantity"),
 ]
 
 

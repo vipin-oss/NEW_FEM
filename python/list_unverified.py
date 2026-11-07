@@ -82,7 +82,7 @@ def main():
     # ---- 3. mode tracking
     mt = J("mode_tracking.json")
     rows.append((f"{mt['mac_min']:.3f}", "lowest MAC of mode 1 against the "
-                 "$h=\\SI{10}{\\micro\\metre}$ shape", "mode_tracking.json",
+                 "$h=\\SI{10}{\\micro\\meter}$ shape", "mode_tracking.json",
                  "an FEM eigenvector overlap; the reference is another FEM "
                  "eigenvector"))
     rows.append((f"{mt['min_f2_over_f1']:.2f}", "smallest $f_2/f_1$ over the "
@@ -91,13 +91,13 @@ def main():
 
     # ---- 4. the thickness sweep: frequencies and slopes
     th = J("demo.json")["flexo_thickness"]
-    rows.append((f"{th[0]['f1_kHz']:.1f}", "$f_1$ at $h=\\SI{10}{\\micro\\metre}$"
+    rows.append((f"{th[0]['f1_kHz']:.1f}", "$f_1$ at $h=\\SI{10}{\\micro\\meter}$"
                  " [kHz]", "demo.json flexo_thickness[0]",
                  "FEM eigen-solve; the Euler--Bernoulli value is the one "
                  "quoted as the comparison, not as this number"))
     for h, s in ((10, -1.96), (5, -1.52), (2, -0.43)):
         rows.append((f"{s:.2f}", f"local log-log slope of the flexoelectric "
-                     f"$k^2$ at $h=\\SI{{{h}}}{{\\micro\\metre}}$",
+                     f"$k^2$ at $h=\\SI{{{h}}}{{\\micro\\meter}}$",
                      "demo.json flexo_thickness (finite differences)",
                      "a finite difference of the eight FEM runs; no closed "
                      "form predicts the slope once the window is fixed in size"))

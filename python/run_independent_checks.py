@@ -463,11 +463,11 @@ def write_axes(F1, F3, F5):
     pol_y = rows["poling y, electrodes top/bottom"]
     pol_x = rows["poling x, electrodes left/right"]
     E_y = pol_y["C_xx"] - pol_y["C_xy"] ** 2 / pol_y["C_yy"]
-    UM = BS + "micro" + BS + "metre"
+    UM = BS + "micro" + BS + "meter"
     SI_200 = BS + "SI{200}{" + UM + "}"
     SI_10 = BS + "SI{10}{" + UM + "}"
     PA = BS + "pascal"
-    FM = BS + "farad" + BS + "per" + BS + "metre"
+    FM = BS + "farad" + BS + "per" + BS + "meter"
     L = ["% table generated from the archived results",
          "@@BS@@begin{tabular}{@{}llll@{}}",
          "@@BS@@toprule",
@@ -539,8 +539,8 @@ def main():
           ""]
     md += ["## F1 -- fundamental frequency of the elastic strip "
            "(e = mu = 0, no gradient term)", "",
-           f"$L=\\SI{{200}}{{\\micro\\metre}}$, depth $h=\\SI{{10}}{{\\micro\\metre}}$, "
-           f"$\\rho=\\SI{{{F1['rho']:.0f}}}{{\\kilo\\gram\\per\\cubic\\metre}}$ "
+           f"$L=\\SI{{200}}{{\\micro\\meter}}$, depth $h=\\SI{{10}}{{\\micro\\meter}}$, "
+           f"$\\rho=\\SI{{{F1['rho']:.0f}}}{{\\kilo\\gram\\per\\cubic\\meter}}$ "
            "(unverified), beam modulus "
            f"$E_b=1/(\\bm C_p^{{-1}})_{{xx}}={F1['E_beam']:.4e}$ Pa "
            f"(a wide plate would use $C^p_{{11}}={F1['E_plate']:.4e}$ Pa).", "",

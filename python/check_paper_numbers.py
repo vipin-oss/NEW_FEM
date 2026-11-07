@@ -109,11 +109,11 @@ def row(where, literal, source, value, fmt, rel_tol=1e-6, upper=None):
 _TIMES_RE = re.compile(r"([0-9]+(?:\.[0-9]+)?)\s*\\times\s*10\^\{?\s*([+-]?[0-9]+)\s*\}?")
 
 
-def normalise(text):
+def normalize(text):
     """Rewrite a\times10^{b} as a e-notation so a bare numeral can be found.
 
     The manuscript states powers of ten in typeset form; the audit literals are
-    bare numerals such as ``1.74e-4``.  Normalising the manuscript once keeps
+    bare numerals such as ``1.74e-4``.  Normalizing the manuscript once keeps
     the table of audited numbers readable.
     """
     text = _TIMES_RE.sub(lambda m: m.group(1) + "e" + m.group(2), text)
@@ -184,7 +184,7 @@ def stale_scan():
 
 
 def main():
-    tex = normalise(manuscript_text())
+    tex = normalize(manuscript_text())
     R = []
     R.append(row("abstract, memory coupling", "0.4650",
                  "memory_variants.json k2", g("memory_variants.json.k2"),

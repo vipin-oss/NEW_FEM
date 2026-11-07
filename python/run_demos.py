@@ -227,7 +227,7 @@ def _modal_k2(mesh, mats, Mg, pair, dense_limit=4200):
 
         1 + sum_i s_i / (w_i^2 - y) = 0,     s_i = (d . phi_i)^2 / beta,
 
-    with (w_i, phi_i) the mass-normalised short-circuit modes.  One eigensolve,
+    with (w_i, phi_i) the mass-normalized short-circuit modes.  One eigensolve,
     no difference of close eigenvalues, and the mu = 0 residual drops to 1e-10
     (i.e. to round-off).  The eigenvector sign cancels inside s_i.
     """

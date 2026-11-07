@@ -74,7 +74,7 @@ material law over a wide band.
 Zener element: the KV/Zener modulus ratio is 1.035 at `ωτ = 0.3`, 1.345 at
 `ωτ = 1`, 9.14 at 10 and 90.9 at 100.  The band `ωτ ≤ 1` is now drawn on
 Fig. 9 (`fig:zetasurf`) — the floor of the surface is shaded for `ωτ ≤ 1`, a dashed line marks
-`ωτ = 1`, and the region beyond carries no shading and is labelled "not
+`ωτ = 1`, and the region beyond carries no shading and is labeled "not
 claimed".  §7 item 7 states the bound as a limitation rather than leaving it
 to be inferred from an axis range.  The pole solver behind the figure is
 itself checked against the roots of the same equation as a polynomial over
@@ -130,11 +130,11 @@ window scaled with `h` to separate the two mechanisms.  That run is not done.
 
 ## 7. Plane stress versus plane strain
 
-**Risk.** A 2-D reduction is a modelling choice; a three-dimensional solution
+**Risk.** A 2-D reduction is a modeling choice; a three-dimensional solution
 would not need it.
 
 **Where it is addressed.** §4.2 and `tab:kinematics` give both choices for all four
-polarisation/kinematics combinations, with the mode index named so that the
+polarization/kinematics combinations, with the mode index named so that the
 comparison is between the same mode.  The plane-stress value is then compared
 with the 3-D free-bar closed form in §4.5 (check C2): the 2-D model sits 2.8 %
 below the 3-D bar, and the paper attributes that gap to the dropped `e31 εzz`,
@@ -143,7 +143,7 @@ shows is at 10⁻⁵).
 
 **Still open.** The 2.8 % gap is *not* removed, and a referee writing in 3-D
 will notice that the "thickness-independent piezo coupling" is a 2-D statement.
-The paper's defence — that the gap is constant in `h` so the *trend* survives
+The paper's defense — that the gap is constant in `h` so the *trend* survives
 — is stated but not shown as a separate number.
 
 ## 8. Placeholder material and bibliographic data
@@ -209,7 +209,7 @@ I9 runs the same bending field in all four poling/electrode pairings, so that
 the pairing which produced `6.34×10⁻⁴` is shown to correspond to no
 configuration (the short-face pairings collect exactly zero charge).
 
-**Still open.** Nothing.  This was a notation defect, not a modelling one: no
+**Still open.** Nothing.  This was a notation defect, not a modeling one: no
 number in the paper changed when it was fixed.
 
 ## 12. Several coupling factors near the same value

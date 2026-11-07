@@ -9,7 +9,7 @@ same space and their overlap can be measured:
     MAC(a,b) = |phi_a^T M phi_b|^2 / ((phi_a^T M phi_a)(phi_b^T M phi_b)),
 
 which is 1 for the same shape and 0 for orthogonal ones.  Both vectors are
-M-normalised by the eigensolver, so the denominator is 1 in practice.
+M-normalized by the eigensolver, so the denominator is 1 in practice.
 
     python3 python/run_reduction_mac.py  ->  results/reduction_mac.json
 
@@ -90,7 +90,7 @@ def main():
         "k2": {"plane_strain": float(strain["k2"][j_s]),
                "plane_stress": float(stress["k2"][j_t])},
         "mac_table": table,
-        "note": "MAC = |phi_a^T M phi_b|^2 with M-normalised eigenvectors of "
+        "note": "MAC = |phi_a^T M phi_b|^2 with M-normalized eigenvectors of "
                 "the short-circuit problem; 1 means the same shape",
     }
     os.makedirs(RES, exist_ok=True)

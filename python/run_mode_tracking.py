@@ -13,7 +13,7 @@ is 1 for the same shape and 0 for mass-orthogonal shapes, and it is computed
 here between the fundamental (short-circuit) mode at each thickness and the
 same mode at the reference thickness h = 10 um.  The off-diagonal entries
 against the reference modes 2..4 are reported too: if the tracked shape had
-drifted into a neighbouring mode, they would rise.
+drifted into a neighboring mode, they would rise.
 
 The mesh is the same 48x4 topology at every thickness, so the dof vectors are
 comparable entry by entry.
@@ -100,7 +100,7 @@ def main():
               f"{maxoff:.2e}; smallest f2/f1: {minratio:.2f}.",
            "", "A MAC of 1 means the same shape; the off-diagonal entries stay "
            "at round-off, so the tracked mode is not drifting towards a "
-           "neighbour, and f2/f1 stays above 2, so no crossing is approached."]
+           "neighbor, and f2/f1 stays above 2, so no crossing is approached."]
     with open(os.path.join(RESULTS, "mode_tracking.md"), "w") as fh:
         fh.write("\n".join(md) + "\n")
     print(f"  min MAC = {mins:.6f}, max off-diagonal = {maxoff:.2e}, "

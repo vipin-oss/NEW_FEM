@@ -8,7 +8,7 @@ The quasi-static coupling factor of an electrode pair is
 
 with K_uu the SHORT-CIRCUIT mechanical stiffness.  For a homogeneous body
 whose strain is free, the same number follows from the constitutive tensors
-alone, because the mechanical energy released by the polarisation is
+alone, because the mechanical energy released by the polarization is
 1/2 e^T C^{-1} e E^2 per unit volume against 1/2 kappa E^2 of electrical
 energy:
 
@@ -27,7 +27,7 @@ body is allowed to relax:
   * 2-D plane stress     -- what this plate model actually implements
 
 and the finite element value is compared with the last one, which is the model
-the code solves.  The 2-D-to-3-D gap is reported separately, as a modelling
+the code solves.  The 2-D-to-3-D gap is reported separately, as a modeling
 deviation rather than an implementation error.
 
 Writes results/coupling_check.json and .md.

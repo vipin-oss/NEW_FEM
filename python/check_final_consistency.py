@@ -44,7 +44,7 @@ def split_captions(raw):
     """(list of caption texts, the same source with every caption blanked).
 
     \caption{...} is scanned with balanced braces: a caption that contains
-    \SI{10}{\micro\metre} or $...$ would otherwise be cut short or swallow
+    \SI{10}{\micro\meter} or $...$ would otherwise be cut short or swallow
     the paragraph that follows it.
     """
     caps, out, i = [], [], 0

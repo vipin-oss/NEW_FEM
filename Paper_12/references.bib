@@ -6,12 +6,17 @@
 %%  (references_R1.bib, 58 entries, every entry carrying a DOI).  These are
 %%  the entries the manuscript is allowed to cite without further checking.
 %%
-%%  Part 2 (entries marked  note    = {TO VERIFY: fields from memory, not checked against the publisher record}) are the flexoelectric,
-%%  piezoelectric, fractional-viscoelastic and harvesting references that the
-%%  new subject needs and that are NOT in the FEM-1 file.  They are tagged so
-%%  that nothing is presented as verified when it has not been.  Zgonik1994 is
-%%  the one entry outside the FEM-1 file that was checked against the journal
-%%  record while this work was carried out.
+%%  Part 2 carries the flexoelectric, piezoelectric, fractional-viscoelastic
+%%  and harvesting references that the new subject needs and that are NOT in
+%%  the FEM-1 file.  Entries whose fields were not checked against a publisher
+%%  record carry note = {UNVERIFIED: ...}, which prints in the bibliography;
+%%  nothing is presented as verified when it has not been.  Zgonik1994 is the
+%%  one entry outside the FEM-1 file that was checked against the journal
+%%  record.  The published entries `fem1` and `Gupta2026Rayleigh` also carry
+%%  UNVERIFIED notes: the first because its publisher record was not checked
+%%  offline, the second because the FEM-1 list prints 2024 while the Crossref
+%%  record gives published-print 2026; the printed year is retained here
+%%  pending author confirmation.
 %% ---------------------------------------------------------------------------
 
 @book{Love1927,
@@ -449,6 +454,7 @@
   pages   = {8825--8848},
   year    = {2026},
   doi     = {10.1080/17455030.2024.2379958},
+  note    = {UNVERIFIED: FEM-1 list prints 2024; Crossref published-print is 2026; the printed year is retained pending author confirmation},
   annote  = {volume, issue, pages and year from api.crossref.org 2026-11-06:
              volume 36, issue 5, pages 8825--8848, published-print 2026-09-03,
              issued (online) 2024}
@@ -585,7 +591,7 @@
   pages   = {637--642},
   year    = {1968},
   doi     = {10.1016/0020-7683(68)90079-6},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{Kogan1964,
@@ -595,7 +601,7 @@
   volume  = {5},
   pages   = {2069--2070},
   year    = {1964},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{YudinTagantsev2013,
@@ -607,7 +613,7 @@
   pages   = {432001},
   year    = {2013},
   doi     = {10.1088/0957-4484/24/43/432001},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{Zubko2013,
@@ -618,7 +624,7 @@
   pages   = {387--421},
   year    = {2013},
   doi     = {10.1146/annurev-matsci-071312-121634},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{Cross2006,
@@ -630,7 +636,7 @@
   pages   = {53--63},
   year    = {2006},
   doi     = {10.1007/s10853-005-5916-6},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{Caputo1967,
@@ -642,7 +648,7 @@
   pages   = {529--539},
   year    = {1967},
   doi     = {10.1111/j.1365-246X.1967.tb02303.x},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{BagleyTorvik1983,
@@ -654,7 +660,7 @@
   pages   = {201--210},
   year    = {1983},
   doi     = {10.1122/1.549724},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{Koeller1984,
@@ -666,7 +672,7 @@
   pages   = {299--307},
   year    = {1984},
   doi     = {10.1115/1.3167616},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{ColeCole1941,
@@ -678,7 +684,7 @@
   pages   = {341--351},
   year    = {1941},
   doi     = {10.1063/1.1750906},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{HavriliakNegami1967,
@@ -689,7 +695,7 @@
   pages   = {161--210},
   year    = {1967},
   doi     = {10.1016/0032-3861(67)90021-3},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{EnelundLesieutre1999,
@@ -701,7 +707,7 @@
   pages   = {4447--4472},
   year    = {1999},
   doi     = {10.1016/S0020-7683(98)00194-2},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{Roundy2003,
@@ -713,7 +719,7 @@
   pages   = {1131--1144},
   year    = {2003},
   doi     = {10.1016/S0140-3664(02)00248-7},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @book{ErturkInman2011,
@@ -723,7 +729,7 @@
   address   = {Chichester},
   year      = {2011},
   doi       = {10.1002/9781119991151},
-  annote    = {TO VERIFY: fields from memory, not checked against the publisher record}
+  note      = {UNVERIFIED: fields from memory, not checked against the publisher record}
 }
 
 @article{fem1,
@@ -735,7 +741,8 @@
   volume  = {263},
   pages   = {104681},
   year    = {2027},
-  doi     = {10.1016/j.finel.2026.104681}
+  doi     = {10.1016/j.finel.2026.104681},
+  note    = {UNVERIFIED: publisher record not checked offline; fields transcribed from the published FEM-1 paper}
 }
 
 @article{Lim2015,

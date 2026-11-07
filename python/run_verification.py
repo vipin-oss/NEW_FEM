@@ -477,7 +477,7 @@ def write_markdown(R):
       f"{R['memory_tau0']:.2e}.\n")
     A("\nL1 indexing of the delivered `modal_fractional` (weights b_1..b_{n-1} "
       "instead of b_0..b_{n-1}):\n")
-    A("| alpha | delivered late oscillation | corrected late oscillation | ratio |\n|---|---|---|---|")
+    A("| alpha | delivered late oscillation | adjusted late oscillation | ratio |\n|---|---|---|---|")
     L = R["l1_scheme"]
     A("\n### Delivered L1 stencil vs the analytic transfer function\n")
     A("Transcribed verbatim from `modal_fractional()`; `w0 tau = 0.3`.\n")

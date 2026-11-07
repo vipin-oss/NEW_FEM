@@ -74,7 +74,7 @@ short-circuit one, the open-circuit fundamental frequency is the root in
 1 + Σ_i s_i / (ω_i² − y) = 0 ,        s_i = (d · φ_i)² / β ,
 ```
 
-with `(ω_i, φ_i)` the mass-normalised *short-circuit* modes. One eigensolve,
+with `(ω_i, φ_i)` the mass-normalized *short-circuit* modes. One eigensolve,
 no difference of close eigenvalues (the eigenvector sign cancels inside `s_i`),
 `f` is strictly increasing between poles so bisection is unconditionally safe.
 The `µ = 0` residual drops to `1.0e-10`, i.e. to round-off, and the value is
@@ -114,7 +114,7 @@ witness, not as a second curve.
 > solving `x = dᵀK⁻¹d/β` against the **open-circuit** matrix and then applying
 > `k² = x/(1+x)`; by Sherman–Morrison the first step already returns `k²`, so
 > the helper produced `k²/(1+k²)` — `0.55814/(1+0.55814) = 0.35821` exactly.
-> The corrected values are the ones above; the closed form from the material
+> The final values are the ones above; the closed form from the material
 > constants (`eᵀC⁻¹e/κ`, plane stress) gives `0.56079`, and the free-plate FEM
 > reproduces it to the fifth decimal.  See
 > `python/derive_k2_closed_form.py` and `results/k2_closed_form.md`.

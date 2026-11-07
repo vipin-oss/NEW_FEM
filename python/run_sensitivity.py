@@ -124,7 +124,7 @@ def eigenpairs(K, M, path):
         S = 1.0 / sd
         A = K * S[:, None] * S[None, :]
         B = M * S[:, None] * S[None, :]
-        w2, V = sla.eig(A, B)                    # generalised, all modes
+        w2, V = sla.eig(A, B)                    # generalized, all modes
         w2 = np.real(w2)
         order = np.argsort(w2)
         w2 = w2[order]
@@ -298,8 +298,8 @@ def main():
     Lt = ["% table generated from the archived results",
           BS + "begin{tabular}{@{}llccc@{}}", BS + "toprule",
           "stack & solver path & $k^2$, $h=$" + BS + "SI{1}{" + BS + "micro"
-          + BS + "metre} & dev & $k^2$, $h=$" + BS + "SI{10}{" + BS + "micro"
-          + BS + "metre}" + ROW, BS + "midrule"]
+          + BS + "meter} & dev & $k^2$, $h=$" + BS + "SI{10}{" + BS + "micro"
+          + BS + "meter}" + ROW, BS + "midrule"]
     for r in tex_rows:
         Lt.append(f"py{r['python']}, np{r['numpy']}, sp{r['scipy']} & "
                   f"{r['path']} & {r['k2_h1']:.4e} & "
@@ -312,8 +312,8 @@ def main():
 
     note = ("all " + str(n_eq) + " equivalent-path rows: spread "
             + f"{spread_h1:.2f}" + BS + "%, $h=1$" + BS
-            + ",\\si{\\micro\\metre}; " + sci(spread_h10) + BS
-            + "%, $h=10$" + BS + ",\\si{\\micro\\metre}"
+            + ",\\si{\\micro\\meter}; " + sci(spread_h10) + BS
+            + "%, $h=10$" + BS + ",\\si{\\micro\\meter}"
             + " (range over midpoint)")
     Lt += [BS + "midrule",
            BS + "multicolumn{5}{@{}l}{" + note + "}" + ROW,

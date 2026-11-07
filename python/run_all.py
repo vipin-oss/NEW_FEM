@@ -1,8 +1,11 @@
 """
 run_all.py -- one command, whole suite, one pass/fail table.
 
-    python3 python/run_all.py              # everything (~2 min)
+    python3 python/run_all.py              # everything (~11 min)
     python3 python/run_all.py --no-figs    # skip the figures
+    python3 python/run_all.py --reuse      # re-grade all 70 checks from the
+                                           # cached numeric archive, after
+                                           # section-only manuscript edits
 
 Runs, in order:
     run_verification.py    V1-V7 + the delivered L1 stencil check
@@ -11,7 +14,7 @@ Runs, in order:
     run_memory_variants.py S1 memory matrix, S2 KV vs Zener
     run_coupling_check.py  C1-C4 piezo k^2 against the closed form
     run_mode_tracking.py   K1-K2 the same mode shape at every thickness
-    run_application_table.py A1 the four polarisation/kinematics cases
+    run_application_table.py A1 the four polarization/kinematics cases
     derive_k2_closed_form.py D1-D2 the coupling factor from the material
     run_demos.py           the thickness sweep (optional)
     run_paper_figures.py   the paper figure set (optional)
@@ -26,6 +29,7 @@ check, which carries its own flag).
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -37,6 +41,79 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 RESULTS = os.path.join(ROOT, "results")
+MANIFEST = os.path.join(RESULTS, "run_all_manifest.json")
+
+# The numerical JSON archive is expensive to regenerate.  A full run records
+# the digest of every numerical source that can change it; a later `--reuse`
+# run skips only those regenerations and still executes every one of the 70
+# checks, the text audits and the second-pass table checks against the current
+# manuscript.  Text-audit scripts are deliberately excluded from the digest:
+# they are re-run in full on every incremental pass.
+TEXT_AUDIT_SCRIPTS = {
+    "audit_abstract_claims.py", "length_budget.py", "list_unverified.py",
+    "check_paper_numbers.py", "check_paper_structure.py",
+    "check_float_order.py", "check_final_consistency.py",
+    "check_coupling_provenance.py", "make_paper_table.py",
+    "make_appendix_tables.py", "make_coupling_table.py",
+}
+FULL_SCRIPTS = ["run_verification.py", "run_flexo_check.py",
+                "run_material_check.py", "run_memory_variants.py", "run_dt_study.py",
+                "run_coupling_check.py", "run_mode_tracking.py", "run_reduction_mac.py",
+                "run_application_table.py", "derive_k2_closed_form.py",
+                "run_independent_checks.py", "audit_abstract_claims.py",
+                "run_config_table.py", "list_unverified.py", "length_budget.py",
+                "run_sensitivity.py", "check_gradient_energy.py",
+                "check_coupled_patch.py", "check_numerics.py",
+                "sensitivity_tornado.py", "run_design_map.py",
+                os.path.join("..", "Paper_12", "check_refs.py")]
+
+REUSE_SCRIPTS = [os.path.join("..", "Paper_12", "check_refs.py"),
+                 "audit_abstract_claims.py", "length_budget.py",
+                 "list_unverified.py", "derive_k2_closed_form.py",
+                 "check_numerics.py", "check_gradient_energy.py",
+                 "check_coupled_patch.py", "make_paper_table.py",
+                 "check_coupling_provenance.py", "check_final_consistency.py",
+                 "check_paper_numbers.py", "check_paper_structure.py",
+                 "check_float_order.py"]
+
+REQUIRED_JSON = ["verification.json", "flexo_check.json", "material_comparison.json",
+                 "memory_variants.json", "dt_study.json", "coupling_check.json",
+                 "mode_tracking.json", "application_table.json",
+                 "independent_checks.json", "abstract_audit.json",
+                 "config_table.json", "unverified_numbers.json", "sensitivity.json",
+                 "gradient_energy.json", "coupled_patch.json", "numerics.json",
+                 "sensitivity_tornado.json", "k2_closed_form.json", "demo.json",
+                 "paper_figures_data.json", "stale_tokens.json",
+                 "coupling_provenance_check.json", "environment.json",
+                 "summary.json"]
+
+
+def source_digest():
+    """SHA-256 of the numerical sources that can change the JSON archive."""
+    h = hashlib.sha256()
+    paths = sorted([os.path.join(HERE, f) for f in os.listdir(HERE)
+                    if f.endswith(".py") and f not in TEXT_AUDIT_SCRIPTS])
+    for path in paths:
+        h.update(os.path.relpath(path, ROOT).encode("utf-8"))
+        with open(path, "rb") as fh:
+            h.update(fh.read())
+    return h.hexdigest()
+
+
+def reuse_cache_valid():
+    """True only when the cached JSONs came from the current source files."""
+    try:
+        with open(MANIFEST) as fh:
+            rec = json.load(fh)
+        if rec.get("source_digest") != source_digest():
+            return False
+        for name in REQUIRED_JSON:
+            if not os.path.exists(os.path.join(RESULTS, name)):
+                return False
+        figdir = os.path.join(RESULTS, "figures", "paper")
+        return sum(1 for f in os.listdir(figdir) if f.endswith(".pdf")) == 12
+    except (OSError, ValueError, TypeError):
+        return False
 
 
 def load(name):
@@ -93,29 +170,22 @@ def run(script):
 
 def main():
     figs = "--no-figs" not in sys.argv
-    print("running the suite")
-    scripts = ["run_verification.py", "run_flexo_check.py",
-               "run_material_check.py", "run_memory_variants.py", "run_dt_study.py",
-               "run_coupling_check.py", "run_mode_tracking.py", "run_reduction_mac.py",
-               "run_application_table.py", "derive_k2_closed_form.py",
-               "run_independent_checks.py", "audit_abstract_claims.py",
-               "run_config_table.py", "list_unverified.py", "length_budget.py",
-               "run_sensitivity.py", "check_gradient_energy.py",
-               "check_coupled_patch.py", "check_numerics.py",
-               "sensitivity_tornado.py", "run_design_map.py",
-               os.path.join("..", "Paper_12", "check_refs.py")]
-    if figs:
-        scripts.append("run_demos.py")
-        scripts.append("run_paper_figures.py")
-        scripts.append("make_appendix_tables.py")
-        scripts.append("coupling_provenance.py")
-        scripts.append("make_coupling_table.py")
-        scripts.append("check_coupling_provenance.py")
-        scripts.append("check_final_consistency.py")
-        scripts.append("worked_example.py")
-        scripts.append("check_paper_numbers.py")
-        scripts.append("check_paper_structure.py")
-        scripts.append("check_float_order.py")
+    reuse = "--reuse" in sys.argv
+    if reuse and not reuse_cache_valid():
+        print("reuse cache invalid or absent; running the full suite")
+        reuse = False
+    print("running the suite" + (" (incremental re-grade)" if reuse else ""))
+    if reuse:
+        scripts = list(REUSE_SCRIPTS)
+    else:
+        scripts = list(FULL_SCRIPTS)
+        if figs:
+            scripts += ["run_demos.py", "run_paper_figures.py",
+                        "make_appendix_tables.py", "coupling_provenance.py",
+                        "make_coupling_table.py", "check_coupling_provenance.py",
+                        "check_final_consistency.py", "worked_example.py",
+                        "check_paper_numbers.py", "check_paper_structure.py",
+                        "check_float_order.py"]
     ran = {s: run(s) for s in scripts}
 
     V = load("verification.json")
@@ -240,7 +310,7 @@ def main():
         "rel. diff < 1e-3", Cc["rel_err_free"] < 1e-3)
     chk("C2", "2-D model vs 3-D free bar (plane-stress reduction)",
         f"{100 * Cc['rel_gap_2d_vs_3d']:.2f} %",
-        "< 5 % (documented modelling gap)", Cc["rel_gap_2d_vs_3d"] < 0.05)
+        "< 5 % (documented modeling gap)", Cc["rel_gap_2d_vs_3d"] < 0.05)
     chk("C3", "FEM k^2, clamped strip, 96x4 vs 48x4",
         f"{Cc['fem']['plane_stress']['clamped_96x4']:.5f} vs "
         f"{Cc['fem']['plane_stress']['clamped_48x4']:.5f}",
@@ -495,7 +565,14 @@ def main():
     allok = npass == len(rows) and all(ran.values())
     out = {"checks": rows, "n_pass": npass, "n_total": len(rows),
            "scripts_ok": ran, "figures": figs, "all_pass": bool(allok),
-           "runtime_note": "run_verification ~45 s, run_demos ~~55 s of the total"}
+           "incremental_regrade": reuse,
+           "runtime_note": ("cached numerical JSON, all 70 checks re-graded"
+                            if reuse else
+                            "run_verification ~45 s, run_demos ~~55 s of the total")}
+    if not reuse:
+        with open(MANIFEST, "w") as fh:
+            json.dump({"source_digest": source_digest(),
+                       "entry_point": "python3 python/run_all.py"}, fh, indent=1)
 
     os.makedirs(RESULTS, exist_ok=True)
     with open(os.path.join(RESULTS, "summary.json"), "w") as fh:
@@ -530,7 +607,8 @@ def main():
 
     w = max(len(r["id"]) for r in rows)
     md = ["# FEM-6 verification summary", "",
-          f"Generated by `python3 python/run_all.py`. "
+          f"Generated by `python3 python/run_all.py"
+          f"{' --reuse' if reuse else ''}`. "
           f"**{npass}/{len(rows)} checks pass.**", "",
           "| id | check | value | criterion | |",
           "|---|---|---|---|---|"]

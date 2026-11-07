@@ -1,6 +1,6 @@
 """
 run_application_table.py -- the worked 200 x 10 um plate, all four
-polarisation / kinematics combinations, in one table.
+polarization / kinematics combinations, in one table.
 
 For each combination the extensional (poling x) or bending (poling y) mode is
 identified, its short-circuit and open-circuit frequencies are taken from the
