@@ -296,11 +296,11 @@ def fig_orientation(pol):
     maps over the aspect ratio."""
     ARS = (2.0, 5.0, 10.0)
     fig = plt.figure(figsize=(6.9, 6.1))
-    gs = fig.add_gridspec(2, 2, hspace=0.24, wspace=0.46,
+    gs = fig.add_gridspec(2, 2, hspace=0.38, wspace=0.46,
                           left=0.075, right=0.955, top=0.94, bottom=0.075)
     cfg = (("f_ext_kHz", (0.945, 1.090), [0.95, 1.05],
             r"$f_{\mathrm{ext}}/f_{\mathrm{ext}}(0)$"),
-           ("k2_axial", (0.74, 1.025), [0.8, 0.9], r"$k^2/k^2(0)$"))
+           ("k2_axial", (0.74, 1.07), [0.8, 0.9], r"$k^2/k^2(0)$"))
     for k, (key, rlim, rticks, rlab) in enumerate(cfg):
         ax = fig.add_subplot(gs[0, k], projection="polar")
         ref = None
@@ -308,9 +308,9 @@ def fig_orientation(pol):
             _, _, dense, smooth, mt_, mv = _fold(pol, AR, key)
             if AR == 2.0:
                 ref = np.interp(0.0, dense, smooth)
-            ax.plot(np.deg2rad(dense), smooth / ref, "-", color=ar_color(AR),
-                    lw=1.2, label=f"AR = {AR:g}", zorder=2)
-            ax.plot(np.deg2rad(mt_), mv / ref, "o", ms=1.6, color=ar_color(AR),
+            ax.plot(np.deg2rad(dense), smooth / ref, ["-", "--", "-."][i],
+                    color=ar_color(AR), lw=1.2, label=f"AR = {AR:g}", zorder=2)
+            ax.plot(np.deg2rad(mt_), mv / ref, ["o", "^", "D"][i], ms=2.1, color=ar_color(AR),
                     mfc="none", mew=0.45, zorder=3)
         if key == "k2_axial":
             _, _, dense, smooth, mt_e, mv_e = _fold(pol, 2.0, key, "ellipse")
@@ -337,7 +337,7 @@ def fig_orientation(pol):
             lb.set_bbox(dict(fc="white", ec="none", alpha=0.9, pad=0.5))
         if k == 0:
             ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.10),
-                      frameon=False, fontsize=6.3, ncol=2, handlelength=1.3,
+                      frameon=False, fontsize=8, ncol=2, handlelength=1.3,
                       columnspacing=0.8)
     for k, (key, lab, cm, fmt) in enumerate((
             ("k2_axial", r"$k^2$", "viridis", "%.2f"),
@@ -348,7 +348,7 @@ def fig_orientation(pol):
         T, A = np.meshgrid(thf[m], arf)
         cf = ax.contourf(T, A, Z[:, m], levels=40, cmap=cm)
         cs = ax.contour(T, A, Z[:, m], levels=6, colors="k", linewidths=0.4)
-        ax.clabel(cs, fontsize=5.4, inline=True, inline_spacing=2, fmt=fmt)
+        ax.clabel(cs, fontsize=7, inline=True, inline_spacing=2, fmt=fmt)
         for AR in sorted({round(r["AR"], 3) for r in pol}):
             ax.plot([0, 180], [AR, AR], "o", ms=1.1, color="w", alpha=0.85)
         # a few points of margin: contour labels placed on the frame edge
@@ -410,30 +410,34 @@ def fig_p4_modeshape():
     Ps = phin.reshape(5, 49)
     Xs = X.reshape(5, 49)
     Ys = Y.reshape(5, 49)
-    magn = 1.0e9                            # 10 nm -> 10 um on the axis
-    fig = plt.figure(figsize=(5.6, 3.6))
-    ax = fig.add_axes([0.02, 0.14, 0.62, 0.78], projection="3d")
+    display_scale = 1.0e9                   # meters -> nanometers
+    fig = plt.figure(figsize=(7.0, 3.6))
+    ax = fig.add_axes([0.02, 0.22, 0.55, 0.70], projection="3d")
     cmap = plt.get_cmap("viridis")
     norm = matplotlib.colors.Normalize(vmin=0.0, vmax=Ps.max())
-    ax.plot_surface(Xs, Ys, Zs * magn * 1e3, facecolors=cmap(norm(Ps)),
+    ax.plot_surface(Xs, Ys, Zs * display_scale, facecolors=cmap(norm(Ps)),
                     rstride=1, cstride=1, linewidth=0.15,
                     edgecolor=(0, 0, 0, 0.3), antialiased=True, shade=False)
     ax.set_xlabel(r"$x$ ($\mu$m)", labelpad=0)
     ax.set_ylabel(r"$y$ ($\mu$m)", labelpad=0)
-    ax.set_zlabel(r"$v\times10^{9}$ ($\mu$m)", labelpad=4, fontsize=9)
+    ax.set_zlabel("")
+    ax.text2D(0.02, 0.98, r"transverse displacement $w$ (nm)",
+              transform=ax.transAxes, fontsize=9)
     ax.view_init(elev=25, azim=-68)
     ax.set_box_aspect((3.3, 1.2, 1.45))
     ax.tick_params(labelsize=8, pad=0)
     ax.zaxis.set_tick_params(labelsize=8, pad=0)
     ax.set_yticks([0, 5, 10])
-    ax.set_zticks([0, 4, 8, 12])
+    ax.set_zticks(np.linspace(Zs.min() * display_scale,
+                             Zs.max() * display_scale, 3))
+    ax.zaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%.0f"))
     ax.grid(True, lw=0.3, alpha=0.5)
     sm = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
-    cb = fig.colorbar(sm, ax=ax, orientation="horizontal", shrink=0.62,
-                      pad=0.015, aspect=34)
+    cb = fig.colorbar(sm, cax=fig.add_axes([0.09, 0.10, 0.37, 0.025]),
+                      orientation="horizontal")
     cb.set_label(r"$\phi$ (mV), open circuit", fontsize=9)
     cb.ax.tick_params(labelsize=8, pad=1)
-    axins = fig.add_axes([0.68, 0.50, 0.30, 0.38])
+    axins = fig.add_axes([0.72, 0.48, 0.26, 0.38])
     axins.contourf(Xs, Ys, Ps, levels=10, cmap="viridis")
     cs = axins.contour(Xs, Ys, Ps, levels=5, colors="k", linewidths=0.5)
     axins.clabel(cs, fmt="%d", fontsize=7)
@@ -443,7 +447,7 @@ def fig_p4_modeshape():
     axins.tick_params(labelsize=7)
     axins.grid(False)
     save(fig, "FB2_modes")
-    return {"V_open_V": V, "magnification": float(magn * 1e3),
+    return {"V_open_V": V, "displacement_display_scale": display_scale,
             "u_peak_nm": 10.0}
 
 
@@ -453,15 +457,16 @@ def fig_p4_modeshape():
 def fig_damping():
     """The fractional element: where its poles go, and what it means for the
     damping ratio."""
-    fig, axs = plt.subplots(1, 2, figsize=(6.9, 2.75),
+    fig, axs = plt.subplots(1, 2, figsize=(6.9, 3.3),
                             gridspec_kw={"wspace": 0.30, "left": 0.085,
-                                         "right": 0.975, "bottom": 0.19,
+                                         "right": 0.975, "bottom": 0.30,
                                          "top": 0.90})
     ax = axs[0]
     alphas = np.linspace(0.2, 1.0, 25)
     w0 = 2 * np.pi * 6.7273e6
     taus = [0.5e-9, 1e-9, 2e-9, 4e-9, 8e-9, 16e-9, 32e-9]
     cmap = plt.get_cmap("cividis")
+    tau_handles = []
     for i, tau in enumerate(taus):
         s0 = None
         xs, ys = [], []
@@ -472,17 +477,15 @@ def fig_damping():
             ys.append(abs(z.imag) / w0)
         xs, ys = np.array(xs), np.array(ys)
         col = cmap(0.12 + 0.76 * i / (len(taus) - 1))
-        ax.plot(xs, ys, "-", color=col, lw=1.15, zorder=2)
+        style = ["-", "--", "-.", ":", "-", "--", "-."][i]
+        symbol = ["o", "s", "^", "D", "v", "<", ">"][i]
+        ax.plot(xs, ys, style, color=col, lw=1.15, zorder=2)
+        tau_handles.append(matplotlib.lines.Line2D(
+            [], [], ls=style, marker=symbol, color=col, mfc="w", ms=3,
+            label=rf"$\tau={tau*1e9:g}$ ns"))
         mk = [0, 6, 12, 18, 24]
-        ax.plot(xs[mk], ys[mk], "o", ms=2.7, color=col, mfc="w", mew=0.55,
+        ax.plot(xs[mk], ys[mk], symbol, ms=3.0, color=col, mfc="w", mew=0.55,
                 zorder=3)
-        if i in (0, len(taus) - 1):
-            first = i == 0
-            ax.annotate(rf"$\tau={tau*1e9:g}$ ns", (xs[0], ys[0]),
-                        textcoords="offset points",
-                        xytext=(-42, 0) if first else (5, 5),
-                        ha="right" if first else "left", va="center",
-                        fontsize=8.5, color="0.25")
     # exact Kelvin-Voigt locus: s/w0 = -zeta +- i sqrt(1 - zeta^2).  At
     # alpha = 1 the fractional element *is* Kelvin-Voigt, so the top curve of
     # panel (a) must lie on this arc for every tau.
@@ -504,8 +507,6 @@ def fig_damping():
     ax.set_xlim(5e-3, 1.5)
     ax.set_ylim(0.60, 1.55)
     ax.axhline(1.0, color="0.55", lw=0.6, ls=":", zorder=1)
-    ax.text(0.03, 0.94, r"markers: $\alpha=0.2,0.4,0.6,0.8,1$",
-            transform=ax.transAxes, ha="left", va="top", fontsize=8.5)
     ax.set_xlabel(r"$-\mathrm{Re}\,s/\omega_0$")
     ax.set_ylabel(r"$|\mathrm{Im}\,s|/\omega_0$")
     ax.tick_params(labelsize=9)
@@ -524,7 +525,7 @@ def fig_damping():
     cf = axb.contourf(A, W, Z, levels=16, cmap="cividis")
     cs = axb.contour(A, W, Z, levels=[0.05, 0.1, 0.2, 0.4, 0.7],
                      colors="k", linewidths=0.45)
-    axb.clabel(cs, fontsize=5.6, inline=True, inline_spacing=2, fmt="%.2f")
+    axb.clabel(cs, fontsize=7, inline=True, inline_spacing=2, fmt="%.2f")
     axb.set_xlabel(r"$\alpha$")
     axb.set_ylabel(r"$\log_{10}\omega\tau$")
     axb.tick_params(labelsize=9)
@@ -534,6 +535,8 @@ def fig_damping():
     cb.set_label(r"$\zeta$", fontsize=10)
     cb.ax.tick_params(labelsize=9)
     print(f"    F6: alpha->1 poles vs exact KV arc, worst |dy| = {_dv:.2e}")
+    fig.legend(handles=tau_handles, loc="lower center", ncol=4,
+               fontsize=8, frameon=False, bbox_to_anchor=(0.5, -0.005))
     save(fig, "F6_damping")
 
 def fig_p6_waterfall():
@@ -689,9 +692,10 @@ def fig_p8_mac(mt_data):
     ax[0].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[0].set_ylabel(r"$1-$MAC  (defect from the $h$=10 $\mu$m shape)")
     ax[0].set_ylim(3e-5, 3e-3)
-    for x, m in zip(hs[keep], macs[keep]):
+    for j, (x, m) in enumerate(zip(hs[keep], macs[keep])):
         ax[0].annotate(f"{m:.5f}", (x, 1.0 - m), textcoords="offset points",
-                       xytext=(4, 5), fontsize=8.5)
+                       xytext=(4 if j == 0 else -5, 7),
+                       ha="left" if j == 0 else "right", fontsize=8.5)
     ax[0].set_title("(a) one shape at every thickness", fontsize=10)
     f2 = np.array([r["f_kHz"][1] for r in rows])
     rat = np.array([r["f_ratio_2_over_1"] for r in rows])
@@ -812,6 +816,9 @@ def fig_p11_convergence():
     ax.loglog(nd, np.maximum(ek[0] * (nd[0] / nd) ** 2.0, 1e-9), "k--", lw=0.9,
               label=r"$\propto N^{-2}$")
     ax.axvline(nd[-1], color="0.55", ls="-.", lw=0.8)
+    ax.set_xticks([400, 800, 2000])
+    ax.set_xticklabels(["400", "800", "2000"])
+    ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
     ax.set_xlabel("degrees of freedom"); ax.set_ylabel("relative error")
     ax.legend(frameon=False, loc="lower left", fontsize=9)
     ax.set_title("(a)", loc="left", fontsize=10)
@@ -940,13 +947,25 @@ def fig_p12_fields():
         if cm == "RdBu_r":
             kw.update(vmin=-vmax, vmax=vmax)
         m = ax.pcolormesh(X, Y, Z, **kw)
+        levels = ([-0.5, 0, 0.5] if tag == "(a)" else
+                  np.linspace(float(Z.min()), float(Z.max()), 5)[1:-1])
+        cs = ax.contour(X, Y, Z, levels=levels, colors="0.15", linewidths=0.45)
+        if tag == "(a)":
+            positions = [(170, y) for y in (2, 5, 8)]
+        elif tag == "(c)":
+            positions = [(55, 1.5), (80, 3), (55, 5)]
+        elif tag == "(e)":
+            positions = [(x, 5) for x in (35, 65, 100)]
+        else:
+            positions = False
+        ax.clabel(cs, fmt="%.2g", fontsize=7, inline=True, manual=positions)
         cb = fig.colorbar(m, ax=ax, pad=0.02, fraction=0.046)
-        cb.set_label(lab, fontsize=6.8)
-        cb.ax.tick_params(labelsize=5.8)
+        cb.set_label(lab, fontsize=8)
+        cb.ax.tick_params(labelsize=7.5)
         ax.set_xlabel(r"$x$ ($\mu$m)", fontsize=9)
         ax.set_ylabel(r"$y$ ($\mu$m)", fontsize=9)
         ax.set_title(tag, loc="left", fontsize=8, pad=2)
-        ax.tick_params(labelsize=6.4)
+        ax.tick_params(labelsize=7.5)
         ax.set_xlim(X.min(), X.max()); ax.set_ylim(Y.min(), Y.max())
         ax.grid(False)
     save(fig, "F3_fields")
@@ -1060,9 +1079,9 @@ def fig_p14_design_space(pol):
     """The two quantities that are not already in the polar sections: the
     change of the coupling relative to the aligned window, and the anisotropy
     of the second-moment tensor that causes it."""
-    fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.9),
+    fig, axs = plt.subplots(1, 2, figsize=(6.6, 3.3),
                             gridspec_kw={"wspace": 0.26, "left": 0.10,
-                                         "right": 0.975, "bottom": 0.19,
+                                         "right": 0.975, "bottom": 0.30,
                                          "top": 0.90})
     ars = sorted({r["AR"] for r in pol})
     half = sorted([r for r in pol if r["AR"] == ars[0]
@@ -1077,10 +1096,10 @@ def fig_p14_design_space(pol):
                    key=lambda z: z["theta_deg"])
         k2 = np.array([r["k2_axial"] for r in h])
         rel = 100.0 * (k2 / k2[0] - 1.0)
-        ax.plot(th, rel, "-", color=ar_color(AR), lw=1.15,
+        ax.plot(th, rel, ["-", "--", "-.", ":", "--", "-."][i],
+                marker=["o", "s", "^", "D", "v", ">"][i], markevery=2,
+                ms=3, mfc="none", color=ar_color(AR), lw=1.15,
                 label=f"AR = {AR:g}")
-        ax.plot(th[::2], rel[::2], "o", ms=2.2, color=ar_color(AR), mfc="none",
-                mew=0.5)
         if i == 0:
             worst = (rel.min(), AR, th[np.argmin(rel)])
         if rel.min() < worst[0]:
@@ -1091,7 +1110,8 @@ def fig_p14_design_space(pol):
     ax.set_ylabel(r"$\Delta k^2/k^2(\theta{=}0)$ (%)")
     ax.tick_params(labelsize=9)
     ax.set_title("(a) coupling against alignment", fontsize=10, loc="left")
-    ax.legend(frameon=False, fontsize=9, ncol=2, loc="lower left")
+    ax.legend(frameon=False, fontsize=8, ncol=3, loc="upper center",
+              bbox_to_anchor=(0.5, -0.27), columnspacing=0.9)
     axb = axs[1]
     axb.plot(th, an, "-", color=OI[3], lw=1.3)
     axb.plot(th, an, "o", ms=2.4, color=OI[3], mfc="none", mew=0.5)
@@ -1101,7 +1121,7 @@ def fig_p14_design_space(pol):
     axb.set_xlabel(r"window angle $\theta$ (deg)")
     axb.set_ylabel(r"$(M_{11}-M_{22})/(M_{11}+M_{22})$")
     axb.tick_params(labelsize=9)
-    axb.set_title(r"(b) anisotropy of $M$ (any aspect ratio)",
+    axb.set_title(r"(b) anisotropy of $M$ at AR = 2",
                   fontsize=10, loc="left")
     save(fig, "F5_design")
     print(f"  design: worst change {worst[0]:.1f} % (AR = {worst[1]:g}, "

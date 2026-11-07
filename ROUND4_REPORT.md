@@ -50,3 +50,37 @@ count cannot be certified until the independent compile. Final source line
 ranges are listed in the delivery section.
 
 Gates: **70/70 PASS; 102/102, zero stale hits** (task2 logs).
+
+## Task 3 — figure inspection and presentation
+
+Opened all twelve PNG previews at their native ~220 dpi, including a second
+inspection after redrawing. Included PDFs remain vector figures at the paper's
+170-mm single-column text width (F5 at 0.86 of that width). F10 is absent from
+the supplied set; F1–F9, F11, FB1 and FB2 are the twelve included graphics.
+
+`python/run_paper_figures.py` and both `Paper_12/figures/` and
+`results/figures/paper/` copies were updated for:
+- F2: fewer labeled logarithmic x ticks, eliminating crowded exponent labels.
+- F3: larger scale text and labeled black contours, including signed
+  displacement contours so hue is not the only sign/level cue.
+- F4: distinct styles/markers, larger legend/contour text, more vertical
+  spacing and sufficient polar radius to avoid clipping the AR=10 curve.
+- F5: distinct styles/markers and an outside legend; label panel (b) as AR=2,
+  the ratio actually used by the existing data producer, not “any aspect ratio.”
+- F6: distinct tau styles/markers with a numeric legend, not hue alone;
+  larger contour labels. Removed crowded in-panel annotations.
+- FB1: keep MAC labels inside the panel; increase manuscript inclusion width
+  from 0.72 text width to full width for legibility, without shrinking data.
+- FB2: separate the inset and surface axes; replace the erroneous, crowded
+  magnification ticks with displacement directly in nm. Same solved field,
+  amplitude and potential; the arbitrary 3-D display scaling is not new physics.
+
+`sec/06_validation.tex` and `sec/07_results.tex`: expanded parameter information
+in captions; corrected F4's (c,d) panel order and aligned-AR=2 normalization;
+corrected F5's anisotropy description. Unchanged images: F1, F7, F8, F9, F11.
+Their series use shapes/styles, or quantitative maps use monotone luminance
+with numerical colorbars/contours, not a hue-only categorical key. F1 identifies
+electrodes/windows with text and geometry. F11 retains its assumed-range label.
+No numeric JSON or solver source was changed. The redraw uses existing sweeps
+or the existing deterministic field solver; final page fit still needs compile.
+Gates: **70/70 PASS; 102/102, zero stale hits** (task3 logs).
