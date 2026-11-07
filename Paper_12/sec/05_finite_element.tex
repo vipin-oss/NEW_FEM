@@ -10,6 +10,25 @@ element, the condensation of the electrode, the memory march on modal
 coordinates and the mesh on which every number of Secs.~\ref{sec:verification}
 and~\ref{sec:results} is computed.
 
+\noindent\textbf{Notation and provenance.} In the equations below, $B$ and
+$B_{,k}$ are the strain and strain-gradient matrices, $K_e$, $K_{g,e}$, $B_e$
+and $C_{\phi,e}$ the elastic, gradient, electromechanical and dielectric
+element matrices, $M$ the consistent mass matrix, $\bm{u}$ and $\bm{\phi}$ the
+nodal displacement and potential vectors, $\bm{f}$ and $\bm{q}$ the mechanical
+and electrode load vectors, $d$ and $\beta$ the condensed coupling vector and
+capacitance, $Q$ and $V$ the electrode charge and voltage, $\Phi$ the retained
+modal basis, $\bm{q}(t)$ and $\bm{a}(t)$ the modal displacement and
+acceleration, $\omega_i$ the short-circuit modal frequencies, $\Delta t$ the
+time step, $b_k$ the L1 weights, $\alpha$ the Caputo order, $\tau$ the
+relaxation time and $K_{\rm mem}$ the remembered stiffness. Unless a source is
+cited, every equation in this section is derived here from the weak form of
+Sec.~\ref{sec:formulation}; the element family is cited at the point of use,
+and references marked UNVERIFIED in the bibliography are used only for those
+classical forms. The published material constants are cited collectively in
+Table~\ref{tab:params}; the remaining inputs are stated as assumed. The single
+worked numerical calculation is given in Sec.~\ref{sec:worked}, and the
+generated tables are collected in \ref{app:data}.
+
 \FloatBarrier
 \subsection{Weak form}
 \label{sec:weak}
