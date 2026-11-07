@@ -10,6 +10,20 @@ higher-order condition on each edge, and the electrical condition decides
 which of the two coupling factors the model returns. This section fixes both,
 together with the axes that the rest of the paper refers to.
 
+\noindent\textbf{Notation and provenance.} On an edge, $\bm{n}$ is the outward
+unit normal and $\bm{t}$ the tangent; $t_i$ and $m_i$ are the classical and
+higher-order tractions, $u_i$ the displacement, $\sigma_{ij}$ and
+$\varsigma_{ijm}$ the ordinary and higher-order stresses, $\phi$ the potential,
+$V$ the floating electrode voltage, $Q$ its charge, $d$ the condensed coupling
+vector, $\beta$ the condensed dielectric coefficient, $K_{sc}$ and $K_{oc}$
+the short- and open-circuit stiffnesses, $\omega_{sc,j}$ and $\omega_{oc,j}$
+the corresponding modal frequencies, $x$ the mode-free coupling strength and
+$k^2$ its coupled value. Unless a source is cited, every equation in this
+section is derived here from the enthalpy of Sec.~\ref{sec:formulation}. The
+published material constants are cited collectively in
+Table~\ref{tab:params}; the remaining inputs are stated as assumed. The single
+worked numerical calculation is given in Sec.~\ref{sec:worked}.
+
 \FloatBarrier
 \subsection{Mechanical and higher-order conditions}
 \label{sec:bc_mech}
@@ -51,8 +65,8 @@ The clamped condition is the one that produces the boundary layer of a
 gradient theory: the gradient energy penalises the curvature that the
 prescribed slope forces at the edge, so the solution relaxes over a length set
 by the window. Section~\ref{sec:windowshape} measures that layer against
-$a/L$, and the results are consistent with the ratio $a/L\le0.2$ that the
-paper adopts as its validity window.
+$a/L$, and the results are consistent with the assumed operating range
+$a/L\le0.2$.
 
 \FloatBarrier
 \subsection{Electrical conditions: open and short circuit}
