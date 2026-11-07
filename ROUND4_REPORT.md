@@ -84,3 +84,17 @@ electrodes/windows with text and geometry. F11 retains its assumed-range label.
 No numeric JSON or solver source was changed. The redraw uses existing sweeps
 or the existing deterministic field solver; final page fit still needs compile.
 Gates: **70/70 PASS; 102/102, zero stale hits** (task3 logs).
+
+## Task 4 — abstract
+
+`Paper_12/main.tex`: retained one narrative paragraph, condensed the opening
+model/verification description and retained “The main findings reveal” with
+all existing quantitative findings. Replaced the archive-focused ending with
+practical uses (electrode selection, window/thickness studies, ring-down
+interpretation) and the conditional nature of the predictions. The assumed
+operating-range statement was not changed. Physical line count depends on TeX.
+`audit_abstract_claims.py` rerun: full numeric-token coverage, no new numeric
+token; the existing 3 independently reproduced claims / 11 JSON-traceable
+claims / 5 inputs distinction is retained. The audit does not turn the eleven
+solver-dependent claims into independent experiments or analytical validations.
+Gates: **70/70 PASS; 102/102, zero stale hits** (task4 logs).
