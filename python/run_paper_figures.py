@@ -182,55 +182,50 @@ def polar_sweep():
     return rows, sym
 
 def fig_p1_geometry():
-    fig, axs = plt.subplots(2, 1, figsize=(6.0, 3.2))
-    fig.subplots_adjust(bottom=0.14, hspace=0.55, top=0.92)
-    L_, H_ = 1.0, 0.30
-    for k, (ax, name, econf) in enumerate(zip(
+    # A wide schematic fills each row; all annotation anchors stay clear of
+    # the specimen outline and the electrode strips. Dimensions live in caption.
+    fig, axs = plt.subplots(2, 1, figsize=(6.8, 2.7))
+    fig.subplots_adjust(left=0.025, right=0.975, bottom=0.04,
+                        top=0.88, hspace=0.60)
+    L_, H_ = 4.0, 0.42
+    for ax, name, econf in zip(
             axs, ("(a) bending: through-thickness electrodes",
-                  "(b) extensional: end electrodes"),
-            ("tb", "lr"))):
+                  "(b) extensional: end electrodes"), ("tb", "lr")):
         ax.add_patch(Rectangle((0, 0), L_, H_, fc="#eef3f8", ec="k", lw=0.9))
-        ax.add_patch(Rectangle((-0.03, 0), 0.03, H_, fc="0.3", ec="k", lw=0.7))
-        for yy in np.linspace(0.012, H_ - 0.012, 7):
-            ax.plot([-0.03, 0.0], [yy, yy + 0.028], color="k", lw=0.45)
+        ax.add_patch(Rectangle((-0.06, 0), 0.06, H_, fc="0.3", ec="k", lw=0.7,
+                               hatch="///"))
         if econf == "tb":
-            ax.add_patch(Rectangle((0, -0.022), L_, 0.022, fc=OI[1],
-                                   alpha=0.6, ec="none"))
-            ax.add_patch(Rectangle((0, H_), L_, 0.022, fc=OI[1],
-                                   alpha=0.6, ec="none"))
-            ax.text(L_ / 2, -0.034, r"earthed, $V=0$", ha="center", va="top",
-                    fontsize=9)
-            ax.text(L_ / 2, H_ + 0.032, r"floating, $q=0$", ha="center",
+            for yy in (-0.025, H_):
+                ax.add_patch(Rectangle((0, yy), L_, 0.025, fc=OI[1], ec="none"))
+            ax.text(0.60, H_ + 0.07, r"floating, $q=0$", ha="center",
                     va="bottom", fontsize=9)
+            ax.text(0.60, -0.07, r"earthed, $V=0$", ha="center",
+                    va="top", fontsize=9)
         else:
             for xx in (0.0, L_):
-                ax.add_patch(Rectangle((xx - (0.012 if xx == 0 else 0), 0),
-                                        0.012, H_, fc=OI[1], alpha=0.6,
-                                        ec="none"))
-            ax.text(0.02, H_ / 2, r"$V=0$", fontsize=9, va="center")
-            ax.text(L_ - 0.02, H_ / 2, r"$V$, $q=0$", fontsize=9,
-                    va="center", ha="right")
-        cx, cy = 0.52, H_ / 2
-        ax.add_patch(Rectangle((cx - 0.10, cy - 0.035), 0.20, 0.07, fill=False,
-                               ec=OI[0], lw=1.4))
-        ax.add_patch(Ellipse((cx, cy), 0.20 * np.sqrt(3 / 4),
-                             0.07 * np.sqrt(3 / 4), fill=False, ec=OI[2],
+                ax.add_patch(Rectangle((xx - 0.016, 0), 0.032, H_,
+                                       fc=OI[1], ec="none"))
+            ax.text(0.13, H_ / 2, r"$V=0$", va="center", fontsize=9)
+            ax.text(3.86, H_ / 2, r"$V$, $q=0$", va="center", ha="right",
+                    fontsize=9)
+        cx, cy = 1.65, H_ / 2
+        ax.add_patch(Rectangle((cx - 0.25, cy - 0.08), 0.50, 0.16,
+                               fill=False, ec=OI[0], lw=1.4))
+        ax.add_patch(Ellipse((cx, cy), 0.50 * np.sqrt(3 / 4),
+                             0.16 * np.sqrt(3 / 4), fill=False, ec=OI[2],
                              lw=1.4, ls="--"))
-        ax.annotate(r"cuboid: $M_{ii}=a_i^2/3$", (cx + 0.085, cy + 0.033),
-                    xytext=(cx + 0.14, cy + 0.085), fontsize=8.5,
+        ax.annotate(r"cuboid: $M_{ii}=a_i^2/3$", (cx + 0.25, cy + 0.08),
+                    xytext=(2.18, 0.31), va="center", fontsize=8.5,
                     arrowprops=dict(arrowstyle="-", lw=0.4, color="0.35"))
-        ax.annotate(r"ellipse (equal $M$)", (cx - 0.09, cy - 0.028),
-                    xytext=(cx - 0.30, cy - 0.095), fontsize=8.5,
+        ax.annotate(r"ellipse (equal $M$)", (cx + 0.15, cy - 0.06),
+                    xytext=(2.18, 0.09), va="center", fontsize=8.5,
                     arrowprops=dict(arrowstyle="-", lw=0.4, color="0.35"))
-        ax.set_xlim(-0.07, L_ + 0.07)
-        ax.set_ylim(-0.115, H_ + 0.14)
-        ax.set_aspect("equal")
+        ax.set_xlim(-0.10, L_ + 0.10)
+        ax.set_ylim(-0.17, H_ + 0.17)
         ax.axis("off")
         ax.set_title(name, fontsize=10, pad=2)
-    fig.text(0.5, 0.01, r"$L=200\ \mu$m, thickness $h$; window half-widths "
-             r"$a_1\times a_2$, $M_{ii}=a_i^2/3$ (cuboid), $a_i^2/4$ (ellipse)",
-             ha="center", fontsize=9)
     save(fig, "F1_geometry")
+
 
 
 # ---------------------------------------------------------------------------
