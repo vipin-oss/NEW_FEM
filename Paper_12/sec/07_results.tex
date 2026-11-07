@@ -226,7 +226,7 @@ them alone fixes a damping ratio.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{F6_damping.pdf}
-\caption{Variations of (a) the pole of a mode at $\omega_0=\SI{6.73}{MHz}$ over $\omega\tau=0.02$--$1.35$ for seven relaxation times, identified by $\tau$ in the legend and distinguished by line style and marker, with markers at five Caputo orders, and of (b) the damping ratio over $\omega\tau=10^{-1.5}$--$10^{1.5}$ and $\alpha=0.2$--$1$ with labeled contours, for the fractional Kelvin--Voigt element with branch continuation. The dashed arc is the exact Kelvin--Voigt locus, on which every $\alpha=1$ pole lies. Fractional poles fan upward, integer-order poles over-damp.}
+\caption{Variations of (a) the pole of a mode at $f_0=\SI{6.73}{MHz}$ ($\omega_0=2\pi f_0$) over $\omega\tau=0.02$--$1.35$ for seven relaxation times, identified by $\tau$ in the legend and distinguished by line style and marker, with markers at five Caputo orders, and of (b) the damping ratio over $\omega\tau=10^{-1.5}$--$10^{1.5}$ and $\alpha=0.2$--$1$ with labeled contours, for the fractional Kelvin--Voigt element with branch continuation. The dashed arc is the exact Kelvin--Voigt locus, on which every $\alpha=1$ pole lies. Fractional poles fan upward, integer-order poles over-damp.}
 \label{fig:damping}
 \end{figure}
 
@@ -269,8 +269,8 @@ threshold. Hence, at a fixed second moment the shape of the window is immaterial
 to the third decimal, and its size and its anisotropy are the only window
 parameters left in the model. The entries of \ref{app:Mcoeff} used here are the
 ellipsoidal second moment \eqref{eq:Mellip} and its rotation \eqref{eq:Mrot}, and
-the classical profile the difference is taken against is the limit
-\eqref{eq:limitM}.
+the classical profile follows from \eqref{eq:limitM} with flexoelectricity
+suppressed.
 
 \begin{figure}[!htbp]
 \centering
@@ -421,10 +421,10 @@ has to be designed against both at once. They depend on different variables: the
 window, the piezoelectric extensional coupling on neither. Figure~\ref{fig:designmap}
 resolves them over the same two parameters. Panel~(a) is the flexoelectric
 bending coupling on a grid of eight thicknesses and eight window
-half-thicknesses, computed with the mode-free measure \eqref{eq:kstatic} and the same
-$48\times4$ mesh as Fig.~\ref{fig:thickness}(a); panel~(b) is the ratio of that
-coupling to the extensional one of the same strip, computed with the mode-free
-measure of \eqref{eq:kstatic}. Both panels carry the line $a_2=h$, along which
+half-thicknesses, computed with the mode-based measure \eqref{eq:k2mode} and
+the same $48\times4$ mesh as Fig.~\ref{fig:thickness}(a); panel~(b) is the
+ratio of that bending coupling to the mode-free extensional coupling
+\eqref{eq:kstatic} of the same strip. Both panels carry the line $a_2=h$, along which
 the window is as thick as the strip, and the map stops at $a_2/L=0.2$, the
 operating range assumed in Sec.~\ref{sec:limit_window}.
 

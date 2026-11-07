@@ -24,8 +24,9 @@ in the requested order, including captions, displayed equations and table inputs
   distinguish stiffness used in a coupling measure from memory placement.
 - Same file: correct the dimensional pole-ratio notation to -Re(s)/|s|,
   matching the existing plotting implementation; correct the ellipsoid and
-  decrement cross-references; identify application-table couplings as modal,
-  and design-map couplings as mode-free, matching their producer scripts.
+  decrement cross-references; identify application-table couplings as modal. The final task-7
+  source cross-check distinguishes the modal design-map numerator from its
+  mode-free denominator; an interim relabeling in task 1 was reverted.
   No JSON value, numerical claim or constitutive law is changed.
 - `sec/91_appendixA.tex`: define window measure and characteristic-length
   notation; call the ellipse integral an axial rather than polar moment.
@@ -123,3 +124,50 @@ The standalone coverage checker intentionally exits 1 while uncited entries
 remain; the requested numerical and structural gates still pass.
 `results/reference_audit.md` was neither run nor rewritten.
 Gates: **70/70 PASS; 102/102, zero stale hits** (task6 logs).
+
+## Task 7 — numerical and protected-content integrity
+
+Added `Paper_12/check_round4_integrity.py` and `results/round4_integrity.md`.
+Against e00aaba it verifies all **33 archived JSON files**, all **13 input
+tables**, material/solver/map-producer code, the 102-number audit, bibliography,
+reference_audit.md, frontmatter and author declarations/acknowledgement are
+byte-identical; all original abstract/conclusion numeric literals and
+assumed-range clauses remain. No verified number required a trace-through edit.
+
+The final source-to-producer comparison checks executable expressions rather
+than docstrings: `run_design_map.flexo_k2` calls `modal_k2`, while the denominator
+uses `static_k2`. Sec. 7.5 now states that distinction explicitly, undoing an
+interim task-1 mislabeling. F6's caption names 6.73 MHz as f0, with omega0=2 pi f0,
+matching the plotting code's angular-frequency conversion without changing
+the physical frequency. Appendix A distinguishes the local one-scale squared
+length L from the global strip length. The pole-ratio correction in task 1
+matches the unchanged numerical implementation, not a change in physical law.
+
+Gates: **70/70 PASS; 102/102, zero stale hits** (task7 logs).
+
+## Delivery, commits and verification limits
+
+| Task | Commit | Gates |
+|---|---|---|
+| 1 ordered read-through | `4f2cb1e` | 70/70; 102/102; 0 stale |
+| 2 candidate overflow fixes | `adad879` | 70/70; 102/102; 0 stale |
+| 3 figures and captions | `d8107bd` | 70/70; 102/102; 0 stale |
+| 4 abstract | `e7f84bb` | 70/70; 102/102; 0 stale |
+| 5 conclusions | `bb60987` | 70/70; 102/102; 0 stale |
+| 6 citation coverage | `c8aef53` | 70/70; 102/102; 0 stale |
+| 7 integrity and final report | final delivery HEAD | 70/70; 102/102; 0 stale |
+
+Candidate overflow source ranges: `sec/03_particular_cases.tex:24–32`
+(eq:limitM) and `sec/91_appendixA.tex:72–79` (eq:Mrot). These displays were
+broken across rows; they are **not confirmed to be the compiler's two reported
+sites**, since no log locations were provided. The author must verify the
+remaining box count, page count and actual page-level float/heading layout.
+Figure and caption changes may affect pagination. Baseline 31 pages is the
+author's measured count for e00aaba, not a measurement of this revision.
+No TeX installation, compile or placeholder substitution was attempted.
+
+Seven uncited bibliography entries remain as explicitly listed in Task 6 and
+citation_coverage.md; no citation was invented to hide them. F10 was not
+supplied. The revision does not claim external validation of assumed inputs,
+reference metadata, or each constitutive interpretation simply because the
+numerical regression gates pass. Final branch: `arena/adfa7636-new-fem` only.
