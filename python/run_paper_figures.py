@@ -273,13 +273,30 @@ def _polarmap(rows, key, nar=61, nth=361):
     return thf, ar_f, Zf
 
 
+AR_ORDER = (2.0, 3.0, 4.0, 5.0, 7.0, 10.0)
+
+
+def ar_color(AR):
+    """One colour per aspect ratio, shared by every figure that sweeps it.
+
+    The categorical palette is indexed by the *value* of the aspect ratio, not
+    by its position in the current figure's list, so AR = 2 is the same blue in
+    F4 (AR = 2, 5, 10) and in F5 (AR = 2, 3, 4, 5, 7, 10).  A sequential map
+    sampled at log(AR) was tried first and made AR = 2 and AR = 3
+    indistinguishable inside one panel.
+    """
+    if AR in AR_ORDER:
+        return OI[AR_ORDER.index(AR)]
+    return OI[-1]
+
+
 def fig_orientation(pol):
     """Window orientation: normalised polar sections of f1 and k2, and their
     maps over the aspect ratio."""
     ARS = (2.0, 5.0, 10.0)
     fig = plt.figure(figsize=(6.9, 6.1))
-    gs = fig.add_gridspec(2, 2, hspace=0.30, wspace=0.46,
-                          left=0.075, right=0.955, top=0.95, bottom=0.075)
+    gs = fig.add_gridspec(2, 2, hspace=0.24, wspace=0.46,
+                          left=0.075, right=0.955, top=0.94, bottom=0.075)
     cfg = (("f_ext_kHz", (0.945, 1.090), [0.95, 1.05],
             r"$f_{\mathrm{ext}}/f_{\mathrm{ext}}(0)$"),
            ("k2_axial", (0.74, 1.025), [0.8, 0.9], r"$k^2/k^2(0)$"))
@@ -290,9 +307,9 @@ def fig_orientation(pol):
             _, _, dense, smooth, mt_, mv = _fold(pol, AR, key)
             if AR == 2.0:
                 ref = np.interp(0.0, dense, smooth)
-            ax.plot(np.deg2rad(dense), smooth / ref, "-", color=OI[i], lw=1.2,
-                    label=f"AR = {AR:g}", zorder=2)
-            ax.plot(np.deg2rad(mt_), mv / ref, "o", ms=1.6, color=OI[i],
+            ax.plot(np.deg2rad(dense), smooth / ref, "-", color=ar_color(AR),
+                    lw=1.2, label=f"AR = {AR:g}", zorder=2)
+            ax.plot(np.deg2rad(mt_), mv / ref, "o", ms=1.6, color=ar_color(AR),
                     mfc="none", mew=0.45, zorder=3)
         if key == "k2_axial":
             _, _, dense, smooth, mt_e, mv_e = _fold(pol, 2.0, key, "ellipse")
@@ -333,7 +350,9 @@ def fig_orientation(pol):
         ax.clabel(cs, fontsize=5.4, inline=True, inline_spacing=2, fmt=fmt)
         for AR in sorted({round(r["AR"], 3) for r in pol}):
             ax.plot([0, 180], [AR, AR], "o", ms=1.1, color="w", alpha=0.85)
-        ax.set_xlim(0, 180)
+        # a few points of margin: contour labels placed on the frame edge
+        # were losing their leading digit
+        ax.set_xlim(-4, 184)
         ax.set_xticks([0, 45, 90, 135, 180])
         ax.set_yscale("log")
         ax.set_yticks([2, 3, 5, 7, 10])
@@ -1027,8 +1046,9 @@ def fig_p14_design_space(pol):
                    key=lambda z: z["theta_deg"])
         k2 = np.array([r["k2_axial"] for r in h])
         rel = 100.0 * (k2 / k2[0] - 1.0)
-        ax.plot(th, rel, "-", color=OI[i], lw=1.15, label=f"AR = {AR:g}")
-        ax.plot(th[::2], rel[::2], "o", ms=2.2, color=OI[i], mfc="none",
+        ax.plot(th, rel, "-", color=ar_color(AR), lw=1.15,
+                label=f"AR = {AR:g}")
+        ax.plot(th[::2], rel[::2], "o", ms=2.2, color=ar_color(AR), mfc="none",
                 mew=0.5)
         if i == 0:
             worst = (rel.min(), AR, th[np.argmin(rel)])
