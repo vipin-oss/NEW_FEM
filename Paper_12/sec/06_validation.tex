@@ -13,6 +13,24 @@ so that each case varies only the feature it is meant to test; the material is
 tetragonal $\mathrm{BaTiO_3}$ at room temperature, with the constants of
 Table~\ref{tab:params}.
 
+\noindent\textbf{Notation and provenance.} In this section, $M_{11}$ and
+$M_{22}$ are the diagonal components of the window second moment, $a_1$ and
+$a_2$ its half-widths, $L$ the strip length, $h$ the thickness, $\rho$ the mass
+density, $\mu$ the flexoelectric coefficient, $k^2$ the coupling factor, $x$
+its uncoupled strength, $C^{p}_{xx}$ the reduced plane-stress stiffness,
+$e_{33}$ and $e_{31}$ piezoelectric constants, $\kappa_{33}$ the polar-axis
+permittivity, $d$ and $\beta$ the condensed electrode pair, $K_{sc}$ the
+short-circuit stiffness, $b_j$ the L1 weights, $\delta$ a logarithmic decrement
+and $\zeta_{\rm eff}$ the damping ratio extracted from successive peaks $A_k$.
+Unless a source is cited, every equation in this section is derived here from
+the formulation of Sec.~\ref{sec:formulation}; the closed coupling forms are
+derived in Sec.~\ref{sec:bc} and the window coefficients in
+\ref{app:Mcoeff}. The published material constants are cited collectively in
+Table~\ref{tab:params}; the remaining inputs are stated as assumed. The single
+worked numerical calculation is given below in Sec.~\ref{sec:worked}, and the
+remaining tabulated values are collected in \ref{app:data} and
+\ref{app:verification}.
+
 The dielectric anisotropy ratio
 $\kappa_{11}/\kappa_{33}=39$ is retained, so the two poling configurations
 differ in their permittivity as well as in their modulus. The strain-gradient
@@ -22,14 +40,16 @@ $a_1\times a_2=3\times1$\,\si{\micro\meter} the cuboid window of
 $M_{22}=3.3\times10^{-13}$\,\si{\square\meter}, that is characteristic lengths
 $\sqrt{M_{11}}=\SI{1.73}{\micro\meter}$ and
 $\sqrt{M_{22}}=\SI{0.58}{\micro\meter}$ along and across the strip. The ratio
-$a_1/L=0.015$ is far inside the operating range $a/L\le0.2$ of
-Sec.~\ref{sec:limit_window}. Two of the inputs are not material constants of
-this crystal. The density $\rho$ rescales every frequency by the common factor
+$a_1/L=0.015$ is far inside the assumed operating range $a/L\le0.2$ of
+Sec.~\ref{sec:limit_window}. Two of the inputs are assumed rather than
+measured. The density $\rho$ is taken as the standard crystallographic value
+and is assumed here; it rescales every frequency by the common factor
 $1/2\pi\sqrt{\rho}$ and therefore moves the kilohertz numbers without touching
-any ratio; the flexoelectric coefficient $\mu$ enters every flexoelectric
-energy linearly and every flexoelectric coupling as $\mu^{2}$, so the growth
-factors and the comparison with the piezoelectric response stand whatever its
-value, while the absolute flexoelectric coupling follows it quadratically.
+any ratio. The flexoelectric coefficient $\mu$ is assumed here; it enters every
+flexoelectric energy linearly and every flexoelectric coupling as $\mu^{2}$,
+so the growth factors and the comparison with the piezoelectric response stand
+whatever its value, while the absolute flexoelectric coupling follows it
+quadratically.
 
 \FloatBarrier
 \subsection{Case I: benchmarks and mesh convergence}
