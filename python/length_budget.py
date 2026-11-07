@@ -1,10 +1,12 @@
 """Page budget for the manuscript, measured from the sources.
 
-No TeX is installed in this environment, so the page count cannot be measured;
-it can, however, be *budgeted*: every figure's height follows from its PDF
-box and its ``width=`` option, every table's height from its row count, and the
-prose from its character count.  The one unknown, how much a page loses to bad
-breaks, is calibrated on the last revision whose PDF was counted (34 pages).
+No full TeX Live is installed in this environment; an offline static Tectonic
+diagnostic compiles the manuscript separately and reports 34 pages.  The count
+below is an area *budget*, not a measurement: every figure's height follows
+from its PDF box and its ``width=`` option, every table's height from its row
+count, and the prose from its character count.  The one unknown, how much a
+page loses to bad breaks, is calibrated on the last revision whose PDF was
+counted (34 pages).
 
     python length_budget.py                  # current tree
     python length_budget.py --calibrate 47a21a3
@@ -275,7 +277,7 @@ def main():
                   "| lever | saves | pages | cost to the paper |", "|---|---|---|---|",
                   "| Appendix B to supplementary material (4 floats, %.0f pt) | %.0f pt | %.1f | the verification table is the evidence of Sec. 6.1; a supplementary file is standard practice but changes the submission |"
                   % (appb, appb, appb / TEXTHEIGHT),
-                  "| all ten body figures to 0.85\\textwidth | %.0f pt | %.1f | axes get smaller; none is removed |"
+                  "| all twelve body figures to 0.85\\textwidth | %.0f pt | %.1f | axes get smaller; none is removed |"
                   % (shrink, shrink / TEXTHEIGHT),
                   "| `tab:verification` at \\footnotesize with tighter rules | %.0f pt | %.1f | 54 rows at 9 pt instead of 12 |"
                   % (small, small / TEXTHEIGHT),

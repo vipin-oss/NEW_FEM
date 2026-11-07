@@ -118,8 +118,8 @@ def main():
               or missing_in) and p.returncode == 0
     lines = ["# Structural check of Paper_12/main.tex", "",
              "**No full TeX Live is available in this environment.** "
-             "An offline Tectonic diagnostic compiles the manuscript to 33 "
-             "pages with 0 undefined references; the mandated "
+             "An offline static Tectonic diagnostic compiles the manuscript "
+             "to 34 pages with 0 undefined references; the mandated "
              "`pdflatex; bibtex; pdflatex x2` sequence remains to be run by "
              "the author. This file lists what a compiler would have flagged "
              "before typesetting.", "",

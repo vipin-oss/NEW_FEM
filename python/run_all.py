@@ -1,11 +1,12 @@
 """
 run_all.py -- one command, whole suite, one pass/fail table.
 
-    python3 python/run_all.py              # everything (~11 min)
+    python3 python/run_all.py              # everything (~14 min)
     python3 python/run_all.py --no-figs    # skip the figures
     python3 python/run_all.py --reuse      # re-grade all 70 checks from the
                                            # cached numeric archive, after
-                                           # section-only manuscript edits
+                                           # section-only manuscript edits;
+                                           # Paper_12/check_refs.py is not run
 
 Runs, in order:
     run_verification.py    V1-V7 + the delivered L1 stencil check
@@ -19,7 +20,7 @@ Runs, in order:
     run_demos.py           the thickness sweep (optional)
     run_paper_figures.py   the paper figure set (optional)
     check_paper_numbers.py N1 every number in the manuscript (optional)
-    check_paper_structure.py   manuscript structure, no TeX available (opt.)
+    check_paper_structure.py   manuscript structure; no full TeX Live (opt.)
 then applies the pass/fail criteria below to the generated JSON and writes
 results/SUMMARY.md and results/summary.json.
 
@@ -66,11 +67,9 @@ FULL_SCRIPTS = ["run_verification.py", "run_flexo_check.py",
                 "run_config_table.py", "list_unverified.py", "length_budget.py",
                 "run_sensitivity.py", "check_gradient_energy.py",
                 "check_coupled_patch.py", "check_numerics.py",
-                "sensitivity_tornado.py", "run_design_map.py",
-                os.path.join("..", "Paper_12", "check_refs.py")]
+                "sensitivity_tornado.py", "run_design_map.py"]
 
-REUSE_SCRIPTS = [os.path.join("..", "Paper_12", "check_refs.py"),
-                 "audit_abstract_claims.py", "length_budget.py",
+REUSE_SCRIPTS = ["audit_abstract_claims.py", "length_budget.py",
                  "list_unverified.py", "derive_k2_closed_form.py",
                  "check_numerics.py", "check_gradient_energy.py",
                  "check_coupled_patch.py", "make_paper_table.py",
@@ -570,7 +569,7 @@ def main():
            "incremental_regrade": reuse,
            "runtime_note": ("cached numerical JSON, all 70 checks re-graded"
                             if reuse else
-                            "run_verification ~45 s, run_demos ~~55 s of the total")}
+                            "full numerical suite ~14 min of the total")}
     if not reuse:
         with open(MANIFEST, "w") as fh:
             json.dump({"source_digest": source_digest(),
