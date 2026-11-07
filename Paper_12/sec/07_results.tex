@@ -11,7 +11,14 @@ helps, what the memory order and the relaxation time do to the damping, and what
 the four electrode configurations return for one strip. Every number quoted is a
 solved eigenvalue or a time march of the model of Sec.~\ref{sec:formulation},
 discretized as in Sec.~\ref{sec:fem} and checked as in
-Sec.~\ref{sec:verification}.
+Sec.~\ref{sec:verification}. All expressions used below are derived in
+Secs.~\ref{sec:formulation}--\ref{sec:fem} or in Sec.~\ref{sec:calibration}; no
+new constitutive law is introduced here. The four parameters not supplied by a
+constitutive table are treated as assumed inputs, as stated in
+Sec.~\ref{sec:formulation} and identified in Sec.~\ref{sec:calibration}. The
+single worked numerical calculation is given in Sec.~\ref{sec:worked}; the
+remaining tabulated values are collected in \ref{app:data} and
+\ref{app:verification}.
 
 \FloatBarrier
 \subsection{Window orientation and strip aspect ratio}
@@ -249,7 +256,7 @@ $l$ retains $0.922$ of the classical loaded-edge displacement, an ellipsoid of
 semi-axis $l$ retains $0.941$, and the equal-$M$ cuboid sits on the ellipsoid
 curve to the third decimal. At fixed $M$ the shape of the window is therefore
 immaterial to $10^{-3}$, which is the coefficient ratio $5/3$ in the gradient
-stiffness seen from the response side. The range in which the model is used is
+stiffness seen from the response side. The assumed operating range is
 $a/L\le0.2$, the right-hand edge of the figure.
 
 Panels (b) and (c) are the corresponding static statement. The clamped strip of
@@ -342,6 +349,20 @@ every thickness.
 \includegraphics[width=0.72\textwidth]{FB1_tracking.pdf}
 \caption{Variations of (a) the defect $1-\mathrm{MAC}$, the MAC being the modal assurance criterion, between the mode shape at each thickness and the shape at $h=\SI{10}{\micro\meter}$, with the MAC printed, and of (b) the frequencies of the first two modes and their ratio, over a sweep from $10$ to $1\,\si{\micro\meter}$. The tracked branch stays within $10^{-3}$ of itself, so the identification is unambiguous.}
 \label{fig:modetrack}
+\end{figure}
+
+Figure~\ref{fig:modes} complements this one-mode identification with the
+spatial structure of the tracked branch. The surface is the computed
+open-circuit bending displacement, colored by the solved electric potential,
+and the inset gives a labeled two-dimensional reading of the same potential on
+the strip coordinates so that the through-thickness variation is not inferred
+from the three-dimensional projection alone.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{FB2_modes.pdf}
+\caption{Open-circuit bending mode and its potential field. The three-dimensional surface is the computed transverse displacement, colored by the solved electric potential; the inset shows labeled potential contours on the strip coordinates, with contour labels in millivolts. Both views use the same finite-element solution and the same assumed inputs as Fig.~\ref{fig:fields}.}
+\label{fig:modes}
 \end{figure}
 
 \input{table_thickness}

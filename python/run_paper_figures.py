@@ -42,12 +42,12 @@ FIG_FONT = "STIXGeneral"        # Times-like; set to "Times New Roman" if presen
 plt.rcParams.update({
     "font.family": FIG_FONT,
     "mathtext.fontset": "stix",
-    "font.size": 8.5,
-    "axes.labelsize": 8.5,
-    "axes.titlesize": 8.5,
-    "legend.fontsize": 7,
-    "xtick.labelsize": 7.5,
-    "ytick.labelsize": 7.5,
+    "font.size": 10,
+    "axes.labelsize": 10,
+    "axes.titlesize": 10,
+    "legend.fontsize": 9,
+    "xtick.labelsize": 9,
+    "ytick.labelsize": 9,
     "axes.spines.top": False,
     "axes.spines.right": False,
     "axes.grid": True,
@@ -182,7 +182,8 @@ def polar_sweep():
     return rows, sym
 
 def fig_p1_geometry():
-    fig, axs = plt.subplots(2, 1, figsize=(5.2, 2.7))
+    fig, axs = plt.subplots(2, 1, figsize=(6.0, 3.2))
+    fig.subplots_adjust(bottom=0.14, hspace=0.55, top=0.92)
     L_, H_ = 1.0, 0.30
     for k, (ax, name, econf) in enumerate(zip(
             axs, ("(a) bending: through-thickness electrodes",
@@ -198,16 +199,16 @@ def fig_p1_geometry():
             ax.add_patch(Rectangle((0, H_), L_, 0.022, fc=OI[1],
                                    alpha=0.6, ec="none"))
             ax.text(L_ / 2, -0.034, r"earthed, $V=0$", ha="center", va="top",
-                    fontsize=6.5)
+                    fontsize=9)
             ax.text(L_ / 2, H_ + 0.032, r"floating, $q=0$", ha="center",
-                    va="bottom", fontsize=6.5)
+                    va="bottom", fontsize=9)
         else:
             for xx in (0.0, L_):
                 ax.add_patch(Rectangle((xx - (0.012 if xx == 0 else 0), 0),
                                         0.012, H_, fc=OI[1], alpha=0.6,
                                         ec="none"))
-            ax.text(0.02, H_ / 2, r"$V=0$", fontsize=6.5, va="center")
-            ax.text(L_ - 0.02, H_ / 2, r"$V$, $q=0$", fontsize=6.5,
+            ax.text(0.02, H_ / 2, r"$V=0$", fontsize=9, va="center")
+            ax.text(L_ - 0.02, H_ / 2, r"$V$, $q=0$", fontsize=9,
                     va="center", ha="right")
         cx, cy = 0.52, H_ / 2
         ax.add_patch(Rectangle((cx - 0.10, cy - 0.035), 0.20, 0.07, fill=False,
@@ -216,19 +217,19 @@ def fig_p1_geometry():
                              0.07 * np.sqrt(3 / 4), fill=False, ec=OI[2],
                              lw=1.4, ls="--"))
         ax.annotate(r"cuboid: $M_{ii}=a_i^2/3$", (cx + 0.085, cy + 0.033),
-                    xytext=(cx + 0.14, cy + 0.085), fontsize=5.8,
+                    xytext=(cx + 0.14, cy + 0.085), fontsize=8.5,
                     arrowprops=dict(arrowstyle="-", lw=0.4, color="0.35"))
         ax.annotate(r"ellipse (equal $M$)", (cx - 0.09, cy - 0.028),
-                    xytext=(cx - 0.30, cy - 0.095), fontsize=5.8,
+                    xytext=(cx - 0.30, cy - 0.095), fontsize=8.5,
                     arrowprops=dict(arrowstyle="-", lw=0.4, color="0.35"))
         ax.set_xlim(-0.07, L_ + 0.07)
-        ax.set_ylim(-0.115, H_ + 0.075)
+        ax.set_ylim(-0.115, H_ + 0.14)
         ax.set_aspect("equal")
         ax.axis("off")
-        ax.set_title(name, fontsize=7.5, pad=1)
-    fig.text(0.5, -0.02, r"$L=200\ \mu$m, thickness $h$; window half-widths "
+        ax.set_title(name, fontsize=10, pad=2)
+    fig.text(0.5, 0.01, r"$L=200\ \mu$m, thickness $h$; window half-widths "
              r"$a_1\times a_2$, $M_{ii}=a_i^2/3$ (cuboid), $a_i^2/4$ (ellipse)",
-             ha="center", fontsize=6.5)
+             ha="center", fontsize=9)
     save(fig, "F1_geometry")
 
 
@@ -321,12 +322,12 @@ def fig_orientation(pol):
         ax.plot(np.linspace(0, 2 * np.pi, 361), np.ones(361), ":",
                 color="0.55", lw=0.7, zorder=1)
         ax.set_rticks(rticks)
-        ax.set_yticklabels([f"{v:g}" for v in rticks], fontsize=6.2)
+        ax.set_yticklabels([f"{v:g}" for v in rticks], fontsize=9)
         ax.set_theta_zero_location("E")
         ax.set_rlabel_position(104)
         ax.set_thetagrids(np.arange(0, 360, 45),
                           labels=["0", "45", "90", "135", "180", "225",
-                                  "270", "315"], fontsize=6.2)
+                                  "270", "315"], fontsize=9)
         ax.tick_params(pad=1)
         ax.grid(alpha=0.35, lw=0.4)
         ax.set_title(rlab, fontsize=8, pad=13)
@@ -358,16 +359,16 @@ def fig_orientation(pol):
         ax.set_yticks([2, 3, 5, 7, 10])
         ax.set_yticklabels(["2", "3", "5", "7", "10"])
         ax.yaxis.set_minor_locator(matplotlib.ticker.NullLocator())
-        ax.set_xlabel(r"window angle $\theta$ (deg)", fontsize=7.5)
-        ax.set_ylabel("aspect ratio", fontsize=7.5)
-        ax.tick_params(labelsize=6.5)
+        ax.set_xlabel(r"window angle $\theta$ (deg)", fontsize=10)
+        ax.set_ylabel("aspect ratio", fontsize=10)
+        ax.tick_params(labelsize=9)
         ax.grid(False)
         ax.text(0.03, 0.93, "(%s)" % "cd"[k], transform=ax.transAxes,
                 fontsize=8.5, fontweight="bold", va="top",
                 bbox=dict(fc="w", ec="none", alpha=0.8, pad=1.0))
         cb = fig.colorbar(cf, ax=ax, pad=0.015, fraction=0.05)
-        cb.set_label(lab, fontsize=7.5)
-        cb.ax.tick_params(labelsize=6.5)
+        cb.set_label(lab, fontsize=10)
+        cb.ax.tick_params(labelsize=9)
     save(fig, "F4_orientation")
 
 
@@ -410,8 +411,8 @@ def fig_p4_modeshape():
     Xs = X.reshape(5, 49)
     Ys = Y.reshape(5, 49)
     magn = 1.0e9                            # 10 nm -> 10 um on the axis
-    fig = plt.figure(figsize=(4.9, 3.1))
-    ax = fig.add_subplot(111, projection="3d")
+    fig = plt.figure(figsize=(5.6, 3.6))
+    ax = fig.add_axes([0.02, 0.14, 0.62, 0.78], projection="3d")
     cmap = plt.get_cmap("viridis")
     norm = matplotlib.colors.Normalize(vmin=0.0, vmax=Ps.max())
     ax.plot_surface(Xs, Ys, Zs * magn * 1e3, facecolors=cmap(norm(Ps)),
@@ -419,19 +420,28 @@ def fig_p4_modeshape():
                     edgecolor=(0, 0, 0, 0.3), antialiased=True, shade=False)
     ax.set_xlabel(r"$x$ ($\mu$m)", labelpad=0)
     ax.set_ylabel(r"$y$ ($\mu$m)", labelpad=0)
-    ax.set_zlabel(r"$v\times10^{9}$ ($\mu$m)", labelpad=4, fontsize=6.5)
+    ax.set_zlabel(r"$v\times10^{9}$ ($\mu$m)", labelpad=4, fontsize=9)
     ax.view_init(elev=25, azim=-68)
     ax.set_box_aspect((3.3, 1.2, 1.45))
-    ax.tick_params(labelsize=5.5, pad=0)
-    ax.zaxis.set_tick_params(labelsize=5.5, pad=0)
+    ax.tick_params(labelsize=8, pad=0)
+    ax.zaxis.set_tick_params(labelsize=8, pad=0)
     ax.set_yticks([0, 5, 10])
     ax.set_zticks([0, 4, 8, 12])
     ax.grid(True, lw=0.3, alpha=0.5)
     sm = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap)
     cb = fig.colorbar(sm, ax=ax, orientation="horizontal", shrink=0.62,
                       pad=0.015, aspect=34)
-    cb.set_label(r"$\phi$ (mV), open circuit", fontsize=7)
-    cb.ax.tick_params(labelsize=5.5, pad=1)
+    cb.set_label(r"$\phi$ (mV), open circuit", fontsize=9)
+    cb.ax.tick_params(labelsize=8, pad=1)
+    axins = fig.add_axes([0.68, 0.50, 0.30, 0.38])
+    axins.contourf(Xs, Ys, Ps, levels=10, cmap="viridis")
+    cs = axins.contour(Xs, Ys, Ps, levels=5, colors="k", linewidths=0.5)
+    axins.clabel(cs, fmt="%d", fontsize=7)
+    axins.set_xlabel(r"$x$ ($\mu$m)", fontsize=8)
+    axins.set_ylabel(r"$y$ ($\mu$m)", fontsize=8)
+    axins.set_title("potential contours (mV)", fontsize=8)
+    axins.tick_params(labelsize=7)
+    axins.grid(False)
     save(fig, "FB2_modes")
     return {"V_open_V": V, "magnification": float(magn * 1e3),
             "u_peak_nm": 10.0}
@@ -472,7 +482,7 @@ def fig_damping():
                         textcoords="offset points",
                         xytext=(-42, 0) if first else (5, 5),
                         ha="right" if first else "left", va="center",
-                        fontsize=6.0, color="0.25")
+                        fontsize=8.5, color="0.25")
     # exact Kelvin-Voigt locus: s/w0 = -zeta +- i sqrt(1 - zeta^2).  At
     # alpha = 1 the fractional element *is* Kelvin-Voigt, so the top curve of
     # panel (a) must lie on this arc for every tau.
@@ -488,18 +498,18 @@ def fig_damping():
             _kv[tau] = (-z.real / w0, abs(z.imag) / w0)
     _dv = max(abs(y - np.sqrt(max(0.0, 1.0 - min(x, 1.0) ** 2)))
               for x, y in _kv.values())
-    ax.legend(loc="lower left", frameon=False, fontsize=6.0,
+    ax.legend(loc="lower left", frameon=False, fontsize=8.5,
               handlelength=1.6, borderaxespad=0.1)
     ax.set_xscale("log")
     ax.set_xlim(5e-3, 1.5)
     ax.set_ylim(0.60, 1.55)
     ax.axhline(1.0, color="0.55", lw=0.6, ls=":", zorder=1)
     ax.text(0.03, 0.94, r"markers: $\alpha=0.2,0.4,0.6,0.8,1$",
-            transform=ax.transAxes, ha="left", va="top", fontsize=5.8)
+            transform=ax.transAxes, ha="left", va="top", fontsize=8.5)
     ax.set_xlabel(r"$-\mathrm{Re}\,s/\omega_0$")
     ax.set_ylabel(r"$|\mathrm{Im}\,s|/\omega_0$")
-    ax.tick_params(labelsize=6.5)
-    ax.set_title(r"(a) poles of the fractional mode", fontsize=7.8, loc="left")
+    ax.tick_params(labelsize=9)
+    ax.set_title(r"(a) poles of the fractional mode", fontsize=10, loc="left")
     axb = axs[1]
     al = np.linspace(0.2, 1.0, 41)
     wt = np.logspace(-1.5, 1.5, 61)
@@ -517,12 +527,12 @@ def fig_damping():
     axb.clabel(cs, fontsize=5.6, inline=True, inline_spacing=2, fmt="%.2f")
     axb.set_xlabel(r"$\alpha$")
     axb.set_ylabel(r"$\log_{10}\omega\tau$")
-    axb.tick_params(labelsize=6.5)
+    axb.tick_params(labelsize=9)
     axb.set_title(r"(b) damping ratio $\zeta(\alpha,\omega\tau)$",
-                  fontsize=7.8, loc="left")
+                  fontsize=10, loc="left")
     cb = fig.colorbar(cf, ax=axb, pad=0.02, fraction=0.055)
-    cb.set_label(r"$\zeta$", fontsize=7.5)
-    cb.ax.tick_params(labelsize=6.5)
+    cb.set_label(r"$\zeta$", fontsize=10)
+    cb.ax.tick_params(labelsize=9)
     print(f"    F6: alpha->1 poles vs exact KV arc, worst |dy| = {_dv:.2e}")
     save(fig, "F6_damping")
 
@@ -548,8 +558,12 @@ def fig_p6_waterfall():
     alphas = [1.0, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4]
     T = 10 * 2 * np.pi / ws[j]
     N = 4000
-    fig, ax = plt.subplots(1, 2, figsize=(6.6, 2.5))
+    fig, ax = plt.subplots(1, 2, figsize=(7.2, 3.3))
+    fig.subplots_adjust(bottom=0.32, wspace=0.28, top=0.88,
+                        left=0.08, right=0.98)
     cmap = plt.get_cmap("cividis")
+    styles = ("-", "--", "-.", ":", "-", "--", "-.", ":")
+    markers = ("o", "s", "^", "D", "v", "<", ">", "x")
     out = {"tau_s": tau, "mode_index": j + 1,
            "f_kHz": float(ws[j] / 2e3 / np.pi),
            "V0": float(abs(d @ x0) / beta)}
@@ -560,8 +574,12 @@ def fig_p6_waterfall():
         u = (Phi[row, :] @ y) * 1e9
         V = (d @ Phi) @ y / beta
         c = (OI + ["#8250A0"])[i % 9]
-        ax[0].plot(t * 1e6, u, color=c, lw=1.1, label=rf"$\alpha={a:g}$")
-        ax[1].plot(t * 1e6, V, color=c, lw=1.1)
+        ax[0].plot(t * 1e6, u, color=c, lw=1.2, ls=styles[i],
+                   marker=markers[i], markevery=250, ms=3.0, mfc="none",
+                   mew=0.6, label=rf"$\alpha={a:g}$")
+        ax[1].plot(t * 1e6, V, color=c, lw=1.2, ls=styles[i],
+                   marker=markers[i], markevery=250, ms=3.0, mfc="none",
+                   mew=0.6)
         # first-period decrement on the first two positive peaks, converted
         # with the exact relation zeta = delta / sqrt(4 pi^2 + delta^2).
         # For alpha < 1 this is a first-period measure, not a damping ratio:
@@ -576,9 +594,12 @@ def fig_p6_waterfall():
     ax[0].set_ylabel(r"$u_{\mathrm{tip}}$ (nm)")
     ax[1].set_xlabel(r"$t$ ($\mu$s)")
     ax[1].set_ylabel(r"$V_{\mathrm{oc}}$ (V)")
-    ax[0].legend(frameon=False, fontsize=6.5, ncol=2)
-    ax[0].set_title("(a) tip displacement", fontsize=7.5)
-    ax[1].set_title("(b) open-circuit voltage", fontsize=7.5)
+    handles, labels = ax[0].get_legend_handles_labels()
+    fig.legend(handles, labels, frameon=False, loc="lower center",
+               bbox_to_anchor=(0.5, 0.04), ncol=4, fontsize=9,
+               columnspacing=1.0, handlelength=2.0)
+    ax[0].set_title("(a) tip displacement", fontsize=10)
+    ax[1].set_title("(b) open-circuit voltage", fontsize=10)
     save(fig, "F9_ringdown")
     return out
 
@@ -593,11 +614,11 @@ def fig_p7_thickness(thick, closed_form):
     h = np.array([r["h_um"] for r in thick])
     kf = np.array([r["k2_flexo"] for r in thick])
     ke = np.array([r["k2_ext"] for r in thick])
-    fig, ax = plt.subplots(1, 3, figsize=(6.9, 2.65),
+    fig, ax = plt.subplots(1, 3, figsize=(7.6, 3.0),
                            gridspec_kw={"width_ratios": [1.1, 1.0, 0.95],
-                                        "wspace": 0.42, "left": 0.075,
-                                        "right": 0.985, "bottom": 0.18,
-                                        "top": 0.90})
+                                        "wspace": 0.48, "left": 0.08,
+                                        "right": 0.985, "bottom": 0.21,
+                                        "top": 0.88})
     ax[0].loglog(h, kf, "-", color=OI[0], lw=1.3,
                  label=r"FEM, 48$\times$4")
     ax[0].loglog(h, kf, "o", ms=3.4, color=OI[0], mfc="none", mew=0.6)
@@ -617,27 +638,28 @@ def fig_p7_thickness(thick, closed_form):
         ym = np.sqrt(kf[i] * kf[i + 1])
         ax[0].annotate(f"{slopes[i]:.2f}", (xm, ym),
                        textcoords="offset points", xytext=(3, dy),
-                       fontsize=6.2, color=OI[0])
+                       fontsize=9, color=OI[0])
     ax[0].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[0].set_ylabel(r"$k^2$ (bending)")
     ax[0].invert_xaxis()
     ax[0].set_ylim(1.2e-4, 1.1e-2)
-    ax[0].tick_params(labelsize=6.5)
-    ax[0].legend(frameon=False, fontsize=6.2, loc="upper left")
-    ax[0].set_title("(a) flexoelectric", fontsize=7.8, loc="left")
+    ax[0].tick_params(labelsize=9)
+    ax[0].legend(frameon=False, fontsize=9, loc="upper left")
+    ax[0].set_title("(a) flexoelectric", fontsize=10, loc="left")
     ax[1].semilogx(h, ke, "-", color=OI[2], lw=1.3, label=r"FEM, 48$\times$4")
     ax[1].semilogx(h, ke, "s", ms=3.4, color=OI[2], mfc="none", mew=0.6)
-    ax[1].semilogx(h, [r["k2_ext_24"] for r in thick], "--", ms=4, lw=0.9,
-                   alpha=0.8, color=OI[3], label=r"FEM, 24$\times$2")
+    ax[1].semilogx(h, [r["k2_ext_24"] for r in thick], "--s", ms=3.4,
+                   lw=1.1, alpha=0.9, color=OI[3],
+                   label=r"FEM, 24$\times$2")
     ax[1].axhline(closed_form, color="k", lw=0.9, ls=":",
                   label=r"$e^{\mathrm{T}}C^{-1}e/\kappa$")
     ax[1].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[1].set_ylabel(r"$k^2$ (quasi-static)")
     ax[1].invert_xaxis()
     ax[1].set_ylim(0.548, 0.570)
-    ax[1].tick_params(labelsize=6.5)
-    ax[1].legend(frameon=False, fontsize=6.0, loc="lower left")
-    ax[1].set_title("(b) piezoelectric", fontsize=7.8, loc="left")
+    ax[1].tick_params(labelsize=9)
+    ax[1].legend(frameon=False, fontsize=8.5, loc="lower left")
+    ax[1].set_title("(b) piezoelectric", fontsize=10, loc="left")
     ax[2].loglog(h, kf / ke, "-", color=OI[4], lw=1.3)
     ax[2].loglog(h, kf / ke, "o", ms=3.4, color=OI[4], mfc="none", mew=0.6)
     ax[2].axhline(1.0, color="0.45", lw=0.9, ls="--")
@@ -645,8 +667,8 @@ def fig_p7_thickness(thick, closed_form):
     ax[2].set_ylabel(r"ratio $k^2_{\mathrm{flexo}}/k^2_{\mathrm{piezo}}$")
     ax[2].invert_xaxis()
     ax[2].set_ylim(2.0e-4, 3.0)
-    ax[2].tick_params(labelsize=6.5)
-    ax[2].set_title("(c) the two together", fontsize=7.8, loc="left")
+    ax[2].tick_params(labelsize=9)
+    ax[2].set_title("(c) the two together", fontsize=10, loc="left")
     save(fig, "F8_thickness")
     return {"n": int(h.size), "slope_thick": float(slopes[0]),
             "slope_thin": float(slopes[-1])}
@@ -657,7 +679,7 @@ def fig_p8_mac(mt_data):
     hs = np.array([r["h_um"] for r in rows])
     macs = np.array([r["mac_mode1_vs_ref"] for r in rows])
     f1 = np.array([r["f_kHz"][0] for r in rows])
-    fig, ax = plt.subplots(1, 2, figsize=(6.4, 2.4),
+    fig, ax = plt.subplots(1, 2, figsize=(7.0, 2.8),
                            gridspec_kw={"width_ratios": [1.2, 1]})
     # the reference thickness itself has 1-MAC = 0 and cannot be drawn on a
     # logarithmic axis; it is the point the others are referred to
@@ -669,24 +691,24 @@ def fig_p8_mac(mt_data):
     ax[0].set_ylim(3e-5, 3e-3)
     for x, m in zip(hs[keep], macs[keep]):
         ax[0].annotate(f"{m:.5f}", (x, 1.0 - m), textcoords="offset points",
-                       xytext=(4, 5), fontsize=5.8)
-    ax[0].set_title("(a) one shape at every thickness", fontsize=7.5)
+                       xytext=(4, 5), fontsize=8.5)
+    ax[0].set_title("(a) one shape at every thickness", fontsize=10)
     f2 = np.array([r["f_kHz"][1] for r in rows])
     rat = np.array([r["f_ratio_2_over_1"] for r in rows])
     ax[1].loglog(hs, f1, "o-", color=OI[1], ms=4, lw=1.1, label=r"$f_1$")
     ax[1].set_ylim(float(f1.min()) * 0.8, float(f2.max()) * 1.4)
-    ax[1].loglog(hs, f2, "s-", color=OI[0], ms=3.6, lw=1.1, label=r"$f_2$")
+    ax[1].loglog(hs, f2, "s--", color=OI[0], ms=3.6, lw=1.2, label=r"$f_2$")
     ax[1].invert_xaxis()
     for i in range(hs.size):
         dx = -16.0 if i == hs.size - 1 else 3.5
         ax[1].annotate(rf"{rat[i]:.2f}", (hs[i], f1[i]),
                        textcoords="offset points", xytext=(dx, -9),
-                       fontsize=5.8, color=OI[1])
+                       fontsize=8.5, color=OI[1])
     ax[1].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[1].set_ylabel("frequency (kHz)")
-    ax[1].legend(frameon=False, fontsize=6.2, loc="lower left")
+    ax[1].legend(frameon=False, fontsize=9, loc="lower left")
     ax[1].set_title(r"(b) $f_2/f_1$ (labels) never approaches 1",
-                    fontsize=7.5)
+                    fontsize=10)
     save(fig, "FB1_tracking")
 
 
@@ -781,7 +803,9 @@ def fig_p11_convergence():
     ek = np.abs(k2 / k2[-1] - 1.0)
     ef = np.abs(f1 / f1[-1] - 1.0)
 
-    fig, axs = plt.subplots(1, 2, figsize=(6.2, 2.4), layout="constrained")
+    fig, axs = plt.subplots(1, 2, figsize=(6.8, 3.2))
+    fig.subplots_adjust(bottom=0.30, wspace=0.32, top=0.88,
+                        left=0.10, right=0.98)
     ax = axs[0]
     ax.loglog(nd, np.maximum(ek, 1e-9), "o-", color="#0072B2", label=r"$k^2$")
     ax.loglog(nd, np.maximum(ef, 1e-9), "s-", color="#D55E00", label=r"$f$ of the mode")
@@ -789,7 +813,8 @@ def fig_p11_convergence():
               label=r"$\propto N^{-2}$")
     ax.axvline(nd[-1], color="0.55", ls="-.", lw=0.8)
     ax.set_xlabel("degrees of freedom"); ax.set_ylabel("relative error")
-    ax.legend(frameon=False, loc="lower left"); ax.set_title("(a)", loc="left")
+    ax.legend(frameon=False, loc="lower left", fontsize=9)
+    ax.set_title("(a)", loc="left", fontsize=10)
     ax = axs[1]
     ax.plot(nd, k2, "o-", color="#0072B2", label=r"$k^2$ (mode-free)")
     ax.axhline(k2[-1], color="k", ls=":", lw=0.8)
@@ -798,9 +823,14 @@ def fig_p11_convergence():
     ax2 = ax.twinx()
     ax2.plot(nd, f1, "s-", color="#D55E00", label=r"$f$ (kHz)")
     ax2.set_ylabel(r"$f$ (kHz)", color="#D55E00")
-    ax2.tick_params(axis="y", colors="#D55E00")
+    ax2.tick_params(axis="y", colors="#D55E00", labelsize=9)
     ax2.grid(False); ax2.spines["right"].set_visible(True)
-    ax.set_title("(b)", loc="left")
+    lines1, labels1 = ax.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    fig.legend(lines1 + lines2, labels1 + labels2, frameon=False,
+               loc="lower center", bbox_to_anchor=(0.5, 0.04), ncol=3,
+               fontsize=9, columnspacing=1.0, handlelength=2.0)
+    ax.set_title("(b)", loc="left", fontsize=10)
     save(fig, "F2_convergence")
     return {"convergence": rec}
 
@@ -913,8 +943,8 @@ def fig_p12_fields():
         cb = fig.colorbar(m, ax=ax, pad=0.02, fraction=0.046)
         cb.set_label(lab, fontsize=6.8)
         cb.ax.tick_params(labelsize=5.8)
-        ax.set_xlabel(r"$x$ ($\mu$m)", fontsize=7)
-        ax.set_ylabel(r"$y$ ($\mu$m)", fontsize=7)
+        ax.set_xlabel(r"$x$ ($\mu$m)", fontsize=9)
+        ax.set_ylabel(r"$y$ ($\mu$m)", fontsize=9)
         ax.set_title(tag, loc="left", fontsize=8, pad=2)
         ax.tick_params(labelsize=6.4)
         ax.set_xlim(X.min(), X.max()); ax.set_ylim(Y.min(), Y.max())
@@ -950,11 +980,11 @@ def _static_w(Mg, nx=48, ny=4, L=LPLATE, h=HPLATE):
 
 def fig_window():
     """What the window size does: the equal-M collapse and the profiles."""
-    fig, axs = plt.subplots(1, 3, figsize=(6.9, 2.55),
+    fig, axs = plt.subplots(1, 3, figsize=(7.6, 2.9),
                             gridspec_kw={"width_ratios": [1.1, 1.0, 1.0],
-                                         "wspace": 0.34, "left": 0.075,
-                                         "right": 0.985, "bottom": 0.19,
-                                         "top": 0.90})
+                                         "wspace": 0.40, "left": 0.08,
+                                         "right": 0.985, "bottom": 0.21,
+                                         "top": 0.88})
     mesh = f6.mesh_rect(20, 4, 1.0, 0.2)
     mat = f6.isotropic_plane_strain(2e11, 0.3, 7850)
 
@@ -976,23 +1006,23 @@ def fig_window():
                                        l * np.sqrt(3 / 5)), True) / u0
                    for l in ls])
     ax = axs[0]
-    for y, lab, col, lsm, dy in (
-            (y1, "ellipsoid, semi-axis $l$", OI[0], "-", 8),
-            (y2, "cuboid, half-width $l$", OI[1], "-", -12),
-            (y3, r"cuboid, equal $M$", OI[2], "--", None)):
-        ax.plot(ls, y, lsm, color=col, lw=1.3, label=lab)
-        ax.plot(ls, y, "o", ms=2.3, color=col, mfc="none", mew=0.5)
+    series = ((y1, "ellipsoid, semi-axis $l$", OI[0], "-", "o", 8),
+              (y2, "cuboid, half-width $l$", OI[1], "--", "s", -12),
+              (y3, r"cuboid, equal $M$", OI[2], "-.", "^", None))
+    for y, lab, col, lsm, mk, dy in series:
+        ax.plot(ls, y, lsm, color=col, lw=1.4, label=lab,
+                marker=mk, markevery=2, ms=3.2, mfc="none", mew=0.6)
         if dy is not None:
             ax.annotate(f"{y[-1]:.3f}", (ls[-1], y[-1]), xytext=(2, dy),
-                        textcoords="offset points", fontsize=6.0, color=col,
+                        textcoords="offset points", fontsize=8.5, color=col,
                         annotation_clip=False)
     ax.set_xlim(0.0, 0.215)
     ax.set_ylim(0.912, 1.004)
     ax.set_xlabel(r"$l/L_x$")
     ax.set_ylabel(r"$u_R/u_{R}^{\mathrm{classical}}$")
-    ax.tick_params(labelsize=6.5)
-    ax.set_title("(a) loaded edge", fontsize=7.8, loc="left")
-    ax.legend(frameon=False, fontsize=6.0, loc="lower left")
+    ax.tick_params(labelsize=9)
+    ax.set_title("(a) loaded edge", fontsize=10, loc="left")
+    ax.legend(frameon=False, fontsize=8.5, loc="lower left")
     x0, w_el = _static_w(np.zeros((2, 2)))
     grid = x0.reshape(5, 49)[2]
     w_el = w_el.reshape(5, 49)[2]
@@ -1002,26 +1032,27 @@ def fig_window():
         recs.append((ratio, w.reshape(5, 49)[2]))
     axb = axs[1]
     axc = axs[2]
+    styles = ("-", "--", "-.")
+    markers = ("o", "s", "^")
     for k, (ratio, pw) in enumerate(recs):
-        axb.plot(grid / LPLATE, pw / pw[-1], "-", color=OI[k], lw=1.3,
-                 label=rf"$a/L={ratio}$")
-        axb.plot(grid[::8] / LPLATE, (pw / pw[-1])[::8], "o", ms=2.3,
-                 color=OI[k], mfc="none", mew=0.5)
+        axb.plot(grid / LPLATE, pw / pw[-1], ls=styles[k], color=OI[k],
+                 lw=1.4, label=rf"$a/L={ratio}$", marker=markers[k],
+                 markevery=8, ms=3.2, mfc="none", mew=0.6)
         d = np.abs(pw - w_el) / abs(w_el[-1])
         nz = d > 0
-        axc.semilogy((grid / LPLATE)[nz], d[nz], "-", color=OI[k], lw=1.3)
-        axc.semilogy((grid[::8] / LPLATE)[nz[::8]], d[::8][nz[::8]], "o",
-                     ms=2.3, color=OI[k], mfc="none", mew=0.5)
+        axc.semilogy((grid / LPLATE)[nz], d[nz], ls=styles[k], color=OI[k],
+                     lw=1.4, marker=markers[k], markevery=8, ms=3.2,
+                     mfc="none", mew=0.6)
     axb.set_xlabel(r"$x/L$")
     axb.set_ylabel(r"$w(x)/w(L)$")
-    axb.tick_params(labelsize=6.5)
-    axb.set_title("(b) clamped strip", fontsize=7.8, loc="left")
-    axb.legend(frameon=False, fontsize=6.2, loc="upper left")
+    axb.tick_params(labelsize=9)
+    axb.set_title("(b) clamped strip", fontsize=10, loc="left")
+    axb.legend(frameon=False, fontsize=9, loc="upper left")
     axc.set_xlabel(r"$x/L$")
     axc.set_ylabel(r"$|w-w_{\mathrm{cl}}|/w_{\mathrm{cl}}(L)$")
-    axc.tick_params(labelsize=6.5)
+    axc.tick_params(labelsize=9)
     axc.set_xlim(0, 1.0)
-    axc.set_title("(c) departure from the classical", fontsize=7.8, loc="left")
+    axc.set_title("(c) departure from the classical", fontsize=10, loc="left")
     save(fig, "F7_window")
 
 
@@ -1058,9 +1089,9 @@ def fig_p14_design_space(pol):
     ax.set_xticks([0, 15, 30, 45, 60, 75, 90])
     ax.set_xlabel(r"window angle $\theta$ (deg)")
     ax.set_ylabel(r"$\Delta k^2/k^2(\theta{=}0)$ (%)")
-    ax.tick_params(labelsize=6.5)
-    ax.set_title("(a) coupling against alignment", fontsize=7.8, loc="left")
-    ax.legend(frameon=False, fontsize=6.2, ncol=2, loc="lower left")
+    ax.tick_params(labelsize=9)
+    ax.set_title("(a) coupling against alignment", fontsize=10, loc="left")
+    ax.legend(frameon=False, fontsize=9, ncol=2, loc="lower left")
     axb = axs[1]
     axb.plot(th, an, "-", color=OI[3], lw=1.3)
     axb.plot(th, an, "o", ms=2.4, color=OI[3], mfc="none", mew=0.5)
@@ -1069,9 +1100,9 @@ def fig_p14_design_space(pol):
     axb.set_xticks([0, 15, 30, 45, 60, 75, 90])
     axb.set_xlabel(r"window angle $\theta$ (deg)")
     axb.set_ylabel(r"$(M_{11}-M_{22})/(M_{11}+M_{22})$")
-    axb.tick_params(labelsize=6.5)
+    axb.tick_params(labelsize=9)
     axb.set_title(r"(b) anisotropy of $M$ (any aspect ratio)",
-                  fontsize=7.8, loc="left")
+                  fontsize=10, loc="left")
     save(fig, "F5_design")
     print(f"  design: worst change {worst[0]:.1f} % (AR = {worst[1]:g}, "
           f"theta = {worst[2]:g} deg)")

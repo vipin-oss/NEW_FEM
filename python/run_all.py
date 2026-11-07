@@ -47,14 +47,16 @@ MANIFEST = os.path.join(RESULTS, "run_all_manifest.json")
 # the digest of every numerical source that can change it; a later `--reuse`
 # run skips only those regenerations and still executes every one of the 70
 # checks, the text audits and the second-pass table checks against the current
-# manuscript.  Text-audit scripts are deliberately excluded from the digest:
-# they are re-run in full on every incremental pass.
-TEXT_AUDIT_SCRIPTS = {
+# manuscript.  Text-audit and figure-presentation scripts are deliberately
+# excluded from the digest: they are re-run in full on every incremental pass
+# or on the dedicated figure pass, and do not change the numeric archive.
+NON_NUMERIC_SCRIPTS = {
     "audit_abstract_claims.py", "length_budget.py", "list_unverified.py",
     "check_paper_numbers.py", "check_paper_structure.py",
     "check_float_order.py", "check_final_consistency.py",
     "check_coupling_provenance.py", "make_paper_table.py",
     "make_appendix_tables.py", "make_coupling_table.py",
+    "run_paper_figures.py",
 }
 FULL_SCRIPTS = ["run_verification.py", "run_flexo_check.py",
                 "run_material_check.py", "run_memory_variants.py", "run_dt_study.py",
@@ -92,7 +94,7 @@ def source_digest():
     """SHA-256 of the numerical sources that can change the JSON archive."""
     h = hashlib.sha256()
     paths = sorted([os.path.join(HERE, f) for f in os.listdir(HERE)
-                    if f.endswith(".py") and f not in TEXT_AUDIT_SCRIPTS])
+                    if f.endswith(".py") and f not in NON_NUMERIC_SCRIPTS])
     for path in paths:
         h.update(os.path.relpath(path, ROOT).encode("utf-8"))
         with open(path, "rb") as fh:
