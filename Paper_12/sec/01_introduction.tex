@@ -4,8 +4,8 @@
 \label{sec:intro}
 %% ===========================================================================
 
-The electromechanical response of a member a few micrometers thick is not the
-response of the same material in bulk. Bending a strip of thickness $h$ to a
+Early device studies show that the electromechanical response of a member a
+few micrometers thick is not the response of the same material in bulk. Bending a strip of thickness $h$ to a
 curvature $\kappa_c$ produces a strain gradient of order $\kappa_c/h$, so a
 coupling that is proportional to the gradient grows as $h^{-2}$ while a coupling
 proportional to the strain itself does not; at the micrometer scale the two are
@@ -14,7 +14,7 @@ transducer has to decide which of them it uses. The devices that pose the
 question are small and getting smaller: vibration energy harvesters and resonant
 microsensors~\cite{Roundy2003,ErturkInman2011}, mechanical metamaterials with
 architected microstructure~\cite{Jiao2023}, and additively manufactured parts
-whose mesostructure sets a length of its own~\cite{Sarar2024}. These studies
+whose mesostructure sets a length of its own~\cite{Sarar2024}. These early studies
 establish that a device can be designed around a resonant mode of a
 millimeter-scale member, measured, and reproduced by a single-length-scale
 model; what they leave open is the behavior of the same member when it is
@@ -29,8 +29,8 @@ are not a detail: whether a polarization is collected depends on which pair of
 faces carries the charge, and a formulation that does not distinguish the two
 configurations cannot say which effect a measurement is seeing.
 
-Strain-gradient elasticity supplies the length that the first property needs,
-and it did so in a definite order. Toupin~\cite{Toupin1962} proposed a theory of
+Subsequent strain-gradient elasticity supplied the length that the first
+property needs, and it did so in a definite order. Toupin~\cite{Toupin1962} proposed a theory of
 elastic dielectrics in which the energy depends on the second displacement
 gradient, Mindlin and Tiersten~\cite{MindlinTiersten1962} cast the same idea as
 a theory of couple stresses, and Mindlin~\cite{Mindlin1964,Mindlin1965} extended
@@ -65,8 +65,8 @@ the tensor and then fits its components to the very test it is meant to predict.
 On the criterion of whether the internal length can be measured before it is
 used, the averaging domain is the one route that has not been taken.
 
-Flexoelectricity supplies the electromechanical side, and its history is
-shorter. Kogan~\cite{Kogan1964} identified the coupling of polarization to the
+Later, flexoelectricity supplied the electromechanical side, and its history
+is shorter. Kogan~\cite{Kogan1964} identified the coupling of polarization to the
 strain gradient, Mindlin~\cite{Mindlin1968} formulated it as a
 polarization-gradient theory, Cross~\cite{Cross2006} reviewed its magnitude in
 insulating solids, Yudin and Tagantsev~\cite{YudinTagantsev2013} and Zubko and
@@ -101,8 +101,8 @@ the mesh must follow it, and the $C^1$ route where the same operator is inverted
 many times, as it is when the dielectric law carries a memory and every time
 step costs a solve.
 
-Dielectric loss is the third ingredient, and its description is older than
-either of the other two. A relaxing dielectric is described by a Cole--Cole or a
+Dielectric loss is the third ingredient, and its description predates either
+of the other two. A relaxing dielectric is described by a Cole--Cole or a
 Havriliak--Negami dispersion~\cite{ColeCole1941,HavriliakNegami1967}, whose
 time-domain counterpart is a constitutive law with a memory. Fractional calculus
 gives that law one parameter more than elasticity: the spring-pot of
@@ -126,7 +126,7 @@ problem two stiffness matrices are available, the condensed one and the
 short-circuit one, and a fractional derivative multiplying one is not the same
 model as the same derivative multiplying the other.
 
-Three gaps follow, one for each line. First, the averaging window that gives the
+Taken together, three gaps remain, one for each line. First, the averaging window that gives the
 internal length its geometric meaning has not been placed inside a coupled
 electromechanical element: the coupled formulations reviewed above use a scalar
 length or an assumed tensor, so the relation between the microstructure and the
@@ -148,8 +148,8 @@ that the choice of memory matrix is nowhere stated.
 
 \input{table_comparison}
 
-The novelty of the present work lies in three items, one per gap, carried by a
-single discretization.
+The novelty lies in three items, one per gap, carried by a single
+discretization.
 
 \begin{enumerate}
 \item \textbf{A rectangular nonlocal window inside a coupled
@@ -178,6 +178,17 @@ single discretization.
   over which the two-dimensional reduction and the small-coupling expansions
   hold are stated.
 \end{enumerate}
+
+Bibliography entries whose publisher record could not be checked are
+marked UNVERIFIED in the bibliography; they are used here only for classical
+background and never for a quantitative input. The measured elastic,
+piezoelectric and dielectric constants are cited collectively in
+Table~\ref{tab:params}; the window geometry, fractional order, relaxation time
+and flexoelectric coefficient are treated as assumed inputs and are identified
+in Sec.~\ref{sec:calibration}. All governing and discretized equations are
+derived in Secs.~\ref{sec:formulation}--\ref{sec:fem}; classical limits are
+cited at the point of use, and the numerical results are checked against closed
+forms, independent routes and mesh convergence in Sec.~\ref{sec:verification}.
 
 Section~\ref{sec:formulation} states the formulation and derives the
 constitutive relations and the governing equations,
