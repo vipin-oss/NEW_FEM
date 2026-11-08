@@ -1,0 +1,81 @@
+{
+ "claims": [
+  {
+   "literal": "200",
+   "what": "plate length, \\SI{200}{\\micro\\metre}",
+   "verdict": "n/a",
+   "route": "an input of the model, not a measured quantity"
+  },
+  {
+   "literal": "10",
+   "what": "plate thickness, \\SI{10}{\\micro\\metre}",
+   "verdict": "n/a",
+   "route": "an input of the model"
+  },
+  {
+   "literal": "1",
+   "what": "$\\alpha=1$ and the one L1 history",
+   "verdict": "n/a",
+   "route": "the classical limit, chosen for the comparison"
+  },
+  {
+   "literal": "0.5581",
+   "what": "piezoelectric extensional $k^2$ of the 200x10 plate",
+   "verdict": "hua",
+   "route": "D1/C1: the closed form built from $e$, $C$, $\\kappa$ alone gives 0.56079, and the free-plate FEM matches it to $10^{-10}$"
+  },
+  {
+   "literal": "0.5608",
+   "what": "the closed-form extensional $k^2$ from $e$, $C$, $\\kappa$",
+   "verdict": "hua",
+   "route": "D1: the plane-stress closed form itself, 0.56079, which is the number this one rounds"
+  },
+  {
+   "literal": "0.5",
+   "what": "distance between 0.5581 and the closed form 0.5608",
+   "verdict": "hua",
+   "route": "D1: the same two numbers, 0.56079 against 0.55814"
+  },
+  {
+   "literal": "24",
+   "what": "growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports",
+   "verdict": "nahi hua",
+   "route": "the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not"
+  },
+  {
+   "literal": "15",
+   "what": "lower end of the effect of window anisotropy and orientation on the coupling",
+   "verdict": "nahi hua",
+   "route": "FEM rotation study (criterion T5 for the mesh/rotation trend); no independent route"
+  },
+  {
+   "literal": "19",
+   "what": "upper end of the same range",
+   "verdict": "nahi hua",
+   "route": "the same rotation study (T5); the spread is a property of the second-moment tensor, which is verified (I8), the spread is not"
+  },
+  {
+   "literal": "0.450",
+   "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
+   "verdict": "nahi hua",
+   "route": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
+  }
+ ],
+ "n_hua": 3,
+ "n_nahi_hua": 4,
+ "n_input": 3,
+ "tokens": [
+  "200",
+  "10",
+  "1",
+  "0.5581",
+  "0.5",
+  "0.5608",
+  "24",
+  "15",
+  "19",
+  "0.450"
+ ],
+ "missing": [],
+ "stale": []
+}

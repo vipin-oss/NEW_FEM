@@ -1,0 +1,109 @@
+%% ===========================================================================
+\FloatBarrier
+\section{Benchmarks and convergence study}
+\label{app:verification}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+%% ===========================================================================
+
+This appendix collects the benchmarks behind Sec.~\ref{sec:verification} in
+full: the benchmark, identity and independent-route record, and the
+convergence study. The numerical precision of the thinnest point follows the
+two tables.
+
+Table~\ref{tab:verification} lists the benchmark problems, the exact
+identities and the tolerance each was required to meet, together with the value
+obtained. The identities are the ones that a re-implementation can reproduce
+without any of the data of this paper: the patch-test energy of a constant
+strain field, the second-moment coefficients of \ref{app:Mcoeff}
+recovered from a numerical integration of the window, the closed-form coupling
+factor of a uniaxial crystal, and the analytical damping ratio of the classical
+Kelvin--Voigt element. The rows marked as independent routes are values
+recomputed along a path that does not use the assembled matrices at all --
+Euler--Bernoulli theory for the bar frequency, the constitutive tensors for the
+coupling factor, the closed forms of \ref{app:Mcoeff} for the window
+coefficients, and the analytical limit for the damping ratio.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Verification record: benchmarks, exact identities and independent
+routes, each with the value obtained and the tolerance it was required to
+meet. The material, the geometry and the mesh of each row are those of
+Sec.~\ref{sec:material}.}
+\label{tab:verification}
+\input{table_verification}
+\end{table}
+
+The two closed forms of Sec.~\ref{sec:verification} rest on the scalar
+$e^{\mathsf T}C^{-1}e=6.3308\times10^{-10}$ of the reduced tensors, and the
+\SI{0.5}{\percent} agreement between them and the finite element value is the
+agreement of that scalar with the assembled route rather than a coincidence of
+two discretizations.
+
+The clamped--free frequency is the one row with an exact counterpart, so it is
+also reported under refinement: the $128\times4$ mesh gives
+144.08\,\si{\kilo\hertz}, against 144.6\,\si{\kilo\hertz} on the
+$48\times4$ mesh and 143.8\,\si{\kilo\hertz} from Euler--Bernoulli theory.
+
+The two-dimensional reduction is quantified in the same record: the
+plane-stress coupling differs from the three-dimensional value by $2.8\,\%$,
+which is the size of the modeling error that the reduction introduces and the
+reason the two reductions are not used interchangeably. Of the independent
+values, the damping ratio of the element at $\alpha=0.3$ and $\omega\tau=0.3$
+is $0.108$, against a peak of $0.179$ at $\alpha=0.7$
+(Sec.~\ref{sec:memorystudy}).
+
+Two rows of Table~\ref{tab:verification} are comparisons rather than exact
+identities. The order of convergence is the least-squares slope of
+$\log|u_R/u_{\rm ref}-1|$ against $\log h$, with $h=L/n_x$ halved over the
+four meshes $5\times1$, $10\times2$, $20\times4$ and $40\times8$ of the
+gradient-free benchmark of Sec.~\ref{sec:verification}; the slope over all
+four is 1.68 and the finest pair alone gives 2.01, so the sequence is entering
+its asymptotic range from the coarse end. The expected rate for the bicubic
+Hermite rectangle is $O(h^{4})$ in $L^2$ and $O(h^{3})$ in $H^1$ on a smooth
+solution, and a linear functional such as $u_R$ converges at least as fast as
+the energy norm; the requirement is the empirical slope above 1.5, and no
+theoretical exponent is claimed beyond that bound. The extensional coupling is
+compared across the two reductions on the same $24\times2$ mesh: $0.4024$ in
+plane strain against $0.4580$ in plane stress. The two models are compared
+mode by mode before the couplings are, because the two reductions could in
+principle select different shapes and then the comparison would be empty. They
+do not: the shape selected by the rule of Table~\ref{tab:application} is mode
+5 in both, and the two short-circuit mode shapes, mass-normalized, overlap
+with $\mathrm{MAC}=0.99999$, while the largest overlap between different
+members of the two six-mode sets is $2.8\times10^{-6}$. The coupling therefore
+differs by the elastic reduction alone, which stiffens the section and lowers
+$k^{2}=e^{2}/(C\kappa)$; the difference is a property of the model.
+
+Table~\ref{tab:convergence} is the convergence study behind
+Fig.~\ref{fig:convergence}. The frequency of the extensional mode and its
+mode-free coupling factor are listed for four meshes, with the errors referred
+to the $48\times4$ mesh used in the paper: the coarser $24\times2$ mesh of the
+parameter sweeps differs from it by $0.04\,\%$ in frequency and by
+$0.03\,\%$ in the coupling factor, and the other two rows by less. None of
+the four rows is a clamped strip; the
+clamped strip is the $96\times4$ against $48\times4$ entry of
+Table~\ref{tab:verification}, whose coupling factors differ by
+$6.2\times10^{-4}$ relative.
+
+\input{table_convergence}
+
+\paragraph{Numerical precision of the thinnest point} The
+$h=\SI{1}{\micro\metre}$ coupling is a difference of two nearly equal
+eigenvalues of a pencil whose condition number is $\sim10^{12}$, so it
+inherits the accuracy of the eigensolver. The same model was solved through
+four mathematically equivalent eigensolver paths -- a QZ generalized
+eigenproblem, a dense symmetric reduction, a sparse Lanczos reduction and a
+truncated modal sum -- and through four numeric stacks, and all of them return
+$4.2\times10^{-3}$ and the factor $24$ to within $0.5\,\%$. Deviations are
+measured from the midpoint of the equivalent results, so the spread quoted is
+the spread of the model, and at $h=\SI{10}{\micro\metre}$ it is at most
+$10^{-4}\,\%$. Every path keeps the whole spectrum in the secular sum:
+truncating it to twelve modes moves $k^{2}$ by more than $80\,\%$, an effect
+of the approximation alone. A run of the same suite on a later numeric stack
+returns $4.18\times10^{-3}$ ($+0.2\,\%$), consistent with this statement. This
+spread fixes the two significant digits quoted in the text and in the
+abstract.
+
+\FloatBarrier

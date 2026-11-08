@@ -1,0 +1,10 @@
+{
+ "assembly_line_present": true,
+ "assembly_factor": 0.5,
+ "M11_ellipse_a3um": 1.8000000000000002e-12,
+ "L11_equivalent": 9.000000000000001e-12,
+ "quarter_M_over_twentieth_L": 1.0,
+ "fem1_coefficient_rel": 0.0,
+ "fem1_benchmark_uR_um": 4.2339,
+ "fem1_paper_uR_um": 4.23
+}
