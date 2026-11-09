@@ -1,0 +1,5 @@
+- A C1 element carries flexoelectricity, strain gradients and fractional memory
+- In the second-moment model the window enters through M only, not through its shape
+- Window anisotropy changes the extensional coupling by 14-17%
+- Flexoelectric bending coupling grows 24-fold from 10 to 1 um
+- Mechanical-only memory damps 0.431 times as much as open-circuit memory at alpha = 1

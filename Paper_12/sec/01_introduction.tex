@@ -10,9 +10,9 @@ resulting strain gradient contributes to electrical polarization through
 flexoelectric coupling. Consequently, the relative piezoelectric and
 flexoelectric responses depend on thickness, deformation mode and electrode
 configuration. This distinction is relevant to miniature resonators, vibration
-energy harvesters and sensing devices~\cite{Roundy2003,ErturkInman2011}, as
+energy harvesters and sensing devices~\cite{ErturkInman2011}, as
 well as architected materials in which a microstructural length influences the
-macroscopic response~\cite{Jiao2023,Sarar2024}. Classical piezoelectricity does
+macroscopic response~\cite{Jiao2023}. Classical piezoelectricity does
 not independently represent the strain-gradient contribution. A higher-order
 formulation can therefore be used to examine the interaction of strain-gradient
 stiffness and electrical coupling in geometries where the characteristic
@@ -40,23 +40,22 @@ strain in the energy, and Ru and Aifantis~\cite{RuAifantis1993} extended the
 reduction to a form that keeps the qualitative predictions of the full theory:
 localization is regularized, singularities are removed and stiffness grows as
 the member shrinks. In parallel, Eringen and
-Edelen~\cite{EringenEdelen1972,Eringen1972Polar,Eringen1983} replaced the local
+Edelen~\cite{EringenEdelen1972} replaced the local
 stress by an integral average over a neighborhood, so the length entered as the
 support of a kernel rather than as a coefficient, and Lim~\cite{Lim2015}
 combined the two descriptions in a higher-order nonlocal strain-gradient model
 in which an integral kernel and a gradient expansion act at once. In these approaches, the internal length is specified by constitutive
 parameters or averaging kernels, with interpretation dependent on the
-material microstructure. Discrete-to-continuum relationships provide further context. Reviews
-by Askes and Aifantis~\cite{AskesAifantis2011} and
-Polizzotto~\cite{Polizzotto2015} compare the formulations, the identification
+material microstructure. Discrete-to-continuum relationships provide further context. The review
+by Askes and Aifantis~\cite{AskesAifantis2011} compares the formulations, the identification
 procedures and the finite element implementations; discrete-to-continuum
 arguments show how the gradient terms emerge from a lattice or a representative
-volume~\cite{MetrikineAskes2002,Gitman2005}; and homogenization of
+volume~\cite{MetrikineAskes2002}; and homogenization of
 three-dimensional lattices establishes that a strain-gradient continuum
 reproduces size effects that classical homogenization
-misses~\cite{Molavitabrizi2023,YangLiuXia2024}. The internal-length tensor is often specified as a constitutive parameter,
+misses~\cite{Molavitabrizi2023}. The internal-length tensor is often specified as a constitutive parameter,
 including in anisotropic gradient models and symmetry classifications
-~\cite{LazarPo2015,Polizzotto2018,Auffray2019}. Connections between integral
+~\cite{Polizzotto2018,Auffray2019}. Connections between integral
 averaging and gradient elasticity have also been established by asymptotic
 expansion, with attention to higher-order boundary conditions
 ~\cite{BorinoPolizzotto2014}. Here a particular second-moment tensor is
@@ -76,32 +75,23 @@ from shock-wave tests on unpolarized bulk material. These are different
 tensor components measured in different specimen and loading conditions;
 neither directly identifies the single phenomenological coefficient prescribed
 in the present numerical model. Yudin and Tagantsev~\cite{YudinTagantsev2013} and Zubko and
-co-workers~\cite{Zubko2013} reviewed its role in thin films, Codony and
-co-workers~\cite{CodonyAriasSuryanarayana2021} computed its transverse component
-from first principles for nanostructures at finite deformation. The separate micron-scale bending experiments of Lam and
+co-workers~\cite{Zubko2013} reviewed its role in thin films. The separate micron-scale bending experiments of Lam and
 co-workers~\cite{Lam2003} showed mechanical strain-gradient stiffening;
 those experiments did not measure flexoelectric polarization. On the computational side the
 formulations divide by how they make the second gradient admissible. Mixed and
 staggered methods carry it as an independent field and keep $C^0$
-interpolation~\cite{AmanatidouAravas2002,AskesMorataAifantis2008,
-PhunpengBaiz2015}; micromorphic and virtual element formulations enlarge the
+interpolation~\cite{AmanatidouAravas2002,AskesMorataAifantis2008}; micromorphic and virtual element formulations enlarge the
 kinematics~\cite{Forest2009,WriggersHudobivnik2023}; Hermite elements provide the required $C^1$ interpolation
 ~\cite{BognerFoxSchmit1966,PeteraPittman1994,
-Zervos2008,Papanicolopulos2009}. Coupled piezoelectric--flexoelectric
+Papanicolopulos2009}. Coupled piezoelectric--flexoelectric
 formulations have already been demonstrated with mixed finite elements,
 including two- and three-dimensional models and a recent dynamic plate
 formulation~\cite{MaoPurohitAravas2016,SerraoKozinov2024,LiuEtAl2026}.
 Related flexoelectric methods include multi-patch isogeometric analysis
 ~\cite{SharmaAnitescuRabczuk2025}, frequency-domain isogeometric
-analysis~\cite{ChenYaoYvonnet2023}, computational
-homogenization for topology
-optimization~\cite{ChenYvonnetYaoPark2021}, gradient electromechanical finite
-elements of arbitrary order~\cite{JoshanSantapuri2024} and a strain-gradient
-phase-field formulation for ferroelectrics~\cite{Wang2024PhaseField}; benchmarks
-with analytical counterparts~\cite{Yang2021,Lazar2024} and isogeometric
-nonlocal-strain-gradient analyses of
-nanostructures~\cite{PhungVan2023EC39,PhungVan2024CS335,PhungVan2024TWS198,
-Thai2023CS316} have also been reported. The finite-element choices impose different computational requirements:
+analysis~\cite{ChenYaoYvonnet2023} and gradient electromechanical finite
+elements of arbitrary order~\cite{JoshanSantapuri2024}; benchmarks
+with analytical counterparts~\cite{Yang2021} have also been reported. The finite-element choices impose different computational requirements:
 mixed formulations introduce additional variables or constraints, whereas
 direct $C^1$ elements enforce derivative continuity through their basis
 functions.
@@ -123,15 +113,11 @@ Fractional viscoelastic models, developed from Caputo-type derivatives
 ~\cite{Caputo1967} and applied by Bagley and Torvik~\cite{BagleyTorvik1983}
 and Koeller~\cite{Koeller1984}, represent power-law mechanical relaxation.
 Time-domain damping models~\cite{EnelundLesieutre1999} provide a basis for
-representing mechanical dissipation. In related coupled-field wave problems,
-Gupta, Barak and Das~\cite{Gupta2024Impact} investigated memory-dependent heat
-transfer in a nonlocal piezo-thermoelastic medium with voids. Their
-size-dependent thermo-piezo-photo-electric semiconductor analysis
-~\cite{Gupta2024Vibrational} considered vibrational response under a
-memory-dependent Moore--Gibson--Thompson heat-conduction model. Gupta and
-co-workers~\cite{Gupta2026Rayleigh} investigated fractional MGT effects on
-Rayleigh-wave propagation in a nonlocal piezo-thermo-electric semiconductor;
-a later comparative study~\cite{Gupta2025Piezo} examined models incorporating
+representing mechanical dissipation. In related coupled-field problems,
+the vibrational response of a size-dependent thermo-piezo-photo-electric
+semiconductor has been analyzed under a memory-dependent
+Moore--Gibson--Thompson heat-conduction model~\cite{Gupta2024Vibrational}, and a
+comparative study~\cite{Gupta2025Piezo} examined models incorporating
 piezoelectric, semiconductor and void effects. Those works address thermal and
 wave-propagation couplings, rather than validation of the local flexoelectric
 strain-gradient finite-element model considered here. The present study instead

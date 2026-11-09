@@ -95,9 +95,17 @@ def main():
                  " [kHz]", "demo.json flexo_thickness[0]",
                  "FEM eigen-solve; the Euler--Bernoulli value is the one "
                  "quoted as the comparison, not as this number"))
-    for h, s in ((10, -1.96), (5, -1.52), (2, -0.43)):
-        rows.append((f"{s:.2f}", f"local log-log slope of the flexoelectric "
-                     f"$k^2$ at $h=\\SI{{{h}}}{{\\micro\\meter}}$",
+    # slopes are computed from the archived eight-point sweep (segments 1, 4
+    # and 7 are the values quoted in the text: -1.96, -1.53, -0.44)
+    import math
+    hs = [r["h_um"] for r in th]
+    ks = [r["k2_flexo"] for r in th]
+    seg = [math.log(ks[i + 1] / ks[i]) / math.log(hs[i + 1] / hs[i])
+           for i in range(len(hs) - 1)]
+    for i in (0, 3, 6):
+        rows.append((f"{seg[i]:.2f}", f"local log-log slope of the flexoelectric "
+                     f"$k^2$ between $h=\\SI{{{hs[i]:g}}}{{\\micro\\meter}}$ and "
+                     f"$\\SI{{{hs[i + 1]:g}}}{{\\micro\\meter}}$",
                      "demo.json flexo_thickness (finite differences)",
                      "a finite difference of the eight FEM runs; no closed "
                      "form predicts the slope once the window is fixed in size"))

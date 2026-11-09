@@ -1,0 +1,29 @@
+{
+ "_note": "Reconstructed from the archived results/k2_closed_form.json ('legacy_wrong_series'); the original frozen file was not part of the received archive. Values are the frozen legacy (pre-correction) series.",
+ "wrong_series": [
+  {
+   "h_um": 10.0,
+   "k2": 0.5581368174244984,
+   "k2_over_1p": 0.35820783591203703,
+   "recorded": 0.35821
+  },
+  {
+   "h_um": 5.0,
+   "k2": 0.5584300414563338,
+   "k2_over_1p": 0.35832859133958156,
+   "recorded": 0.35833
+  },
+  {
+   "h_um": 2.0,
+   "k2": 0.5585808925522295,
+   "k2_over_1p": 0.3583906970895391,
+   "recorded": 0.35839
+  },
+  {
+   "h_um": 1.0,
+   "k2": 0.5586119061770536,
+   "k2_over_1p": 0.3584034639817495,
+   "recorded": 0.3584
+  }
+ ]
+}

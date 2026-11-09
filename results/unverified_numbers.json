@@ -147,19 +147,19 @@
   },
   {
    "literal": "-1.96",
-   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{10}{\\micro\\meter}$",
+   "what": "local log-log slope of the flexoelectric $k^2$ between $h=\\SI{10}{\\micro\\meter}$ and $\\SI{7}{\\micro\\meter}$",
    "source": "demo.json flexo_thickness (finite differences)",
    "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
   {
-   "literal": "-1.52",
-   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{5}{\\micro\\meter}$",
+   "literal": "-1.53",
+   "what": "local log-log slope of the flexoelectric $k^2$ between $h=\\SI{3.5}{\\micro\\meter}$ and $\\SI{2.7}{\\micro\\meter}$",
    "source": "demo.json flexo_thickness (finite differences)",
    "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
   {
-   "literal": "-0.43",
-   "what": "local log-log slope of the flexoelectric $k^2$ at $h=\\SI{2}{\\micro\\meter}$",
+   "literal": "-0.44",
+   "what": "local log-log slope of the flexoelectric $k^2$ between $h=\\SI{1.4}{\\micro\\meter}$ and $\\SI{1}{\\micro\\meter}$",
    "source": "demo.json flexo_thickness (finite differences)",
    "why": "a finite difference of the eight FEM runs; no closed form predicts the slope once the window is fixed in size"
   },
