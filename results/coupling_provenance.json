@@ -1,9 +1,9 @@
 {
- "working_value": 0.5581368174245003,
+ "working_value": 0.5726777888245478,
  "rows": [
   {
    "label": "k2_free_nogradient_48x4",
-   "value": 0.5607862968604258,
+   "value": 0.5752336685285313,
    "x": null,
    "bc": "none (free, minimum-norm solve)",
    "mesh": "48x4",
@@ -17,7 +17,7 @@
   },
   {
    "label": "k2_clamped_nogradient_48x4",
-   "value": 0.5595713043155028,
+   "value": 0.5740973369842656,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "48x4",
@@ -31,7 +31,7 @@
   },
   {
    "label": "k2_clamped_gradient_48x4",
-   "value": 0.5581368174245003,
+   "value": 0.5726777888245478,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "48x4",
@@ -45,7 +45,7 @@
   },
   {
    "label": "k2_clamped_gradient_24x2",
-   "value": 0.5579682481629592,
+   "value": 0.5725249911363521,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "24x2",
@@ -59,7 +59,7 @@
   },
   {
    "label": "k2_mode_based_Kuu_24x2",
-   "value": 0.46498183495530354,
+   "value": 0.48473801752307943,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "24x2",
@@ -69,11 +69,11 @@
    "formula": "(w_oc^2 - w_u^2)/w_oc^2",
    "key": "memory_variants.json k2",
    "mode": 5,
-   "f_kHz": 6727.321873210225
+   "f_kHz": 6855.078319492926
   },
   {
    "label": "k2_mode_based_Ksc_24x2",
-   "value": 0.458297081158994,
+   "value": 0.4783799573401322,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "24x2",
@@ -83,11 +83,11 @@
    "formula": "(w_oc^2 - w_sc^2)/w_oc^2, mu = 1e-6",
    "key": "quoted as 0.4583 in the ring-down section",
    "mode": 5,
-   "f_kHz": 6727.321873210225
+   "f_kHz": 6855.078319492926
   },
   {
    "label": "k2_mode_based_Ksc_24x2_mu0",
-   "value": 0.45797234985416213,
+   "value": 0.4780765155167041,
    "x": null,
    "bc": "left edge clamped",
    "mesh": "24x2",
@@ -97,12 +97,12 @@
    "formula": "(w_oc^2 - w_sc^2)/w_oc^2, mu = 0",
    "key": "application_table.json rows[3].k2",
    "mode": 5,
-   "f_kHz": 6725.792506544914
+   "f_kHz": 6853.578043634856
   },
   {
    "label": "k2_closed_form_plane_stress",
-   "value": 0.560786296866519,
-   "x": 1.2767959944457632,
+   "value": 0.5752336685338313,
+   "x": 1.3542355547538183,
    "bc": "--",
    "mesh": "--",
    "kin": "plane stress",

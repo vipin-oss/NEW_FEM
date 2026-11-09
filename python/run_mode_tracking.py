@@ -16,7 +16,7 @@ against the reference modes 2..4 are reported too: if the tracked shape had
 drifted into a neighboring mode, they would rise.
 
 The mesh is the same 48x4 topology at every thickness, so the dof vectors are
-comparable entry by entry.
+compared after pulling physical y and xy derivatives back to the reference thickness.
 
 Also reported: the frequency ratios f_j/f_1 at each thickness, which must stay
 clear of 1 if no crossing occurs anywhere in the sweep.
@@ -57,7 +57,7 @@ def main():
     for h in HS:
         mesh = f6.mesh_rect(NX, NY, L, h)
         mdl = f6.assemble(mesh, mt.to_core(mat), Mg)
-        Ksc, M, _, _ = f6.reduce(mdl, "short", pair=("bottom", "top"))
+        Ksc, M, idx, _ = f6.reduce(mdl, "short", pair=("bottom", "top"))
         ws, Phi = f6.modes(Ksc, M, NM)
         shapes[h] = (Phi, M, ws)
 
@@ -66,7 +66,9 @@ def main():
     rows = []
     for h in HS:
         Phi, M, ws = shapes[h]
-        macs = [mac(Phi[:, 0], Pref[:, j], Mref) for j in range(NM)]
+        mapped = Phi[:, 0].copy()
+        mapped[np.isin(idx % 8, [2, 3, 6, 7])] *= h / href
+        macs = [mac(mapped, Pref[:, j], Mref) for j in range(NM)]
         rows.append({
             "h_um": h * 1e6,
             "f_kHz": [float(x / 2e3 / np.pi) for x in ws],
@@ -83,7 +85,8 @@ def main():
     maxoff = max(max(r["mac_offdiag"]) for r in rows)
     minratio = min(r["f_ratio_2_over_1"] for r in rows)
     out = {"rows": rows, "mac_min": mins, "mac_offdiag_max": maxoff,
-           "min_f2_over_f1": minratio, "reference_h_um": href * 1e6}
+           "min_f2_over_f1": minratio, "reference_h_um": href * 1e6,
+           "mapping": "y=(h/href)*yref; dy,dxy DOFs multiplied by h/href"}
     with open(os.path.join(RESULTS, "mode_tracking.json"), "w") as fh:
         json.dump(out, fh, indent=1)
 
@@ -98,9 +101,9 @@ def main():
                   f"{r['mac_mode1_vs_ref']:.6f} | {max(r['mac_offdiag']):.2e} |")
     md += ["", f"Minimum MAC: {mins:.6f}; largest off-diagonal MAC: "
               f"{maxoff:.2e}; smallest f2/f1: {minratio:.2f}.",
-           "", "A MAC of 1 means the same shape; the off-diagonal entries stay "
-           "at round-off, so the tracked mode is not drifting towards a "
-           "neighbor, and f2/f1 stays above 2, so no crossing is approached."]
+           "", "MAC uses a pullback to the reference thickness. These sampled shapes "
+           "and spectral gaps support branch identification at the tested points; "
+           "they do not prove absence of crossings between samples."]
     with open(os.path.join(RESULTS, "mode_tracking.md"), "w") as fh:
         fh.write("\n".join(md) + "\n")
     print(f"  min MAC = {mins:.6f}, max off-diagonal = {maxoff:.2e}, "

@@ -5,52 +5,64 @@
 %% ===========================================================================
 
 The formulation combines piezoelectric and flexoelectric coupling with
-fractional memory in a $C^1$ Bogner--Fox--Schmit discretization. The second
-moment of the averaging window sets the gradient stiffness, while modal L1
-integration retains the dielectric history. The principal findings are:
+fractional memory in a $C^1$ Bogner--Fox--Schmit discretization. The prescribed window second moment parametrizes the assumed local
+gradient stiffness, while modal L1
+integration retains the reduced mechanical stiffness history. The principal findings for the prescribed parameters are:
 
 \begin{itemize}
-\item The averaging window, through its second-moment tensor $M$,
-  supplies the internal length. Physically, the window is the domain over which
-  the microstructure is averaged, and because the gradient energy is linear in
-  $M$ the shape of that domain is not a parameter: windows of equal second
-  moment give identical solutions to the third decimal, while their size spans
-  the coupling from $3.6\times10^{-6}$ to $1.0\times10^{-2}$ over the map
-  computed here. Rotating an anisotropic window changes the extensional
-  coupling by $15$--$19\,\%$ between the aligned and transverse positions,
+\item The window second-moment tensor $M$ defines the internal length
+  parameter in the adopted local gradient-energy model. Windows with the same
+  $M$ give identical solutions within this second-moment approximation; this
+  does not establish equivalence of their original spatial-averaging kernels,
+  particularly where a nominal window extends outside the strip. The local-model numerical design map spans coupling from
+$3.6\times10^{-6}$ to $1.0\times10^{-2}$ across all 64 cases, while
+the 25 cases satisfying the necessary mid-plane window-fit condition
+$2a_2\le h$ span $1.28\times10^{-4}$ to $1.01\times10^{-2}$.
+Neither subset, without a boundary-truncated averaging kernel or
+experiment, establishes a calibrated finite-specimen design law. Rotating an anisotropic window changes the extensional
+  coupling by $14$--$17\,\%$ between the aligned and transverse positions,
   because the gradient stiffness samples different directional strain gradients.
-\item The thickness $h$ converts a curvature into a strain gradient
-  of order $\kappa_c/h$ and thereby separates the two couplings: the
+\item For a prescribed bending curvature, the strain gradient is set by the
+  curvature and the electrode/geometry response; the two coupling mechanisms exhibit different thickness dependences: the
   flexoelectric bending coupling grows by a factor $24$ between
   \SI{10}{\micro\meter} and \SI{1}{\micro\meter}, while the piezoelectric
-  extensional coupling stays constant to $0.09\,\%$ and its quasi-static value,
-  $0.5581$, lies within $0.5\,\%$ of the closed form $0.5608$.
-\item The flexoelectric coefficient $\mu$, the polarization produced by
-  a unit strain gradient, fixes the absolute size of the bending coupling: at
+  extensional coupling stays constant to $0.07\,\%$ and its quasi-static value,
+  $0.5727$, lies within $0.5\,\%$ of the closed form $0.5752$.
+\item The assumed flexoelectric coefficient $\mu$ influences the magnitude of
+  the bending coupling: at
   the assumed $\mu=10^{-6}$\,\si{\coulomb\per\meter} the ratio of the two
-  couplings spans $3.1\times10^{-4}$ to $7.5\times10^{-3}$ and reaches
-  $0.1\,\%$ only below $h=5.5\,\si{\micro\meter}$.
-\item The Caputo order $\alpha$, which measures how broad the
-  relaxation spectrum is, controls the shape of the decay: the first-period
-  decrement of the tip displacement runs from $0.063$ at $\alpha=1$ to $0.104$
-  at $\alpha=0.6$ and back to $0.085$ at $\alpha=0.4$, so a free decay is not
-  exponential below $\alpha=1$ and an integer-order reading is in error by
-  $64\,\%$ at $\alpha=0.6$.
-\item The relaxation time $\tau$, which places the loss peak at
-  $\omega\tau$ of order unity, fixes where that damping acts: at $\alpha=1$ and
+  couplings spans $2.9\times10^{-4}$ to $7.0\times10^{-3}$ and reaches
+  $0.1\,\%$ only below $h=5.3\,\si{\micro\meter}$.
+\item The Caputo order $\alpha$, which specifies the fractional mechanical memory response, controls the shape of the decay: the first-period
+  equivalent damping index of the tip displacement rises from $0.065$ at
+  $\alpha=1$ to a maximum of $0.105$ at $\alpha=0.6$ and then decreases
+  to $0.085$ at $\alpha=0.4$ for
+  the tested time scale. The fractional decay is nonexponential, and replacing
+  the $\alpha=0.6$ early-decay measure with its integer-order value would change that index substantially: the fractional value is
+  $62\,\%$ larger than the integer-order value.
+\item The time parameter $\tau$ controls loss through the
+  dimensionless frequency $\omega\tau$: at $\alpha=1$ and
   $\omega\tau=0.3$ the damping ratio is $0.15003$ on the condensed matrix
-  against $0.0675$ on the short-circuit one, a ratio of $0.450$, and the
+  against $0.0646$ on the mechanical-only one, a ratio of $0.431$, and the
   Kelvin--Voigt limit is reproduced to $0.02\,\%$.
-\item The $C^1$ Bogner--Fox--Schmit rectangle converges at the $N^{-2}$ rate of bicubic Hermite interpolation, so
-  that $48\times4$ elements reproduce the coupling factor to
-  $6.2\times10^{-4}$ relative.
+\item Mesh refinement of the $C^1$ Bogner--Fox--Schmit method converges
+  in the tested benchmarks; the gradient-free bar sequence has
+  an observed overall order of $1.68$, increasing to $2.01$ between its
+  finest two meshes. In the extensional coupling study, refinement from
+  $48\times4$ to $96\times4$ elements changes the coupling factor by
+  $5.9\times10^{-4}$ relative.
 \end{itemize}
 
-For sensing design, select the electrodes first ($0.4580$ against $0.1141$
-at equal tip motion), then the thickness and window geometry; interpret decay
-with $\alpha$, $\tau$ and the memory matrix stated together. Applications
-remain conditional on the assumed inputs and two-dimensional kinematics:
-plane-stress coupling differs from the three-dimensional value by $2.8\,\%$,
-motivating measured-window calibration and shell extensions.
+Within the adopted model, electrode choice ($0.4781$ against $0.1036$
+at equal tip motion), thickness and gradient-length parameters govern the
+reported sensing response. The design map includes configurations in which a
+literal window would cross the specimen faces; those results quantify local
+model sensitivity rather than calibrated physical device performance. Decay
+interpretation depends jointly on $\alpha$, $\tau$ and the chosen memory
+matrix. Quantitative application to a particular material requires calibration of
+the assumed inputs and assessment of the two-dimensional approximation:
+plane-stress coupling differs from the three-dimensional value by $0.3\,\%$.
+Calibration of the window parameters and a three-dimensional extension are
+needed for more general predictions.
 
 \FloatBarrier

@@ -17,9 +17,9 @@ agree, then the whole piezoelectric path -- the e tensor, the plane-stress
 reduction, the potential condensation and the rank-one electrode update -- is
 checked by something that does not use it.
 
-Finally the script reproduces the *wrong* number 0.3582 from the same data, to
-show that it was not a different material or a different geometry but the same
-formula applied twice.
+The legacy error (a second x/(1+x) application) is checked ONLY against
+a frozen legacy-material series. Corrected plane-stress values are not the
+same as the legacy series, and no cross-model equality is claimed.
 
 Run: python3 python/derive_k2_closed_form.py
      -> results/k2_closed_form.md, results/k2_closed_form.json
@@ -135,11 +135,12 @@ def main():
               f"here the difference is "
               f"{float(np.max(np.abs(np.linalg.inv(Cp) - s3[:2, :2]))):.1e} Pa$^{{-1}}$.",
               "",
-              "The piezoelectric matrix is *not* reduced: with $\\sigma_{zz}=0$ "
-              "and $D_z=0$ the out-of-plane normal strain couples only to "
-              "$e_{31}$ terms that the in-plane block already carries, so "
-              "$\\mathbf e_p=\\mathbf e_{2d}$ and $\\kappa_{\\rm eff}=\\kappa_{xx}"
-              "=\\kappa_{33}$.", ""]
+              "The local 3-D piezoelectric enthalpy is condensed consistently: "
+              "$\\mathbf e_p=\\mathbf e_{2d}-\\mathbf e_z\\mathbf c_3^{\\mathsf T}/C_{zz}$ "
+              "and $\\kappa_p=\\kappa_{2d}+\\mathbf e_z\\mathbf e_z^{\\mathsf T}/C_{zz}$. "
+              "These coupled reductions are implemented in the patched "
+              "`materials.py`. They concern local electromechanical blocks; "
+              "higher-gradient and flexoelectric tensors require separate closure.", ""]
 
     # ---------------------------------------------------------------- step 4
     ep = m.e()[0, :]
@@ -203,33 +204,37 @@ def main():
               f"{100 * (rows[4][2] / fem_cl - 1):+.4f} %", ""]
 
     # ---------------------------------------------------------------- step 6
-    lines += ["## Step 6 -- why the earlier number was 0.3582", "",
-              "The helper that produced it (`_static_k2`) solved the coupling "
-              "against the *open-circuit* matrix $K_{oc}$ and then applied "
-              "the same $x/(1+x)$ map.  But", "",
-              "$$K_{oc}=K_{sc}+\\frac{d d^{\\mathsf T}}{\\beta}"
-              "\\;\\Longrightarrow\\;"
-              "\\frac{d^{\\mathsf T}K_{oc}^{-1}d}{\\beta}"
-              "=x-\\frac{x^2}{1+x}=\\frac{x}{1+x}=k^2$$", "",
-              "by Sherman--Morrison, so the first application already returned "
-              "$k^2$ and the second turned it into $k^2/(1+k^2)$:", ""]
+    # The old 0.3582 series was derived with old (uncondensed) local e/kappa;
+    # never assert that it agrees with the newly corrected material model.
+    frozen_path = os.path.join(ROOT, "provenance", "FROZEN_LEGACY_K2_SERIES.json")
+    with open(frozen_path) as ff:
+        frozen = json.load(ff)
+    legacy_wrong_table = frozen["wrong_series"]
+    lines += ["## Step 6 -- the historical 0.3582 series belongs to the legacy material model", "",
+              "The old helper incorrectly applied the $x/(1+x)$ map twice, "
+              "but the archived values also used *unreduced* plane-stress "
+              "piezoelectric and dielectric constants. Therefore historical "
+              "values must be audited against the frozen **legacy** material "
+              "dataset, not the present corrected-constitutive series.", "",
+              "$$K_{oc}=K_{sc}+dd^\\mathsf{T}/\\beta,\\qquad "
+              "d^\\mathsf{T}K_{oc}^{-1}d/\\beta=x/(1+x)=k^2.$$$", "",
+              "| thickness (um) | legacy correct $k^2$ | legacy erroneous $k^2/(1+k^2)$ | original recorded | corrected-model $k^2$ |",
+              "|---|---|---|---|---|"]
     th = json.load(open(os.path.join(RES, "demo.json")))["flexo_thickness"]
-    lines += ["| $h$ (µm) | correct $k^2$ | $k^2/(1+k^2)$ | recorded as |",
-              "|---|---|---|---|"]
+    by_h = {r_["h_um"]:r_ for r_ in th}
     wrong_table = []
-    by_h = {r_["h_um"]: r_ for r_ in th}
-    for h_rec, rec in zip((10.0, 5.0, 2.0, 1.0),
-                          (0.35821, 0.35833, 0.35839, 0.35840)):
-        r_ = by_h[h_rec]
-        kk = r_["k2_ext"]
-        lines.append(f"| {r_['h_um']:.0f} | {kk:.5f} | {kk / (1 + kk):.5f} | "
-                     f"{rec:.5f} |")
-        wrong_table.append({"h_um": r_["h_um"], "k2": kk,
-                            "k2_over_1p": kk / (1 + kk), "recorded": rec})
-    lines += ["", "The identity reproduces all four recorded values to the last "
-              "digit, which is the proof that the 0.3582 series was the same "
-              "physics run through the same formula twice -- not a different "
-              "material, geometry or mesh.", ""]
+    for old in legacy_wrong_table:
+        h_rec=old["h_um"]
+        kk=by_h[h_rec]["k2_ext"]
+        lines.append(f"| {h_rec:.0f} | {old['k2']:.5f} | {old['k2_over_1p']:.5f} | {old['recorded']:.5f} | {kk:.5f} |")
+        wrong_table.append({"h_um":h_rec, "legacy_k2":old["k2"],
+                            "legacy_k2_over_1p":old["k2_over_1p"],
+                            "legacy_recorded":old["recorded"],
+                            "corrected_k2":kk})
+    lines += ["", "The frozen legacy error series is internally consistent "
+              "to its historical printed precision. The corrected constitutive "
+              "model yields different coupling factors; **cross-model equality "
+              "would be false**.", ""]
 
     # ---- the same table for LaTeX, generated not typed
     def texrow(label, x, k, bold=False, nd=4):
@@ -263,16 +268,15 @@ def main():
     with open(os.path.join(ROOT, "Paper_12", "table_closed_form.tex"), "w") as fh:
         fh.write("\n".join(tex).replace("@@ROW@@", chr(92) * 2) + "\n")
 
-    wtex = ["% table generated from the archived results",
-            r"\begin{tabular}{@{}lccc@{}}", r"\toprule",
-            r"$h$ (\si{\micro\meter}) & correct $k^2$ & "
-            r"$k^2/(1+k^2)$ & value that was quoted @@ROW@@", r"\midrule"]
+    wtex = ["% historical legacy comparison; NOT an equal-material-model comparison",
+            r"\begin{tabular}{@{}lcccc@{}}", r"\toprule",
+            r"$h$ (\si{\micro\meter}) & legacy $k^2$ & legacy $k^2/(1+k^2)$ & old quoted & corrected $k^2$ @@ROW@@", r"\midrule"]
     for w in wrong_table:
-        wtex.append("%.0f & %.5f & %.5f & %.5f @@ROW@@"
-                    % (w["h_um"], w["k2"], w["k2_over_1p"], w["recorded"]))
+        wtex.append("%.0f & %.5f & %.5f & %.5f & %.5f @@ROW@@"
+                    % (w["h_um"],w["legacy_k2"],w["legacy_k2_over_1p"],w["legacy_recorded"],w["corrected_k2"]))
     wtex += [r"\bottomrule", r"\end{tabular}"]
-    with open(os.path.join(RES, "table_superseded_series.tex"), "w") as fh:
-        fh.write("\n".join(wtex).replace("@@ROW@@", chr(92) * 2) + "\n")
+    with open(os.path.join(RES,"table_superseded_series.tex"),"w") as fh:
+        fh.write("\n".join(wtex).replace("@@ROW@@", chr(92)*2)+"\n")
 
     out.update({"x_3d": x3, "k2_3d_free": k3, "k33_squared": k33sq,
                 "k2_3d_uniaxial": k33sq / (1 + k33sq),
@@ -281,7 +285,7 @@ def main():
                 "k2_2d_plane_strain": k2s,
                 "fem": {tag: k for tag, x, k in rows},
                 "fem_x": {tag: x for tag, x, k in rows},
-                "wrong_series": wrong_table})
+                "legacy_wrong_series": legacy_wrong_table, "historical_comparison": wrong_table})
     with open(os.path.join(RES, "k2_closed_form.json"), "w") as fh:
         json.dump(out, fh, indent=1)
     with open(os.path.join(RES, "k2_closed_form.md"), "w") as fh:
@@ -295,8 +299,8 @@ def main():
     print(f"  FEM clamped 96x4      k^2 = {rows[4][2]:.5f}")
     print(f"  plane strain closed   k^2 = {k2s:.5f}   FEM {r['k2']:.5f}")
     k_sweep = th[0]["k2_ext"]
-    print(f"  the old number:  k^2/(1+k^2) = {k_sweep / (1 + k_sweep):.5f}"
-          f"  vs recorded 0.35821")
+    print(f"  legacy wrong 0.3582 explained by historical k^2/(1+k^2);"
+          f"  corrected model k^2={k_sweep:.5f}")
     print("  -> results/k2_closed_form.md")
     return 0
 

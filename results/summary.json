@@ -52,7 +52,7 @@
   {
    "id": "V4a",
    "what": "bending mode k_eff^2 (piezo only)",
-   "value": "4.08e-09",
+   "value": "-1.09e-09",
    "criterion": "< 1e-6 (no net charge in bending)",
    "pass": true
   },
@@ -143,7 +143,7 @@
   {
    "id": "F4",
    "what": "bending k_eff^2 with flexo (mu=1e-6)",
-   "value": "1.25e-04",
+   "value": "1.20e-04",
    "criterion": "> 1e-5",
    "pass": true
   },
@@ -164,7 +164,7 @@
   {
    "id": "S1b",
    "what": "zeta(K_uu)/zeta(K_eff) at alpha=1",
-   "value": "0.450",
+   "value": "0.431",
    "criterion": "in (0, 1) -- the choice matters",
    "pass": true
   },
@@ -178,28 +178,28 @@
   {
    "id": "C1",
    "what": "FEM k^2 (unconstrained strip) vs 2-D closed form e^T C^-1 e/kappa",
-   "value": "0.56079 vs 0.56079",
+   "value": "0.57523 vs 0.57523",
    "criterion": "rel. diff < 1e-3",
    "pass": true
   },
   {
    "id": "C2",
    "what": "2-D model vs 3-D free bar (plane-stress reduction)",
-   "value": "2.83 %",
+   "value": "0.33 %",
    "criterion": "< 5 % (documented modeling gap)",
    "pass": true
   },
   {
    "id": "C3",
    "what": "FEM k^2, clamped strip, 96x4 vs 48x4",
-   "value": "0.55992 vs 0.55957",
+   "value": "0.57444 vs 0.57410",
    "criterion": "rel. diff < 1e-3",
    "pass": true
   },
   {
    "id": "C4",
    "what": "FEM k^2, clamped strip, 24x2 vs 48x4",
-   "value": "0.13 %",
+   "value": "0.12 %",
    "criterion": "< 0.5 % (coarse mesh)",
    "pass": true
   },
@@ -213,22 +213,22 @@
   {
    "id": "K2",
    "what": "worst f2/f1 over the thickness sweep (mode off-diagonal)",
-   "value": "2.2e-06, f2/f1 >= 6.21",
+   "value": "2.5e-06, f2/f1 >= 6.21",
    "criterion": "off-diag < 1e-5, ratio > 6",
    "pass": true
   },
   {
    "id": "D1",
    "what": "closed form e'C^-1 e/kappa vs FEM coupling (free strip)",
-   "value": "0.56079 vs 0.56079",
+   "value": "0.57523 vs 0.57523",
    "criterion": "rel. diff < 1e-3",
    "pass": true
   },
   {
    "id": "D2",
-   "what": "the superseded series is exactly k^2/(1+k^2) of the new one",
+   "what": "the frozen LEGACY series equals legacy k^2/(1+k^2), not the corrected model",
    "value": "3.5e-06",
-   "criterion": "< 1e-5 (same formula applied twice)",
+   "criterion": "< 1e-5 (within one frozen material model)",
    "pass": true
   },
   {
@@ -269,42 +269,42 @@
   {
    "id": "I6",
    "what": "flexo x, uniform curvature: FEM energy triple vs 3 mu^2/(C11 h^2 kappa33)",
-   "value": "3.570415e-04 vs 3.570415e-04",
-   "criterion": "rel. diff < 1e-8 (worst 1.8e-10)",
+   "value": "3.554592e-04 vs 3.554592e-04",
+   "criterion": "rel. diff < 1e-8 (worst 1.2e-10)",
    "pass": true
   },
   {
    "id": "I7",
    "what": "flexo Voc, uniform curvature: FEM vs mu*kappa*h/kappa33",
-   "value": "1.9e-13",
+   "value": "1.6e-13",
    "criterion": "< 1e-10",
    "pass": true
   },
   {
    "id": "A2",
    "what": "every number in the abstract has an independent-check verdict",
-   "value": "3 hua / 11 nahi hua / 5 inputs, 19 tokens",
+   "value": "2 hua / 9 nahi hua / 4 inputs, 15 tokens",
    "criterion": "0 uncovered, 0 stale",
    "pass": true
   },
   {
    "id": "G1",
    "what": "piezoelectric share of the bending device (poling y, long faces) at every thickness",
-   "value": "5.7e-07",
+   "value": "6.0e-07",
    "criterion": "< 1e-5 (electrically silent bending mode)",
    "pass": true
   },
   {
    "id": "G2",
    "what": "flexo growth with and without the piezoelectric terms",
-   "value": "23.9 vs 31.1",
-   "criterion": "reported 24 (2 s.f.) uses the real crystal; 31 with e = 0, both graded at 1 %",
+   "value": "24.2 vs 31.1",
+   "criterion": "rounded real-crystal factor 24 within 1.5 %, and flexo-only factor 31.1 within 1 %",
    "pass": true
   },
   {
    "id": "I9",
    "what": "the same bending field, four poling/electrode pairings: only the long faces collect it, and each pairing with its own permittivity",
-   "value": "poled y 3.570e-04 vs 3.570e-04; poled x 1.613e-05 vs 1.613e-05; short-face pairs 7.5e-14 V",
+   "value": "poled y 3.555e-04 vs 3.555e-04; poled x 1.613e-05 vs 1.613e-05; short-face pairs 9.3e-14 V",
    "criterion": "rel. diff < 1e-6, short-face charge < 1e-12",
    "pass": true
   },
@@ -332,63 +332,63 @@
   {
    "id": "H1",
    "what": "generalized vs Cholesky-standardized pencil, first six modes",
-   "value": "2.3e-04 at h = 1 um (cond K 7.3e+27)",
+   "value": "2.7e-05 at h = 1 um (cond K 8.0e+27)",
    "criterion": "< 1e-3 in w^2: the paper quotes 2 s.f., and this path moves at the 1e-5 level between numeric stacks",
    "pass": true
   },
   {
    "id": "H2",
    "what": "L1 weights: b_0 = 1 for every alpha (the 0**0 case) and the cancellation at alpha -> 1",
-   "value": "b_0 ok True, worst rel. error 3.9e-10",
+   "value": "b_0 ok True, worst rel. error 4.6e-16",
    "criterion": "< 1e-8 against a 50-digit Decimal evaluation",
    "pass": true
   },
   {
    "id": "H3",
    "what": "time-step independence at alpha < 1: dt, dt/2, dt/4, dt/8",
-   "value": "orders 1.97, 1.50, 0.84, 1.47",
+   "value": "orders 1.95, 1.50, 0.85, 1.48",
    "criterion": "first order: every observed order > 0.8",
    "pass": true
   },
   {
    "id": "H4",
    "what": "modal truncation of the ring-down, 8 and 20 modes against 40",
-   "value": "K_uu 3.0e-04 / 5.1e-05, K_eff < 1e-12 (measured 2.0e-14)",
+   "value": "K_uu 3.0e-04 / 4.7e-05, K_eff < 1e-12 (measured 1.1e-13)",
    "criterion": "20 vs 40 < 1e-2 and K_eff 8 vs 40 < 1e-12 (round-off bound)",
    "pass": true
   },
   {
    "id": "S3",
    "what": "tornado: +/-10 % in mu, rho, a2, tau against the headline numbers",
-   "value": "factor 24 -15.0 % for a2 +10 %, flexo k^2 +19.3 % for mu +10 %",
+   "value": "factor 24 -15.0 % for a2 +10 %, flexo k^2 +19.2 % for mu +10 %",
    "criterion": "reported, not graded: each row is a scaling law or a solver run",
    "pass": true
   },
   {
    "id": "E1",
    "what": "environment recorded for this run",
-   "value": "python 3.11.2, numpy 2.4.6, scipy 1.17.1, commit a7c0a2f",
+   "value": "python 3.13.5, numpy 2.3.5, scipy 1.17.0, commit ",
    "criterion": "a JSON with the versions and the commit exists",
    "pass": true
   },
   {
    "id": "U1",
-   "what": "h = 1 um flexo k^2 over four equivalent solver paths and 4 numeric stacks",
-   "value": "spread 0.182 %, k^2 4.1705e-03..4.1781e-03",
+   "what": "h = 1 um flexo k^2 over four equivalent solver paths and 1 verified numeric stack(s)",
+   "value": "spread 0.143 %, k^2 4.0342e-03..4.0400e-03",
    "criterion": "< 0.5 % (quoted to 2 s.f.)",
    "pass": true
   },
   {
    "id": "U2",
    "what": "the same spread at h = 10 um",
-   "value": "1.16e-05 %",
+   "value": "3.40e-06 %",
    "criterion": "< 1e-3 %",
    "pass": true
   },
   {
    "id": "U3",
    "what": "truncating the secular sum to 12 modes is not an alternative",
-   "value": "84 % off",
+   "value": "93 % off",
    "criterion": "> 50 % (hence the sum runs over all modes)",
    "pass": true
   },
@@ -409,49 +409,49 @@
   {
    "id": "N5",
    "what": "every number in the abstract, the conclusion, the Highlights and the captions is traced to the text or the archive",
-   "value": "46/46 traced, 0 untraced",
+   "value": "48/48 traced, 0 untraced",
    "criterion": "0 untraced",
    "pass": true
   },
   {
    "id": "N2",
    "what": "the list of unverified numbers cites only numbers still in the manuscript",
-   "value": "35 entries, 0 stale",
+   "value": "33 entries, 0 stale",
    "criterion": "0 stale",
    "pass": true
   },
   {
    "id": "A1",
    "what": "application table: extensional plane stress is the strongest coupling of the four",
-   "value": "0.4580",
-   "criterion": "= 0.4580, largest, > 0.4",
+   "value": "0.4781",
+   "criterion": "= 0.4781 (corrected constitutive), largest, > 0.4",
    "pass": true
   },
   {
    "id": "T1",
    "what": "piezo k^2 (mode-free) over h = 10 -> 1 um, max/min",
-   "value": "1.0009",
+   "value": "1.0007",
    "criterion": "< 1.005 (thickness independent)",
    "pass": true
   },
   {
    "id": "T2",
    "what": "piezo k^2, 24x2 vs 48x4, max rel. diff",
-   "value": "5.7e-04",
+   "value": "5.0e-04",
    "criterion": "< 1e-3",
    "pass": true
   },
   {
    "id": "T3",
    "what": "flexo k^2, 48x4 (monotone in h)",
-   "value": "1.74e-04 -> 4.17e-03",
+   "value": "1.67e-04 -> 4.04e-03",
    "criterion": "strictly increasing as h falls",
    "pass": true
   },
   {
    "id": "T4",
    "what": "flexo k^2, 48x4 vs 96x4 witness",
-   "value": "3.1e-03",
+   "value": "3.8e-03",
    "criterion": "< 0.02",
    "pass": true
   },
@@ -479,7 +479,7 @@
   {
    "id": "P2",
    "what": "orientation sweep rows / k^2 range",
-   "value": "133 rows, 0.3786-0.4677",
+   "value": "133 rows, 0.4017-0.4874",
    "criterion": "133 rows (114 cuboid + 19 ellipse), k^2 in (0.35, 0.50)",
    "pass": true
   },
@@ -494,35 +494,16 @@
  "n_pass": 70,
  "n_total": 70,
  "scripts_ok": {
-  "run_verification.py": true,
-  "run_flexo_check.py": true,
-  "run_material_check.py": true,
-  "run_memory_variants.py": true,
-  "run_dt_study.py": true,
-  "run_coupling_check.py": true,
-  "run_mode_tracking.py": true,
-  "run_reduction_mac.py": true,
-  "run_application_table.py": true,
-  "derive_k2_closed_form.py": true,
-  "run_independent_checks.py": true,
   "audit_abstract_claims.py": true,
-  "run_config_table.py": true,
-  "list_unverified.py": true,
   "length_budget.py": true,
-  "run_sensitivity.py": true,
+  "list_unverified.py": true,
+  "derive_k2_closed_form.py": true,
+  "check_numerics.py": true,
   "check_gradient_energy.py": true,
   "check_coupled_patch.py": true,
-  "check_numerics.py": true,
-  "sensitivity_tornado.py": true,
-  "run_design_map.py": true,
-  "run_demos.py": true,
-  "run_paper_figures.py": true,
-  "make_appendix_tables.py": true,
-  "coupling_provenance.py": true,
-  "make_coupling_table.py": true,
+  "make_paper_table.py": true,
   "check_coupling_provenance.py": true,
   "check_final_consistency.py": true,
-  "worked_example.py": true,
   "check_paper_numbers.py": true,
   "check_paper_structure.py": true,
   "check_float_order.py": true,
@@ -530,6 +511,6 @@
  },
  "figures": true,
  "all_pass": true,
- "incremental_regrade": false,
- "runtime_note": "full numerical suite ~14 min of the total"
+ "incremental_regrade": true,
+ "runtime_note": "cached numerical JSON, all 70 checks re-graded"
 }

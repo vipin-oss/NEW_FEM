@@ -1,0 +1,56 @@
+{
+  "x": {
+    "Cpsxx": 95500000000.0,
+    "e_eff": [
+      [
+        7.05,
+        -0.3594594594594594
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    "kappa_eff": [
+      [
+        4.980417249592072e-10,
+        0.0
+      ],
+      [
+        0.0,
+        1.94792131974e-08
+      ]
+    ],
+    "largest_abs_enthalpy_discrepancy_J_m3": 9.094947017729282e-13
+  },
+  "y": {
+    "Cpsxx": 169459459459.45947,
+    "e_eff": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        -0.3594594594594594,
+        7.05
+      ]
+    ],
+    "kappa_eff": [
+      [
+        1.94792131974e-08,
+        0.0
+      ],
+      [
+        0.0,
+        4.980417249592072e-10
+      ]
+    ],
+    "largest_abs_enthalpy_discrepancy_J_m3": 1.8189894035458565e-12
+  },
+  "gradient_energy": {
+    "variance_energy_for_linear_strain": 85.867500068694,
+    "adopted_M_over_4_energy": 42.933750034347,
+    "ratio": 2.0,
+    "interpretation": "model normalization; not a forced variance expansion"
+  }
+}

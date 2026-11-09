@@ -14,7 +14,7 @@ interpreter, numpy and scipy that produced them.  Run it under several stacks
 and merge:
 
     python3 python/run_sensitivity.py                       # local stack
-    /tmp/vA/bin/python python/run_sensitivity.py --emit results/sensitivity_envs/a.json
+    python3 python/run_sensitivity.py --emit results/sensitivity_envs/a.json
     python3 python/run_sensitivity.py                       # merges and writes
 
 Every emitted file names its own stack, so the merged table in
@@ -26,6 +26,7 @@ Writes results/sensitivity.json and Paper_12/table_sensitivity.tex.
 from __future__ import annotations
 
 import glob
+import hashlib
 import json
 import os
 import platform
@@ -184,7 +185,17 @@ def main():
     tag = f"py{env['python']}-np{env['numpy']}-sp{env['scipy']}"
     print(f"  stack {tag}")
     values = run_stack()
-    rec = {"tag": tag, **env, "values": values}
+    # Do not pool old datasets computed with different constitutive tensors.
+    # The fingerprint includes the two files that set the constitutive tensors
+    # and the assembled stiffness/eigenproblem. Old untagged environment files
+    # are retained on disk but excluded from same-model solver comparisons.
+    fp = hashlib.sha256()
+    for name in ("materials.py", "fem6_core.py"):
+        fp.update(name.encode())
+        with open(os.path.join(HERE, name), "rb") as fh:
+            fp.update(fh.read())
+    model_digest = fp.hexdigest()
+    rec = {"tag": tag, **env, "model_digest": model_digest, "values": values}
 
     os.makedirs(ENVS, exist_ok=True)
     path = emit or os.path.join(ENVS, tag + ".json")
@@ -196,9 +207,14 @@ def main():
 
     # merge every stack that has been run
     recs = []
+    excluded = []
     for fn in sorted(glob.glob(os.path.join(ENVS, "*.json"))):
         with open(fn) as fh:
-            recs.append(json.load(fh))
+            old = json.load(fh)
+        if old.get("model_digest") != model_digest:
+            excluded.append(os.path.basename(fn))
+            continue
+        recs.append(old)
     if not recs:
         recs = [rec]
 
@@ -255,6 +271,7 @@ def main():
             "k2_h10_min": min(v10s), "k2_h10_max": max(v10s),
             "growth_min": min(growth), "growth_max": max(growth),
             "n_stacks": len(recs), "n_rows": len(rows),
+            "model_digest": model_digest, "excluded_unverified_envs": excluded,
             "spread_h1_method": "(max-min)/midpoint over equivalent rows",
             "truncated_max_dev_pct": max(abs(r["dev_h1_pct"]) for r in tr)
             if tr else None}
@@ -264,6 +281,8 @@ def main():
     md = ["# Platform sensitivity of the h = 1 um flexoelectric coupling", "",
           "One model (48$\\times4$, poling $y$, electrodes on the long faces, "
           "$\\mu=10^{-6}$ C/m), five eigensolver paths, three numeric stacks.  "
+          f"Excluded {len(excluded)} pre-patch/untagged environment records: "
+          "their physical tensors cannot be confirmed identical. "
           "The deviations are relative to the **midpoint** of the "
           "equivalent rows, never to the running stack, so the same table "
           "is produced on every machine.", "",
@@ -278,11 +297,16 @@ def main():
                   f"{r['k2_h10']:.5e} | {r['dev_h10_pct']:+.2e} | "
                   f"{r['growth']:.2f} |")
     md += ["",
+           "These model-tagged rows test solver-path agreement only; they do "
+           "not establish cross-platform variation unless multiple tagged "
+           "independent environments are available. Former pooled 3.50%/4.46% "
+           "ranges confounded different constitutive models and must not be "
+           "described as numerical software variation.",
            "The h = 1 um value is the least reproducible number in the paper: "
            "it is a small difference of two nearly equal eigenvalues of a "
            "pencil with condition $\\sim10^{12}$, so it inherits the "
            "eigenvector accuracy of the stack.  Two significant digits "
-           "(4.2e-3, growth 24) are stable across every row of this table; the "
+           "(4.0e-3, growth 24) are stable across the current model-tagged paths; the "
            "fourth digit is not, which is why the manuscript quotes two.", ""]
     with open(os.path.join(RES, "sensitivity.md"), "w") as fh:
         fh.write("\n".join(md) + "\n")

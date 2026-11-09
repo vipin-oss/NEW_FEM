@@ -146,17 +146,23 @@ def draw(H, A, KB, KE):
                       inline_spacing=3)
         ax.set_xscale("log"); ax.set_yscale("log")
         ax.set_xlim(H.min(), H.max()); ax.set_ylim(A.min(), A.max())
-        # orientation lines in black with a white halo: white-on-viridis
-        # vanishes over the bright part of the map, and the a2/L = 0.2 line
-        # initially sat exactly on the top spine and could not be seen
-        ax.plot(H, H, ":", color="k", lw=1.0, zorder=5)
-        ax.text(1.05, 4.2, r"$a_2=h$", fontsize=6.5, zorder=6,
-                bbox=dict(fc="w", ec="none", alpha=0.75, pad=0.6))
-        # the map itself stops at a2/L = 0.2 (the top of the frame), so no
-        # line is drawn there: the note sits inside, clear of the title
-        ax.text(0.97, 0.955, r"$a_2/L\leq0.2$", transform=ax.transAxes,
-                fontsize=6.2, ha="right", va="top", zorder=6,
-                bbox=dict(fc="w", ec="none", alpha=0.75, pad=0.6))
+        # Four legible geometric labels instead of overlapping log minor ticks.
+        ax.set_xticks([1, 2, 5, 10], labels=["1", "2", "5", "10"])
+        ax.xaxis.set_minor_locator(matplotlib.ticker.NullLocator())
+        ax.set_yticks([0.25, 1, 4, 16], labels=["0.25", "1", "4", "16"])
+        ax.yaxis.set_minor_locator(matplotlib.ticker.NullLocator())
+        # A centered FULL window fits transversely only when 2*a2 <= h;
+        # local gradient coefficients are still mathematically defined above
+        # this boundary, but are not contained physical averaging windows.
+        ax.fill_between(H, 0.5 * H, A.max(), facecolor="white",
+                        alpha=0.14, edgecolor="0.25", hatch="///",
+                        linewidth=0, zorder=4)
+        ax.plot(H, 0.5 * H, ":", color="black", lw=1.05, zorder=5)
+        ax.text(1.08, 0.64, r"$2a_2=h$", fontsize=6.5, zorder=6,
+                bbox=dict(fc="w", ec="none", alpha=0.80, pad=0.6))
+        ax.text(0.97, 0.955, r"$a_2/L\leq0.16$ (grid)",
+                transform=ax.transAxes, fontsize=6.2, ha="right", va="top",
+                zorder=6, bbox=dict(fc="w", ec="none", alpha=0.8, pad=0.6))
         ax.set_xlabel(r"strip thickness $h$ ($\mu$m)")
         ax.set_ylabel(r"window half-thickness $a_2$ ($\mu$m)")
         ax.set_title(title)
@@ -224,7 +230,7 @@ def main():
 
     summary = {
         "L_um": 200.0, "a1_um": 3.0, "mu_C_per_m": 1e-6,
-        "mesh": "48x4", "measure": "mode-free static, K_uu short circuit",
+        "mesh": "48x4", "measure": "modal flexoelectric bending; mode-free piezoelectric extension",
         "h_um": H.tolist(), "a2_um": A.tolist(),
         "k2_bend_flexo": KB.tolist(), "k2_ext_piezo": KE.tolist(),
         "ratio": (KB / KE).tolist(),

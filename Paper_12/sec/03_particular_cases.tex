@@ -4,15 +4,12 @@
 \label{sec:limits}
 %% ===========================================================================
 
-The general model of Sec.~\ref{sec:formulation} contains independent constitutive switches, and
-each of them has to reproduce a known theory when it is turned off. Each
+The limiting cases are obtained by suppressing individual constitutive
+contributions in the constitutive model. Each
 switch acts on one term of the energy: \eqref{eq:Eel} for the elastic part,
 \eqref{eq:Epiezo} for the piezoelectric and dielectric parts and
-\eqref{eq:Eflexo} for the flexoelectric one, so a reduction is a statement
-about a matrix rather than about a material. This
-section states those reductions; the numerical results that follow are read
-against them, and Sec.~\ref{sec:verification} checks two of them as exact
-identities rather than as trends. All reductions below follow from the enthalpy of Sec.~\ref{sec:formulation};
+\eqref{eq:Eflexo} for the flexoelectric one, Each reduction is defined by the corresponding constitutive terms. These limits provide reference cases for the numerical verification in Sec.~\ref{sec:verification}.
+All reductions follow from the stated enthalpy;
 the classical limits are cited at the point of use.
 
 \FloatBarrier
@@ -35,8 +32,7 @@ higher-order stress retains the flexoelectric part $-\mu_{kijm}E_k$, so a model
 with a window of zero size and a nonzero flexoelectric coefficient keeps a
 higher-order stress, a double traction and a fourth-order character. The
 classical limit is therefore the double limit $M_{mn}\to0$ \emph{and}
-$\mu_{kijl}\to0$, in which the double-traction condition of
-Sec.~\ref{sec:bc} drops out of the formulation. What remains is the classical
+$\mu_{kijl}\to0$, in which the higher-order double-traction condition drops out of the formulation. What remains is the classical
 piezoelectric strip: the weak form keeps only the elastic, piezoelectric and
 dielectric terms, the displacement field needs $C^0$ continuity only, and the
 coupling factor is the purely piezoelectric one. Thus, with flexoelectricity suppressed, the window size alone switches the
@@ -49,16 +45,12 @@ strain-gradient stiffness on or off without changing the remaining terms.
 With the flexoelectric tensor set to zero the electric displacement
 \eqref{eq:D} loses its strain-gradient contribution and the model reduces to
 the linear piezoelectric strip of the plane-stress reduction \eqref{eq:Cp},
-with the strain-gradient stiffness retained. On the extensional configuration
-of Fig.~\ref{fig:geometry} the coupling factor is $k^2=0.5581$ and is unchanged
+with the strain-gradient stiffness retained. For the length-poled extensional configuration, the coupling factor is $k^2=0.5727$ and is unchanged
 by the switch, because that configuration collects the piezoelectric charge
 only. On the bending configuration the piezoelectric charge of the mode
 integrates to zero over a face electrode, and the piezoelectric-only coupling
-factor of that mode falls to $1.0\times10^{-10}$, which is the round-off floor
-of the secular equation rather than a physical value. The comparison of the
-two configurations therefore cannot be read as a competition between the two
-effects; it is a statement about which electrode pair can collect which
-polarization.
+factor of that mode falls to $1.0\times10^{-10}$, which is at the numerical round-off level of the secular calculation. The different coupling factors reflect the charge collected by the
+respective electrode configurations.
 
 \FloatBarrier
 \subsection{Purely flexoelectric response}
@@ -69,36 +61,44 @@ response of the same strip. Over the thickness range
 $\SI{10}{\micro\meter}\to\SI{1}{\micro\meter}$ the flexoelectric coupling of
 that configuration then rises from $1.76\times10^{-4}$ to
 $5.5\times10^{-3}$, a factor $31$. With the piezoelectric terms present the
-same sweep gives a rise from $1.74\times10^{-4}$ to $4.2\times10^{-3}$, a
-factor $24$. The piezoelectric terms are electrically silent on that device,
-but they are not mechanically silent: they change the elastic stiffness of the
+same sweep gives a rise from $1.67\times10^{-4}$ to $4.0\times10^{-3}$, a
+factor $24$. The piezoelectric contribution to collected charge vanishes for this
+configuration, although the corresponding stiffness contribution remains: they change the elastic stiffness of the
 mode that carries the gradient, and the difference between $24$ and $31$ is
-the measure of that change. Both are reported, and the paper quotes the factor
-$24$ because it is the response of the real crystal.
+the source of the difference. The factor $24$ refers to the model
+with both couplings retained.
 
 \FloatBarrier
 \subsection{Classical Kelvin--Voigt and undamped limits}
 \label{sec:limit_memory}
 
-For $\alpha=1$ the fractional element \eqref{eq:kvfreq} becomes the classical
-Kelvin--Voigt element, $\sigma=K(\varepsilon+\tau\dot\varepsilon)$, whose
-damping ratio follows from the dashpot coefficient $\tau K$ alone,
+For $\alpha=1$ the local fractional material law becomes the classical
+Kelvin--Voigt law, $\sigma=C(\varepsilon+\tau\dot\varepsilon)$,
+with constitutive modulus $C$ in pascals. For a single proportional-memory
+mode with modal stiffness $k_m$ and mass $m_m$, the dashpot coefficient
+is $c_m=\tau k_m$, and the damping ratio is
 \begin{equation}
-  \zeta = \frac{\tau K}{2\sqrt{KM}} = \frac{\omega\tau}{2},
+  \zeta = \frac{c_m}{2\sqrt{k_m m_m}}
+         =\frac{\tau k_m}{2\sqrt{k_m m_m}}
+         =\frac{\omega_m\tau}{2},\qquad
+  \omega_m=\sqrt{k_m/m_m},
   \label{eq:limitKV}
 \end{equation}
-In \eqref{eq:limitKV}, $M$ denotes the modal mass rather than the window
-second-moment tensor, and $\omega=\sqrt{K/M}$ is the undamped angular
-frequency for the stiffness $K$ carrying the memory.
-The implementation reproduces it: at $\omega\tau=0.3$ the ring-down of
-Sec.~\ref{sec:memorystudy} returns $\zeta_{\rm eff}=0.15003$ against the exact
+where $k_m$ and $m_m$ are modal quantities, distinct from the material
+modulus and the window second-moment tensor. This exact relation applies
+when the memory stiffness is proportional to the same modal elastic
+stiffness; it is not an exact per-mode formula for the non-proportional
+mechanical-only memory operator.
+The implementation reproduces it: at $\omega\tau=0.3$ the simulated
+ring-down returns $\zeta_{\rm eff}=0.15003$ against the exact
 $0.15000$, a difference of $0.02\,\%$. For $\tau\to0$ the memory term of
-\eqref{eq:kv} vanishes, the time-discrete problem \eqref{eq:step} becomes the
-undamped one, and the eigenvalues are those of the selected elastic circuit matrix, $K_{oc}$
-for the open-circuit ring-downs. Between these two limits the model is genuinely fractional: the
-damping ratio is no longer proportional to $\omega\tau$, and the memory matrix
-that the derivative multiplies changes $\zeta_{\rm eff}$ by a factor $0.450$
-at $\alpha=1$ (Sec.~\ref{sec:memorystudy}).
+\eqref{eq:kv} vanishes and the time-discrete problem \eqref{eq:step}
+becomes undamped. Its eigenvalues are those of the chosen
+\emph{electrode-conditioned} elastic pencil: $K_{oc}$ for the reported
+open-circuit ring-down and $K_{sc}$ for the corresponding short-circuit
+problem. Between these two limits the model is genuinely fractional: the
+damping ratio is no longer proportional to $\omega\tau$, and the choice of stiffness-memory matrix changes $\zeta_{\rm eff}$ by a factor $0.431$
+at $\alpha=1$ for the specified device.
 
 \FloatBarrier
 \subsection{Recovery of the one-scale gradient theory}
@@ -108,15 +108,13 @@ Finally, the one-scale gradient theories are recovered as special choices of
 $M$. For an ellipsoidal window $M_{mn}=L_{mn}/5$, so
 $\tfrac14M_{mn}=\tfrac1{20}L_{mn}$ and the tensorial strain-gradient energy of
 the one-scale theory~\cite{fem1} is reproduced exactly, with the cuboid,
-ellipse and ellipsoid windows giving the scalar coefficients that
-\ref{app:Mcoeff} lists; setting $M_{mn}=\ell^{2}\delta_{mn}$ reduces
+ellipse and ellipsoid windows giving their respective scalar second-moment
+coefficients; setting $M_{mn}=\ell^{2}\delta_{mn}$ reduces
 the same expression to the isotropic Aifantis form~\cite{Aifantis1992}.
 Dropping the memory and the flexoelectric tensor leaves a strain-gradient
-piezoelectric strip; the classical strip additionally requires $M_{mn}=0$. The present work differs from these in carrying the
-fractional memory on the reduced modal coordinates and in treating the
-window's second moment, rather than a scalar length, as the object that the
-discretization sees. Which of these reductions a given problem selects is
-decided by its boundary and electrode conditions, which Sec.~\ref{sec:bc}
-states.
+piezoelectric strip; the classical strip additionally requires $M_{mn}=0$.
+In the present formulation, fractional memory acts on the reduced modal
+coordinates and the gradient stiffness depends on the window second-moment
+tensor rather than on a scalar length. The same boundary and electrode conditions are imposed in these reductions.
 
 \FloatBarrier

@@ -92,6 +92,43 @@ def static_k2(mats, Mg, pair, L=LPLATE, h=HPLATE, nx=24, ny=2):
     return (x / beta) / (1.0 + x / beta)
 
 
+def rank_one_spectrum(eigenvalues, residues):
+    """Sorted spectrum of diag(eigenvalues)+vv.T, residues=v**2.
+
+    Exact zero residues and repeated poles are deflated. Active roots use
+    checked interlacing intervals; sub-ulp shifts can round to zero, but no
+    artificial positive offset is inserted.
+    """
+    from scipy.optimize import brentq
+    lam=np.asarray(eigenvalues,float);res=np.asarray(residues,float)
+    if lam.ndim!=1 or res.shape!=lam.shape or not np.all(np.isfinite(lam)) or not np.all(np.isfinite(res)) or np.any(res<0):
+        raise ValueError("require finite eigenvalues and nonnegative residues")
+    vals,inv,counts=np.unique(lam,return_inverse=True,return_counts=True)
+    weights=np.bincount(inv,weights=res,minlength=len(vals))
+    roots=[];active=weights>0
+    for value,count,weight in zip(vals,counts,weights):
+        roots.extend([value]*int(count-(weight>0)))
+    poles=vals[active];weights=weights[active]
+    if len(poles)==1:
+        roots.append(poles[0]+weights[0])
+    elif len(poles)>1:
+        for j,pole in enumerate(poles):
+            gap=poles[j+1]-pole if j+1<len(poles) else weights.sum()
+            def secular(t):
+                if t==0:return -np.inf
+                if t==1 and j+1<len(poles):return np.inf
+                delta=np.longdouble(t)*np.longdouble(gap)
+                den=poles.astype(np.longdouble)-np.longdouble(pole)-delta
+                return float(1+np.sum(weights.astype(np.longdouble)/den))
+            upper=secular(1.)
+            if upper<0:raise RuntimeError("rank-one root is not bracketed")
+            t=brentq(secular,0.,1.,xtol=np.nextafter(0.,1.),rtol=8*np.finfo(float).eps,maxiter=1200)
+            roots.append(pole+t*gap)
+    result=np.sort(np.asarray(roots))
+    if len(result)!=len(lam) or not np.isfinite(result).all():raise RuntimeError("invalid rank-one spectrum")
+    return result
+
+
 def modal_k2(mats, Mg, pair, nmodes=6, L=LPLATE, h=HPLATE, nx=24, ny=2):
     """Mode-resolved k^2 from one short-circuit eigensolve (secular root)."""
     mesh = f6.mesh_rect(nx, ny, L, h)
@@ -105,20 +142,8 @@ def modal_k2(mats, Mg, pair, nmodes=6, L=LPLATE, h=HPLATE, nx=24, ny=2):
     Phi = S[:, None] * y
     s = (Phi.T @ d) ** 2 / beta
 
-    def f(yy):
-        return 1.0 + float(np.sum(s / (w2 - yy)))
+    r = rank_one_spectrum(w2, s)[:nmodes]
 
-    out = []
-    for j in range(nmodes):
-        a, b = w2[j] * (1 + 1e-12), w2[j + 1] * (1 - 1e-12)
-        for _ in range(200):
-            m = 0.5 * (a + b)
-            if f(m) > 0:
-                b = m
-            else:
-                a = m
-        out.append(0.5 * (a + b))
-    r = np.array(out)
     return (r - w2[:nmodes]) / r, np.sqrt(w2[:nmodes]) / 2e3 / np.pi, Phi, M, w2
 
 
@@ -667,13 +692,15 @@ def fig_p7_thickness(thick, closed_form):
                    lw=1.1, alpha=0.9, color=OI[3],
                    label=r"FEM, 24$\times$2")
     ax[1].axhline(closed_form, color="k", lw=0.9, ls=":",
-                  label=r"$e^{\mathrm{T}}C^{-1}e/\kappa$")
+                  label="closed-form $k^2$")
     ax[1].set_xlabel(r"thickness $h$ ($\mu$m)")
     ax[1].set_ylabel(r"$k^2$ (quasi-static)")
     ax[1].invert_xaxis()
-    ax[1].set_ylim(0.548, 0.570)
+    limits = np.r_[ke, [r["k2_ext_24"] for r in thick], closed_form]
+    padding = max(float(np.ptp(limits)) * 0.22, 2e-4)
+    ax[1].set_ylim(float(limits.min()) - padding, float(limits.max()) + padding)
     ax[1].tick_params(labelsize=9)
-    ax[1].legend(frameon=False, fontsize=8.5, loc="lower left")
+    ax[1].legend(frameon=False, fontsize=8, loc="center left", bbox_to_anchor=(0, 0.57))
     ax[1].set_title("(b) piezoelectric", fontsize=10, loc="left")
     ax[2].loglog(h, kf / ke, "-", color=OI[4], lw=1.3)
     ax[2].loglog(h, kf / ke, "o", ms=3.4, color=OI[4], mfc="none", mew=0.6)
@@ -708,7 +735,7 @@ def fig_p8_mac(mt_data):
         ax[0].annotate(f"{m:.5f}", (x, 1.0 - m), textcoords="offset points",
                        xytext=(4 if j == 0 else -5, 7),
                        ha="left" if j == 0 else "right", fontsize=8.5)
-    ax[0].set_title("(a) one shape at every thickness", fontsize=10)
+    ax[0].set_title("(a) mapped shape comparison", fontsize=10)
     f2 = np.array([r["f_kHz"][1] for r in rows])
     rat = np.array([r["f_ratio_2_over_1"] for r in rows])
     ax[1].loglog(hs, f1, "o-", color=OI[1], ms=4, lw=1.1, label=r"$f_1$")
@@ -791,28 +818,31 @@ def main():
 # ---------------------------------------------------------------------------
 # P11  convergence of the discretisation
 # ---------------------------------------------------------------------------
-def fig_p11_convergence():
+def fig_p11_convergence(cached_records=None):
     """Convergence of the extensional coupling and of the frequency of the
     mode that carries it, against the mesh."""
     MAT = mt.Material(**{**mt.batio3("x", "plane_stress").__dict__, "mu": 0.0})
     Mg = f6.second_moment("cuboid", 3e-6, 1e-6, 0.0)
     meshes = [(12, 2), (24, 2), (36, 2), (48, 4)]
-    rec = []
-    for nx, ny in meshes:
-        mesh = f6.mesh_rect(nx, ny, LPLATE, HPLATE)
-        mdl = f6.assemble(mesh, mt.to_core(MAT), Mg)
-        Ksc, M, idx, _ = f6.reduce(mdl, "short", pair=("left", "right"))
-        _, _, _, (d, beta) = f6.reduce(mdl, "open", pair=("left", "right"))
-        w, Phi = f6.modes(Ksc, M, 8)          # w is omega, in rad/s
-        s = (Phi.T @ d) ** 2 / beta           # units of omega^2
-        x = s / w ** 2
-        k2m = x / (1.0 + x)
-        j = int(np.argmax(k2m))
-        f1 = float(w[j] / 2e3 / np.pi)        # omega -> kHz
-        k2 = float(static_k2(MAT, Mg, ("left", "right"), nx=nx, ny=ny))
-        rec.append({"nx": nx, "ny": ny, "ndof": int(mdl.ndof_mech),
-                    "f_coupled_kHz": f1, "k2_static": k2,
-                    "k2_mode": float(k2m[j]), "mode_index": j})
+    if cached_records is not None:
+        rec = cached_records
+    else:
+        rec = []
+        for nx, ny in meshes:
+            mesh = f6.mesh_rect(nx, ny, LPLATE, HPLATE)
+            mdl = f6.assemble(mesh, mt.to_core(MAT), Mg)
+            Ksc, M, idx, _ = f6.reduce(mdl, "short", pair=("left", "right"))
+            _, _, _, (d, beta) = f6.reduce(mdl, "open", pair=("left", "right"))
+            w, Phi = f6.modes(Ksc, M, 8)          # w is omega, in rad/s
+            s = (Phi.T @ d) ** 2 / beta           # units of omega^2
+            x = s / w ** 2
+            k2m = x / (1.0 + x)
+            j = int(np.argmax(k2m))
+            f1 = float(w[j] / 2e3 / np.pi)        # omega -> kHz
+            k2 = float(static_k2(MAT, Mg, ("left", "right"), nx=nx, ny=ny))
+            rec.append({"nx": nx, "ny": ny, "ndof": int(mdl.ndof_mech),
+                        "f_coupled_kHz": f1, "k2_static": k2,
+                        "k2_mode": float(k2m[j]), "mode_index": j})
     nd = np.array([r["ndof"] for r in rec], float)
     k2 = np.array([r["k2_static"] for r in rec], float)
     f1 = np.array([r["f_coupled_kHz"] for r in rec], float)
@@ -823,8 +853,8 @@ def fig_p11_convergence():
     fig.subplots_adjust(bottom=0.30, wspace=0.32, top=0.88,
                         left=0.10, right=0.98)
     ax = axs[0]
-    ax.loglog(nd, np.maximum(ek, 1e-9), "o-", color="#0072B2", label=r"$k^2$")
-    ax.loglog(nd, np.maximum(ef, 1e-9), "s-", color="#D55E00", label=r"$f$ of the mode")
+    ax.loglog(nd[:-1], ek[:-1], "o-", color="#0072B2", label=r"$k^2$")
+    ax.loglog(nd[:-1], ef[:-1], "s-", color="#D55E00", label=r"$f$ of the mode")
     ax.loglog(nd, np.maximum(ek[0] * (nd[0] / nd) ** 2.0, 1e-9), "k--", lw=0.9,
               label=r"$\propto N^{-2}$")
     ax.axvline(nd[-1], color="0.55", ls="-.", lw=0.8)

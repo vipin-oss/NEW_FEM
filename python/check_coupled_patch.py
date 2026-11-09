@@ -42,68 +42,60 @@ MAT = mt.to_core(mt.batio3("y", "plane_stress"))
 MAT.mu = 1e-6
 
 
-def nodal_vector(g=0.0, e0=0.0):
-    """Nodal values of u = g x^2 / 2, v = 0, phi = -e0 x on the unit element.
-
-    The BFS node carries (u, u_x, u_y, u_xy, v, v_x, v_y, v_xy), so the
-    quadratic field fixes all four u-values of each corner exactly.
-    """
+def nodal_vector(g=0.0, e0=0.0, affine=.01):
+    """u=affine*x+g*x^2/2, v=0, phi=-e0*(x+y)."""
     u = np.zeros(32)
-    for c, (xa, ya) in enumerate(((0.0, 0.0), (HX, 0.0), (HX, HY), (0.0, HY))):
-        u[8 * c + 0] = 0.5 * g * xa ** 2
-        u[8 * c + 1] = g * xa
-    phi = np.array([-e0 * 0.0, -e0 * HX, -e0 * HX, -e0 * 0.0])
-    return u, phi
+    corners = ((0.,0.),(HX,0.),(HX,HY),(0.,HY))
+    for c,(x,y) in enumerate(corners):
+        u[8*c] = affine*x + .5*g*x*x
+        u[8*c+1] = affine + g*x
+    return u, np.array([-e0*(x+y) for x,y in corners])
 
 
-def fem_energy(g, e0, gradient=True):
-    Ke, _Me, Kuphi, Kpp = f6.element_matrices(HX, HY, MAT, MG,
-                                              gradient=gradient)
-    u, phi = nodal_vector(g, e0)
-    return 0.5 * u @ Ke @ u + u @ Kuphi @ phi - 0.5 * phi @ Kpp @ phi
+def analytic_components(g,e0,gradient=True,affine=.01):
+    A=HX*HY; C,e,kap=MAT.C,MAT.e,MAT.kappa
+    return dict(elastic=.5*C[0,0]*A*(affine**2+affine*g*HX+g*g*HX*HX/3),
+                gradient=.25*MG[0,0]*C[0,0]*g*g*A if gradient else 0.,
+                piezoelectric=-e0*(e[0,0]+e[1,0])*A*(affine+.5*g*HX),
+                flexoelectric=-MAT.mu*g*e0*A,
+                dielectric=-.5*e0*e0*kap.sum()*A)
 
 
-def analytic_energy(g, e0, gradient=True):
-    """The same enthalpy, integrated in closed form over the element.
+def analytic_energy(g,e0,gradient=True):
+    return sum(analytic_components(g,e0,gradient).values())
 
-        Pi = 1/2 int eps C eps + 1/4 int M_mn eps_,m C eps_,n
-             + int (e eps).grad(phi) + int mu grad(tr eps).grad(phi)
-             - 1/2 int grad(phi) kappa grad(phi)
 
-    with eps_xx = g x, grad(phi) = (-e0, 0) and grad(tr eps) = (g, 0).
-    """
-    C, e, kap = MAT.C, MAT.e, MAT.kappa
-    A = HX * HY
-    # elastic: 1/2 C11 g^2 \int x^2 dA
-    el = 0.5 * C[0, 0] * g ** 2 * (HX ** 3 / 3.0) * HY
-    gr = (0.25 * MG[0, 0] * C[0, 0] * g ** 2 * A) if gradient else 0.0
-    # coupling: int (e_{k1} eps_xx) grad(phi)_k = e_{01} g (-e0) \int x dA
-    pz = e[0, 0] * g * (-e0) * (0.5 * HX ** 2 * HY)
-    # flexoelectric: int mu (g, 0).(-e0, 0) = -mu g e0 A
-    fx = -MAT.mu * g * e0 * A
-    # dielectric: -1/2 kappa_xx e0^2 A
-    dl = -0.5 * kap[0, 0] * e0 ** 2 * A
-    return el + gr + pz + fx + dl
+def fem_components(g,e0,gradient=True):
+    from dataclasses import replace
+    u,phi=nodal_vector(g,e0)
+    K,_,B,C=f6.element_matrices(HX,HY,MAT,MG,gradient=gradient)
+    K0,_,Bp,_=f6.element_matrices(HX,HY,replace(MAT,mu=0.),MG,gradient=False)
+    return dict(elastic=.5*u@K0@u,gradient=.5*u@(K-K0)@u,
+                piezoelectric=u@Bp@phi,flexoelectric=u@(B-Bp)@phi,
+                dielectric=-.5*phi@C@phi)
+
+
+def fem_energy(g,e0,gradient=True):
+    return sum(fem_components(g,e0,gradient).values())
 
 
 def patch():
-    """Two fields: one that only the classical terms see, one with a gradient."""
-    rows = []
-    for name, g, e0, grad in (
-            ("constant strain, uniform field", 0.0, 1.0e5, True),
-            ("constant strain gradient, uniform field", 1.0e5, 1.0e5, True)):
-        a = fem_energy(g, e0, grad)
-        b = analytic_energy(g, e0, grad)
-        rows.append({"case": name, "fem": a, "analytic": b,
-                     "rel_err": abs(a - b) / max(abs(b), 1e-300)})
-    # a field with no gradient must not see the gradient operator at all
-    a0 = fem_energy(0.0, 1.0e5, gradient=False)
-    rows.append({"case": "gradient operator off, constant strain",
-                 "fem": a0, "analytic": analytic_energy(0.0, 1.0e5, False),
-                 "rel_err": abs(a0 - analytic_energy(0.0, 1.0e5, False))
-                 / abs(analytic_energy(0.0, 1.0e5, False))})
-    worst = max(r["rel_err"] for r in rows)
-    return {"rows": rows, "worst_rel_err": float(worst)}
+    rows=[]
+    for name,g,grad in [('affine strain, uniform field',0.,True),
+                         ('affine plus strain gradient, uniform field',1e5,True),
+                         ('gradient stiffness off, affine strain',0.,False)]:
+        fc=fem_components(g,1e5,grad);ac=analytic_components(g,1e5,grad)
+        scale=sum(abs(v) for v in ac.values())
+        errors={k:abs(fc[k]-ac[k])/max(abs(ac[k]),scale*1e-12) for k in ac}
+        # Zero terms are checked absolutely relative to total energy scale.
+        errors={k:(abs(fc[k])/scale if ac[k]==0 else errors[k]) for k in ac}
+        rows.append(dict(case=name,fem=sum(fc.values()),analytic=sum(ac.values()),
+                         components_fem=fc,components_analytic=ac,
+                         component_errors=errors,rel_err=max(errors.values())))
+    assert all(abs(v)>0 for v in rows[1]['components_analytic'].values())
+    worst=max(r['rel_err'] for r in rows)
+    assert worst<1e-10, rows
+    return dict(rows=rows,worst_rel_err=float(worst))
 
 
 def symmetry():

@@ -1,6 +1,6 @@
 # Structural check of Paper_12/main.tex
 
-**No full TeX Live is available in this environment.** This structural audit does not compile the manuscript or measure pages; the mandated `pdflatex; bibtex; pdflatex x2` sequence remains to be run by the author. This file lists what a compiler would have flagged before typesetting.
+This is a *static* structural audit; it does not compile the manuscript or measure pages. A separate LaTeX build log must be checked before claiming successful compilation.
 
 - braces and math: ok
 - environments: ok

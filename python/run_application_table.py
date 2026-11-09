@@ -2,18 +2,18 @@
 run_application_table.py -- the worked 200 x 10 um plate, all four
 polarization / kinematics combinations, in one table.
 
-For each combination the extensional (poling x) or bending (poling y) mode is
-identified, its short-circuit and open-circuit frequencies are taken from the
+For each combination the mode with largest coupling among the first six is
+selected and its displacement polarization is measured, its short-circuit and open-circuit frequencies are taken from the
 same mesh, and the coupling is the two-solve value
 
     k^2 = (w_open^2 - w_short^2) / w_open^2 ,
 
-i.e. the denominator is the *short-circuit* matrix.  (Sweeps are graded by the
+i.e. the denominator is the open-circuit squared frequency.  (Sweeps are graded by the
 mode-free measure instead -- see docs/checker report -- because identifying a
 mode by its coupling is fine for one geometry and circular in a sweep.)
 
 V0 is the open-circuit voltage of that mode when its tip displacement is
-exactly 10 nm.
+normalized to a maximum nodal displacement magnitude of 10 nm.
 
 Run:  python3 python/run_application_table.py
       -> results/application_table.json, results/application_table.md
@@ -76,7 +76,11 @@ def one(poling, kin, want):
                       and idx[r] == mdl.mech_dof[n][c] else 0.0)
         disp[n] = float(np.linalg.norm(d3))
     x0 = Phi[:, j] * (10e-9 / disp.max())
-    return {"poling": poling, "kinematics": kin, "mode": want,
+    ix = np.where(idx % 8 < 4)[0]
+    x_fraction = float(Phi[ix, j] @ M[np.ix_(ix, ix)] @ Phi[ix, j])
+    mode = "longitudinal" if x_fraction > .9 else ("transverse" if x_fraction < .1 else "mixed")
+    return {"poling": poling, "kinematics": kin, "mode": mode,
+            "x_displacement_mass_fraction": x_fraction,
             "mode_index": j + 1,
             "f_kHz": float(wo[j] / 2e3 / np.pi),
             "f_short_kHz": float(ws[j] / 2e3 / np.pi),
@@ -92,14 +96,14 @@ def main():
     with open(os.path.join(RES, "application_table.json"), "w") as fh:
         json.dump({"rows": rows,
                    "note": "24x2 mesh, window 3x1 um, mu = 0, k^2 denominator "
-                           "= short-circuit matrix"}, fh, indent=1)
+                           "= open-circuit squared frequency"}, fh, indent=1)
     hdr = ("| poling | kinematics | mode | f (kHz) | k^2 | V0 (V) |\n"
            "|---|---|---|---|---|---|\n")
     lines = [f"| {r['poling']} | {r['kinematics'].replace('_', ' ')} | "
              f"{r['mode']} | {r['f_kHz']:.1f} | {r['k2']:.4f} | "
              f"{r['V0_V']:.2f} |" for r in rows]
     with open(os.path.join(RES, "application_table.md"), "w") as fh:
-        fh.write("# 200 um x 10 um BaTiO3 plate, first mode of each family\n\n")
+        fh.write("# 200 um x 10 um BaTiO3 plate, largest-coupling mode among the first six\n\n")
         fh.write(hdr + "\n".join(lines) + "\n")
     for r in rows:
         print(f"  {r['poling']}, {r['kinematics']:13s} {r['mode']:11s} "

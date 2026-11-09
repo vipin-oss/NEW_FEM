@@ -34,10 +34,14 @@ Kinematics
 ----------
 "plane_strain"  eps_zz = 0  -> C = [[C11, C13, 0], [C13, C33, 0], [0, 0, C44]]
 "plane_stress"  sig_zz = 0  -> C = C_2d - c3 c3^T / C_zz   (see plane_stress())
-The piezoelectric and dielectric tensors are NOT modified by the plane-stress
-reduction in this polarity: the out-of-plane component D_z of a 4mm crystal
-poled in-plane involves only the out-of-plane shear strains, which vanish in
-the 2-D kinematics, so e_ps = e_2d exactly.
+In the fully coupled plane-stress reduction, eliminating eps_zz at fixed
+in-plane strain and electric field also modifies the in-plane piezoelectric
+and dielectric tensors.  The eliminated normal strain couples to the in-plane
+polar electric field through e31.  Accordingly, e_ps != e_2d and
+kappa_ps != kappa_2d for this material (except where e31 = 0).
+These formulas are the local linear piezoelectric plane-stress reduction;
+the strain-gradient and flexoelectric terms remain separate constitutive
+assumptions of the reduced 2-D model.
 """
 
 from __future__ import annotations
@@ -103,20 +107,41 @@ class Material:
                              [0.0, 0.0, self.C44]])
         raise ValueError("kinematics must be 'plane_strain' or 'plane_stress'")
 
-    def e(self) -> np.ndarray:
-        """2x3 piezoelectric stress matrix, rows (D_x, D_y), cols
-        (eps_xx, eps_yy, gamma_xy)."""
+    def _ezz(self) -> np.ndarray:
+        """Coupling of the eliminated eps_zz to in-plane (E_x,E_y)."""
         if self.poling == "y":
-            return np.array([[0.0, 0.0, self.e15],
-                             [self.e31, self.e33, 0.0]])
-        return np.array([[self.e33, self.e31, 0.0],
-                         [0.0, 0.0, self.e15]])
+            return np.array([0.0, self.e31])
+        if self.poling == "x":
+            return np.array([self.e31, 0.0])
+        raise ValueError("poling must be 'x' or 'y'")
+
+    def e(self) -> np.ndarray:
+        """2x3 effective e, rows (D_x, D_y), cols
+        (eps_xx, eps_yy, gamma_xy), with coupled plane-stress correction."""
+        if self.poling == "y":
+            e = np.array([[0.0, 0.0, self.e15],
+                          [self.e31, self.e33, 0.0]])
+        elif self.poling == "x":
+            e = np.array([[self.e33, self.e31, 0.0],
+                          [0.0, 0.0, self.e15]])
+        else:
+            raise ValueError("poling must be 'x' or 'y'")
+        if self.kinematics == "plane_stress":
+            c3 = self.full_3d()[2, :2]
+            czz = self.full_3d()[2, 2]
+            e[:, :2] -= np.outer(self._ezz(), c3) / czz
+        return e
 
     def kappa(self) -> np.ndarray:
-        """2x2 dielectric permittivity (F/m), rows/cols (x, y)."""
+        """2x2 effective dielectric permittivity (F/m), with coupled
+        plane-stress correction induced by eliminating eps_zz."""
         k11 = self.kappa_r11 * EPS0
         k33 = self.kappa_r33 * EPS0
-        return np.diag([k33, k11]) if self.poling == "x" else np.diag([k11, k33])
+        k = np.diag([k33, k11]) if self.poling == "x" else np.diag([k11, k33])
+        if self.kinematics == "plane_stress":
+            ezz = self._ezz()
+            k = k + np.outer(ezz, ezz) / self.full_3d()[2, 2]
+        return k
 
     def as_dict(self) -> dict:
         return {"name": self.name, "C": self.C().tolist(),

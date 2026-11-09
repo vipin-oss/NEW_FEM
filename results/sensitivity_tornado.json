@@ -1,19 +1,19 @@
 {
  "baseline": {
-  "factor24": 23.933153564270942,
+  "factor24": 24.225588883605294,
   "k2_flexo": {
-   "10.0": 0.00017437295718421788,
-   "1.0": 0.004173294761745929
+   "10.0": 0.0001667661317880717,
+   "1.0": 0.004040007748406965
   },
-  "k2_ext_24x2": 1.0000026810881321e-10
+  "k2_ext_24x2": 1.0000033553199755e-10
  },
  "rows": [
   {
    "input": "mu",
    "what": "flexoelectric coefficient",
    "perturbation": "+10 %",
-   "d_factor24_pct": -1.1651382178621827,
-   "d_k2ext_pct": 19.258361626297372,
+   "d_factor24_pct": -1.260930457848608,
+   "d_k2ext_pct": 19.159560018533384,
    "d_zeta_pct": 0.0,
    "source": "solver, 48x4: factor 24 and the flexo k^2 at 1 um, mu -> 1.1e-6; the flexo k^2 carries mu^2, the ratio cancels it to the (1+x) saturation"
   },
@@ -21,8 +21,8 @@
    "input": "mu",
    "what": "flexoelectric coefficient",
    "perturbation": "-10 %",
-   "d_factor24_pct": 1.24054442417465,
-   "d_k2ext_pct": -17.787901258308892,
+   "d_factor24_pct": 0.9253230987589012,
+   "d_k2ext_pct": -18.05440193561444,
    "d_zeta_pct": 0.0,
    "source": "solver, 48x4: as above, mu -> 0.9e-6"
   },
@@ -30,8 +30,8 @@
    "input": "a2",
    "what": "window half-thickness",
    "perturbation": "+10 %",
-   "d_factor24_pct": -14.973049144418148,
-   "d_k2ext_pct": 0.000161621736149975,
+   "d_factor24_pct": -14.971318654482978,
+   "d_k2ext_pct": 2.4770924289541085e-05,
    "d_zeta_pct": 0.0,
    "source": "solver, 48x4: M22 = a2^2/3 enters the gradient stiffness; k^2 ext is the mode-free limit on the 24x2 strip"
   },
@@ -39,8 +39,8 @@
    "input": "a2",
    "what": "window half-thickness",
    "perturbation": "-10 %",
-   "d_factor24_pct": 18.198010088105132,
-   "d_k2ext_pct": -0.00014366250282726867,
+   "d_factor24_pct": 18.04537601612275,
+   "d_k2ext_pct": -1.753788125835598e-06,
    "d_zeta_pct": 0.0,
    "source": "solver, 48x4: as above, a2 -> 0.9 um"
   },

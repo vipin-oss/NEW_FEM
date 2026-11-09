@@ -478,22 +478,22 @@ def write_markdown(R):
     A("\nL1 indexing of the delivered `modal_fractional` (weights b_1..b_{n-1} "
       "instead of b_0..b_{n-1}):\n")
     A("| alpha | delivered late oscillation | adjusted late oscillation | ratio |\n|---|---|---|---|")
-    L = R["l1_scheme"]
+    l1 = R["l1_scheme"]
     A("\n### Delivered L1 stencil vs the analytic transfer function\n")
     A("Transcribed verbatim from `modal_fractional()`; `w0 tau = 0.3`.\n")
     A("| alpha | Omega/w0 | amplitude | analytic |H| | ratio |")
     A("|---|---|---|---|---|")
-    for r in L["rows"]:
+    for r in l1["rows"]:
         A(f"| {r['alpha']:.1f} | {r['Omega_over_w0']:.2f} | {r['amp']:.4e} | "
           f"{r['amp_analytic']:.4e} | {r['ratio']:.4f} |")
-    A(f"\nWorst deviation {100*L['worst_ratio_error']:.3f} % -> "
-      f"{'PASS' if L['pass'] else 'FAIL'}\n")
+    A(f"\nWorst deviation {100*l1['worst_ratio_error']:.3f} % -> "
+      f"{'PASS' if l1['pass'] else 'FAIL'}\n")
     A("Time-step refinement at Omega = w0, alpha = 1:\n")
     A("| pts/period | dt | rel. error |")
     A("|---|---|---|")
-    for c in L["convergence"]:
+    for c in l1["convergence"]:
         A(f"| {c['ppd']} | {c['dt']:.3e} | {c['rel_err']:.2e} |")
-    A(f"\nObserved order {L['observed_order']:.2f}")
+    A(f"\nObserved order {l1['observed_order']:.2f}")
 
     A("\n## V6 Static modal truncation\n")
     A(f"Direct solution: {R['truncation']['u_direct']*1e6:.4f} um\n")

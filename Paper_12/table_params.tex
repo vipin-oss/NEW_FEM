@@ -3,10 +3,11 @@
 \begin{table}[!t]
 \centering
 \small
-\caption{Parameters of the model. The sources of the first four rows are given
-in the text above the table; the five rows below the rule are assumed and their
-effect is stated there and in Secs.~\ref{sec:material} and
-\ref{sec:limitations}.}
+\caption{Parameters of the model. Elastic, piezoelectric and dielectric parameters are attributed to
+the cited material reference; density is a rounded representative
+crystallographic value~\cite{Nakatani2016}, not measured for this specimen;
+flexoelectric coefficient, window, memory-law parameters, geometry and mesh
+are prescribed inputs, not independently calibrated material measurements.}
 \label{tab:params}
 \begin{tabular}{@{}llll@{}}
 \toprule
@@ -23,8 +24,8 @@ mass density & $\rho$ & $6020$ & \si{\kilo\gram\per\cubic\meter} \\
 \midrule
 flexoelectric coefficient & $\mu$ & $10^{-6}$ & \si{\coulomb\per\meter} \\
 window half-widths & $a_1$, $a_2$ & $3$, $1$ & \si{\micro\meter} \\
-fractional order & $\alpha$ & $0.5$--$1$ & -- \\
-relaxation time & $\tau$ & $0.3$--$30$ & \si{\nano\second} \\
+fractional order (studied range) & $\alpha$ & $0.2$--$1$ & -- \\
+relaxation time (studied range) & $\tau$ & $0.3$--$32$ & \si{\nano\second} \\
 strip geometry & $L$, $h$ & $200$, $10$ & \si{\micro\meter} \\
 mesh & -- & $48\times4$ BFS elements & -- \\
 \bottomrule

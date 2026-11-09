@@ -3,51 +3,55 @@
   {
    "poling": "y",
    "kinematics": "plane_strain",
-   "mode": "bending",
+   "mode": "longitudinal",
+   "x_displacement_mass_fraction": 0.9998539144276747,
    "mode_index": 4,
-   "f_kHz": 6721.814859529462,
-   "f_short_kHz": 6105.668207596049,
-   "k2": 0.17492522858599,
-   "f1_kHz": 220.46001209495842,
-   "k2_mode1": -7.160169447734962e-09,
-   "V0_V": 3.4822717289887994
+   "f_kHz": 6721.814859511665,
+   "f_short_kHz": 6105.668207599035,
+   "k2": 0.17492522858081433,
+   "f1_kHz": 220.4600123460978,
+   "k2_mode1": 9.30045448829509e-11,
+   "V0_V": 3.4822717289887537
   },
   {
    "poling": "y",
    "kinematics": "plane_stress",
-   "mode": "bending",
+   "mode": "longitudinal",
+   "x_displacement_mass_fraction": 0.9999284489420167,
    "mode_index": 4,
-   "f_kHz": 6360.999139640461,
-   "f_short_kHz": 5987.112331403103,
-   "k2": 0.11410114695498862,
-   "f1_kHz": 208.73201170211257,
-   "k2_mode1": 2.298692173349902e-09,
-   "V0_V": 2.4099081711212453
+   "f_kHz": 6323.757713345882,
+   "f_short_kHz": 5987.1123313972785,
+   "k2": 0.10363607671890512,
+   "f1_kHz": 207.54625335388278,
+   "k2_mode1": -8.700020523507892e-11,
+   "V0_V": 2.2217226478164736
   },
   {
    "poling": "x",
    "kinematics": "plane_strain",
-   "mode": "extensional",
+   "mode": "longitudinal",
+   "x_displacement_mass_fraction": 0.999893699967613,
    "mode_index": 5,
-   "f_kHz": 7160.990114091177,
-   "f_short_kHz": 5535.757853277258,
-   "k2": 0.4024035329276824,
-   "f1_kHz": 165.5710393179003,
-   "k2_mode1": 6.223046251091467e-09,
-   "V0_V": 141.4535814430358
+   "f_kHz": 7160.990114081461,
+   "f_short_kHz": 5535.757853295287,
+   "k2": 0.40240353292216824,
+   "f1_kHz": 165.57103876135264,
+   "k2_mode1": 4.451482642140974e-12,
+   "V0_V": 141.45358144296097
   },
   {
    "poling": "x",
    "kinematics": "plane_stress",
-   "mode": "extensional",
+   "mode": "longitudinal",
+   "x_displacement_mass_fraction": 0.9999523327746993,
    "mode_index": 5,
-   "f_kHz": 6725.792506544914,
-   "f_short_kHz": 4951.698413044448,
-   "k2": 0.45797234985416213,
-   "f1_kHz": 147.72743379099876,
-   "k2_mode1": 5.702507200506078e-11,
-   "V0_V": 138.99313989428654
+   "f_kHz": 6853.5780436338355,
+   "f_short_kHz": 4951.3175673816595,
+   "k2": 0.4780765155164964,
+   "f1_kHz": 147.72714744924667,
+   "k2_mode1": 3.4647405896943745e-11,
+   "V0_V": 143.70909899203363
   }
  ],
- "note": "24x2 mesh, window 3x1 um, mu = 0, k^2 denominator = short-circuit matrix"
+ "note": "24x2 mesh, window 3x1 um, mu = 0, k^2 denominator = open-circuit squared frequency"
 }

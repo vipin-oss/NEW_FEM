@@ -7,18 +7,19 @@
 The fourth-order character of \eqref{eq:gov1} means that a boundary condition
 on the displacement is not enough: the gradient theory requires a second,
 higher-order condition on each edge, and the electrical condition decides
-which of the two coupling factors the model returns. This section fixes both,
-together with the axes that the rest of the paper refers to.
+which of the two coupling factors the model returns. The mechanical and electrical conditions and coordinate conventions are
+specified below.
 
 \FloatBarrier
 \subsection{Mechanical and higher-order conditions}
 \label{sec:bc_mech}
 
-On an edge with unit outward normal $\bm{n}$ and tangent $\bm{t}$, stationarity
+On a straight edge segment of the rectangular domain, with constant
+outward unit normal $\bm{n}$ and tangent $\bm{t}$, stationarity
 of \eqref{eq:energy} gives the classical traction
 \begin{equation}
-  t_i = \sigma_{ij}n_j - \partial_m\!\left(\varsigma_{ijm}\right)n_j
-      - \partial_t\!\left(\varsigma_{ijm}\,t_m n_j\right),
+  t_i = \left(\sigma_{ij}-\varsigma_{ijm,m}\right)n_j
+      - \partial_t\!\left(\varsigma_{ijm}\,t_j n_m\right),
   \label{eq:traction}
 \end{equation}
 and the higher-order double traction
@@ -26,39 +27,45 @@ and the higher-order double traction
   m_i = \varsigma_{ijm}\,n_j n_m ,
   \label{eq:doubletraction}
 \end{equation}
-which is conjugate to the normal derivative of the displacement. The
+which is conjugate to the normal derivative of the displacement.
+The continuum traction $t_i$ has SI units $\si{\pascal}$ and the double
+traction $m_i$ has units $\si{\newton\per\meter}$; integrating either
+corresponding virtual-work term along a two-dimensional edge yields energy
+per unit out-of-plane width, not the total three-dimensional work. The
 flexoelectric part of $\varsigma$ in \eqref{eq:tau} is carried by these two
 expressions without further change: it contributes $\mu(\nabla\cdot\bm E)n_i$
-to \eqref{eq:traction} away from the tangent term,
-$+\partial_t[\mu(\bm E\cdot\bm t)n_i]$ through the tangential derivative, and
-$-\mu(\bm E\cdot\bm n)n_i$ to \eqref{eq:doubletraction}. The weak form
-assembles all three as the single coupling term
-$\int\mu\nabla N_\phi^{\mathsf T}\nabla(\varepsilon_{xx}+\varepsilon_{yy})$, so
-no assembled matrix changes when the term is written out. For each straight edge, integration by parts also leaves the endpoint term
-$[\varsigma_{ijm}n_m t_j\,\delta u_i]_{\partial e}$.
-At a free corner, the oriented contributions from adjacent edges must balance
-the applied corner force. The conforming weak form retains these terms;
-edge traction conditions alone do not specify the complete corner problem.
-The following are componentwise constraints; prescribing both $u_i=0$ is
-not a universal mechanical definition of a simply supported beam.
-Three combinations are used in the results:
+to \eqref{eq:traction} from the divergence term,
+$+\mu\partial_t[(\bm E\cdot\bm n)t_i]$ through the tangential derivative, and
+$-\mu(\bm E\cdot\bm n)n_i$ to \eqref{eq:doubletraction}. For piecewise straight edges, tangential integration by parts also
+produces corner contributions where the effective traction jumps; these
+must be treated consistently with prescribed nodal displacement and slope
+conditions. Higher-order surface traction, double-traction and edge-jump
+terms appear explicitly in the independent variational treatments of
+Mao et al.~\cite{MaoPurohitAravas2016} and Serrao and
+Kozinov~\cite{SerraoKozinov2024}. Those references support the requirement
+for higher-order boundary data, but they do not validate the particular
+two-dimensional edge treatment or replace a three-dimensional benchmark
+for the present model. The finite-element weak form includes the flexoelectric term
+$\int\mu\nabla N_\phi^{\mathsf T}\nabla(\varepsilon_{xx}+\varepsilon_{yy})$, consistent with the constitutive coupling stated above. The mechanical boundary classes considered are
 \begin{equation}
   \text{clamped: } u_i=0,\ u_{i,j}n_j=0;\qquad
-  \text{simply supported: } u_i=0,\ m_i=0;\qquad
+  \text{displacement-supported: } u_i=0,\ m_i=0;\qquad
   \text{free: } t_i=0,\ m_i=0 .
   \label{eq:bcmech}
 \end{equation}
-The first prescribes both quantities that the element \eqref{eq:dofs} carries,
-the second leaves the slope free and removes the double force, and the third is
-the natural condition of the weak form, which the discretization satisfies
-automatically.
+The middle condition fixes both displacement components but leaves the normal
+slope natural; it should not be confused with a conventional beam simple
+support. The reported strip simulations prescribe all eight nodal Hermite
+quantities on the selected clamped edge, which enforces both $u_i=0$ and its
+normal slope there (and their tangential derivatives). Other mechanical
+edges are natural/free, except where an external traction or point load is
+applied. The displacement-supported class is not a separate simulated case.
 
-The clamped condition is the one that produces the boundary layer of a
-gradient theory: the gradient energy penalises the curvature that the
+A prescribed clamped slope produces a strain-gradient boundary layer: the gradient energy penalises the curvature that the
 prescribed slope forces at the edge, so the solution relaxes over a length set
-by the window. Section~\ref{sec:windowshape} measures that layer against
-$a/L$, and the results are consistent with the assumed operating range
-$a/L\le0.2$.
+by the window. The window-size dependence is examined against $a/L$;
+$a/L\le0.2$ is an assumed input range, not a verified error bound and
+not a restriction on the transverse ratio $a_2/h$.
 
 \FloatBarrier
 \subsection{Electrical conditions: open and short circuit}
@@ -75,9 +82,7 @@ condensation and gives the rank-one update
   \label{eq:rankone}
 \end{equation}
 with $d$ the condensed coupling vector and $\beta$ the condensed dielectric
-coefficient. Two coupling measures follow from this pair, and the difference
-between them matters for the interpretation of every coupling number in the
-paper. The \emph{mode-based} factor of the $j$-th mode is
+coefficient. The two coupling measures used in the analysis are defined below. The \emph{mode-based} factor of the $j$-th mode is
 \begin{equation}
   k_j^2=\frac{\omega_{oc,j}^2-\omega_{sc,j}^2}{\omega_{oc,j}^2},
   \label{eq:k2mode}
@@ -86,24 +91,22 @@ where $\omega_{oc,j}$ and $\omega_{sc,j}$ are the open- and short-circuit
 angular frequencies. This factor depends on the returned eigenvector, while the
 \emph{mode-free quasi-static} factor of the electrode pair is
 \begin{equation}
-  x = \frac{d^{\mathsf T}K_{uu}^{-1}d}{\beta},\qquad
+  x = \frac{d^{\mathsf T}K_{sc}^{-1}d}{\beta},\qquad
   k^2 = \frac{x}{1+x},
   \label{eq:kstatic}
 \end{equation}
-which involves no eigenvector at all. Equation~\eqref{eq:kstatic} is the
+which does not require an eigenvector. Equation~\eqref{eq:kstatic} is the
 measure used wherever a quantity has to be compared across geometries or
 across thicknesses, because it cannot select a different mode in a different
-configuration. Four symbols carry the distinction in what follows and are
-fixed here once: $k^2_{\rm qs}=x/(1+x)$ is the mode-free factor of
+configuration. The following notation distinguishes the coupling measures: $k^2_{\rm qs}=x/(1+x)$ is the mode-free factor of
 \eqref{eq:kstatic}; $k^2_{\rm qs,u}=x$ is the same quantity without the coupled
 denominator, the one that can be set against $e^{\mathsf T}C^{-1}e/\kappa$;
 $k^2_{j}$ is the mode-based factor of the $j$-th mode; and $k^2_{j}(K_{uu})$ or
 $k^2_{j}(K_{sc})$ names the matrix whose short-circuit eigenvalues enter it. An
 unsubscripted $k^2$ in the results is $k^2_{\rm qs}$. The extensional coupling
 factor of the \SI{200}{\micro\meter} by \SI{10}{\micro\meter} strip obtained
-from \eqref{eq:kstatic} is $k^2=0.5581$, within $0.5\,\%$ of the constitutive
-prediction $0.5608$ obtained from the constitutive tensors in
-Sec.~\ref{sec:verification}.
+from \eqref{eq:kstatic} is $k^2=0.5727$, within $0.5\,\%$ of the constitutive
+prediction $0.5752$ obtained independently from the constitutive tensors.
 
 \FloatBarrier
 \subsection{Poling axes and Voigt indices}
@@ -113,28 +116,30 @@ The material is tetragonal $\mathrm{BaTiO_3}$ at room temperature, with Voigt
 indices $1=x$, $2=y$, $3=z$; the length runs along $x$
 (\SI{200}{\micro\meter}), the thickness along $y$ (\SI{10}{\micro\meter}), and
 $z$ is out of plane, the neutral axis of the bending and a free surface. The
-crystal is anisotropic, so the two configurations of Fig.~\ref{fig:geometry}
+crystal is anisotropic, so the two poling configurations
 do not share a modulus: poling along $x$ pairs the strain $\varepsilon_{xx}$
 with $C^{p}_{xx}=\SI{9.5500e10}{\pascal}$, while poling along $y$ pairs the
 same strain with $C^{p}_{xx}=\SI{1.6946e11}{\pascal}$, the two being exchanged
 by the rotation that takes one poling axis into the other, and the beam moduli
 $E_b=1/(\bm C_p^{-1})_{xx}$ are \SI{7.6327e10}{\pascal} and
 \SI{1.3544e11}{\pascal}. The electric field runs along the poling axis in
-both configurations, so the polar-axis permittivity
-$\kappa_{33}=\SI{4.9583e-10}{\farad\per\meter}$ is the component that acts
-across the electrode gap: $\kappa_{yy}=\kappa_{33}$ with the poling along $y$
-and $\kappa_{xx}=\kappa_{33}$ with the poling along $x$. A modulus and a
-permittivity are always taken from the same configuration.
+both configurations. The unreduced polar-axis permittivity is
+$\kappa_{33}=\SI{4.9583e-10}{\farad\per\meter}$, but the coupled
+plane-stress elimination yields the effective value
+$\kappa^{p}_{\mathrm{pol}}=\SI{4.9804e-10}{\farad\per\meter}$
+across the electrode gap: $\kappa^{p}_{yy}$ with poling along $y$ and
+$\kappa^{p}_{xx}$ with poling along $x$. A modulus and a permittivity are
+always taken from the same reduced configuration.
 
-The pairing rule has a quantitative consequence that the paper relies on. The
+The electrode configuration also determines the field direction and gap. The
 extensional configuration is poled along $x$ with electrodes on the short
 faces and the gap $L=\SI{200}{\micro\meter}$; the bending configuration is
 poled along $y$ with electrodes on the long faces and the gap
-$h=\SI{10}{\micro\meter}$. The two gaps differ by a factor of twenty, and so do
-the electric fields produced by the same polarization, which is why the
-extensional coupling is an electromechanical property of the material and the
-bending coupling is a size effect of the geometry. These kinematic and
-electrical conditions, together with the energy of
-Sec.~\ref{sec:energy}, are what the element of Sec.~\ref{sec:fem} discretizes.
+$h=\SI{10}{\micro\meter}$. The two gaps differ by a factor of twenty.
+For uniform open-circuit polarization and equal permittivity, $E=-P/\kappa$
+is independent of gap and the voltage scales with gap. At fixed applied
+voltage, the field instead scales inversely with gap. The actual coupling
+also depends on the strain field, reduced tensors and electrode arrangement. These kinematic and electrical conditions are imposed in the finite-element
+formulation.
 
 \FloatBarrier

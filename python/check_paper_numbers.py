@@ -192,6 +192,11 @@ def stale_scan():
                     "UNVERIFIED", "Notation and provenance", "fields from memory"}:
                 continue
             for i, line in enumerate(body.splitlines(), 1):
+                # "dynamic plate formulation" names prior published plate
+                # literature, not a stale identification of OUR strip.
+                # Suppress only this documented false positive.
+                if tok in ("plate", "Plate") and "dynamic plate" in line:
+                    continue
                 if tok in line:
                     hits.append({"token": tok, "why": why, "file": rel,
                                  "line": i, "text": line.strip()[:120]})
@@ -201,10 +206,10 @@ def stale_scan():
 def main():
     tex = normalize(manuscript_text())
     R = []
-    R.append(row("abstract, memory coupling", "0.4650",
+    R.append(row("abstract, memory coupling", "0.4847",
                  "memory_variants.json k2", g("memory_variants.json.k2"),
                  "{:.4f}"))
-    R.append(row("abstract, zeta ratio", "0.450",
+    R.append(row("abstract, zeta ratio", "0.431",
                  "memory_variants.json S1 Kuu/Keff",
                  g("memory_variants.json.S1.Kuu_alpha1.0.zeta_eff")
                  / g("memory_variants.json.S1.Keff_alpha1.0.zeta_eff"),
@@ -213,19 +218,19 @@ def main():
                  "memory_variants.json S1 Keff zeta",
                  g("memory_variants.json.S1.Keff_alpha1.0.zeta_eff"),
                  "{:.5f}"))
-    R.append(row("abstract, piezo k^2", "0.5581",
+    R.append(row("abstract, piezo k^2", "0.5727",
                  "demo.json flexo_thickness[0].k2_ext",
                  g("demo.json.flexo_thickness.0.k2_ext"), "{:.4f}"))
-    R.append(row("thickness, piezo k^2 series (h=10)", "0.55814",
+    R.append(row("thickness, piezo k^2 series (h=10)", "0.57268",
                  "demo.json flexo_thickness[0].k2_ext",
                  g("demo.json.flexo_thickness.0.k2_ext"), "{:.5f}"))
-    R.append(row("thickness, piezo k^2 series (h=1)", "0.55861",
+    R.append(row("thickness, piezo k^2 series (h=1)", "0.57310",
                  "demo.json flexo_thickness[3].k2_ext",
                  g("demo.json.flexo_thickness.7.k2_ext"), "{:.5f}"))
-    R.append(row("thickness, flexo k^2 at h=10", "1.74e-4",
+    R.append(row("thickness, flexo k^2 at h=10", "1.67e-4",
                  "demo.json flexo_thickness[0].k2_flexo",
                  g("demo.json.flexo_thickness.0.k2_flexo"), "{:.2e}"))
-    R.append(row("thickness, flexo k^2 at h=1", "4.2e-3",
+    R.append(row("thickness, flexo k^2 at h=1", "4.0e-3",
                  "demo.json flexo_thickness[3].k2_flexo",
                  g("demo.json.flexo_thickness.7.k2_flexo"), "{:.1e}",
                  rel_tol=5e-3))
@@ -244,12 +249,12 @@ def main():
     R.append(row("worked, analytic flexo growth, h^-2 over 10 -> 1 um",
                  "100", "worked_example.json flexo (h_max/h_min)^2",
                  (_wf["h_um"][0] / _wf["h_um"][-1]) ** 2, "{:.0f}"))
-    R.append(row("worked, FEM flexo below the analytic x at h=10", "2.05",
+    R.append(row("worked, FEM flexo below the analytic x at h=10", "2.13",
                  "worked_example.json x_analytic_h10 / demo k2_flexo[0]",
                  _wf["x_analytic_h10"]
                  / g("demo.json.flexo_thickness.0.k2_flexo"), "{:.2f}",
                  rel_tol=5e-3))
-    R.append(row("orientation, extensional f at 0 deg, AR=2", "5012",
+    R.append(row("orientation, extensional f at 0 deg, AR=2", "5011",
                  "paper_figures_data.json polar[AR=2,th=0].f_ext_kHz",
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 2.0 and r["shape"] == "cuboid"
@@ -264,12 +269,12 @@ def main():
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 10.0 and r["shape"] == "cuboid"
                   and r["theta_deg"] == 0.0][0]["f_ext_kHz"], "{:.0f}"))
-    R.append(row("orientation, extensional f at 90 deg, AR=10", "5288",
+    R.append(row("orientation, extensional f at 90 deg, AR=10", "5287",
                  "paper_figures_data.json polar[AR=10,th=90].f_ext_kHz",
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 10.0 and r["shape"] == "cuboid"
                   and r["theta_deg"] == 90.0][0]["f_ext_kHz"], "{:.0f}"))
-    R.append(row("orientation, worst coupling change (AR=10)", "-18.7",
+    R.append(row("orientation, worst coupling change (AR=10)", "-17.3",
                  "paper_figures_data.json polar, min of k2/k2(0)-1",
                  100.0 * min([r["k2_axial"] for r in J("paper_figures_data.json")["polar"]
                               if r["AR"] == 10.0 and r["shape"] == "cuboid"]
@@ -285,37 +290,37 @@ def main():
                  max(max(x["rel_k2"], x["rel_f"])
                      for x in J("paper_figures_data.json")["symmetry"]),
                  "{:.0e}", rel_tol=0.6))
-    R.append(row("coupling check, closed form", "0.5608",
+    R.append(row("coupling check, closed form", "0.5752",
                  "coupling_check.json closed_form.k2_2d_closed",
                  g("coupling_check.json.closed_form.k2_2d_closed"), "{:.5f}",
                  rel_tol=1e-3))
-    R.append(row("coupling check, free 48x4", "0.5608",
+    R.append(row("coupling check, free 48x4", "0.5752",
                  "coupling_check.json fem.plane_stress.free_48x4",
                  g("coupling_check.json.fem.plane_stress.free_48x4"), "{:.5f}",
                  rel_tol=1e-3))
-    R.append(row("coupling check, 2-D vs 3-D gap", "2.8",
+    R.append(row("coupling check, 2-D vs 3-D gap", "0.3",
                  "coupling_check.json rel_gap_2d_vs_3d x100",
                  100 * g("coupling_check.json.rel_gap_2d_vs_3d"), "{:.1f}"))
     R.append(row("mode tracking, worst MAC", "0.999",
                  "mode_tracking.json rows min mac",
                  min(r["mac_mode1_vs_ref"]
                      for r in J("mode_tracking.json")["rows"]), "{:.3f}"))
-    R.append(row("orientation, k2 at 0 deg, AR=2", "0.4448",
+    R.append(row("orientation, k2 at 0 deg, AR=2", "0.4654",
                  "paper_figures_data.json polar[AR=2,th=0]",
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 2.0 and r["shape"] == "cuboid"
                   and r["theta_deg"] == 0.0][0]["k2_axial"], "{:.4f}"))
-    R.append(row("orientation, k2 at 90 deg, AR=2", "0.3786",
+    R.append(row("orientation, k2 at 90 deg, AR=2", "0.4017",
                  "paper_figures_data.json polar[AR=2,th=90]",
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 2.0 and r["shape"] == "cuboid"
                   and r["theta_deg"] == 90.0][0]["k2_axial"], "{:.4f}"))
-    R.append(row("orientation, k2 at 0 deg, AR=10", "0.4677",
+    R.append(row("orientation, k2 at 0 deg, AR=10", "0.4874",
                  "paper_figures_data.json polar[AR=10,th=0]",
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 10.0 and r["shape"] == "cuboid"
                   and r["theta_deg"] == 0.0][0]["k2_axial"], "{:.4f}"))
-    R.append(row("orientation, k2 at 90 deg, AR=10", "0.3801",
+    R.append(row("orientation, k2 at 90 deg, AR=10", "0.4032",
                  "paper_figures_data.json polar[AR=10,th=90]",
                  [r for r in J("paper_figures_data.json")["polar"]
                   if r["AR"] == 10.0 and r["shape"] == "cuboid"
@@ -328,16 +333,16 @@ def main():
     R.append(row("application, k2 extensional plane strain", "0.4024",
                  "application_table.json rows[2].k2",
                  g("application_table.json.rows.2.k2"), "{:.4f}"))
-    R.append(row("application, k2 extensional plane stress", "0.4580",
+    R.append(row("application, k2 extensional plane stress", "0.4781",
                  "application_table.json rows[3].k2",
                  g("application_table.json.rows.3.k2"), "{:.4f}"))
-    R.append(row("application, V0 extensional plane stress", "138.99",
+    R.append(row("application, V0 extensional plane stress", "143.71",
                  "application_table.json rows[3].V0_V",
                  g("application_table.json.rows.3.V0_V"), "{:.2f}"))
-    R.append(row("application, k2 bending plane stress", "0.1141",
+    R.append(row("application, k2 bending plane stress", "0.1036",
                  "application_table.json rows[1].k2",
                  g("application_table.json.rows.1.k2"), "{:.4f}"))
-    R.append(row("application, V0 bending plane stress", "2.41",
+    R.append(row("application, V0 bending plane stress", "2.22",
                  "application_table.json rows[1].V0_V",
                  g("application_table.json.rows.1.V0_V"), "{:.2f}"))
     R.append(row("application, f1 extensional plane stress", "147.73",
@@ -355,21 +360,13 @@ def main():
     R.append(row("closed form, 2-D plane strain", "0.5132",
                  "k2_closed_form.json k2_2d_plane_strain",
                  g("k2_closed_form.json.k2_2d_plane_strain"), "{:.4f}"))
-    R.append(row("closed form, x_2D", "1.2768",
+    R.append(row("closed form, x_2D", "1.3542",
                  "k2_closed_form.json x_2d",
                  g("k2_closed_form.json.x_2d"), "{:.4f}"))
     R.append(row("closed form, C_p[0][0]", "9.5500",
                  "k2_closed_form.json C_p[0][0] / 1e10",
                  g("k2_closed_form.json.C_p.0.0") / 1e10, "{:.4f}"))
-    # the count is checked in words, because that is how the abstract says it
-    words = {41: "forty-one", 49: "forty-nine", 50: "fifty",
-             51: "fifty-one", 54: "fifty-four",
-             57: "fifty-seven"}
-    nt = g("summary.json.n_total")
-    R.append(row("__skip__", "__skip__", "skip", 0, "{}").__class__ and {"where": "skip", "tex": "", "json": "", "value": 0, "formatted": "", "rel": None, "rel_tol": None, "ok": True}) if False else None
-    # the graded-criteria count is no longer quoted in the manuscript: the
-    # paper describes the verification, not the harness that produced it
-    _ = g("summary.json.n_total")
+    # Harness count is not printed; no previous summary is needed.
 
     # ---- the independent routes (run_independent_checks.py)
     I = "independent_checks.json"
@@ -396,25 +393,24 @@ def main():
     R.append(row("sensitivity, spread at h=1 um, per cent, upper bound",
                  "0.5\\%", "sensitivity.json spread_h1_pct (range/midpoint)",
                  SN["spread_h1_pct"], "{:.2f}", upper=0.5))
-    R.append(row("sensitivity, spread at h=10 um, per cent, upper bound",
-                 "10^{-4}\\%",
-                 "sensitivity.json spread_h10_pct (range/midpoint)",
-                 SN["spread_h10_pct"], "{:.2e}", upper=1e-4))
+    R.append(row("sensitivity, actual same-model spread at h=10 um (%)",
+                 "3.4e-6", "sensitivity.json spread_h10_pct (range/midpoint)",
+                 SN["spread_h10_pct"], "{:.1e}", rel_tol=0.02))
     CT = J("config_table.json")
     # Round 13: the 4e7 ratio left the abstract with the rewrite; the same gap is
     # now stated as "two orders of magnitude" in the conclusion, so this slot
     # carries the ring-down decrements that the rewritten Sec. 6.7 quotes.
     P6 = J("paper_figures_data.json")["notes"]["P6"]
-    R.append(row("ring-down, decrement at alpha=1", "0.063",
+    R.append(row("ring-down, decrement at alpha=1", "0.065",
                  "paper_figures_data.json notes.P6 zeta_1.0",
                  P6["zeta_1.0"], "{:.3f}", rel_tol=1e-2))
-    R.append(row("ring-down, peak decrement at alpha=0.6", "0.104",
+    R.append(row("ring-down, decrement at alpha=0.6", "0.105",
                  "paper_figures_data.json notes.P6 zeta_0.6",
                  P6["zeta_0.6"], "{:.3f}", rel_tol=1e-2))
     R.append(row("ring-down, decrement at alpha=0.4", "0.085",
                  "paper_figures_data.json notes.P6 zeta_0.4",
                  P6["zeta_0.4"], "{:.3f}", rel_tol=1e-2))
-    R.append(row("ring-down, error at alpha=0.6 against alpha=1", "64",
+    R.append(row("ring-down, error at alpha=0.6 against alpha=1", "62",
                  "paper_figures_data.json notes.P6 zeta_0.6/zeta_1.0 - 1, in percent",
                  100.0 * (P6["zeta_0.6"] / P6["zeta_1.0"] - 1.0), "{:.0f}",
                  rel_tol=1e-2))
@@ -427,7 +423,7 @@ def main():
     R.append(row("config table, growth with e=0", "31",
                  "config_table growth_flexo_only",
                  CT["growth_flexo_only"], "{:.0f}", rel_tol=5e-3))
-    R.append(row("config table, piezo shift at h=1, per cent", "24",
+    R.append(row("config table, piezo shift at h=1, per cent", "26",
                  "config_table min flexo_shift x100",
                  100 * abs(min(r["flexo_shift"] for r in CT["rows"])),
                  "{:.0f}"))
@@ -454,7 +450,7 @@ def main():
     R.append(row("closed form, 3-D uniaxial", "0.3748",
                  "k2_closed_form.json k2_3d_uniaxial",
                  g("k2_closed_form.json.k2_3d_uniaxial"), "{:.4f}"))
-    R.append(row("closed form, FEM clamped 48x4", "0.55957",
+    R.append(row("closed form, FEM clamped 48x4", "0.57410",
                  "k2_closed_form.json fem.FEM clamped 48x4",
                  g("k2_closed_form.json.fem.FEM clamped 48x4"), "{:.5f}"))
     R.append(row("modulus ratio, w=1, alpha=1", "1.35",
@@ -489,15 +485,15 @@ def main():
     R.append(row("worked, plane-stress C12", "5.7000e10",
                  "materials C_p[0,1]", W["plane_stress"]["C12p_poling_x"],
                  "{:.4e}"))
-    R.append(row("worked, kappa33", "4.9583e-10", "k2_closed_form kappa_eff",
+    R.append(row("worked, kappa33", "4.9804e-10", "k2_closed_form kappa_eff",
                  cf["kappa_eff"], "{:.4e}", rel_tol=1e-4))
-    R.append(row("worked, condensed capacitance beta", "2.4792e-11",
+    R.append(row("worked, condensed capacitance beta", "2.4902e-11",
                  "worked_example beta", cf["beta"], "{:.4e}", rel_tol=1e-3))
-    R.append(row("worked, x from the assembled matrices", "1.2631",
+    R.append(row("worked, x from the assembled matrices", "1.3402",
                  "worked_example x_fem", cf["x_fem"], "{:.4f}"))
-    R.append(row("worked, distance to the closed form", "0.47",
+    R.append(row("worked, distance to the closed form", "0.44",
                  "worked_example diff_percent", cf["diff_percent"], "{:.2f}"))
-    R.append(row("worked, flexoelectric x at h=10", "3.5704e-4",
+    R.append(row("worked, flexoelectric x at h=10", "3.5546e-4",
                  "worked_example x_analytic_h10", fx["x_analytic_h10"], "{:.4e}"))
     R.append(row("worked, peak ratio of the ring-down", "2.5947",
                  "exp(delta) from memory_variants.json", mm["zeta"]["peak_ratio"], "{:.4f}"))
@@ -524,11 +520,11 @@ def main():
     R.append(row("Sec. 5.4, 8 vs 40 modes with the memory on K_uu", "3.0e-4",
                  "numerics.json kuu_relerr_8_vs_40",
                  _nu["kuu_relerr_8_vs_40"], "{:.1e}"))
-    R.append(row("Sec. 5.4, 20 vs 40 modes with the memory on K_uu", "5.1e-5",
+    R.append(row("Sec. 5.4, 20 vs 40 modes with the memory on K_uu", "4.7e-5",
                  "numerics.json kuu_relerr_20_vs_40",
                  _nu["kuu_relerr_20_vs_40"], "{:.1e}"))
     _kf = J("k2_closed_form.json")["fem"]
-    R.append(row("verification table, clamped 96x4 vs 48x4, relative", "6.2e-4",
+    R.append(row("verification table, clamped 96x4 vs 48x4, relative", "5.9e-4",
                  "k2_closed_form.json fem clamped 96x4 / 48x4 - 1",
                  abs(_kf["FEM clamped 96x4"] / _kf["FEM clamped 48x4"] - 1.0),
                  "{:.1e}"))
@@ -549,7 +545,7 @@ def main():
     R.append(row("design map, flexo k^2 at h=10, a2=0.25", "1.6e-4",
                  "design_map.json [h=10][a2=0.25]", _at(10.0, 0.25), "{:.1e}",
                  rel_tol=_TOL))
-    R.append(row("design map, change of k^2 at h=10 for a2 1 -> 0.25 um", "5.5",
+    R.append(row("design map, change of k^2 at h=10 for a2 1 -> 0.25 um", "5.4",
                  "design_map.json 100*(1-k(a2=.25)/k(a2=1)) at h=10",
                  100.0 * (1.0 - _at(10.0, 0.25) / _at(10.0, 1.0)), "{:.1f}",
                  rel_tol=_TOL))
@@ -559,19 +555,19 @@ def main():
     R.append(row("design map, gain from the window at h=1", "2.5",
                  "design_map.json k(a2=.25)/k(a2=1) at h=1",
                  _at(1.0, 0.25) / _at(1.0, 1.0), "{:.1f}", rel_tol=_TOL))
-    R.append(row("design map, flexo k^2 at h=1, a2=1 um", "4.2e-3",
+    R.append(row("design map, flexo k^2 at h=1, a2=1 um", "4.0e-3",
                  "design_map.json [h=1][a2=1]", _at(1.0, 1.0), "{:.1e}",
                  rel_tol=_TOL))
     R.append(row("design map, smallest flexo k^2", "3.6e-6",
                  "design_map.json range k2_flexo_min",
                  dm["range"]["k2_flexo_min"], "{:.1e}", rel_tol=_TOL))
-    R.append(row("design map, smallest flexo/piezo ratio", "6.5e-6",
+    R.append(row("design map, smallest flexo/piezo ratio", "6.3e-6",
                  "design_map.json range ratio_min",
                  dm["range"]["ratio_min"], "{:.1e}", rel_tol=_TOL))
-    R.append(row("design map, largest flexo/piezo ratio", "1.9e-2",
+    R.append(row("design map, largest flexo/piezo ratio", "1.8e-2",
                  "design_map.json range ratio_max",
                  dm["range"]["ratio_max"], "{:.1e}", rel_tol=_TOL))
-    R.append(row("design map, thickness of the 0.1 % crossing at a2=1 um", "5.5",
+    R.append(row("design map, thickness of the 0.1 % crossing at a2=1 um", "5.3",
                  "design_map.json thresholds h_at_0p1pct_a2_1um",
                  dm["thresholds"]["h_at_0p1pct_a2_1um"], "{:.1f}",
                  rel_tol=_TOL))

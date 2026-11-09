@@ -132,7 +132,7 @@ def application_table():
            r"\midrule"]
     for r in A:
         tex.append(f"{r['poling']} & {r['kinematics'].replace('_', ' ')} & "
-                   f"{r['mode']} ({r['mode_index']}) & {r['f_kHz']:.1f} & "
+                   f"{r['mode'].replace('longitudinal', 'longit.')} ({r['mode_index']}) & {r['f_kHz']:.1f} & "
                    f"{r['k2']:.4f} & {r['V0_V']:.2f} \\\\")
     tex += [r"\bottomrule", r"\end{tabular}"]
     with open(os.path.join(OUT, "table_application.tex"), "w") as fh:

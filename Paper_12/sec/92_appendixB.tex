@@ -6,16 +6,16 @@
 \setcounter{figure}{0}
 %% ===========================================================================
 
-Table~\ref{tab:verification} collects the static, frequency and coupling
-benchmarks cited in Sec.~\ref{sec:verification}. The comparison uses the same
-material and discretization as Sec.~\ref{sec:material}; the classical beam
+Table~\ref{tab:verification} summarizes the static, frequency and coupling
+benchmarks. The comparison uses the same
+material and discretization as the main calculations; the classical beam
 values and constitutive coupling provide independent reference routes.
 
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Static, frequency and coupling benchmarks for the validation of
-Sec.~\ref{sec:verification}, with the obtained and reference values.}
+\caption{Static, frequency and coupling benchmarks, with the obtained and
+reference values.}
 \label{tab:verification}
 \input{table_verification}
 \end{table}
@@ -23,24 +23,23 @@ Sec.~\ref{sec:verification}, with the obtained and reference values.}
 The order of convergence is the least-squares slope of
 $\log|u_R/u_{\rm ref}-1|$ against $\log h$, with $h=L/n_x$ halved over the
 four meshes $5\times1$, $10\times2$, $20\times4$ and $40\times8$ of the
-gradient-free benchmark of Sec.~\ref{sec:verification}; the slope over all
+gradient-free benchmark; the slope over all
 four is 1.68 and the finest pair alone gives 2.01, so the sequence is entering
 its asymptotic range from the coarse end. The expected rate for the bicubic
 Hermite rectangle is $O(h^{4})$ in $L^2$ and $O(h^{3})$ in $H^1$ on a smooth
-solution, and a linear functional such as $u_R$ converges at least as fast as
-the energy norm; the requirement is the empirical slope above 1.5, and no
-theoretical exponent is claimed beyond that bound.
+solution, under suitable regularity assumptions. The observed tip-displacement rate is
+a benchmark-specific result; corner regularity and derivative constraints
+can affect convergence, so these data do not prove a universal rate.
 
-Table~\ref{tab:convergence} is the convergence study behind
-Fig.~\ref{fig:convergence}. The frequency of the extensional mode and its
+Table~\ref{tab:convergence} gives the underlying mesh-refinement values. The frequency of the extensional mode and its
 mode-free coupling factor are listed for four meshes, with the errors referred
-to the $48\times4$ mesh used in the paper: the coarser $24\times2$ mesh of the
+to the $48\times4$ reference mesh: the coarser $24\times2$ mesh of the
 parameter sweeps differs from it by $0.04\,\%$ in frequency and by
-$0.03\,\%$ in the coupling factor, and the other two rows by less. None of
-the four rows is a clamped strip; the
-clamped strip is the $96\times4$ against $48\times4$ entry of
-Table~\ref{tab:verification}, whose coupling factors differ by
-$6.2\times10^{-4}$ relative.
+$0.03\,\%$ in the coupling factor, the $36\times2$ row differs by less, while the $12\times2$ row has larger
+errors. All four calculations use the left-edge constraints of the assembly
+routine. A separate clamped-strip comparison
+compares the $96\times4$ and $48\times4$ meshes; their coupling factors
+differ by $5.9\times10^{-4}$ relative.
 
 \input{table_convergence}
 

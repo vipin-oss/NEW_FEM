@@ -48,8 +48,11 @@ def mediabox(path):
 
 def read(rel, rev=None):
     if rev:
-        r = subprocess.run(["git", "show", "%s:Paper_12/%s" % (rev, rel)],
-                           cwd=ROOT, capture_output=True, text=True)
+        try:
+            r = subprocess.run(["git", "show", "%s:Paper_12/%s" % (rev, rel)],
+                               cwd=ROOT, capture_output=True, text=True)
+        except FileNotFoundError:
+            return ""
         return r.stdout if r.returncode == 0 else ""
     path = os.path.join(PAPER, rel)
     return open(path).read() if os.path.exists(path) else ""
@@ -208,6 +211,9 @@ def main():
         rev, pages = None, None
     cur = measure()
     old = measure(rev) if rev else None
+    calibration_missing = old is not None and total(old) <= 0
+    if calibration_missing:
+        old = None
     tot = total(cur)
     lines = ["# Page budget (estimate, not a measurement)", "",
              "No full TeX Live here; no compiled page count is measured by this script. "
@@ -215,6 +221,8 @@ def main():
              "%.1f pt, text height %.1f pt, %.0f characters per line, %.0f pt per line; "
              "figure heights from each PDF's MediaBox and its `width=` option, table "
              "heights from row counts." % (TEXTWIDTH, TEXTHEIGHT, CHARLINE, LINESKIP), ""]
+    if calibration_missing:
+        lines += ["Historical calibration NOT AVAILABLE; compiled pages NOT MEASURED.", ""]
     rows = [("body figures", cur["body_fig"], "%d" % cur["n_body_fig"]),
             ("body tables", cur["body_tab"], "%d" % cur["n_body_tab"]),
             ("body prose and display maths", cur["body_txt"], "%d words" % cur["body_words"]),

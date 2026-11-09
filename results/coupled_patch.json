@@ -2,25 +2,88 @@
  "patch": {
   "rows": [
    {
-    "case": "constant strain, uniform field",
-    "fem": -9.739606598699998e-11,
-    "analytic": -9.7396065987e-11,
-    "rel_err": 2.6540491015039947e-16
+    "case": "affine strain, uniform field",
+    "fem": 8.473232546157777e-06,
+    "analytic": 8.473232546157821e-06,
+    "components_fem": {
+     "elastic": 8.472972972972976e-06,
+     "gradient": -4.6506271056401265e-20,
+     "piezoelectric": 3.594594594594603e-10,
+     "flexoelectric": -1.1580528575742387e-24,
+     "dielectric": -9.988627461179598e-11
+    },
+    "components_analytic": {
+     "elastic": 8.472972972972974e-06,
+     "gradient": 0.0,
+     "piezoelectric": 3.594594594594594e-10,
+     "flexoelectric": -0.0,
+     "dielectric": -9.988627461179603e-11
+    },
+    "component_errors": {
+     "elastic": 1.999376015847471e-16,
+     "gradient": 5.488480854886632e-15,
+     "piezoelectric": 2.588826541166901e-15,
+     "flexoelectric": 1.3666868560660728e-19,
+     "dielectric": 5.175764987280734e-16
+    },
+    "rel_err": 5.488480854886632e-15
    },
    {
-    "case": "constant strain gradient, uniform field",
-    "fem": 0.0015533682809823117,
-    "analytic": 0.0015533682809823128,
-    "rel_err": 6.979685279783626e-16
+    "case": "affine plus strain gradient, uniform field",
+    "fem": 0.001646573137951562,
+    "analytic": 0.0016465731379515637,
+    "components_fem": {
+     "elastic": 0.0003756351351351351,
+     "gradient": 0.0012709459459459447,
+     "piezoelectric": 2.156756756756789e-09,
+     "flexoelectric": -1.0000000000000005e-08,
+     "dielectric": -9.988627461179598e-11
+    },
+    "components_analytic": {
+     "elastic": 0.00037563513513513516,
+     "gradient": 0.0012709459459459465,
+     "piezoelectric": 2.1567567567567563e-09,
+     "flexoelectric": -1e-08,
+     "dielectric": -9.988627461179603e-11
+    },
+    "component_errors": {
+     "elastic": 1.4431586279801297e-16,
+     "gradient": 1.364907360151873e-15,
+     "piezoelectric": 1.5149429389050755e-14,
+     "flexoelectric": 4.963083675318166e-16,
+     "dielectric": 5.175764987280734e-16
+    },
+    "rel_err": 1.5149429389050755e-14
    },
    {
-    "case": "gradient operator off, constant strain",
-    "fem": -9.739606598699998e-11,
-    "analytic": -9.7396065987e-11,
-    "rel_err": 2.6540491015039947e-16
+    "case": "gradient stiffness off, affine strain",
+    "fem": 8.473232546157823e-06,
+    "analytic": 8.473232546157821e-06,
+    "components_fem": {
+     "elastic": 8.472972972972976e-06,
+     "gradient": 0.0,
+     "piezoelectric": 3.594594594594603e-10,
+     "flexoelectric": -1.1580528575742387e-24,
+     "dielectric": -9.988627461179598e-11
+    },
+    "components_analytic": {
+     "elastic": 8.472972972972974e-06,
+     "gradient": 0.0,
+     "piezoelectric": 3.594594594594594e-10,
+     "flexoelectric": -0.0,
+     "dielectric": -9.988627461179603e-11
+    },
+    "component_errors": {
+     "elastic": 1.999376015847471e-16,
+     "gradient": 0.0,
+     "piezoelectric": 2.588826541166901e-15,
+     "flexoelectric": 1.3666868560660728e-19,
+     "dielectric": 5.175764987280734e-16
+    },
+    "rel_err": 2.588826541166901e-15
    }
   ],
-  "worst_rel_err": 6.979685279783626e-16
+  "worst_rel_err": 1.5149429389050755e-14
  },
  "symmetry": {
   "ndof_mech": 96,
@@ -29,9 +92,9 @@
   "n_positive": 96,
   "n_negative": 14,
   "n_zero": 0,
-  "min_eig_K": -0.00010499087586848064,
-  "min_eig_K_rel": -6.676097754437491e-17,
-  "min_eig_Cphi": 1.3224164827363566e-10,
+  "min_eig_K": -0.00011826334130566175,
+  "min_eig_K_rel": -7.520059441279797e-17,
+  "min_eig_Cphi": 1.3254199458993166e-10,
   "n_null_Cphi_ungrounded": 1,
   "blocks_exact": true,
   "symmetric": true,

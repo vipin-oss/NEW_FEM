@@ -49,15 +49,16 @@ MANIFEST = os.path.join(RESULTS, "run_all_manifest.json")
 # run skips only those regenerations and still executes every one of the 70
 # checks, the text audits and the second-pass table checks against the current
 # manuscript.  Text-audit and figure-presentation scripts are deliberately
-# excluded from the digest: they are re-run in full on every incremental pass
-# or on the dedicated figure pass, and do not change the numeric archive.
+# excluded from the digest: they are static manuscript audit/presentation
+# helpers and do not change numerical JSON. Figure generation IS numerical:
+# run_paper_figures.py generates ring-down response and paper_figures_data.json
+# and therefore MUST be included in the source digest.
 NON_NUMERIC_SCRIPTS = {
     "audit_abstract_claims.py", "length_budget.py", "list_unverified.py",
     "check_paper_numbers.py", "check_paper_structure.py",
     "check_float_order.py", "check_final_consistency.py",
     "check_coupling_provenance.py", "make_paper_table.py",
     "make_appendix_tables.py", "make_coupling_table.py",
-    "run_paper_figures.py",
 }
 FULL_SCRIPTS = ["run_verification.py", "run_flexo_check.py",
                 "run_material_check.py", "run_memory_variants.py", "run_dt_study.py",
@@ -335,9 +336,9 @@ def main():
     chk("D1", "closed form e'C^-1 e/kappa vs FEM coupling (free strip)",
         f"{Cf['k2_2d_closed']:.5f} vs {Cf['fem']['FEM free 48x4']:.5f}",
         "rel. diff < 1e-3", cf_err < 1e-3)
-    wid = max(abs(w["k2_over_1p"] - w["recorded"]) for w in Cf["wrong_series"])
-    chk("D2", "the superseded series is exactly k^2/(1+k^2) of the new one",
-        f"{wid:.1e}", "< 1e-5 (same formula applied twice)", wid < 1e-5)
+    wid = max(abs(w["k2_over_1p"] - w["recorded"]) for w in Cf["legacy_wrong_series"])
+    chk("D2", "the frozen LEGACY series equals legacy k^2/(1+k^2), not the corrected model",
+        f"{wid:.1e}", "< 1e-5 (within one frozen material model)", wid < 1e-5)
 
     # ---- independent routes (nothing here reuses the assembly path) ----
     e1 = {c["case"]: c for c in Ic["F1_frequencies"]["cases"]}
@@ -382,9 +383,8 @@ def main():
         "< 1e-5 (electrically silent bending mode)", gmax < 1e-5)
     chk("G2", "flexo growth with and without the piezoelectric terms",
         f"{Gc['growth_both']:.1f} vs {Gc['growth_flexo_only']:.1f}",
-        "reported 24 (2 s.f.) uses the real crystal; 31 with e = 0, both "
-        "graded at 1 %",
-        abs(Gc["growth_both"] / 23.9 - 1) < 0.01
+        "rounded real-crystal factor 24 within 1.5 %, and flexo-only factor 31.1 within 1 %",
+        abs(Gc["growth_both"] / 24.0 - 1) < 0.015
         and abs(Gc["growth_flexo_only"] / 31.1 - 1) < 0.01)
     cfg = {r["configuration"]: r for r in Ic["F5_configurations"]["rows"]}
     yb = cfg["poling y, electrodes top/bottom"]
@@ -458,7 +458,7 @@ def main():
         os.path.exists(os.path.join(RESULTS, "environment.json")))
 
     chk("U1", "h = 1 um flexo k^2 over four equivalent solver paths and "
-        f"{Sn['n_stacks']} numeric stacks",
+        f"{Sn['n_stacks']} verified numeric stack(s)",
         f"spread {Sn['spread_h1_pct']:.3f} %, k^2 {Sn['k2_h1_min']:.4e}"
         f"..{Sn['k2_h1_max']:.4e}", "< 0.5 % (quoted to 2 s.f.)",
         Sn["spread_h1_pct"] < 0.5)
@@ -499,8 +499,8 @@ def main():
     ak2 = [r["k2"] for r in At["rows"]]
     chk("A1", "application table: extensional plane stress is the strongest "
         "coupling of the four", f"{max(ak2):.4f}",
-        "= 0.4580, largest, > 0.4",
-        abs(max(ak2) - 0.45797) < 1e-4 and ak2.index(max(ak2)) == 3
+        "= 0.4781 (corrected constitutive), largest, > 0.4",
+        abs(max(ak2) - 0.47808) < 1e-4 and ak2.index(max(ak2)) == 3
         and max(ak2) > 0.4)
 
     if D is not None:

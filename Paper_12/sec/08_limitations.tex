@@ -8,8 +8,7 @@
 \label{sec:calib_a_mu}
 
 The window size $a$, fractional order $\alpha$, relaxation time $\tau$ and
-flexoelectric coefficient $\mu$ require identification rather than a
-constitutive-table lookup. Size-dependent compliance or frequency identifies
+flexoelectric coefficient $\mu$ are prescribed parameters that require independent calibration. Size-dependent compliance or frequency identifies
 $M_{22}$; directional measurements identify $M_{11}/M_{22}$ and the window
 orientation, as in characteristic-length identification~\cite{fem1}.
 Ultrasonic dispersion or a clamped-edge strain profile provides an independent
@@ -18,67 +17,128 @@ the window anisotropy and test whether its second moment is an adequate
 description. These are possible calibration routes, not measurements performed
 in this study.
 
-The flexoelectric coefficient follows from voltage or charge at a measured
-curvature $\kappa_c$; for the bending configuration of
-Fig.~\ref{fig:geometry}(a),
+In principle, the flexoelectric coefficient may be estimated from voltage
+or charge measurements under specified kinematic and electrical conditions at a known curvature $\kappa_c$; in the ideal one-dimensional, piezoelectric-free open-circuit limit,
+$V=\mu[\operatorname{tr}\varepsilon(h)-\operatorname{tr}\varepsilon(0)]/\kappa^p_{yy}$.
+For prescribed constant curvature with $\varepsilon_{yy}=0$ and
+$\partial_y\varepsilon_{xx}=\kappa_c$, this becomes
 \begin{equation}
-  V = \frac{\mu\,\kappa_c\,h}{\kappa_{33}},
+  V = \frac{\mu\,\kappa_c\,h}{\kappa^{p}_{yy}},
   \label{eq:muV}
 \end{equation}
-where $\kappa_{33}=4.9583\times10^{-10}$\,\si{\farad\per\meter}.
-Equation~\eqref{eq:muV} identifies the magnitude; the sign depends on crystal
-symmetry. The assumed $\mu=10^{-6}$\,\si{\coulomb\per\meter} sets absolute
-bending couplings, which scale as $\mu^2$.
+where $\kappa^{p}_{yy}=4.9804\times10^{-10}$\,\si{\farad\per\meter}.
+Equation~\eqref{eq:muV} is a restricted scaling approximation; the voltage sign
+also depends on electrode orientation. Transverse strain relaxation,
+piezoelectricity and nonuniform curvature require the actual sensitivity
+model; in the condensed FEM use $V_{oc}=d^{\mathsf T}u/\beta$.
+It is not an experimental identification performed here. The assumed $\mu=10^{-6}$\,\si{\coulomb\per\meter} sets absolute
+bending couplings; the isolated weak-coupling contribution scales as $\mu^2$.
+Published BaTiO$_3$ measurements give $\mu_{12}\approx10^{-5}$\,\si{\coulomb\per\meter}
+in unpoled ceramic bending~\cite{MaCross2006} and
+$\mu_{11}\approx1.733\times10^{-5}$\,\si{\coulomb\per\meter}
+under unpolarized bulk shock loading~\cite{HuDengLiangShen2017}.
+Neither measures the single coefficient in Eq.~\eqref{eq:muexplicit} under
+the chosen poled, reduced two-dimensional constitutive assumptions; they
+constrain the interpretation of absolute predictions rather than fixing $\mu$.
 
 \subsection{Fractional order and relaxation time}
 \label{sec:calib_alpha_tau}
 
-Mechanical dynamic-modulus or ring-down measurements are required to identify
-$(\alpha,\tau)$ for the chosen mechanical memory placement. The scalar
-Kelvin--Voigt loss tangent is
+Dynamic mechanical spectroscopy or multi-frequency mechanical resonance
+measurements could identify $(\alpha,\tau)$ by fitting the effective
+stiffness modulus and loss tangent of \eqref{eq:kvfreq},
 \begin{equation}
   \tan\delta=\frac{(\omega\tau)^{\alpha}\sin(\pi\alpha/2)}
      {1+(\omega\tau)^{\alpha}\cos(\pi\alpha/2)}.
   \label{eq:tandelta}
 \end{equation}
-Both are monotone in $\omega\tau$, so a single loss peak does not identify
-$\tau$. Ring-down measurements provide a complementary route; for proportional memory on $K_{oc}$ and $(\omega\tau)^\alpha\ll1$,
+For this fractional stiffness-memory law, the loss tangent alone at a
+single frequency generally does not identify both $\alpha$ and $\tau$.
+Ring-down measurements provide a complementary route. The commonly used
+leading-order approximation requires
+$r=(\omega\tau)^\alpha\ll1$ in addition to weak observable damping:
 \begin{equation}
-  \zeta=\frac{(\omega\tau)^{\alpha}\sin(\pi\alpha/2)}{2}
-  \quad\Longrightarrow\quad
-  \delta\approx\pi(\omega\tau)^{\alpha}\sin(\pi\alpha/2).
+  \zeta\simeq\frac{r\sin(\pi\alpha/2)}{2},\qquad
+  \delta\simeq\pi r\sin(\pi\alpha/2),\qquad
+  r=(\omega\tau)^\alpha\ll1.
   \label{eq:zetasmall}
 \end{equation}
+If the storage correction is retained, half of the complex-modulus loss
+tangent is instead
+$\frac{r\sin(\pi\alpha/2)}{2[1+r\cos(\pi\alpha/2)]}$.
+Neither quantity equals the damping ratio of a general fractional pole
+outside the appropriate asymptotic regime.
 At $\alpha=1$, \eqref{eq:zetasmall} gives $\delta=\pi\omega\tau$, agreeing
 with \eqref{eq:zeta} to the $1.2\,\%$ small-loss approximation. One decrement
 constrains only a product; identifying both parameters requires multiple
-frequencies or an independently known order. The fitted law represents a
-broadened single-power-law response, not two separated loss mechanisms.
+frequencies or an independently known order. The adopted power-law model does not distinguish two independently
+calibrated dissipation mechanisms.
 
 \subsection{Validity window}
 \label{sec:limit_window}
 
-The geometry and parameter ranges are those of Table~\ref{tab:params} and the
-individual sweeps. The damping discussion emphasizes $\omega\tau\le1$, but this is an
-assumed range rather than an experimentally fitted frequency band.
-The second-moment truncation uses $a/L\le0.2$ as an assumed operating range,
+The stated geometry and parameter ranges apply to the numerical sweeps. The damping interpretation is restricted to
+$\omega\tau\le1$; outside that band the map extrapolates the fitted law.
+The second-moment model uses $a/L\le0.2$ as an assumed operating range,
 not a validated truncation threshold: no experiment or exact averaging
-comparison here establishes where the approximation fails. The coupled
-denominator of \eqref{eq:kstatic} is retained because $k^2=0.5581$ is not
+comparison here establishes where the approximation fails. The $8\times8$
+design map uses $a_2/L=0.00125$--$0.16$ and $a_2/h=0.025$--$32$; in 39 of
+its 64 configurations even a window centered at mid-thickness would extend
+beyond at least one free face ($2a_2>h$). The other 25 points satisfy only
+a necessary mid-plane window-fit condition, not the boundary-aware support
+condition at every point of the strip. Thus the second-moment tensor is
+an independently prescribed local gradient coefficient in those cases,
+not the literal moment of an averaging window entirely inside the specimen.
+These extrapolations are numerical sensitivity analyses, not validated
+physical design prescriptions. The coupled
+denominator of \eqref{eq:kstatic} is retained because $k^2=0.5727$ is not
 small; the uncoupled measure is used only for the constitutive comparison.
 
 \subsection{Modeling limits}
 \label{sec:limitations}
 
+The Zgonik single-crystal tensor values are fitted room-temperature
+measurements, with reported uncertainty (for example
+$e_{31}=(-0.7\pm0.6)$\,\si{\coulomb\per\square\meter} and
+$\kappa_{11}/\kappa_0=2200\pm200$)~\cite{Zgonik1994}; uncertainty in
+those inputs has not been propagated through the present results.
 The results use two-dimensional plane stress; plane strain gives $0.5132$
 for the constitutive coupling, and neither reduction is a three-dimensional
-validation. Density rescales absolute frequencies, while $\mu^2$ rescales
-absolute flexoelectric couplings. Memory placement must accompany calibration:
-$K_{\rm eff}$ and $K_{uu}$ give a damping-ratio ratio of $0.450$ at $\alpha=1$
-for the device of Sec.~\ref{sec:memorystudy}. They are distinct condensed
-models, not interchangeable numerical implementations. Thin-strip couplings
-are resolved to two significant digits because they subtract nearly equal
-eigenvalues. Verification establishes that the implementation solves the
-stated model; material-specific prediction requires measured inputs.
+validation. Density changes the inertial frequency scale, while the flexoelectric
+contribution depends on the assumed $\mu$ and need not follow a pure
+$\mu^2$ law in the presence of piezoelectric cross terms. Memory placement must accompany calibration:
+$K_{\rm eff}$ and $K_{uu}$ give a damping-ratio ratio of $0.431$ at $\alpha=1$
+for the investigated device. They are distinct condensed
+models, not interchangeable numerical implementations. Thin-strip couplings are reported to two significant digits because they
+represent small, conditioning-sensitive spectral shifts. At $h=\SI{1}{\micro\meter}$,
+coarse-mesh eigenvalue calculations exhibit relative first-mode shifts up
+to $7\times10^{-4}$ across direct and shift--invert solvers on
+$12\times2$--$24\times2$ meshes. An inverse generalized-pencil
+formulation reduces the tested eigenpair residuals to about $10^{-5}$.
+An additional independent cross-solver exercise on 1-\si{\micro\meter}
+meshes found that directly solving the stiffness--mass generalized pencil
+and solving an inverse pencil can disagree for the lowest eigenfrequency
+when the scaled stiffness is ill-conditioned, as recorded in the
+archived independent cross-solver diagnostics.
+A fresh $y$-poled, $h=\SI{1}{\micro\meter}$ refinement exercise using
+$24\times2$, $48\times4$, $72\times6$ and $96\times8$ meshes likewise
+showed that refinement alone does not cure numerical conditioning.
+The first short-circuit frequency decreased from approximately $34.71$ to
+$34.54$ kHz, but the scaled first-mode residual increased from about
+$5.4\times10^{-6}$ to $1.8\times10^{-3}$. The coupling inferred by
+subtracting independently computed open- and short-circuit eigenvalues
+was not stable enough to replace the archived secular-root values.
+These diagnostics are not corrected reference solutions.
+The observed sensitivity precludes a claim of independently certified
+sub-per-mille thin-strip frequency accuracy. A properly conditioned
+higher-precision or independently formulated finite-element benchmark is
+still required. The three-dimensional mixed flexoelectric theories of
+Mao et al.~\cite{MaoPurohitAravas2016} and Serrao and
+Kozinov~\cite{SerraoKozinov2024} retain the full tensor structure and
+higher-order edge conditions; they are methodological references, not a
+verification that condensing the local $C,e,\kappa$ blocks reproduces those
+three-dimensional flexoelectric boundary-value problems. Such a benchmark
+and material-specific measurements are required before treating the present
+two-dimensional predictions as quantitatively validated.
 
 \FloatBarrier

@@ -49,11 +49,10 @@ def main():
     u_bench_um = None
     for c in (V.get("checks", []) if isinstance(V, dict) else []):
         pass
-    with open(os.path.join(RES, "summary.json")) as fh:
-        S = json.load(fh)
-    for c in S["checks"]:
-        if c["id"] == "V2":
-            u_bench_um = float(str(c["value"]).split()[0])
+    # Read fresh V2, not a summary generated later by run_all.
+    l020 = next(row for row in V["fem1"]["length"]
+                if abs(row["l_over_L"] - 0.20) < 1e-9)
+    u_bench_um = float(f"{l020['u'] * 1e6:.4f}")
     out = {"assembly_line_present": bool(has_half),
            "assembly_factor": 0.5 if has_half else None,
            "M11_ellipse_a3um": M11_ellipse,

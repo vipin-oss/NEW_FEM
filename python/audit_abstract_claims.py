@@ -31,63 +31,7 @@ RES = os.path.join(ROOT, "results")
 TEX = os.path.join(ROOT, "Paper_12", "main.tex")
 
 # (literal in the abstract, what it is, verdict, route / where it is checked)
-CLAIMS = [
-    ("200", "plate length, \\SI{200}{\\micro\\meter}",
-     "n/a", "an input of the model, not a measured quantity"),
-    ("10", "plate thickness, \\SI{10}{\\micro\\meter}",
-     "n/a", "an input of the model"),
-    ("1", "$\\alpha=1$ and the one L1 history",
-     "n/a", "the classical limit, chosen for the comparison"),
-    ("0.5581", "piezoelectric extensional $k^2$ of the 200x10 plate",
-     "hua", "D1/C1: the closed form built from $e$, $C$, $\\kappa$ alone "
-     "gives 0.56079, and the free-plate FEM matches it to $10^{-10}$"),
-    ("0.5608", "the closed-form extensional $k^2$ from $e$, $C$, $\\kappa$",
-     "hua", "D1: the plane-stress closed form itself, 0.56079, which is the "
-     "number this one rounds"),
-    ("0.5", "distance between 0.5581 and the closed form 0.5608",
-     "hua", "D1: the same two numbers, 0.56079 against 0.55814"),
-    ("24", "growth of the flexoelectric $k^2$ over the same range, to the two "
-     "significant digits the platform supports",
-     "nahi hua", "the same FEM sweep (T3); the flexoelectric operator itself "
-     "is verified against the uniform-curvature limit (I6, I7), the growth "
-     "factor is not"),
-    ("15", "lower end of the effect of window anisotropy and orientation on "
-     "the coupling",
-     "nahi hua", "FEM rotation study (criterion T5 for the mesh/rotation "
-     "trend); no independent route"),
-    ("19", "upper end of the same range",
-     "nahi hua", "the same rotation study (T5); the spread is a property of "
-     "the second-moment tensor, which is verified (I8), the spread is not"),
-    ("0.450", "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
-     "nahi hua", "a property of the two condensation choices, read off the "
-     "FEM matrices (S1b); the pole solver that converts the pole into "
-     "$\\zeta$ is itself checked (I4)"),
-    ("0.09", "thickness independence of the mode-free extensional coupling",
-     "nahi hua", "T1: the same FEM sweep; the closed form is thickness "
-     "independent but the 0.09 % residual is a solver property"),
-    ("3.6", "smallest flexoelectric coupling on the design map",
-     "nahi hua", "design_map.json range k2_flexo_min, quoted to two "
-     "significant digits (N1)"),
-    ("1.0", "largest flexoelectric coupling on the design map",
-     "nahi hua", "design_map.json largest k2_flexo, quoted to two "
-     "significant digits (N1)"),
-    ("6.5", "smallest flexoelectric/piezoelectric ratio on the design map",
-     "nahi hua", "design_map.json range ratio_min, quoted to two "
-     "significant digits (N1)"),
-    ("1.9", "largest flexoelectric/piezoelectric ratio on the design map",
-     "nahi hua", "design_map.json range ratio_max, quoted to two "
-     "significant digits (N1)"),
-    ("0.1", "the 0.1 % contour on the design map",
-     "nahi hua", "design_map.json 0.1 % contour; a threshold of the solved "
-     "map (N1)"),
-    ("5.5", "thickness of the 0.1 % crossing at a2 = 1 micrometer",
-     "nahi hua", "design_map.json threshold h_at_0p1pct_a2_1um, quoted to "
-     "two significant digits (N1)"),
-    ("2", "subscript index in $a_2$",
-     "n/a", "a symbol index, not a measured quantity"),
-    ("0.2", "assumed operating range $a/L\\le0.2$",
-     "n/a", "an assumed modeling range, not a measured quantity"),
-]
+CLAIMS = [('1', 'Caputo classical limit and L1 order', 'n/a', 'input/order selection; verified classical limit in test V5a'), ('0.5727', 'corrected plane-stress extensional factor', 'hua', 'independent material closed form 0.57523 and free-FEM 0.57523; clamped 0.57268 via demo.json'), ('0.5752', 'corrected plane-stress closed form', 'hua', 'k2_closed_form.json, constitutive Schur and FEM free 48x4; C1/D1'), ('14', 'lower endpoint of window orientation coupling change (%)', 'nahi hua', 'run_paper_figures.py polar sweep; FEM result, not independent measurement'), ('17', 'upper endpoint of window orientation coupling change (%)', 'nahi hua', 'run_paper_figures.py polar sweep; FEM result, not independent measurement'), ('10', 'thickness (micrometre)', 'n/a', 'prescribed input'), ('24', 'fold flexo growth on thinning', 'nahi hua', 'demo.json flexo_thickness series, T3; closed curvature coefficient separately checked'), ('0.08', 'upper bound percent extensional factor change', 'nahi hua', 'demo.json thin vs thick; solver-refinement bound'), ('0.065', 'alpha 1 first-period decrement', 'nahi hua', 'paper_figures_data.json notes.P6 zeta_1.0'), ('0.105', 'alpha 0.6 first-period decrement', 'nahi hua', 'paper_figures_data.json notes.P6 zeta_0.6'), ('0.6', 'chosen fractional order', 'n/a', 'input'), ('0.085', 'alpha 0.4 first-period decrement', 'nahi hua', 'paper_figures_data.json notes.P6 zeta_0.4'), ('0.4', 'chosen fractional order', 'n/a', 'input'), ('3.6', 'lowest design map coupling in 10^-6 units', 'nahi hua', 'design_map.json range.k2_flexo_min'), ('1.0', 'highest design map coupling in 10^-2 units', 'nahi hua', 'design_map.json range.k2_flexo_max')]
 
 
 def abstract_text():

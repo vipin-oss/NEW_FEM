@@ -1,71 +1,59 @@
 {
- "n": 35,
+ "n": 33,
  "rows": [
   {
+   "literal": "14",
+   "what": "lower endpoint of window orientation coupling change (%)",
+   "source": "abstract_audit.json",
+   "why": "run_paper_figures.py polar sweep; FEM result, not independent measurement"
+  },
+  {
+   "literal": "17",
+   "what": "upper endpoint of window orientation coupling change (%)",
+   "source": "abstract_audit.json",
+   "why": "run_paper_figures.py polar sweep; FEM result, not independent measurement"
+  },
+  {
    "literal": "24",
-   "what": "growth of the flexoelectric $k^2$ over the same range, to the two significant digits the platform supports",
+   "what": "fold flexo growth on thinning",
    "source": "abstract_audit.json",
-   "why": "the same FEM sweep (T3); the flexoelectric operator itself is verified against the uniform-curvature limit (I6, I7), the growth factor is not"
+   "why": "demo.json flexo_thickness series, T3; closed curvature coefficient separately checked"
   },
   {
-   "literal": "15",
-   "what": "lower end of the effect of window anisotropy and orientation on the coupling",
+   "literal": "0.08",
+   "what": "upper bound percent extensional factor change",
    "source": "abstract_audit.json",
-   "why": "FEM rotation study (criterion T5 for the mesh/rotation trend); no independent route"
+   "why": "demo.json thin vs thick; solver-refinement bound"
   },
   {
-   "literal": "19",
-   "what": "upper end of the same range",
+   "literal": "0.065",
+   "what": "alpha 1 first-period decrement",
    "source": "abstract_audit.json",
-   "why": "the same rotation study (T5); the spread is a property of the second-moment tensor, which is verified (I8), the spread is not"
+   "why": "paper_figures_data.json notes.P6 zeta_1.0"
   },
   {
-   "literal": "0.450",
-   "what": "$\\zeta$ ratio, memory on $K_{uu}$ over $K_{\\rm eff}$",
+   "literal": "0.105",
+   "what": "alpha 0.6 first-period decrement",
    "source": "abstract_audit.json",
-   "why": "a property of the two condensation choices, read off the FEM matrices (S1b); the pole solver that converts the pole into $\\zeta$ is itself checked (I4)"
+   "why": "paper_figures_data.json notes.P6 zeta_0.6"
   },
   {
-   "literal": "0.09",
-   "what": "thickness independence of the mode-free extensional coupling",
+   "literal": "0.085",
+   "what": "alpha 0.4 first-period decrement",
    "source": "abstract_audit.json",
-   "why": "T1: the same FEM sweep; the closed form is thickness independent but the 0.09 % residual is a solver property"
+   "why": "paper_figures_data.json notes.P6 zeta_0.4"
   },
   {
    "literal": "3.6",
-   "what": "smallest flexoelectric coupling on the design map",
+   "what": "lowest design map coupling in 10^-6 units",
    "source": "abstract_audit.json",
-   "why": "design_map.json range k2_flexo_min, quoted to two significant digits (N1)"
+   "why": "design_map.json range.k2_flexo_min"
   },
   {
    "literal": "1.0",
-   "what": "largest flexoelectric coupling on the design map",
+   "what": "highest design map coupling in 10^-2 units",
    "source": "abstract_audit.json",
-   "why": "design_map.json largest k2_flexo, quoted to two significant digits (N1)"
-  },
-  {
-   "literal": "6.5",
-   "what": "smallest flexoelectric/piezoelectric ratio on the design map",
-   "source": "abstract_audit.json",
-   "why": "design_map.json range ratio_min, quoted to two significant digits (N1)"
-  },
-  {
-   "literal": "1.9",
-   "what": "largest flexoelectric/piezoelectric ratio on the design map",
-   "source": "abstract_audit.json",
-   "why": "design_map.json range ratio_max, quoted to two significant digits (N1)"
-  },
-  {
-   "literal": "0.1",
-   "what": "the 0.1 % contour on the design map",
-   "source": "abstract_audit.json",
-   "why": "design_map.json 0.1 % contour; a threshold of the solved map (N1)"
-  },
-  {
-   "literal": "5.5",
-   "what": "thickness of the 0.1 % crossing at a2 = 1 micrometer",
-   "source": "abstract_audit.json",
-   "why": "design_map.json threshold h_at_0p1pct_a2_1um, quoted to two significant digits (N1)"
+   "why": "design_map.json range.k2_flexo_max"
   },
   {
    "literal": "6721.8",
@@ -86,19 +74,19 @@
    "why": "FEM eigen-solve plus the rank-one electrode update"
   },
   {
-   "literal": "6361.0",
+   "literal": "6323.8",
    "what": "application table, y/plane_stress, mode 4 frequency [kHz]",
    "source": "application_table.json",
    "why": "FEM eigen-solve"
   },
   {
-   "literal": "0.1141",
+   "literal": "0.1036",
    "what": "application table, y/plane_stress $k^2$",
    "source": "application_table.json",
    "why": "FEM eigen-solve; no closed form for this mode and this clamping"
   },
   {
-   "literal": "2.41",
+   "literal": "2.22",
    "what": "application table, y/plane_stress open-circuit voltage [V]",
    "source": "application_table.json",
    "why": "FEM eigen-solve plus the rank-one electrode update"
@@ -122,19 +110,19 @@
    "why": "FEM eigen-solve plus the rank-one electrode update"
   },
   {
-   "literal": "6725.8",
+   "literal": "6853.6",
    "what": "application table, x/plane_stress, mode 5 frequency [kHz]",
    "source": "application_table.json",
    "why": "FEM eigen-solve"
   },
   {
-   "literal": "0.4580",
+   "literal": "0.4781",
    "what": "application table, x/plane_stress $k^2$",
    "source": "application_table.json",
    "why": "FEM eigen-solve; no closed form for this mode and this clamping"
   },
   {
-   "literal": "138.99",
+   "literal": "143.71",
    "what": "application table, x/plane_stress open-circuit voltage [V]",
    "source": "application_table.json",
    "why": "FEM eigen-solve plus the rank-one electrode update"
@@ -152,7 +140,7 @@
    "why": "FEM eigen-solve; exact for no geometry of this kind"
   },
   {
-   "literal": "210.4",
+   "literal": "209.0",
    "what": "$f_1$ at $h=\\SI{10}{\\micro\\meter}$ [kHz]",
    "source": "demo.json flexo_thickness[0]",
    "why": "FEM eigen-solve; the Euler--Bernoulli value is the one quoted as the comparison, not as this number"
@@ -182,7 +170,7 @@
    "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
   },
   {
-   "literal": "0.06746",
+   "literal": "0.06465",
    "what": "$\\zeta(K_{uu})$ at $\\alpha=1$",
    "source": "memory_variants.json S1 zeta_eff",
    "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
@@ -194,19 +182,19 @@
    "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
   },
   {
-   "literal": "0.0831",
+   "literal": "0.0796",
    "what": "first-period $\\zeta(K_{uu})$ at $\\alpha=0.7$",
    "source": "memory_variants.json S1 zeta_first",
    "why": "a logarithmic decrement of an FEM ring-down; the closed-form $\\omega\\tau/2$ is the $\\alpha=1$, $K_{\\rm eff}$ limit only"
   },
   {
-   "literal": "139.07",
+   "literal": "143.78",
    "what": "open-circuit voltage of the ring-down initial condition [V]",
    "source": "memory_variants.json S1",
    "why": "FEM mode shape times the rank-one electrode update"
   },
   {
-   "literal": "2.8",
+   "literal": "0.3",
    "what": "2-D plane-stress against 3-D free-bar closed form [%]",
    "source": "coupling_check.json rel_gap_2d_vs_3d",
    "why": "the gap itself is a comparison, but its *attribution* to the dropped $e_{31}\\varepsilon_{zz}$ is not separable here"

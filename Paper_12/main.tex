@@ -56,47 +56,59 @@
 
 \begin{frontmatter}
 
-\title{Fractional-Memory Piezoelectric--Flexoelectric Strain-Gradient Solids
-with a Rectangular Nonlocal Window: a $C^1$ Finite Element Framework}
+\title{Fractional-Memory Piezoelectric--Flexoelectric Strain-Gradient Strips
+with Rectangular-Window Second Moments: a $C^1$ Finite Element Framework}
 
-%% TODO  author, affiliation and corresponding e-mail are not supplied in the
-%% delivered material; enter them here before submission.
-\author{
-Author name to be supplied$^{1,*}$
-\\
-\\
-${}^{1}$Affiliation to be supplied\\
-Email: $^{1}$address@institution\\
-${}^{*}$Corresponding author
-}
+%% Author details transcribed from FEM_1_R2_FINAL (2).pdf, page 1.
+%% The author team must confirm authorship and affiliations for THIS study.
+\author[inst1]{Vipin Gupta}
+\ead{vipin@gurugramuniversity.ac.in}
+\author[inst2]{Sunita Kumawat}
+\ead{sunita14kumawat@gmail.com}
+\author[inst3]{Arun Kumar Yadav}
+\ead{arunyadav0307@gmail.com}
+\author[inst4]{Taizo Maruyama}
+\ead{maruyama.t.45ef@m.isct.ac.jp}
+\author[inst5]{Bandar Almohsen\corref{cor1}}
+\ead{balmohsen@ksu.edu.sa}
+\cortext[cor1]{Corresponding author}
+\affiliation[inst1]{organization={Department of Mathematics, Gurugram University},
+  city={Gurugram}, country={India}}
+\affiliation[inst2]{organization={Department of Mathematics, Amrita Vishwa Vidyapeetham, Bengaluru Campus},
+  city={Bengaluru-560035}, country={India}}
+\affiliation[inst3]{organization={School of Basic and Applied Sciences, K.R. Mangalam University},
+  city={Gurugram}, country={India}}
+\affiliation[inst4]{organization={Department of Civil and Environmental Engineering, Institute of Science Tokyo},
+  addressline={2-12-1-W8-22, Ookayama}, city={Meguro-ku}, postcode={Tokyo 152-8550}, country={Japan}}
+\affiliation[inst5]{organization={Department of Mathematics, College of Science, King Saud University},
+  addressline={P.O. Box 2455}, city={Riyadh 11451}, country={Saudi Arabia}}
 
 \begin{abstract}
-A $C^1$ Bogner--Fox--Schmit finite element formulation combines
-piezoelectricity, flexoelectricity and fractional dielectric memory in a
-$\mathrm{BaTiO_3}$ strip. A rectangular averaging window supplies the
-gradient stiffness through its second moment, and a Caputo Kelvin--Voigt law
-is integrated by the L1 scheme on reduced modal coordinates. Verification uses
-closed-form couplings, beam frequencies, gradient identities and the classical
-Kelvin--Voigt limit.
-The main findings reveal that the extensional coupling factor is
-$k^2=0.5581$, within $0.5\,\%$ of the closed form $0.5608$; that rotating an
-anisotropic window changes the coupling by $15$--$19\,\%$ while windows of
-equal second moment give identical solutions; and that reducing the thickness
-of a \SI{200}{\micro\meter}-long strip from \SI{10}{\micro\meter} to
-\SI{1}{\micro\meter} multiplies the flexoelectric bending coupling by $24$
-while leaving the piezoelectric coupling unchanged to $0.09\,\%$. At
-$\alpha=1$ memory on the short-circuit matrix damps $0.450$ times as much as
-memory on the condensed one, and the fractional order changes the shape of a
-ring-down, not only its decay rate. On a design map of thickness and window
-half-thickness the flexoelectric coupling spans $3.6\times10^{-6}$ to
-$1.0\times10^{-2}$ and its ratio to the piezoelectric coupling spans
-$6.5\times10^{-6}$ to $1.9\times10^{-2}$; the ratio reaches $0.1\,\%$ only
-below $h=5.5\,\si{\micro\meter}$ for $a_2=\SI{1}{\micro\meter}$. The assumed
-operating range is $a/L\le0.2$. Parameters not supplied by a constitutive
-table are stated as assumed inputs. The results support electrode selection,
-window and thickness studies, and interpretation of measured ring-downs while
-distinguishing geometric size effects from material coupling. Predictions remain
-conditional on the stated parameters and memory placement.
+This study develops a $C^1$ Bogner--Fox--Schmit finite element formulation
+for the coupled piezoelectric--flexoelectric response of a strain-gradient
+strip with fractional mechanical stiffness memory. The coefficients of an
+adopted positive local gradient energy are parametrized by the second-moment
+tensor of a prescribed rectangular window. A Caputo Kelvin--Voigt law is
+integrated by the L1 method in a reduced modal representation. The
+implementation is assessed through closed-form electromechanical couplings,
+mesh-refinement studies and limiting-case calculations. For the assumed
+$\mathrm{BaTiO_3}$ parameters, the extensional coupling factor is
+$k^2=0.5727$, compared with the closed-form value $0.5752$. Rotation of an
+anisotropic window changes the computed coupling by approximately $14$--$17\,\%$.
+When the strip thickness is reduced from \SI{10}{\micro\meter} to
+\SI{1}{\micro\meter}, the flexoelectric bending coupling increases by
+approximately a factor of $24$ in the archived mesh study, whereas the extensional piezoelectric
+coupling changes by less than $0.08\,\%$. The first-period equivalent
+decrement is $0.065$ at $\alpha=1$, reaches $0.105$ at $\alpha=0.6$,
+and is $0.085$ at $\alpha=0.4$;
+the damping also depends on which condensed stiffness operator carries the
+memory. The computed design map spans flexoelectric coupling factors from
+$3.6\times10^{-6}$ to $1.0\times10^{-2}$. Since the prescribed window
+extends beyond the strip in part of the parameter range, these results
+represent sensitivity of the adopted local gradient model rather than
+material-calibrated device predictions. The calculations quantify the separate effects of window geometry,
+electrical boundary conditions and fractional mechanical memory within
+the prescribed model.
 \end{abstract}
 
 \begin{keyword}
@@ -116,36 +128,24 @@ averaging window; fractional viscoelasticity; piezoelectric open-circuit sensing
 \input{sec/08_limitations}
 \input{sec/09_conclusions}
 
-\section*{CRediT authorship contribution statement}
-\textbf{Author one (name to be supplied):} Conceptualization, Methodology,
-Software, Validation, Formal analysis, Investigation, Writing -- original
-draft. \textbf{Author two (name to be supplied):} Conceptualization, Software,
-Writing -- review and editing, Supervision. \textbf{Author three (name to be
-supplied):} Formal analysis, Validation, Writing -- review and editing.
-\textbf{Author four (name to be supplied):} Methodology, Resources, Funding
-acquisition. All authors have read and approved the final manuscript.
+%% The following three statements are exact transcriptions of
+%% FEM_1_R2_FINAL (2).pdf, p. 37. Their applicability to NEW_FEM
+%% MUST be confirmed by ALL named authors and the grant holder.
+\section*{Data availability statement}
+The authors confirm that the data supporting the findings of this study are available within the article.
 
-\section*{Declaration of competing interest}
-The authors declare that they have no known competing financial interests or
-personal relationships that could have appeared to influence the work reported
-in this paper.
+\section*{Conflict of Interest Disclosure Statement}
+No potential conflict of interest was reported by the authors.
 
-\section*{Data availability}
-The scripts and archived JSON data accompanying the source archive contain the
-numerical values behind the figures and tables. The material constants,
-geometry and discretization are stated in Table~\ref{tab:params} and
-Sec.~\ref{sec:material}; the benchmark and convergence results are collected
-in \ref{app:verification}.
-
-%% TODO  sanction number to be confirmed against the sanction letter before
-%% submission.
 \section*{Acknowledgements}
-This research was supported by the Haryana State Research Fund (HSRF) under
-sanction 14/66-2026 SPD/HSHEC/HSRF-(38), dated 13 July 2026.
+This research was supported by the Deanship of Scientific Research at King Saud University under ongoing research
+funding program (ORF-2026-158), King Saud University, Riyadh, Saudi Arabia.
 
 \appendix
 \renewcommand{\thetable}{\Alph{section}.\arabic{table}}
 \renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
+\renewcommand{\theHtable}{app.\Alph{section}.\arabic{table}}
+\renewcommand{\theHfigure}{app.\Alph{section}.\arabic{figure}}
 
 \input{sec/91_appendixA}
 \input{sec/92_appendixB}

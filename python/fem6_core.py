@@ -4,8 +4,8 @@ FEM-6 core library
 C1 Bogner-Fox-Schmit (BFS) plane-strain finite element framework for
 piezoelectric solids with
 
-  * an anisotropic strain-gradient (nonlocal) energy derived from the second
-    moment of a rectangular (2-D) / cuboid (3-D) averaging domain, and
+  * a phenomenological anisotropic strain-gradient energy parameterized by the
+    second moment of a rectangular (2-D) / cuboid (3-D) averaging domain, and
   * fractional Kelvin-Voigt memory of Caputo order alpha on the condensed
     electromechanical stiffness.
 
@@ -28,9 +28,10 @@ The strain-gradient (double-stress) stiffness assembled here is
     K_g = (1/2) * int  M_mn  B_,m^T C B_,n  dOmega ,
 
 so that the energy is  (1/4) M_mn (C eps)_,m . (eps)_,n  and the double stress
-is  q = (1/2) M_mn (C eps)_,n .  The factor 1/2 is the Taylor factor of the
-uniform-kernel average and is *dimension independent*: only the second-moment
-tensor M changes with the shape of the averaging domain.
+is  q = (1/2) M_mn (C eps)_,n .  The factor 1/2 is the variational derivative of the ADOPTED energy
+(1/4) M_mn (C eps)_,m . (eps)_,n. A Taylor expansion of a spatial
+average does NOT, on its own, derive this positive energy or its prefactor.
+Only the kernel second moments are exact geometric properties of the window.
 
     ellipsoid (3-D, semi-axes l)   M = diag(l_x^2/5, l_y^2/5, l_z^2/5)
     rectangle (2-D, half-widths a) M = diag(a_x^2/3, a_y^2/3)
@@ -230,11 +231,11 @@ def _e_to_tensor(e):
     """Voigt e (engineering shear strain) -> third-order tensor.
 
     The Voigt shear entries multiply the engineering shear strain
-    gamma = 2 eps, so the tensor components carry a factor 1/2.
+    gamma = 2 eps; symmetric tensor contraction already includes both shear slots.
     """
     T = np.zeros((3, 3, 3))
     for A, (j, k) in enumerate(_VOIGT_PAIRS):
-        f = 0.5 if A >= 3 else 1.0
+        f = 1.0
         T[:, j, k] = f * e[:, A]
         T[:, k, j] = f * e[:, A]
     return T
@@ -250,8 +251,8 @@ def _tensor_to_2d(C3, e3, k3, Q=None):
     C = np.array([[C4[0, 0, 0, 0], C4[0, 0, 1, 1], C4[0, 0, 0, 1]],
                   [C4[1, 1, 0, 0], C4[1, 1, 1, 1], C4[1, 1, 0, 1]],
                   [C4[0, 1, 0, 0], C4[0, 1, 1, 1], C4[0, 1, 0, 1]]])
-    e = np.array([[e3[0, 0, 0], e3[0, 1, 1], 2 * e3[0, 0, 1]],
-                  [e3[1, 0, 0], e3[1, 1, 1], 2 * e3[1, 0, 1]]])
+    e = np.array([[e3[0, 0, 0], e3[0, 1, 1], e3[0, 0, 1]],
+                  [e3[1, 0, 0], e3[1, 1, 1], e3[1, 0, 1]]])
     kap = np.array([[k3[0, 0], k3[0, 1]], [k3[1, 0], k3[1, 1]]])
     return C, e, kap
 
@@ -261,12 +262,15 @@ def batio3_3d():
     C11, C12, C13, C33, C44 = 2.22e11, 1.08e11, 1.11e11, 1.51e11, 6.10e10
     e15, e31, e33 = 34.2, -0.7, 6.7
     k11, k33 = 1.9479e-8, 4.9583e-10
+    # The basal-plane shear C66 is independent of the polar-plane C44
+    # in tetragonal 4mm BaTiO3 (Zgonik 1994 parameter set).
+    C66 = 1.34e11
     C = np.array([[C11, C12, C13, 0, 0, 0],
                   [C12, C11, C13, 0, 0, 0],
                   [C13, C13, C33, 0, 0, 0],
                   [0, 0, 0, C44, 0, 0],
                   [0, 0, 0, 0, C44, 0],
-                  [0, 0, 0, 0, 0, C44]])
+                  [0, 0, 0, 0, 0, C66]])
     e = np.array([[0, 0, 0, 0, e15, 0],
                   [0, 0, 0, e15, 0, 0],
                   [e31, e31, e33, 0, 0, 0]])
@@ -274,10 +278,10 @@ def batio3_3d():
     return _C_to_tensor(C), _e_to_tensor(e), k
 
 
-def batio3_plane_strain(poling="z", rho=6020.0):
+def batio3_plane_strain(poling="y", rho=6020.0):
     """Plane-strain BaTiO3 with the poling axis inside the model plane.
 
-    poling='z' : poling along the thickness direction (model y)
+    poling='y' : poling along the thickness direction (model y)
     poling='x' : poling along the beam axis (length-extensional mode)
     """
     C3, e3, k3 = batio3_3d()
@@ -349,6 +353,10 @@ class Mesh:
 
 
 def mesh_rect(nx: int, ny: int, Lx: float, Ly: float) -> Mesh:
+    if not isinstance(nx, (int, np.integer)) or not isinstance(ny, (int, np.integer)) or nx < 1 or ny < 1:
+        raise ValueError("nx and ny must be positive integers")
+    if not np.isfinite(Lx) or not np.isfinite(Ly) or Lx <= 0.0 or Ly <= 0.0:
+        raise ValueError("rectangle side lengths must be finite and strictly positive")
     xs = np.linspace(0.0, Lx, nx + 1)
     ys = np.linspace(0.0, Ly, ny + 1)
     X, Y = np.meshgrid(xs, ys, indexing="ij")
@@ -473,23 +481,48 @@ class Model:
 
     # -- convenience -------------------------------------------------------
     def force_tip(self, Fx=0.0, Fy=0.0, side="right", at_y=None):
-        """Consistent nodal load for a point force at an edge node."""
+        """Consistent point-load vector on a vertical edge.
+
+        For a nonnodal ``at_y`` the load is distributed to the adjacent
+        BFS nodal values and derivative DOFs by evaluating the displacement
+        shape functions at the *requested point* (not snapping to a node).
+        The default remains the middle mesh node for historical results.
+        """
         n = self.mesh
+        if side not in ("left", "right"):
+            raise ValueError("force_tip only supports left/right vertical edges")
         i = n.nx if side == "right" else 0
+        f = np.zeros(self.ndof_mech)
         if at_y is None:
             j = n.ny // 2
-        else:
-            j = int(round(at_y / n.hy))
-        node = i + (n.nx + 1) * j
-        f = np.zeros(self.ndof_mech)
-        d = self.mech_dof[node]
-        f[d[0]] += Fx
-        f[d[4]] += Fy
+            node = i + (n.nx + 1) * j
+            d = self.mech_dof[node]
+            f[d[0]] += Fx
+            f[d[4]] += Fy
+            return f
+        y = float(at_y)
+        if not np.isfinite(y) or y < 0.0 or y > n.Ly:
+            raise ValueError("at_y must lie on the vertical boundary in [0,Ly]")
+        j = min(n.ny - 1, int(y / n.hy))
+        iel = n.nx - 1 if side == "right" else 0
+        base = iel + (n.nx + 1) * j
+        el = (base, base + 1, base + 1 + (n.nx + 1),
+              base + (n.nx + 1))
+        xi = 1.0 if side == "right" else -1.0
+        eta = 2.0 * (y - j * n.hy) / n.hy - 1.0
+        N, *_ = bfs_scalar([xi], [eta], n.hx, n.hy)
+        for c, node in enumerate(el):
+            for d in range(4):
+                weight = N[0, 4 * c + d]
+                f[self.mech_dof[node][d]] += weight * Fx
+                f[self.mech_dof[node][4 + d]] += weight * Fy
         return f
 
     def edge_traction(self, tx=0.0, ty=0.0, side="right"):
         """Consistent nodal load of a uniform traction on a vertical edge."""
         n = self.mesh
+        if side not in ("left", "right"):
+            raise ValueError("edge_traction only supports left/right vertical edges")
         xg, wg = gauss_legendre(4)
         f = np.zeros(self.ndof_mech)
         iel = n.nx - 1 if side == "right" else 0
@@ -516,6 +549,10 @@ class Model:
 def assemble(mesh: Mesh, mat: Material, Mg: np.ndarray,
              clamped_edges=("left",), gradient=True, phi_bilinear=True):
     """Assemble the global system."""
+    if not phi_bilinear:
+        raise NotImplementedError("only bilinear nodal electric interpolation is implemented")
+    if any(edge not in ("left", "right", "top", "bottom") for edge in clamped_edges):
+        raise ValueError("unknown clamped edge; expected left/right/top/bottom")
     nnode = mesh.nnode
     ndm = 8 * nnode
     ndp = nnode
@@ -577,14 +614,16 @@ def reduce(model: Model, circuit="short", pair=("bottom", "top")):
     circuit 'open'  : bottom electrode grounded, top electrode floating at a
                       single uniform potential (zero net charge)
     """
+    if circuit not in ("short", "open"):
+        raise ValueError("circuit must be 'short' or 'open'")
+    if len(pair) != 2 or any(edge not in model.electrodes for edge in pair):
+        raise ValueError("pair must name two existing electrodes")
+    if np.intersect1d(model.electrodes[pair[0]], model.electrodes[pair[1]]).size:
+        raise ValueError("electrodes must be disjoint")
     free = np.setdiff1d(np.arange(model.ndof_mech), model.constrained)
     mech_idx = free
     Kmm = _sub(model.K, free, free)
     Mmm = _sub(model.M, free, free)
-    if not np.any(model.B):                 # purely elastic problem
-        if circuit == "open":
-            return Kmm, Mmm, mech_idx, (np.zeros(free.size), 1.0)
-        return Kmm, Mmm, mech_idx, None
     Bf = _sub(model.B, free, np.arange(model.ndof_phi))
 
     bot = model.electrodes[pair[0]]
@@ -663,29 +702,46 @@ def _condense_phi(Kmm, Bf, C, fixed, floating, return_float=False):
 
 
 def modes(K, M, nmodes=6, dense_limit=2600):
-    """Solve K x = w^2 M x with diagonal scaling S = diag(1/sqrt(K_ii))."""
+    """Lowest frequencies of K x = omega^2 M x, mass-normalized.
+
+    A stiffness-diagonal congruence uses the SAME S on both matrices.
+    For dense problems, solve M_s y = lambda K_s y for the LARGEST
+    lambda=omega^-2; the low frequencies are much more reliable this way
+    when Ms is numerically tiny relative to Ks (thin strips).  This changes
+    the eigensolver, not the FEM matrices or physical constitutive model.
+    Sparse systems retain the shift-invert route. Never silently clip a
+    negative or zero eigenvalue to zero frequency.
+    """
     n = K.shape[0]
-    d = np.sqrt(np.abs(np.diag(K)))
-    S = 1.0 / d
+    if n == 0:
+        raise ValueError("empty eigenproblem")
+    k = max(1, min(int(nmodes), n))
+    diag = np.diag(K)
+    if not np.all(np.isfinite(diag)) or np.any(diag <= 0):
+        raise ValueError("nonpositive stiffness diagonal in modal analysis")
+    S = 1.0 / np.sqrt(diag)
     Ks = K * S[:, None] * S[None, :]
     Ms = M * S[:, None] * S[None, :]
-    if n <= dense_limit:
-        w2, y = eigh(Ks, Ms)
+    if n <= dense_limit or k == n:
+        inv_w2, y = eigh(Ms, Ks, subset_by_index=[n-k, n-1],
+                          driver="gvx", check_finite=True)
+        if np.any(inv_w2 <= 0) or not np.all(np.isfinite(inv_w2)):
+            raise RuntimeError("invalid inverse eigenvalues (K or M singular/indefinite)")
+        w2 = 1.0 / inv_w2[::-1]
+        y = y[:, ::-1]
     else:
         from scipy.sparse import csr_matrix
         from scipy.sparse.linalg import eigsh
-        w2, y = eigsh(csr_matrix(Ks), k=nmodes, M=csr_matrix(Ms), sigma=0.0,
-                      which="LM")
+        w2, y = eigsh(csr_matrix(Ks), k=k, M=csr_matrix(Ms), sigma=0.0,
+                      which="LM", tol=1e-10)
         order = np.argsort(w2)
         w2, y = w2[order], y[:, order]
-    nmodes = min(nmodes, n)
-    w2 = w2[:nmodes]
-    y = y[:, :nmodes]
+    if np.any(w2 <= 0) or not np.all(np.isfinite(w2)):
+        raise RuntimeError("nonpositive or nonfinite eigenfrequencies")
     x = S[:, None] * y
-    # mass-normalize
-    for k in range(x.shape[1]):
-        x[:, k] /= np.sqrt(x[:, k] @ M @ x[:, k])
-    return np.sqrt(np.maximum(w2, 0.0)), x
+    for j in range(x.shape[1]):
+        x[:, j] /= np.sqrt(x[:, j] @ M @ x[:, j])
+    return np.sqrt(w2), x
 
 
 # --------------------------------------------------------------------------
@@ -694,17 +750,23 @@ def modes(K, M, nmodes=6, dense_limit=2600):
 
 
 def l1_weights(nsteps, alpha):
-    """L1 weights b_j = (j+1)^(1-a) - j^(1-a), j = 0..nsteps.
+    """L1 Caputo weights b_j=(j+1)^(1-alpha)-j^(1-alpha).
 
-    Only b_0 is used for the newest increment, and only j >= 1 for the
-    history.  At alpha = 1 the closed form gives b_0 = 1 - 0^0 = 0 because
-    numpy evaluates 0**0 as 1, so b_0 is set explicitly here: the newest
-    weight of the L1 stencil is 1 for every alpha, and the transient already
-    applies it implicitly (it never reads b[0]).
+    Compute j>=1 by expm1/log1p to avoid catastrophic cancellation near
+    alpha=1 at late steps. b_0=1 for every 0<alpha<=1; at alpha=1 all
+    history weights j>=1 vanish exactly. Invalid fractional orders fail
+    explicitly rather than creating misleading solver results.
     """
-    k = np.arange(nsteps + 1)
-    b = (k + 1.0) ** (1.0 - alpha) - k ** (1.0 - alpha)
+    if not (0.0 < alpha <= 1.0):
+        raise ValueError("Caputo order alpha must satisfy 0 < alpha <= 1")
+    if nsteps < 0:
+        raise ValueError("nsteps must be nonnegative")
+    b = np.zeros(nsteps + 1, dtype=float)
     b[0] = 1.0
+    if nsteps and alpha < 1.0:
+        j = np.arange(1, nsteps + 1, dtype=float)
+        p = 1.0 - alpha
+        b[1:] = np.exp(p * np.log(j)) * np.expm1(p * np.log1p(1.0 / j))
     return b
 
 
@@ -736,11 +798,11 @@ def transient(K, M, Kd, f_hat, alpha, tau, dt, nsteps, nmodes=12,
         y[:, 0] = Phi.T @ M @ x0
     if v0 is not None:
         v[:, 0] = Phi.T @ M @ v0
-    # For 0 < alpha < 1, the Caputo history tends to zero for smooth data.
-    # At alpha == 1 it is the initial velocity and must be retained.
+    # Smooth Caputo history vanishes initially only for 0 < alpha < 1.
     p = p0 if p0 is not None else Phi.T @ f_time(0.0)
     a[:, 0] = p - w2 * y[:, 0]
     if alpha == 1.0:
+        # The integer-order derivative at t=0 is v0, not zero history.
         a[:, 0] -= tau * Kd_red @ v[:, 0]
 
     Om2 = np.diag(w2)
@@ -782,23 +844,29 @@ def damping_ratio(omega, tau, alpha):
 
 
 def complex_frequency(omega0, tau, alpha, iters=200, s0=None):
-    """Fundamental pole of  s^2 + omega0^2 (1 + (tau s)^alpha) = 0.
+    """Principal-branch modal pole, accepted only with a checked residual.
 
-    Damped Newton iteration on the principal branch (as in the MATLAB
-    helper cplx_root, but with a convergence check on the residual).
-
-    ``s0`` warm-starts the iteration.  The pole equation has several roots and
-    for alpha < 1 and omega*tau >~ 4 the plain iteration can jump to a
-    different one (it was observed to land on a root with a positive real
-    part); sweeping omega*tau with the previous root as s0 keeps the branch
-    continuous, which is what a damping map needs.
+    Plain Newton iteration; s0 supports branch continuation. An unconverged
+    iterate raises RuntimeError instead of being reported as a physical pole.
     """
+    if not (np.isfinite(omega0) and omega0 > 0 and np.isfinite(tau)
+            and tau >= 0 and 0 < alpha <= 1 and iters > 0):
+        raise ValueError("require omega0>0, tau>=0, 0<alpha<=1 and iters>0")
     s = omega0 * (-0.05 + 1.0j) if s0 is None else complex(s0)
     for _ in range(iters):
+        if not np.isfinite(s) or s == 0:
+            break
         fv = s ** 2 + omega0 ** 2 * (1.0 + (tau * s) ** alpha)
         dfv = 2.0 * s + omega0 ** 2 * alpha * tau ** alpha * s ** (alpha - 1.0)
+        if dfv == 0 or not np.isfinite(dfv):
+            break
         ds = fv / dfv
         s -= ds
-        if abs(ds) < 1e-14 * abs(s):
+        if abs(ds) < 1e-14 * max(abs(s), omega0):
             break
-    return s
+    if np.isfinite(s):
+        term = (tau * s) ** alpha
+        residual = abs(s*s + omega0**2*(1+term)) / (abs(s*s)+omega0**2*(1+abs(term)))
+        if np.isfinite(residual) and residual <= 1e-11:
+            return s
+    raise RuntimeError("modal pole did not converge; use smaller continuation steps")

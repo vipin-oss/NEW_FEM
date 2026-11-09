@@ -2,8 +2,8 @@
 check_paper_structure.py -- what can be checked about the manuscript without a
 TeX installation.
 
-No full TeX Live (`pdflatex`, `bibtex`) is available here. This is a source-only
-audit, not evidence of a successful compile or a measured page count. It checks:
+This is a source-only structural audit, not evidence of a successful compile
+or a measured page count, even if TeX is installed. It checks:
 
   * balanced braces, and no stray $ or unmatched begin/end,
   * every environment closed, in the right order,
@@ -107,12 +107,9 @@ def main():
     ok = not (problems or missing_ref or missing_cite or missing_gfx
               or missing_in) and p.returncode == 0
     lines = ["# Structural check of Paper_12/main.tex", "",
-             "**No full TeX Live is available in this environment.** "
-             "This structural audit does not compile the manuscript or measure pages; "
-             "the mandated "
-             "`pdflatex; bibtex; pdflatex x2` sequence remains to be run by "
-             "the author. This file lists what a compiler would have flagged "
-             "before typesetting.", "",
+             "This is a *static* structural audit; it does not compile the "
+             "manuscript or measure pages. A separate LaTeX build log must "
+             "be checked before claiming successful compilation.", "",
              f"- braces and math: {'ok' if not problems else 'PROBLEM'}",
              f"- environments: {'ok' if not problems else 'PROBLEM'}",
              f"- unresolved \\\\ref: {missing_ref if missing_ref else 'none'}",

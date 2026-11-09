@@ -89,8 +89,8 @@ def table_thickness():
 \caption{Thickness sweep behind Fig.~\ref{fig:thickness}. First frequency,
 flexoelectric bending coupling and extensional coupling of the poled strip. The
 bending column carries $\mu=10^{-6}$\,\si{\coulomb\per\meter}, the extensional
-column $\mu=0$, and both are converged to the tolerance of
-\ref{app:verification}.}
+column $\mu=0$, these are archived sweep results. Extensional convergence does not certify
+the first bending frequency or small thin-strip spectral shifts.}
 \label{tab:thickness}
 \begin{tabular}{@{}r r r r@{}}
 \toprule
