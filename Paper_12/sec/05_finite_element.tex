@@ -145,37 +145,37 @@ With the L1 weights of \eqref{eq:l1} the time-discrete problem is
   \label{eq:step}
 \end{equation}
 with $M$ the consistent mass matrix, $\bm{a}$ the acceleration vector, and
-$K_{\rm mem}\equiv\tau^{\alpha}K$ the remembered operator -- the stiffness
+$K_{\rm mem}\equiv\tau^{\alpha}K_d$ the remembered operator -- the stiffness
 times the relaxation time to the power $\alpha$, so that $K_{\rm mem}$ carries
 mass over time to the power $\alpha-2$ and
 $\tau^{\alpha}K\,\mathrm{D}^{\alpha}\bm{u}$ has the units of a force -- and
-$K\in\{K_{\rm eff},K_{uu}\}$ the model choice quantified in
+$K=K_{oc}$ and $K_d\in\{K_{oc},K_{uu}\}$ the model choice quantified in
 Sec.~\ref{sec:memorystudy}. In the modal variant used for the long ring-downs
 the displacement is projected on the mass-normalized modes of the
-short-circuit pencil,
+open-circuit pencil,
 \begin{equation}
   \bm{u}(t) \simeq \Phi\,\bm{q}(t),\qquad
   \Phi^{\mathsf T}M\Phi = I,\qquad
-  \Phi^{\mathsf T}K_{sc}\Phi = \mathrm{diag}(\omega_i^2),
+  \Phi^{\mathsf T}K_{oc}\Phi = \mathrm{diag}(\omega_i^2),
   \label{eq:modal}
 \end{equation}
 and the convolution is carried on $\bm{q}$ instead of on the nodal vector, so
 the cost per step is proportional to the number of retained modes rather than
 to the number of degrees of freedom. Inserting the Newmark expressions for
-$\bm{u}^{n+1}$ and $\bm{a}^{n+1}$ ($\beta=\tfrac14$, $\gamma=\tfrac12$),
+$\bm{u}^{n+1}$ and $\bm{a}^{n+1}$ ($\beta_N=\tfrac14$, $\gamma_N=\tfrac12$),
 \begin{equation}
   \bm{u}^{n+1} = \bm{u}^{n} + \Delta t\,\bm{v}^{n}
-     + \Delta t^{2}\left[\left(\tfrac12-\beta\right)\bm{a}^{n}
-       + \beta\,\bm{a}^{n+1}\right],
+     + \Delta t^{2}\left[\left(\tfrac12-\beta_N\right)\bm{a}^{n}
+       + \beta_N\,\bm{a}^{n+1}\right],
   \qquad
-  \bm{v}^{n+1} = \bm{v}^{n} + \Delta t\left[(1-\gamma)\bm{a}^{n}
-       + \gamma\,\bm{a}^{n+1}\right],
+  \bm{v}^{n+1} = \bm{v}^{n} + \Delta t\left[(1-\gamma_N)\bm{a}^{n}
+       + \gamma_N\,\bm{a}^{n+1}\right],
   \label{eq:newmark}
 \end{equation}
 moves every unknown of step $n+1$ into one constant matrix,
 \begin{equation}
-  \left[M + \beta\Delta t^{2}K +
-    \frac{\beta\,\Delta t^{2-\alpha}}{\Gamma(2-\alpha)}K_{\rm mem}\right]
+  \left[M + \beta_N\Delta t^{2}K +
+    \frac{\beta_N\,\Delta t^{2-\alpha}}{\Gamma(2-\alpha)}K_{\rm mem}\right]
   \bm{a}^{n+1} = \bm{r}^{n+1},
   \label{eq:stepA}
 \end{equation}
@@ -183,7 +183,9 @@ which is factorized once by Cholesky, the elastic and the memory stiffness both
 appearing on the left; $\bm{r}^{n+1}$ collects the known displacements,
 velocities and the history sum $\sum_{k\ge1}b_{k}\Delta\bm{u}^{n+1-k}$ of
 \eqref{eq:l1}. The first step has no history, so the initial acceleration is
-$\bm{a}^{0}=M^{-1}(\bm{f}^{0}-K\bm{u}^{0})$ with $\bm{v}^{0}$ supplied by the
+$\bm{a}^{0}=M^{-1}(\bm{f}^{0}-K_{oc}\bm{u}^{0})$ for smooth initial data
+and $0<\alpha<1$. At $\alpha=1$, the additional term
+$-M^{-1}\tau K_d\bm v^0$ is required. Here $\bm{v}^{0}$ is supplied by the
 initial condition.
 
 Two limits check the expression. At $\alpha=1$ the weights are $b_0=1$ and
@@ -197,7 +199,7 @@ exact $\omega\tau/2$ to that accuracy ($0.150111$, $0.150057$, $0.150029$
 against $0.150000$ at $N$, $2N$ and $4N$ steps, Sec.~\ref{sec:verification}).
 At $\tau\to0$ the memory matrix vanishes and the elastic problem is recovered.
 The dimensions fix the exponents: the exponent $2-\alpha$ of $\Delta t$ makes
-$\beta\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ dimensionally
+$\beta_N\Delta t^{2-\alpha}K_{\rm mem}/\Gamma(2-\alpha)$ dimensionally
 consistent with $M$.
 
 The truncation of the modal projection was measured on the ring-down of
@@ -228,8 +230,8 @@ For each geometry, assembly, condensation and solution proceed as follows.
   degrees of freedom into free, earthed and floating.
 \item Condense the potential, first to the electrode pair by \eqref{eq:schur}
   and then to the single floating electrode by \eqref{eq:dbeta}; store
-  $(d,\beta)$.
-\item \emph{Frequency domain:} solve the short-circuit pencil
+  $(d,\beta_N)$.
+\item \emph{Frequency domain:} solve the open-circuit pencil
   $K_{sc}\bm{\phi}=\omega^{2}M\bm{\phi}$ for the required number of modes
   (Lanczos above $4200$ unknowns, dense LAPACK below), with the two blocks
   scaled separately.

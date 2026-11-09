@@ -150,17 +150,15 @@ its effect on the ring-down has to be computed rather than estimated. For a
 strongly piezoelectric device the distinction belongs in the model statement,
 not in the implementation.
 
-Neither matrix is derived from a dielectric relaxation; both are placements of
-the fractional element inside a condensed model. One law can be derived
-exactly. If the permittivity itself relaxes,
-$D_k=e_{kij}\varepsilon_{ij}+\kappa_{kl}[1+(\tau\partial_t)^{\alpha}]E_l$,
-then $\nabla\cdot\bm D=0$ carries the Caputo derivative of the field, and
-condensing the potential moves the memory onto the piezoelectric stiffening
-$B_iC^{-1}B_i^{\mathsf T}$, that is onto exactly the part of $K_{\rm eff}$ that
-the condensation adds over $K_{uu}$. That is a third possibility, bracketed by
-the two matrices tabulated: $K_{\rm eff}$ remembers the whole condensed
-stiffness and $K_{uu}$ none of it. The ratio $0.450$ belongs to the
-$\alpha=1$ row of Table~\ref{tab:memory} and to this device.
+Neither memory matrix is derived from dielectric relaxation. If the
+dielectric block has the scalar Laplace-domain factor
+$g(s)=1+(\tau s)^\alpha$, zero electrical prehistory and instantaneous
+electromechanical coupling give, before electrode-specific condensation,
+$K_{uu}+B[g(s)C_\phi]^{-1}B^{\mathsf T}
+=K_{uu}+g(s)^{-1}BC_\phi^{-1}B^{\mathsf T}$.
+The inverse factor prevents identifying either assumed mechanical memory
+placement with this dielectric model. They need not bound its response.
+The reported ratio $0.450$ is specific to this archived device calculation.
 
 \input{table_memory}
 
@@ -206,29 +204,17 @@ dissipative by construction. The integer-order case sits at
 $|\mathrm{Im}\,s|/\omega_0\simeq1$ for $\omega\tau\lesssim0.1$ and moves down
 and to the right as $\omega\tau$ grows, so the dashpot lowers the frequency and
 eventually over-damps the mode: at $\omega\tau=10$ the imaginary part has
-vanished and $\zeta=1$. The fractional cases fan \emph{upward}: a spring-pot
-with $\alpha<1$ raises the damped frequency as $\tau$ grows, because the
-fractional modulus grows sub-linearly rather than linearly in $\omega$. At
-$\omega\tau=10$ and $\alpha=0.5$ the damped frequency is $2.13\,\omega_0$
-($2.45\,\omega_0$ at $\alpha=0.7$), against $\mathrm{Im}\,s=0$ for $\alpha=1$ at
-the same $\omega\tau$. The ratio in Fig.~\ref{fig:damping}(b) increases with
-both $\alpha$ and $\omega\tau$ and reaches $\zeta\to1$ for $\alpha\to1$ and
-large $\omega\tau$; for small $\alpha$ it is flat, because a spring-pot with a
-broad relaxation spectrum produces a damping that depends only weakly on the
-device frequency. That flatness is the qualitative reason the fractional
-description is used for dielectric loss in the first place. The band
-$\omega\tau\le1$, which contains the strip mode at \SI{6.73}{MHz} for every
-$\tau\le\SI{32}{\nano\second}$ used here, is the one in which the element is
-calibrated and claimed. Hence, in the range where the element is used, $\alpha$
-sets the shape of the decay and $\tau$ sets where the loss peaks, and neither of
-them alone fixes a damping ratio.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\textwidth]{F6_damping.pdf}
-\caption{Variations of (a) the pole of a mode at $f_0=\SI{6.73}{MHz}$ ($\omega_0=2\pi f_0$) over $\omega\tau=0.02$--$1.35$ for seven relaxation times, identified by $\tau$ in the legend and distinguished by line style and marker, with markers at five Caputo orders, and of (b) the damping ratio over $\omega\tau=10^{-1.5}$--$10^{1.5}$ and $\alpha=0.2$--$1$ with labeled contours, for the fractional Kelvin--Voigt element with branch continuation. The dashed arc is the exact Kelvin--Voigt locus, on which every $\alpha=1$ pole lies. Fractional poles fan upward, integer-order poles over-damp.}
-\label{fig:damping}
-\end{figure}
+vanished and $\zeta=1$. The dependence of damped frequency on $\omega_0\tau$ is not
+universally increasing for $\alpha<1$. At $\alpha=0.9$, direct complex-root
+calculations give $\operatorname{Im}(s)/\omega_0=1.00223,1.01571,1.01207$
+and $0.98457$ at $\omega_0\tau=0.02,0.30,0.60$ and $1.00$,
+respectively. Likewise, the pole damping index is nonmonotone in $\alpha$:
+at $\omega_0\tau=0.3$ it is approximately $0.108,0.159,0.179,0.166,0.150$
+for $\alpha=0.3,0.5,0.7,0.9,1$. These pole indices characterize complex roots,
+not spatial attenuation or a single exponential decay rate. The complete
+fractional initial-value response includes non-pole contributions.
+The map illustrates the assumed constitutive law; no material-specific
+frequency band has been calibrated experimentally here.
 
 \FloatBarrier
 \subsection{Window size and shape against the second moment}

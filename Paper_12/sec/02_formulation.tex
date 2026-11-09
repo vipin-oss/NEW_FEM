@@ -73,7 +73,7 @@ changes $M$ and with it the ratio between the directional gradient penalties.
 \subsection{Kinematics}
 \label{sec:kinematics}
 
-Let $\Omega\subset\mathbb{R}^2$ be the mid-plane of a strip of thickness $h$,
+Let $\Omega\subset\mathbb{R}^2$ be the length--thickness cross-section of a strip of thickness $h$,
 with length $L$, coordinates $x_1$ along the member and $x_2$ through its thickness. The
 mechanical state is the pair $(u_1,u_2)$, where $u_1$ is the in-plane
 displacement and $u_2\equiv w$ is the transverse deflection, the model retains
@@ -120,8 +120,8 @@ elastic energy is
         \varepsilon_{kl}\,\mathrm{d}A ,
   \label{eq:Eel}
 \end{equation}
-the gradient energy is the window average of the elastic energy truncated at
-the second moment, which by \eqref{eq:Mdef} is
+the adopted positive strain-gradient energy uses the window second moment as
+a geometric parameter, with the normalization of the one-scale benchmark,
 \begin{equation}
   \Pi_{\rm gr} = \tfrac14\int_\Omega M_{mn}\,
         \varepsilon_{ij,m}\,C_{ijkl}\,\varepsilon_{kl,n}\,\mathrm{d}A ,
@@ -160,23 +160,25 @@ isotropic and is represented by the single coefficient
 a charge per unit length, so every flexoelectric energy in this paper scales as
 $\mu$ and every flexoelectric coupling as $\mu^{2}$.
 
-The constitutive relations are the derivatives of $\Pi$ with respect to the
+All area integrals are per unit out-of-plane width. Let $H$ denote the
+local electric enthalpy density (the integrand of $\Pi$). The constitutive
+relations are derivatives of $H$ with respect to the
 three kinematic variables. The stress is
 \begin{equation}
-  \sigma_{ij} = \frac{\partial \Pi}{\partial \varepsilon_{ij}}
+  \sigma_{ij} = \frac{\partial H}{\partial \varepsilon_{ij}}
               = C_{ijkl}\,\varepsilon_{kl} - e_{kij} E_k ,
   \label{eq:sig}
 \end{equation}
 the higher-order stress is
 \begin{equation}
-  \varsigma_{ijm} = \frac{\partial \Pi}{\partial \varepsilon_{ij,m}}
+  \varsigma_{ijm} = \frac{\partial H}{\partial \varepsilon_{ij,m}}
               = \tfrac12 M_{mn}\,C_{ijkl}\,\varepsilon_{kl,n}
                 - \mu_{kijm}\,E_k ,
   \label{eq:tau}
 \end{equation}
 and the electric displacement is
 \begin{equation}
-  D_k = -\frac{\partial \Pi}{\partial E_k}
+  D_k = -\frac{\partial H}{\partial E_k}
               = e_{kij}\,\varepsilon_{ij} + \kappa_{kl}\,E_l
                 + \mu_{kijl}\,\eta_{ijl},
   \label{eq:D}
@@ -210,19 +212,19 @@ the flexoelectric coupling $+\int\mu\,\nabla N_\phi^{\mathsf T}
 the potential. A sign error in any one of the three would show up as an
 asymmetry between $B$ and $B^{\mathsf T}$ rather than as a change of a number.
 
-The second term of \eqref{eq:energy} is the second-moment truncation of the
-window average of the elastic energy:
-Taylor expanding the strain about the centroid of the window and averaging
-with $\langle s_m\rangle=0$, $\langle s_ms_n\rangle=M_{mn}$ leaves a quadratic
-functional in the strain gradient whose kernel is the second-moment tensor, so
-the coefficient of the gradient energy is fixed by the window and is not a
-fitted length. The truncation is exact for a strain that varies affinely across
-the window and is in error at the next order in $a_i\partial\varepsilon$; its
-adequacy has to be established for the material at hand
-(Sec.~\ref{sec:limit_window}) rather than assumed from a convergent series.
+The factor $1/4$ in \eqref{eq:Egrad} is an adopted normalization,
+chosen to recover the one-scale benchmark, rather than a consequence of
+averaging the local elastic energy. For example, for affine strain
+$\varepsilon(\bm x+\bm s)=\varepsilon(\bm x)+s_m\varepsilon_{,m}$,
+the direct average of $\tfrac12\varepsilon:C:\varepsilon$ contributes
+$\tfrac12 M_{mn}\varepsilon_{,m}:C:\varepsilon_{,n}$.
+This differs by a factor of two from \eqref{eq:Egrad}. Accordingly, the
+window is a prescribed geometric parametrization of this gradient model;
+equivalence to an exact finite-domain nonlocal average is not established.
+Windows with equal second moments are equivalent only within this model.
 
 Three features of \eqref{eq:energy} matter for the implementation. First, the
-gradient term couples the third derivatives of the displacement, so the element
+gradient energy contains second derivatives of the displacement, so the element
 must be $C^1$ in the sense of \eqref{eq:dofs}; a $C^0$ element would make the
 fourth-order term non-conforming. Second, the piezoelectric and flexoelectric
 couplings appear in the same enthalpy but not in the same devices: they are
@@ -262,40 +264,35 @@ reported in Sec.~\ref{sec:verification}.
 \subsection{Fractional Kelvin--Voigt memory}
 \label{sec:fracmem}
 
-The dielectric relaxation is described by a fractional Kelvin--Voigt element in
-which the quantity conjugate to the electric field carries a Caputo derivative
-of order $\alpha$. The Caputo derivative of a function that starts from rest
-is
+The transient model assumes mechanical fractional Kelvin--Voigt memory
+after electrical condensation. It does not derive that memory from a
+frequency-dependent permittivity. For $0<\alpha<1$, the Caputo derivative is
 \begin{equation}
-  {}^{C}\!D_t^{\alpha}f(t) = \frac{1}{\Gamma(1-\alpha)}
-     \int_{0}^{t}\frac{\dot f(t')}{(t-t')^{\alpha}}\,\mathrm{d}t',
-  \qquad 0<\alpha\le1,
-  \label{eq:caputo}
+ {}^CD_t^\alpha f(t)=\frac{1}{\Gamma(1-\alpha)}
+ \int_0^t\frac{\dot f(t')}{(t-t')^\alpha}\,\mathrm dt',
+ \label{eq:caputo}
 \end{equation}
-and the spring-pot of Caputo~\cite{Caputo1967}, whose use as a constitutive
-element is due to Bagley and Torvik~\cite{BagleyTorvik1983} and
-Koeller~\cite{Koeller1984}, is
+and ${}^CD_t^1 f=\dot f$. A scalar mechanical analogue is
 \begin{equation}
-  \sigma(t) = K\,\varepsilon(t) + K\,\tau^{\alpha}\,
-              {}^{C}\!D_t^{\alpha}\varepsilon(t),
-  \label{eq:kv}
+ \sigma=K\varepsilon+K\tau^\alpha{}^CD_t^\alpha\varepsilon,
+ \label{eq:kv}
 \end{equation}
-with $\tau$ a relaxation time and $K$ the appropriate stiffness. The model is
-the fractional counterpart of the Cole--Cole description of a broadened
-dielectric relaxation~\cite{ColeCole1941,HavriliakNegami1967}, and its
-frequency-domain modulus,
+with modulus $K$ and time scale $\tau$. Its steady harmonic modulus is
 \begin{equation}
-  K^{*}(\omega) = K\left[1+(\mathrm{i}\omega\tau)^{\alpha}\right],
-  \label{eq:kvfreq}
+ K^*(\omega)=K[1+(\mathrm i\omega\tau)^\alpha].
+ \label{eq:kvfreq}
 \end{equation}
-reduces to the classical Kelvin--Voigt element for $\alpha=1$.
-
-Two matrices are candidates for the $K$ of \eqref{eq:kv} in the condensed
-mechanical problem: the fully condensed stiffness $K_{\rm eff}$, which
-contains the electrical boundary condition, and the short-circuit stiffness
-$K_{uu}$, which does not. They are different models of the same physics, not
-two numerical conventions, and Sec.~\ref{sec:memorystudy} quantifies the
-difference. Discretizing \eqref{eq:caputo} with the L1 scheme at uniform steps
+Fractional mechanical constitutive laws are established in
+\cite{Caputo1967,BagleyTorvik1983,Koeller1984}. This Kelvin--Voigt modulus is
+not identical to a Cole--Cole or Havriliak--Negami permittivity.
+The condensed evolution assumed here is
+$M\ddot{\bm u}+K_{oc}\bm u+\tau^\alpha K_d{}^CD_t^\alpha\bm u=\bm f$,
+where $K_d\in\{K_{oc},K_{uu}\}$ is selected independently of the elastic
+stiffness. Here $K_{oc}=K_{\rm eff}$ and $K_{uu}$ is the mechanical block
+before electrical condensation; it generally differs from $K_{sc}$.
+The two placements are phenomenological alternatives requiring separate
+calibration, not consequences of the same dielectric relaxation law.
+Discretizing \eqref{eq:caputo} with the L1 scheme at uniform steps
 $\Delta t$, with $n$ the step index and $t_n=n\Delta t$, gives
 \begin{equation}
   {}^{C}\!D_t^{\alpha}\varepsilon(t_n) \approx
@@ -317,9 +314,9 @@ convolution is applied to the reduced modal coordinates, so the history that
 has to be stored is one scalar sequence per retained mode and the cost per step
 does not grow with the number of elements; which of the two matrices enters
 \eqref{eq:kv} decides whether the piezoelectric contribution is inside the
-remembered operator or outside it. The L1 discretization is first order in time
-for every order $\alpha\in(0,1]$, at $\alpha=1$ as well, because the newest
-increment enters through a backward difference; the sequence that measures the
+remembered operator or outside it. For smooth data the L1 derivative approximation has order $2-\alpha$ for
+$0<\alpha<1$; initial singularities may reduce this rate. The implemented
+backward difference at $\alpha=1$ is first order; the sequence that measures the
 order, and the step the results use, are reported in Sec.~\ref{sec:verification}.
 
 \FloatBarrier
@@ -329,7 +326,7 @@ order, and the step the results use, are reported in Sec.~\ref{sec:verification}
 Stationarity of \eqref{eq:energy} with respect to the mechanical field and to
 the potential gives the strong form on $\Omega$,
 \begin{align}
-  \sigma_{ij,j} - \varsigma_{ijm,jm} + \rho\,\ddot u_i &= 0,
+  \sigma_{ij,j} - \varsigma_{ijm,jm} - \rho\,\ddot u_i &= 0,
   \label{eq:gov1}\\
   D_{k,k} &= 0,
   \label{eq:gov2}
@@ -339,11 +336,11 @@ classical traction and the higher-order double-traction
 conditions on the boundary, which are stated in Sec.~\ref{sec:bc}. With
 \eqref{eq:Dexplicit} substituted, the two equations read
 \begin{equation}
-  \left(C_{ijkl}\varepsilon_{kl}\right)_{,j}
+  \left(C_{ijkl}\varepsilon_{kl}-e_{kij}E_k\right)_{,j}
     - \left[\tfrac12 M_{mn}C_{ijkl}\varepsilon_{kl,n}\right]_{,jm}
-    + \mu\left(\nabla\cdot\bm{E}\right)_{,i} + \rho\ddot u_i = 0,
+    + \mu\left(\nabla\cdot\bm{E}\right)_{,i} - \rho\ddot u_i = 0,
   \qquad
-  \kappa_{kl}E_{l,k} = -\mu\,\partial_k\partial_k
+  \kappa_{kl}E_{l,k} = -e_{kij}\varepsilon_{ij,k}-\mu\,\partial_k\partial_k
     \left(\varepsilon_{xx}+\varepsilon_{yy}\right),
   \label{eq:govexp}
 \end{equation}

@@ -736,9 +736,12 @@ def transient(K, M, Kd, f_hat, alpha, tau, dt, nsteps, nmodes=12,
         y[:, 0] = Phi.T @ M @ x0
     if v0 is not None:
         v[:, 0] = Phi.T @ M @ v0
-    # initial acceleration: M a0 = f0 - K x0 (memory term vanishes at t=0+)
+    # For 0 < alpha < 1, the Caputo history tends to zero for smooth data.
+    # At alpha == 1 it is the initial velocity and must be retained.
     p = p0 if p0 is not None else Phi.T @ f_time(0.0)
     a[:, 0] = p - w2 * y[:, 0]
+    if alpha == 1.0:
+        a[:, 0] -= tau * Kd_red @ v[:, 0]
 
     Om2 = np.diag(w2)
     A = np.eye(r) + beta * dt ** 2 * (Om2 + c * Kd_red)

@@ -18,7 +18,7 @@ On an edge with unit outward normal $\bm{n}$ and tangent $\bm{t}$, stationarity
 of \eqref{eq:energy} gives the classical traction
 \begin{equation}
   t_i = \sigma_{ij}n_j - \partial_m\!\left(\varsigma_{ijm}\right)n_j
-      + \partial_t\!\left(\varsigma_{ijm}\,t_m n_j\right),
+      - \partial_t\!\left(\varsigma_{ijm}\,t_m n_j\right),
   \label{eq:traction}
 \end{equation}
 and the higher-order double traction
@@ -30,12 +30,18 @@ which is conjugate to the normal derivative of the displacement. The
 flexoelectric part of $\varsigma$ in \eqref{eq:tau} is carried by these two
 expressions without further change: it contributes $\mu(\nabla\cdot\bm E)n_i$
 to \eqref{eq:traction} away from the tangent term,
-$-\partial_t[\mu(\bm E\cdot\bm t)n_i]$ through the tangential derivative, and
+$+\partial_t[\mu(\bm E\cdot\bm t)n_i]$ through the tangential derivative, and
 $-\mu(\bm E\cdot\bm n)n_i$ to \eqref{eq:doubletraction}. The weak form
 assembles all three as the single coupling term
 $\int\mu\nabla N_\phi^{\mathsf T}\nabla(\varepsilon_{xx}+\varepsilon_{yy})$, so
-no assembled matrix changes when the term is written out. Three combinations
-are used in the results:
+no assembled matrix changes when the term is written out. For each straight edge, integration by parts also leaves the endpoint term
+$[\varsigma_{ijm}n_m t_j\,\delta u_i]_{\partial e}$.
+At a free corner, the oriented contributions from adjacent edges must balance
+the applied corner force. The conforming weak form retains these terms;
+edge traction conditions alone do not specify the complete corner problem.
+The following are componentwise constraints; prescribing both $u_i=0$ is
+not a universal mechanical definition of a simply supported beam.
+Three combinations are used in the results:
 \begin{equation}
   \text{clamped: } u_i=0,\ u_{i,j}n_j=0;\qquad
   \text{simply supported: } u_i=0,\ m_i=0;\qquad

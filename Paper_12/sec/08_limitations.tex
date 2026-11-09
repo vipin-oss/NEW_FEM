@@ -33,15 +33,16 @@ bending couplings, which scale as $\mu^2$.
 \subsection{Fractional order and relaxation time}
 \label{sec:calib_alpha_tau}
 
-Dielectric spectroscopy identifies $(\alpha,\tau)$ by jointly fitting the
-modulus and loss tangent of \eqref{eq:kvfreq},
+Mechanical dynamic-modulus or ring-down measurements are required to identify
+$(\alpha,\tau)$ for the chosen mechanical memory placement. The scalar
+Kelvin--Voigt loss tangent is
 \begin{equation}
   \tan\delta=\frac{(\omega\tau)^{\alpha}\sin(\pi\alpha/2)}
      {1+(\omega\tau)^{\alpha}\cos(\pi\alpha/2)}.
   \label{eq:tandelta}
 \end{equation}
 Both are monotone in $\omega\tau$, so a single loss peak does not identify
-$\tau$. Ring-down measurements provide a complementary route; for small loss,
+$\tau$. Ring-down measurements provide a complementary route; for proportional memory on $K_{oc}$ and $(\omega\tau)^\alpha\ll1$,
 \begin{equation}
   \zeta=\frac{(\omega\tau)^{\alpha}\sin(\pi\alpha/2)}{2}
   \quad\Longrightarrow\quad
@@ -58,8 +59,8 @@ broadened single-power-law response, not two separated loss mechanisms.
 \label{sec:limit_window}
 
 The geometry and parameter ranges are those of Table~\ref{tab:params} and the
-individual sweeps. The damping interpretation is restricted to
-$\omega\tau\le1$; outside that band the map extrapolates the fitted law.
+individual sweeps. The damping discussion emphasizes $\omega\tau\le1$, but this is an
+assumed range rather than an experimentally fitted frequency band.
 The second-moment truncation uses $a/L\le0.2$ as an assumed operating range,
 not a validated truncation threshold: no experiment or exact averaging
 comparison here establishes where the approximation fails. The coupled
